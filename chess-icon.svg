@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:rgb(102,126,234);stop-opacity:1" />
+      <stop offset="100%" style="stop-color:rgb(118,75,162);stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Chess Knight piece -->
+  <g transform="translate(50, 50)">
+    <!-- Base -->
+    <ellipse cx="0" cy="30" rx="25" ry="8" fill="url(#grad1)" opacity="0.9"/>
+    
+    <!-- Knight body -->
+    <path d="M -15,25 L -15,0 C -15,-10 -10,-20 0,-25 L 5,-23 C 8,-25 10,-20 10,-15 L 8,-10 C 12,-8 15,-5 15,0 L 15,25 Z" 
+          fill="url(#grad1)" stroke="white" stroke-width="2" opacity="0.95"/>
+    
+    <!-- Knight ear -->
+    <path d="M 0,-25 L -2,-30 L 2,-28 Z" fill="white" opacity="0.8"/>
+    
+    <!-- Knight eye -->
+    <circle cx="-5" cy="-15" r="2" fill="white"/>
+    
+    <!-- Glass effect overlay -->
+    <path d="M -12,0 C -12,-8 -8,-18 0,-23 L 2,-22 C 5,-20 7,-15 7,-10 L 5,-5 C 8,-3 10,0 10,5 L 10,20 L -12,20 Z" 
+          fill="white" opacity="0.15"/>
+  </g>
+</svg>
