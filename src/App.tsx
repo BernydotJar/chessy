@@ -1,4 +1,3 @@
-import React from 'react';
 import { ChessBoard } from './components/ChessBoard';
 import { GameControls } from './components/GameControls';
 import { MoveHistory } from './components/MoveHistory';
