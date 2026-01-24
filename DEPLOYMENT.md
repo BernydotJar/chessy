@@ -99,10 +99,11 @@ This builds with the correct base path and publishes `dist/` to the `gh-pages` b
 
 2. **Enable GitHub Pages**
 - Go to Settings → Pages
-- Source: Deploy from branch → `gh-pages` → `/` (root)
+- Source: **GitHub Actions**
 - Save
 
 Your site will be available at `https://bernydotjar.github.io/chessy/`.
+Every push to `main` will deploy automatically via GitHub Actions.
 
 ### Option 4: Railway (Free tier available)
 

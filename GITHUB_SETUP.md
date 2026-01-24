@@ -68,7 +68,7 @@ After creating the repository, configure these settings:
 
 ### 1. Enable GitHub Pages (Optional)
 - Go to Settings → Pages
-- Source: Deploy from branch → `gh-pages` → `/` (root)
+- Source: **GitHub Actions**
 - Save
 - Run `npm run deploy` locally to publish the `gh-pages` branch
 

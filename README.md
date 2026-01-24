@@ -78,8 +78,10 @@ npm run preview
 npm run deploy
 ```
 
-Then enable Pages in GitHub: Settings → Pages → Deploy from branch → `gh-pages` → `/` (root).
+Then enable Pages in GitHub: Settings → Pages → Source: **GitHub Actions**.
 Your site will be available at `https://bernydotjar.github.io/chessy/`.
+
+On every push to `main`, GitHub Actions will build and deploy automatically.
 
 ## 🎨 Customization
 
