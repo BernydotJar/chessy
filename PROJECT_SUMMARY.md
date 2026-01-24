@@ -55,7 +55,7 @@ A **complete, production-ready** chess application MVP with beautiful glassmorph
 ## 📁 Complete Project Structure
 
 ```
-glasschess/
+chessy/
 ├── 📄 Configuration Files
 │   ├── package.json           # Dependencies and scripts
 │   ├── tsconfig.json          # TypeScript config
@@ -148,7 +148,7 @@ glasschess/
 
 ```bash
 # Navigate to project
-cd glasschess
+cd chessy
 
 # Initialize git
 git init
@@ -160,7 +160,7 @@ git add .
 git commit -m "feat: initial commit - GlassChess MVP"
 
 # Add your repository (create on GitHub first)
-git remote add origin https://github.com/YOUR_USERNAME/glasschess.git
+git remote add origin https://github.com/BernydotJar/chessy.git
 
 # Push to GitHub
 git branch -M main

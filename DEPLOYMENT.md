@@ -11,8 +11,8 @@
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/glasschess.git
-cd glasschess
+git clone https://github.com/BernydotJar/chessy.git
+cd chessy
 ```
 
 2. **Install dependencies**
@@ -90,30 +90,19 @@ Or use the Netlify dashboard:
 
 ### Option 3: GitHub Pages (Free)
 
-1. **Install gh-pages**
-```bash
-npm i -D gh-pages
-```
-
-2. **Add to package.json scripts**
-```json
-"scripts": {
-  "deploy": "npm run build && gh-pages -d dist"
-}
-```
-
-3. **Update vite.config.ts**
-```typescript
-export default defineConfig({
-  base: '/glasschess/', // your repo name
-  // ... rest of config
-})
-```
-
-4. **Deploy**
+1. **Deploy**
 ```bash
 npm run deploy
 ```
+
+This builds with the correct base path and publishes `dist/` to the `gh-pages` branch.
+
+2. **Enable GitHub Pages**
+- Go to Settings → Pages
+- Source: Deploy from branch → `gh-pages` → `/` (root)
+- Save
+
+Your site will be available at `https://bernydotjar.github.io/chessy/`.
 
 ### Option 4: Railway (Free tier available)
 
@@ -207,5 +196,5 @@ Consider adding:
 
 For deployment issues:
 - Check the [Vercel documentation](https://vercel.com/docs)
-- Visit our [GitHub Discussions](https://github.com/yourusername/glasschess/discussions)
+- Visit our [GitHub Discussions](https://github.com/BernydotJar/chessy/discussions)
 - Open an issue with the `deployment` label

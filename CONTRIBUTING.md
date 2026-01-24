@@ -42,8 +42,8 @@ Enhancement suggestions are tracked as GitHub issues. When creating an enhanceme
 
 ```bash
 # Clone your fork
-git clone https://github.com/your-username/glasschess.git
-cd glasschess
+git clone https://github.com/BernydotJar/chessy.git
+cd chessy
 
 # Install dependencies
 npm install

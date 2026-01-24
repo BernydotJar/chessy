@@ -7,7 +7,7 @@ Follow these steps to push the GlassChess project to GitHub:
 ### Step 1: Create a New Repository on GitHub
 
 1. Go to [github.com/new](https://github.com/new)
-2. **Repository name**: `glasschess`
+2. **Repository name**: `chessy`
 3. **Description**: A beautiful, free chess platform with glassmorphism design
 4. **Visibility**: Choose Public or Private
 5. **DO NOT** initialize with README, .gitignore, or license (we already have these)
@@ -17,7 +17,7 @@ Follow these steps to push the GlassChess project to GitHub:
 
 ```bash
 # Navigate to the project directory
-cd glasschess
+cd chessy
 
 # Initialize git repository
 git init
@@ -29,7 +29,7 @@ git add .
 git commit -m "feat: initial commit - GlassChess MVP with glassmorphism UI"
 
 # Add your GitHub repository as remote (replace with your username)
-git remote add origin https://github.com/YOUR_USERNAME/glasschess.git
+git remote add origin https://github.com/BernydotJar/chessy.git
 
 # Rename branch to main (if needed)
 git branch -M main
@@ -40,7 +40,7 @@ git push -u origin main
 
 ### Step 3: Verify Upload
 
-Go to your repository URL: `https://github.com/YOUR_USERNAME/glasschess`
+Go to your repository URL: `https://github.com/BernydotJar/chessy`
 
 You should see:
 - ✅ README.md with project description
@@ -53,13 +53,13 @@ You should see:
 If you have GitHub CLI installed:
 
 ```bash
-cd glasschess
+cd chessy
 
 # Initialize and create repository in one command
-gh repo create glasschess --public --source=. --remote=origin --push
+gh repo create chessy --public --source=. --remote=origin --push
 
 # Or for private repository
-gh repo create glasschess --private --source=. --remote=origin --push
+gh repo create chessy --private --source=. --remote=origin --push
 ```
 
 ## Repository Settings (Recommended)
@@ -68,8 +68,9 @@ After creating the repository, configure these settings:
 
 ### 1. Enable GitHub Pages (Optional)
 - Go to Settings → Pages
-- Source: Deploy from branch → `main` → `/dist`
+- Source: Deploy from branch → `gh-pages` → `/` (root)
 - Save
+- Run `npm run deploy` locally to publish the `gh-pages` branch
 
 ### 2. Add Topics
 Add these topics to help others discover your project:
@@ -98,7 +99,7 @@ In the About section (top right), add:
 1. Go to [vercel.com](https://vercel.com)
 2. Sign in with GitHub
 3. Click "New Project"
-4. Import your `glasschess` repository
+4. Import your `chessy` repository
 5. Configure:
    - **Framework Preset**: Vite
    - **Build Command**: `npm run build`
@@ -132,7 +133,7 @@ If you get authentication errors:
 **Using SSH**:
 ```bash
 # Change remote URL to SSH
-git remote set-url origin git@github.com:YOUR_USERNAME/glasschess.git
+git remote set-url origin git@github.com:BernydotJar/chessy.git
 ```
 
 ### Large Files Warning
@@ -147,13 +148,13 @@ cat .gitignore
 
 Make sure you have:
 - Created the repository on GitHub first
-- Replaced `YOUR_USERNAME` with your actual GitHub username
+- Set the remote URL to `https://github.com/BernydotJar/chessy.git`
 - Proper authentication configured
 
 ## Repository Structure After Push
 
 ```
-glasschess/
+chessy/
 ├── .github/
 │   └── workflows/
 │       └── ci-cd.yml

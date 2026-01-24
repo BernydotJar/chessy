@@ -51,7 +51,7 @@ function App() {
             <p>Made with ♟️ and ❤️ by the GlassChess Team</p>
             <p className="mt-2">
               <a 
-                href="https://github.com/yourusername/glasschess" 
+                href="https://github.com/BernydotJar/chessy" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-blue-300 hover:text-blue-200 transition-colors underline"

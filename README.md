@@ -50,8 +50,8 @@ A beautiful, free, and modern chess application with glassmorphism design inspir
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/glasschess.git
-cd glasschess
+git clone https://github.com/BernydotJar/chessy.git
+cd chessy
 
 # Install dependencies
 npm install
@@ -72,6 +72,15 @@ npm run build
 npm run preview
 ```
 
+### Deploy to GitHub Pages
+
+```bash
+npm run deploy
+```
+
+Then enable Pages in GitHub: Settings → Pages → Deploy from branch → `gh-pages` → `/` (root).
+Your site will be available at `https://bernydotjar.github.io/chessy/`.
+
 ## 🎨 Customization
 
 The app includes a built-in theme customizer allowing users to:
@@ -83,7 +92,7 @@ The app includes a built-in theme customizer allowing users to:
 ## 📁 Project Structure
 
 ```
-glasschess/
+chessy/
 ├── src/
 │   ├── components/        # React components
 │   │   ├── ChessBoard.tsx
@@ -218,8 +227,8 @@ MIT License - feel free to use this project for learning or building your own ch
 
 ## 📞 Contact & Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/glasschess/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/glasschess/discussions)
+- **Issues**: [GitHub Issues](https://github.com/BernydotJar/chessy/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/BernydotJar/chessy/discussions)
 - **Email**: your.email@example.com
 
 ---
