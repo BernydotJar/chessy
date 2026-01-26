@@ -4,6 +4,7 @@ import { MoveHistory } from './components/MoveHistory';
 import { ThemeCustomizer } from './components/ThemeCustomizer';
 import { AIOpponent } from './components/AIOpponent';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
+import { CoachInsights } from './components/CoachInsights';
 import { useGameStore } from './store/gameStore';
 import { useTranslation } from 'react-i18next';
 import './styles/glassmorphism.css';
@@ -59,6 +60,7 @@ function App() {
           {/* Right Sidebar - Move History */}
           <div className="lg:col-span-3 animate-slide-up" style={{ animationDelay: '0.3s' }}>
             <MoveHistory />
+            <CoachInsights />
           </div>
         </div>
 

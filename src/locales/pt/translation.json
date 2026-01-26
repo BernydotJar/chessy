@@ -45,7 +45,9 @@
     "capturedByWhite": "Capturadas pelas Brancas",
     "capturedByBlack": "Capturadas pelas Pretas",
     "none": "Nenhuma",
-    "noMoves": "Ainda não há jogadas. Comece a jogar!"
+    "noMoves": "Ainda não há jogadas. Comece a jogar!",
+    "show": "Mostrar histórico",
+    "hide": "Ocultar histórico"
   },
   "ai": {
     "title": "Oponente IA",
@@ -108,5 +110,79 @@
     "pressKey": "Pressione {{key}}",
     "clickOrPress": "Clique em uma peça ou use o atalho do teclado",
     "esc": "Pressione ESC para cancelar"
+  },
+  "pieces": {
+    "pawn": "Peão",
+    "knight": "Cavalo",
+    "bishop": "Bispo",
+    "rook": "Torre",
+    "queen": "Dama",
+    "king": "Rei"
+  },
+  "coach": {
+    "title": "Dica do mentor",
+    "getInsight": "Obter dica",
+    "noMoves": "Faça alguns lances e clique em “Obter dica”.",
+    "opening": "Abertura: {{name}}",
+    "principle": "Princípio",
+    "principles": {
+      "general": "Jogada sólida. Continue se desenvolvendo e lutando pelo centro.",
+      "centerPawn": "Bom: o movimento de {{piece}} ajuda a controlar o centro.",
+      "development": "Desenvolvimento: {{piece}} entra em jogo e apoia o centro.",
+      "castle": "Bom: o roque melhora a segurança do rei e conecta as torres.",
+      "earlyQueen": "Cuidado: mover a dama cedo pode ser arriscado. Priorize o desenvolvimento.",
+      "kingSafety": "Considere rocar em breve para melhorar a segurança do rei.",
+      "enPassant": "Boa! En passant é uma captura tática rara."
+    }
+  },
+  "openings": {
+    "italian": {
+      "name": "Abertura Italiana",
+      "note": "Abertura clássica focada em desenvolvimento rápido e controle do centro."
+    },
+    "ruyLopez": {
+      "name": "Ruy López",
+      "note": "Abertura estratégica que pressiona o centro e o cavalo em c6."
+    },
+    "sicilian": {
+      "name": "Defesa Siciliana",
+      "note": "Estrutura assimétrica que luta pelo centro a partir do flanco."
+    },
+    "french": {
+      "name": "Defesa Francesa",
+      "note": "Estrutura sólida com contrajogo contra o centro das brancas."
+    },
+    "caroKann": {
+      "name": "Defesa Caro-Kann",
+      "note": "Defesa resiliente com estrutura de peões sólida."
+    },
+    "scandinavian": {
+      "name": "Defesa Escandinava",
+      "note": "Desafia o centro das brancas logo no início."
+    },
+    "petrov": {
+      "name": "Defesa Petrov",
+      "note": "Sólida e simétrica, busca igualdade."
+    },
+    "philidor": {
+      "name": "Defesa Philidor",
+      "note": "Defesa compacta que prepara uma ruptura central."
+    },
+    "queensGambit": {
+      "name": "Gambito da Dama",
+      "note": "As brancas oferecem um peão para ganhar espaço e controle central."
+    },
+    "queensGambitDeclined": {
+      "name": "Gambito da Dama Recusado",
+      "note": "As negras mantêm o centro e se desenvolvem com solidez."
+    },
+    "kingsIndian": {
+      "name": "Defesa Índia do Rei",
+      "note": "As negras cedem espaço e buscam contrajogo dinâmico."
+    },
+    "english": {
+      "name": "Abertura Inglesa",
+      "note": "Abertura flexível que controla o centro pelo flanco."
+    }
   }
 }

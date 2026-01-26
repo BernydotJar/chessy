@@ -45,7 +45,9 @@
     "capturedByWhite": "Captured by White",
     "capturedByBlack": "Captured by Black",
     "none": "None",
-    "noMoves": "No moves yet. Start playing!"
+    "noMoves": "No moves yet. Start playing!",
+    "show": "Show History",
+    "hide": "Hide History"
   },
   "ai": {
     "title": "AI Opponent",
@@ -108,5 +110,79 @@
     "pressKey": "Press {{key}}",
     "clickOrPress": "Click a piece or press the keyboard shortcut",
     "esc": "Press ESC to cancel"
+  },
+  "pieces": {
+    "pawn": "Pawn",
+    "knight": "Knight",
+    "bishop": "Bishop",
+    "rook": "Rook",
+    "queen": "Queen",
+    "king": "King"
+  },
+  "coach": {
+    "title": "Coach Insight",
+    "getInsight": "Get Insight",
+    "noMoves": "Click Get Insight after a few moves.",
+    "opening": "Opening: {{name}}",
+    "principle": "Principle",
+    "principles": {
+      "general": "Solid move. Keep developing and fighting for the center.",
+      "centerPawn": "Good: {{piece}} move helps control the center.",
+      "development": "Development: {{piece}} gets into play and supports the center.",
+      "castle": "Good: castling improves king safety and connects the rooks.",
+      "earlyQueen": "Careful: early queen moves can be risky. Prioritize development.",
+      "kingSafety": "Consider castling soon to improve king safety.",
+      "enPassant": "Nice! En passant is a rare tactical capture."
+    }
+  },
+  "openings": {
+    "italian": {
+      "name": "Italian Game",
+      "note": "A classical opening focused on rapid development and central control."
+    },
+    "ruyLopez": {
+      "name": "Ruy Lopez",
+      "note": "A strategic opening that pressures the center and targets the knight on c6."
+    },
+    "sicilian": {
+      "name": "Sicilian Defense",
+      "note": "Asymmetric structure that fights for the center from the flank."
+    },
+    "french": {
+      "name": "French Defense",
+      "note": "Solid structure aiming for counterplay against White's center."
+    },
+    "caroKann": {
+      "name": "Caro-Kann Defense",
+      "note": "Resilient defense aiming for a strong pawn structure."
+    },
+    "scandinavian": {
+      "name": "Scandinavian Defense",
+      "note": "Directly challenges White's center early."
+    },
+    "petrov": {
+      "name": "Petrov Defense",
+      "note": "Solid and symmetrical, aiming for equal play."
+    },
+    "philidor": {
+      "name": "Philidor Defense",
+      "note": "A compact defense that supports a later central break."
+    },
+    "queensGambit": {
+      "name": "Queen's Gambit",
+      "note": "White offers a pawn to gain space and central control."
+    },
+    "queensGambitDeclined": {
+      "name": "Queen's Gambit Declined",
+      "note": "Black holds the center and aims for solid development."
+    },
+    "kingsIndian": {
+      "name": "King's Indian Defense",
+      "note": "Black allows space but prepares a dynamic counterattack."
+    },
+    "english": {
+      "name": "English Opening",
+      "note": "Flexible opening that builds control of the center from the side."
+    }
   }
 }
