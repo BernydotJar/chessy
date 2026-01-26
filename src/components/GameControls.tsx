@@ -1,6 +1,7 @@
 import React from 'react';
 import { useGameStore } from '../store/gameStore';
 import { RotateCcw, Undo2, Flag, Trophy } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export const GameControls: React.FC = () => {
   const {
@@ -16,24 +17,26 @@ export const GameControls: React.FC = () => {
     showLegalMoves,
     setShowLegalMoves,
   } = useGameStore();
+  const { t } = useTranslation();
 
   const getGameStatus = () => {
     if (!isGameOver) {
-      const turn = chess.turn() === 'w' ? 'White' : 'Black';
+      const turn = chess.turn() === 'w' ? t('colors.white') : t('colors.black');
       if (chess.isCheck()) {
-        return `${turn} is in check!`;
+        return t('status.inCheck', { color: turn });
       }
-      return `${turn} to move`;
+      return t('status.turn', { color: turn });
     }
 
     if (winner === 'draw') {
-      if (chess.isStalemate()) return 'Draw by stalemate';
-      if (chess.isThreefoldRepetition()) return 'Draw by threefold repetition';
-      if (chess.isInsufficientMaterial()) return 'Draw by insufficient material';
-      return 'Draw';
+      if (chess.isStalemate()) return t('status.drawStalemate');
+      if (chess.isThreefoldRepetition()) return t('status.drawThreefold');
+      if (chess.isInsufficientMaterial()) return t('status.drawInsufficient');
+      return t('status.draw');
     }
 
-    return `${winner === 'white' ? 'White' : 'Black'} wins by checkmate!`;
+    const winnerColor = winner === 'white' ? t('colors.white') : t('colors.black');
+    return t('status.winsCheckmate', { color: winnerColor });
   };
 
   return (
@@ -46,7 +49,7 @@ export const GameControls: React.FC = () => {
             {getGameStatus()}
           </p>
           <p className="text-white/70 text-sm mt-1">
-            Move {Math.floor(history.length / 2) + 1}
+            {t('controls.moveNumber', { count: Math.floor(history.length / 2) + 1 })}
           </p>
         </div>
       </div>
@@ -57,19 +60,19 @@ export const GameControls: React.FC = () => {
           onClick={undoMove}
           disabled={history.length === 0}
           className="glass-button px-4 py-3 rounded-lg text-white font-medium flex items-center justify-center gap-2 hover:scale-105 transition-transform disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
-          aria-label="Undo last move"
+          aria-label={t('controls.undo')}
         >
           <Undo2 size={20} />
-          <span>Undo</span>
+          <span>{t('controls.undo')}</span>
         </button>
 
         <button
           onClick={resetGame}
           className="glass-button px-4 py-3 rounded-lg text-white font-medium flex items-center justify-center gap-2 hover:scale-105 transition-transform"
-          aria-label="Reset game"
+          aria-label={t('controls.newGame')}
         >
           <RotateCcw size={20} />
-          <span>New Game</span>
+          <span>{t('controls.newGame')}</span>
         </button>
       </div>
 
@@ -78,14 +81,16 @@ export const GameControls: React.FC = () => {
         <button
           onClick={() => setShowLegalMoves(!showLegalMoves)}
           className="w-full glass-button px-4 py-3 rounded-lg text-white font-medium hover:scale-105 transition-transform"
-          aria-label="Toggle legal move hints"
+          aria-label={showLegalMoves ? t('controls.hideLegalMoves') : t('controls.showLegalMoves')}
         >
-          {showLegalMoves ? 'Hide Legal Moves' : 'Show Legal Moves'}
+          {showLegalMoves ? t('controls.hideLegalMoves') : t('controls.showLegalMoves')}
         </button>
         {isAIGame && (
           <div className="text-white/70 text-xs text-center">
-            AI: {aiDifficulty.charAt(0).toUpperCase() + aiDifficulty.slice(1)} · You are{' '}
-            {playerColor.charAt(0).toUpperCase() + playerColor.slice(1)}
+            {t('controls.aiInfo', {
+              level: t(`ai.difficultyLevels.${aiDifficulty}.label`),
+              color: t(`colors.${playerColor}`),
+            })}
           </div>
         )}
       </div>
@@ -94,15 +99,15 @@ export const GameControls: React.FC = () => {
       {!isGameOver && history.length > 0 && (
         <button
           onClick={() => {
-            if (confirm('Are you sure you want to resign?')) {
+            if (confirm(t('controls.resignConfirm'))) {
               resetGame();
             }
           }}
           className="w-full glass-button px-4 py-3 rounded-lg text-red-300 font-medium flex items-center justify-center gap-2 hover:bg-red-500/20 transition-all"
-          aria-label="Resign game"
+          aria-label={t('controls.resign')}
         >
           <Flag size={20} />
-          <span>Resign</span>
+          <span>{t('controls.resign')}</span>
         </button>
       )}
 
@@ -110,13 +115,13 @@ export const GameControls: React.FC = () => {
       {isGameOver && (
         <div className="glass-container rounded-lg p-4 text-center animate-fade-in">
           <p className="text-white/80 text-sm mb-3">
-            Game Over
+            {t('controls.gameOver')}
           </p>
           <button
             onClick={resetGame}
             className="w-full glass-button px-4 py-3 rounded-lg text-white font-semibold hover:scale-105 transition-transform bg-gradient-to-r from-blue-500/20 to-purple-500/20"
           >
-            Play Again
+            {t('controls.playAgain')}
           </button>
         </div>
       )}

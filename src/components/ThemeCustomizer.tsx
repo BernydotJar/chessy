@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { useGameStore, themePresets } from '../store/gameStore';
 import { Palette, X } from 'lucide-react';
 import { BoardTheme } from '../types/chess.types';
+import { useTranslation } from 'react-i18next';
 
 export const ThemeCustomizer: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { theme, setTheme } = useGameStore();
   const [customTheme, setCustomTheme] = useState<BoardTheme>(theme);
+  const { t } = useTranslation();
 
   const handlePresetSelect = (preset: BoardTheme) => {
     setCustomTheme(preset);
@@ -24,10 +26,10 @@ export const ThemeCustomizer: React.FC = () => {
       <button
         onClick={() => setIsOpen(true)}
         className="glass-button px-4 py-2 rounded-lg text-white font-medium flex items-center gap-2 hover:scale-105 transition-transform"
-        aria-label="Open theme customizer"
+        aria-label={t('theme.open')}
       >
         <Palette size={20} />
-        <span>Customize</span>
+        <span>{t('theme.customize')}</span>
       </button>
 
       {isOpen && (
@@ -36,12 +38,12 @@ export const ThemeCustomizer: React.FC = () => {
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-white flex items-center gap-2">
                 <Palette size={24} />
-                Theme Customizer
+                {t('theme.title')}
               </h2>
               <button
                 onClick={() => setIsOpen(false)}
                 className="glass-button p-2 rounded-lg text-white hover:bg-white/20"
-                aria-label="Close theme customizer"
+                aria-label={t('theme.close')}
               >
                 <X size={20} />
               </button>
@@ -50,7 +52,7 @@ export const ThemeCustomizer: React.FC = () => {
             {/* Preset Themes */}
             <div className="mb-6">
               <h3 className="text-white font-semibold mb-3 text-sm uppercase tracking-wide">
-                Preset Themes
+                {t('theme.preset')}
               </h3>
               <div className="grid grid-cols-2 gap-3">
                 {themePresets.map((preset) => (
@@ -78,12 +80,12 @@ export const ThemeCustomizer: React.FC = () => {
             {/* Custom Colors */}
             <div className="space-y-4">
               <h3 className="text-white font-semibold text-sm uppercase tracking-wide">
-                Custom Colors
+                {t('theme.custom')}
               </h3>
 
               <div>
                 <label className="block text-white text-sm mb-2">
-                  Light Squares
+                  {t('theme.light')}
                 </label>
                 <div className="flex gap-2">
                   <input
@@ -104,7 +106,7 @@ export const ThemeCustomizer: React.FC = () => {
 
               <div>
                 <label className="block text-white text-sm mb-2">
-                  Dark Squares
+                  {t('theme.dark')}
                 </label>
                 <div className="flex gap-2">
                   <input
@@ -125,7 +127,7 @@ export const ThemeCustomizer: React.FC = () => {
 
               <div>
                 <label className="block text-white text-sm mb-2">
-                  Glass Opacity: {customTheme.glassOpacity.toFixed(2)}
+                  {t('theme.glassOpacity', { value: customTheme.glassOpacity.toFixed(2) })}
                 </label>
                 <input
                   type="range"
@@ -140,7 +142,7 @@ export const ThemeCustomizer: React.FC = () => {
 
               <div>
                 <label className="block text-white text-sm mb-2">
-                  Glass Blur: {customTheme.glassBlur}px
+                  {t('theme.glassBlur', { value: customTheme.glassBlur })}
                 </label>
                 <input
                   type="range"
@@ -157,7 +159,7 @@ export const ThemeCustomizer: React.FC = () => {
             {/* Preview */}
             <div className="mt-6">
               <h3 className="text-white font-semibold mb-3 text-sm uppercase tracking-wide">
-                Preview
+                {t('theme.preview')}
               </h3>
               <div className="grid grid-cols-8 gap-0 w-full aspect-square rounded-lg overflow-hidden">
                 {Array.from({ length: 64 }).map((_, i) => {

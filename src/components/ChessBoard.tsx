@@ -3,6 +3,7 @@ import { Chessboard } from 'react-chessboard';
 import { useGameStore } from '../store/gameStore';
 import { Square } from 'chess.js';
 import { PromotionDialog } from './PromotionDialog';
+import { useTranslation } from 'react-i18next';
 
 export const ChessBoard: React.FC = () => {
   const { 
@@ -19,6 +20,7 @@ export const ChessBoard: React.FC = () => {
   
   const [highlightedSquares, setHighlightedSquares] = useState<string[]>([]);
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   const onDrop = (sourceSquare: Square, targetSquare: Square) => {
     // Check if the move requires promotion
@@ -128,7 +130,7 @@ export const ChessBoard: React.FC = () => {
             <div className="glass-card px-6 py-4 rounded-lg">
               <div className="flex items-center gap-3">
                 <div className="spinner" />
-                <span className="text-white font-semibold">AI is thinking...</span>
+                <span className="text-white font-semibold">{t('ai.thinking')}</span>
               </div>
             </div>
           </div>

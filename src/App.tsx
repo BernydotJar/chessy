@@ -3,11 +3,14 @@ import { GameControls } from './components/GameControls';
 import { MoveHistory } from './components/MoveHistory';
 import { ThemeCustomizer } from './components/ThemeCustomizer';
 import { AIOpponent } from './components/AIOpponent';
+import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { useGameStore } from './store/gameStore';
+import { useTranslation } from 'react-i18next';
 import './styles/glassmorphism.css';
 
 function App() {
   const { startAIGame, isAIGame, toggleSound, soundEnabled } = useGameStore();
+  const { t } = useTranslation();
 
   return (
     <div className="min-h-screen animated-gradient p-4 md:p-8">
@@ -18,12 +21,15 @@ function App() {
             Glass<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-purple-200">Chess</span>
           </h1>
           <p className="text-white/80 text-lg">
-            Free, Beautiful, Modern Chess Platform
+            {t('app.subtitle')}
           </p>
+          <div className="mt-4 flex justify-center">
+            <LanguageSwitcher />
+          </div>
           {isAIGame && (
             <div className="mt-2 glass-container inline-block px-4 py-2 rounded-lg">
               <p className="text-white/90 text-sm font-semibold">
-                🤖 Playing against AI
+                {t('app.aiBadge')}
               </p>
             </div>
           )}
@@ -64,7 +70,7 @@ function App() {
         {/* Footer */}
         <footer className="text-center text-white/60 text-sm animate-fade-in" style={{ animationDelay: '0.4s' }}>
           <div className="glass-container rounded-lg p-4 inline-block">
-            <p>Made with ♟️ and ❤️ by the GlassChess Team</p>
+            <p>{t('app.footer.madeBy')}</p>
             <p className="mt-2">
               <a 
                 href="https://github.com/BernydotJar/chessy" 
@@ -72,10 +78,13 @@ function App() {
                 rel="noopener noreferrer"
                 className="text-blue-300 hover:text-blue-200 transition-colors underline"
               >
-                View on GitHub
+                {t('app.footer.viewOnGithub')}
               </a>
               {' · '}
-              <span className="text-white/40">Phase 2 - AI Enhanced</span>
+              <span className="text-white/40">{t('app.footer.phase')}</span>
+            </p>
+            <p className="mt-2 text-white/70 text-xs">
+              {t('app.footer.credit')}
             </p>
           </div>
         </footer>

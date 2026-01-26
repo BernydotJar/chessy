@@ -1,0 +1,112 @@
+{
+  "app": {
+    "subtitle": "Free, Beautiful, Modern Chess Platform",
+    "aiBadge": "🤖 Playing against AI",
+    "footer": {
+      "madeBy": "Made with ♟️ and ❤️ by the GlassChess Team",
+      "viewOnGithub": "View on GitHub",
+      "phase": "Phase 2 - AI Enhanced",
+      "credit": "by Eduardo Sacahuí and the BlancoNegro Chess Team"
+    }
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "es": "Español",
+    "pt": "Português"
+  },
+  "controls": {
+    "undo": "Undo",
+    "newGame": "New Game",
+    "resign": "Resign",
+    "resignConfirm": "Are you sure you want to resign?",
+    "gameOver": "Game Over",
+    "playAgain": "Play Again",
+    "moveNumber": "Move {{count}}",
+    "showLegalMoves": "Show Legal Moves",
+    "hideLegalMoves": "Hide Legal Moves",
+    "aiInfo": "AI: {{level}} · You are {{color}}"
+  },
+  "status": {
+    "turn": "{{color}} to move",
+    "inCheck": "{{color}} is in check!",
+    "winsCheckmate": "{{color}} wins by checkmate!",
+    "draw": "Draw",
+    "drawStalemate": "Draw by stalemate",
+    "drawThreefold": "Draw by threefold repetition",
+    "drawInsufficient": "Draw by insufficient material"
+  },
+  "colors": {
+    "white": "White",
+    "black": "Black"
+  },
+  "history": {
+    "title": "Move History",
+    "capturedByWhite": "Captured by White",
+    "capturedByBlack": "Captured by Black",
+    "none": "None",
+    "noMoves": "No moves yet. Start playing!"
+  },
+  "ai": {
+    "title": "AI Opponent",
+    "settings": "AI settings",
+    "difficulty": "Difficulty Level",
+    "playAs": "Play As",
+    "soundEffects": "Sound Effects",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "startGame": "Start Game",
+    "startGameVsAi": "Start Game vs AI",
+    "difficultyLabel": "Difficulty",
+    "playingAsLabel": "Playing as",
+    "soundLabel": "Sound",
+    "random": "Random",
+    "thinking": "AI is thinking...",
+    "difficultyLevels": {
+      "beginner": {
+        "label": "Beginner",
+        "description": "Perfect for learning"
+      },
+      "easy": {
+        "label": "Easy",
+        "description": "Casual play"
+      },
+      "medium": {
+        "label": "Medium",
+        "description": "Balanced challenge"
+      },
+      "hard": {
+        "label": "Hard",
+        "description": "Experienced players"
+      },
+      "master": {
+        "label": "Master",
+        "description": "Maximum difficulty"
+      }
+    }
+  },
+  "theme": {
+    "customize": "Customize",
+    "title": "Theme Customizer",
+    "preset": "Preset Themes",
+    "custom": "Custom Colors",
+    "light": "Light Squares",
+    "dark": "Dark Squares",
+    "glassOpacity": "Glass Opacity: {{value}}",
+    "glassBlur": "Glass Blur: {{value}}px",
+    "preview": "Preview",
+    "open": "Open theme customizer",
+    "close": "Close theme customizer"
+  },
+  "promotion": {
+    "title": "Choose Promotion Piece",
+    "promoting": "Promoting {{color}}",
+    "queen": "Queen",
+    "rook": "Rook",
+    "bishop": "Bishop",
+    "knight": "Knight",
+    "pressKey": "Press {{key}}",
+    "clickOrPress": "Click a piece or press the keyboard shortcut",
+    "esc": "Press ESC to cancel"
+  }
+}

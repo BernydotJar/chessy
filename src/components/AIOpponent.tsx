@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Bot, Play, Settings, Volume2, VolumeX } from 'lucide-react';
 import { DifficultyLevel } from '../utils/stockfishService';
+import { useTranslation } from 'react-i18next';
 
 interface AIOpponentProps {
   onStartGame: (difficulty: DifficultyLevel, playerColor: 'white' | 'black' | 'random') => void;
@@ -18,13 +19,34 @@ export const AIOpponent: React.FC<AIOpponentProps> = ({
   const [difficulty, setDifficulty] = useState<DifficultyLevel>('medium');
   const [playerColor, setPlayerColor] = useState<'white' | 'black' | 'random'>('white');
   const [showSettings, setShowSettings] = useState(false);
+  const { t } = useTranslation();
 
   const difficulties: Array<{ value: DifficultyLevel; label: string; description: string }> = [
-    { value: 'beginner', label: 'Beginner', description: 'Perfect for learning' },
-    { value: 'easy', label: 'Easy', description: 'Casual play' },
-    { value: 'medium', label: 'Medium', description: 'Balanced challenge' },
-    { value: 'hard', label: 'Hard', description: 'Experienced players' },
-    { value: 'master', label: 'Master', description: 'Maximum difficulty' },
+    {
+      value: 'beginner',
+      label: t('ai.difficultyLevels.beginner.label'),
+      description: t('ai.difficultyLevels.beginner.description'),
+    },
+    {
+      value: 'easy',
+      label: t('ai.difficultyLevels.easy.label'),
+      description: t('ai.difficultyLevels.easy.description'),
+    },
+    {
+      value: 'medium',
+      label: t('ai.difficultyLevels.medium.label'),
+      description: t('ai.difficultyLevels.medium.description'),
+    },
+    {
+      value: 'hard',
+      label: t('ai.difficultyLevels.hard.label'),
+      description: t('ai.difficultyLevels.hard.description'),
+    },
+    {
+      value: 'master',
+      label: t('ai.difficultyLevels.master.label'),
+      description: t('ai.difficultyLevels.master.description'),
+    },
   ];
 
   const handleStartGame = () => {
@@ -37,12 +59,12 @@ export const AIOpponent: React.FC<AIOpponentProps> = ({
       <div className="flex items-center justify-between">
         <h3 className="text-white font-semibold text-lg flex items-center gap-2">
           <Bot size={24} />
-          AI Opponent
+          {t('ai.title')}
         </h3>
         <button
           onClick={() => setShowSettings(!showSettings)}
           className="glass-button p-2 rounded-lg text-white hover:scale-105 transition-transform"
-          aria-label="AI settings"
+          aria-label={t('ai.settings')}
         >
           <Settings size={20} />
         </button>
@@ -53,7 +75,7 @@ export const AIOpponent: React.FC<AIOpponentProps> = ({
           {/* Difficulty Selection */}
           <div>
             <label className="block text-white text-sm font-semibold mb-2">
-              Difficulty Level
+              {t('ai.difficulty')}
             </label>
             <div className="space-y-2">
               {difficulties.map((diff) => (
@@ -76,7 +98,7 @@ export const AIOpponent: React.FC<AIOpponentProps> = ({
           {/* Color Selection */}
           <div>
             <label className="block text-white text-sm font-semibold mb-2">
-              Play As
+              {t('ai.playAs')}
             </label>
             <div className="grid grid-cols-3 gap-2">
               {(['white', 'black', 'random'] as const).map((color) => (
@@ -89,7 +111,9 @@ export const AIOpponent: React.FC<AIOpponentProps> = ({
                       : 'hover:bg-white/10'
                   }`}
                 >
-                  <div className="text-white font-medium text-sm">{color}</div>
+                  <div className="text-white font-medium text-sm">
+                    {color === 'random' ? t('ai.random') : t(`colors.${color}`)}
+                  </div>
                 </button>
               ))}
             </div>
@@ -98,14 +122,14 @@ export const AIOpponent: React.FC<AIOpponentProps> = ({
           {/* Sound Toggle */}
           <div>
             <label className="block text-white text-sm font-semibold mb-2">
-              Sound Effects
+              {t('ai.soundEffects')}
             </label>
             <button
               onClick={onToggleSound}
               className="w-full glass-button p-3 rounded-lg flex items-center justify-between"
             >
               <span className="text-white font-medium">
-                {soundEnabled ? 'Enabled' : 'Disabled'}
+                {soundEnabled ? t('ai.enabled') : t('ai.disabled')}
               </span>
               {soundEnabled ? (
                 <Volume2 size={20} className="text-white" />
@@ -122,7 +146,7 @@ export const AIOpponent: React.FC<AIOpponentProps> = ({
             className="w-full glass-button px-4 py-4 rounded-lg text-white font-semibold flex items-center justify-center gap-2 hover:scale-105 transition-transform bg-gradient-to-r from-blue-500/20 to-purple-500/20 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <Play size={20} />
-            <span>Start Game vs AI</span>
+            <span>{t('ai.startGameVsAi')}</span>
           </button>
         </div>
       )}
@@ -131,13 +155,14 @@ export const AIOpponent: React.FC<AIOpponentProps> = ({
         <div className="glass-container rounded-lg p-4">
           <div className="text-white/80 text-sm">
             <p className="mb-2">
-              <strong>Difficulty:</strong> {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+              <strong>{t('ai.difficultyLabel')}:</strong> {t(`ai.difficultyLevels.${difficulty}.label`)}
             </p>
             <p className="mb-2">
-              <strong>Playing as:</strong> {playerColor === 'random' ? 'Random' : playerColor.charAt(0).toUpperCase() + playerColor.slice(1)}
+              <strong>{t('ai.playingAsLabel')}:</strong>{' '}
+              {playerColor === 'random' ? t('ai.random') : t(`colors.${playerColor}`)}
             </p>
             <p>
-              <strong>Sound:</strong> {soundEnabled ? 'On' : 'Off'}
+              <strong>{t('ai.soundLabel')}:</strong> {soundEnabled ? t('ai.enabled') : t('ai.disabled')}
             </p>
           </div>
           {!isPlaying && (
@@ -146,7 +171,7 @@ export const AIOpponent: React.FC<AIOpponentProps> = ({
               className="w-full mt-3 glass-button px-4 py-3 rounded-lg text-white font-semibold flex items-center justify-center gap-2 hover:scale-105 transition-transform"
             >
               <Play size={20} />
-              <span>Start Game</span>
+              <span>{t('ai.startGame')}</span>
             </button>
           )}
         </div>

@@ -1,9 +1,11 @@
 import React from 'react';
 import { useGameStore } from '../store/gameStore';
 import { ScrollText } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export const MoveHistory: React.FC = () => {
   const { history, capturedPieces } = useGameStore();
+  const { t } = useTranslation();
 
   const pieceSymbols: { [key: string]: string } = {
     p: '♟',
@@ -52,30 +54,30 @@ export const MoveHistory: React.FC = () => {
     <div className="glass-card rounded-xl p-6 space-y-4">
       <div className="flex items-center gap-2 text-white font-semibold text-lg mb-4">
         <ScrollText size={24} />
-        <span>Move History</span>
+        <span>{t('history.title')}</span>
       </div>
 
       {/* Captured Pieces */}
       <div className="space-y-3">
         <div className="glass-container rounded-lg p-3">
           <p className="text-white text-xs font-semibold mb-2 uppercase tracking-wide">
-            Captured by White
+            {t('history.capturedByWhite')}
           </p>
           {capturedPieces.white.length > 0 ? (
             renderCapturedPieces(capturedPieces.white, 'white')
           ) : (
-            <p className="text-white/40 text-sm">None</p>
+            <p className="text-white/40 text-sm">{t('history.none')}</p>
           )}
         </div>
 
         <div className="glass-container rounded-lg p-3">
           <p className="text-gray-800 text-xs font-semibold mb-2 uppercase tracking-wide">
-            Captured by Black
+            {t('history.capturedByBlack')}
           </p>
           {capturedPieces.black.length > 0 ? (
             renderCapturedPieces(capturedPieces.black, 'black')
           ) : (
-            <p className="text-white/40 text-sm">None</p>
+            <p className="text-white/40 text-sm">{t('history.none')}</p>
           )}
         </div>
       </div>
@@ -84,7 +86,7 @@ export const MoveHistory: React.FC = () => {
       <div className="glass-container rounded-lg p-4 max-h-64 overflow-y-auto glass-scrollbar">
         {history.length === 0 ? (
           <p className="text-white/60 text-sm text-center py-4">
-            No moves yet. Start playing!
+            {t('history.noMoves')}
           </p>
         ) : (
           <div className="space-y-2">

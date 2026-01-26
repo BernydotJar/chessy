@@ -1,0 +1,112 @@
+{
+  "app": {
+    "subtitle": "Plataforma de ajedrez moderna, hermosa y gratuita",
+    "aiBadge": "🤖 Jugando contra la IA",
+    "footer": {
+      "madeBy": "Hecho con ♟️ y ❤️ por el equipo de GlassChess",
+      "viewOnGithub": "Ver en GitHub",
+      "phase": "Fase 2 - IA Mejorada",
+      "credit": "por Eduardo Sacahuí y el equipo BlancoNegro Chess"
+    }
+  },
+  "language": {
+    "label": "Idioma",
+    "en": "Inglés",
+    "es": "Español",
+    "pt": "Portugués"
+  },
+  "controls": {
+    "undo": "Deshacer",
+    "newGame": "Nueva partida",
+    "resign": "Rendirse",
+    "resignConfirm": "¿Seguro que quieres rendirte?",
+    "gameOver": "Fin de la partida",
+    "playAgain": "Jugar de nuevo",
+    "moveNumber": "Movimiento {{count}}",
+    "showLegalMoves": "Mostrar movimientos legales",
+    "hideLegalMoves": "Ocultar movimientos legales",
+    "aiInfo": "IA: {{level}} · Juegas con {{color}}"
+  },
+  "status": {
+    "turn": "Turno de {{color}}",
+    "inCheck": "{{color}} en jaque",
+    "winsCheckmate": "{{color}} ganan por jaque mate",
+    "draw": "Empate",
+    "drawStalemate": "Empate por ahogado",
+    "drawThreefold": "Empate por triple repetición",
+    "drawInsufficient": "Empate por material insuficiente"
+  },
+  "colors": {
+    "white": "Blancas",
+    "black": "Negras"
+  },
+  "history": {
+    "title": "Historial de movimientos",
+    "capturedByWhite": "Capturadas por las Blancas",
+    "capturedByBlack": "Capturadas por las Negras",
+    "none": "Ninguna",
+    "noMoves": "Aún no hay movimientos. ¡Empieza a jugar!"
+  },
+  "ai": {
+    "title": "Oponente IA",
+    "settings": "Ajustes de IA",
+    "difficulty": "Nivel de dificultad",
+    "playAs": "Jugar como",
+    "soundEffects": "Efectos de sonido",
+    "enabled": "Activado",
+    "disabled": "Desactivado",
+    "startGame": "Comenzar partida",
+    "startGameVsAi": "Comenzar vs IA",
+    "difficultyLabel": "Dificultad",
+    "playingAsLabel": "Jugando como",
+    "soundLabel": "Sonido",
+    "random": "Aleatorio",
+    "thinking": "La IA está pensando...",
+    "difficultyLevels": {
+      "beginner": {
+        "label": "Principiante",
+        "description": "Perfecto para aprender"
+      },
+      "easy": {
+        "label": "Fácil",
+        "description": "Partida casual"
+      },
+      "medium": {
+        "label": "Medio",
+        "description": "Desafío equilibrado"
+      },
+      "hard": {
+        "label": "Difícil",
+        "description": "Para jugadores experimentados"
+      },
+      "master": {
+        "label": "Maestro",
+        "description": "Máxima dificultad"
+      }
+    }
+  },
+  "theme": {
+    "customize": "Personalizar",
+    "title": "Personalizador de tema",
+    "preset": "Temas predefinidos",
+    "custom": "Colores personalizados",
+    "light": "Casillas claras",
+    "dark": "Casillas oscuras",
+    "glassOpacity": "Opacidad del vidrio: {{value}}",
+    "glassBlur": "Desenfoque del vidrio: {{value}}px",
+    "preview": "Vista previa",
+    "open": "Abrir personalizador de tema",
+    "close": "Cerrar personalizador de tema"
+  },
+  "promotion": {
+    "title": "Elige pieza de promoción",
+    "promoting": "Promocionando {{color}}",
+    "queen": "Reina",
+    "rook": "Torre",
+    "bishop": "Alfil",
+    "knight": "Caballo",
+    "pressKey": "Pulsa {{key}}",
+    "clickOrPress": "Haz clic en una pieza o usa el atajo del teclado",
+    "esc": "Pulsa ESC para cancelar"
+  }
+}
