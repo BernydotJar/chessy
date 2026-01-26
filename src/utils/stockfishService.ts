@@ -1,6 +1,7 @@
 // AI Opponent Service using Stockfish
 // This provides chess engine capabilities with multiple difficulty levels
 
+
 export type DifficultyLevel = 'beginner' | 'easy' | 'medium' | 'hard' | 'master';
 
 export interface AIMove {
@@ -16,8 +17,14 @@ export interface EngineEvaluation {
   depth: number;
 }
 
+type EngineLike = {
+  postMessage: (command: string) => void;
+  onmessage: ((event: MessageEvent | string) => void) | null;
+  terminate?: () => void;
+};
+
 class StockfishService {
-  private engine: Worker | null = null;
+  private engine: EngineLike | null = null;
   private isReady: boolean = false;
   private pendingCallback: ((result: any) => void) | null = null;
 
@@ -37,16 +44,13 @@ class StockfishService {
 
     return new Promise((resolve, reject) => {
       try {
-        // Using Stockfish WASM
-        const stockfishPath = 'https://cdn.jsdelivr.net/npm/stockfish@16.0.0/src/stockfish.js';
-        
-        // Create web worker
-        this.engine = new Worker(stockfishPath);
-        
+        const stockfishUrl = `${import.meta.env.BASE_URL}stockfish.js`;
+        this.engine = new Worker(stockfishUrl) as unknown as EngineLike;
+
         this.engine.onmessage = (event) => {
-          const message = event.data;
-          
-          if (message === 'uciok') {
+          const message = typeof event === 'string' ? event : event.data;
+
+          if (!this.isReady && (message === 'uciok' || message === 'readyok')) {
             this.isReady = true;
             resolve();
           } else if (this.pendingCallback && message.startsWith('bestmove')) {
@@ -56,15 +60,11 @@ class StockfishService {
           }
         };
 
-        this.engine.onerror = (error) => {
-          console.error('Stockfish error:', error);
-          reject(error);
-        };
-
         // Initialize UCI protocol
         this.sendCommand('uci');
-        
+        this.sendCommand('isready');
       } catch (error) {
+        this.engine = null;
         reject(error);
       }
     });
@@ -125,10 +125,8 @@ class StockfishService {
 
     return new Promise((resolve) => {
       let evaluation: Partial<EngineEvaluation> = { depth: 0, score: 0 };
-      
-      const messageHandler = (event: MessageEvent) => {
-        const message = event.data;
-        
+
+      const handleMessage = (message: string) => {
         if (message.startsWith('info') && message.includes('score')) {
           // Parse evaluation
           const depthMatch = message.match(/depth (\d+)/);
@@ -151,20 +149,34 @@ class StockfishService {
         if (message.startsWith('bestmove')) {
           const move = this.parseBestMove(message);
           evaluation.bestMove = move ? `${move.from}${move.to}` : undefined;
-          
-          this.engine?.removeEventListener('message', messageHandler);
+
+          // Restore original handler if we replaced it
+          if (this.engine) {
+            this.engine.onmessage = baseHandler;
+          }
           resolve(evaluation as EngineEvaluation);
         }
       };
 
-      this.engine?.addEventListener('message', messageHandler);
+      const baseHandler = this.engine?.onmessage || null;
+      if (this.engine) {
+        this.engine.onmessage = (event) => {
+          const message = typeof event === 'string' ? event : event.data;
+          handleMessage(message);
+          if (baseHandler) {
+            baseHandler(event);
+          }
+        };
+      }
       
       this.sendCommand(`position fen ${fen}`);
       this.sendCommand(`go depth ${depth}`);
       
       // Timeout
       setTimeout(() => {
-        this.engine?.removeEventListener('message', messageHandler);
+        if (this.engine) {
+          this.engine.onmessage = baseHandler;
+        }
         resolve(evaluation as EngineEvaluation);
       }, 5000);
     });
@@ -173,7 +185,7 @@ class StockfishService {
   terminate(): void {
     if (this.engine) {
       this.sendCommand('quit');
-      this.engine.terminate();
+      this.engine.terminate?.();
       this.engine = null;
       this.isReady = false;
     }

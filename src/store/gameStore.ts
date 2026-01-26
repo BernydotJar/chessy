@@ -16,7 +16,7 @@ interface GameStore extends GameState {
   legalMoves: string[];
   pendingPromotion: { from: string; to: string } | null;
   
-  makeMove: (from: string, to: string, promotion?: string) => boolean;
+  makeMove: (from: string, to: string, promotion?: string, isAIMove?: boolean) => boolean;
   makeAIMove: () => Promise<void>;
   resetGame: () => void;
   undoMove: () => void;
@@ -156,14 +156,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
   legalMoves: [],
   pendingPromotion: null,
 
-  makeMove: (from: string, to: string, promotion?: string) => {
+  makeMove: (from: string, to: string, promotion?: string, isAIMove: boolean = false) => {
     const { chess, isAIGame, playerColor, isAIThinking } = get();
     
     // Prevent moves during AI thinking
-    if (isAIThinking) return false;
+    if (isAIThinking && !isAIMove) return false;
     
     // In AI game, prevent moves when it's not player's turn
-    if (isAIGame) {
+    if (isAIGame && !isAIMove) {
       const currentTurn = chess.turn();
       const playerTurn = playerColor === 'white' ? 'w' : 'b';
       if (currentTurn !== playerTurn) return false;
@@ -225,12 +225,24 @@ export const useGameStore = create<GameStore>((set, get) => ({
     
     try {
       const aiMove: AIMove | null = await stockfishService.getBestMove(chess.fen(), aiDifficulty);
-      
+
       if (aiMove) {
-        get().makeMove(aiMove.from, aiMove.to, aiMove.promotion);
+        get().makeMove(aiMove.from, aiMove.to, aiMove.promotion, true);
+        return;
+      }
+
+      const fallbackMoves = chess.moves({ verbose: true }) as Move[];
+      if (fallbackMoves.length > 0) {
+        const randomMove = fallbackMoves[Math.floor(Math.random() * fallbackMoves.length)];
+        get().makeMove(randomMove.from, randomMove.to, randomMove.promotion, true);
       }
     } catch (error) {
       console.error('AI move error:', error);
+      const fallbackMoves = chess.moves({ verbose: true }) as Move[];
+      if (fallbackMoves.length > 0) {
+        const randomMove = fallbackMoves[Math.floor(Math.random() * fallbackMoves.length)];
+        get().makeMove(randomMove.from, randomMove.to, randomMove.promotion, true);
+      }
     } finally {
       set({ isAIThinking: false });
     }
