@@ -3,6 +3,11 @@ import { findOpening } from './openings';
 import { StockfishService } from './stockfishService';
 
 export type CoachInsight = {
+  fen: string;
+  moveNumber: number;
+  ply: number;
+  san: string;
+  uci: string;
   openingKey?: string;
   principleKey: string;
   principleParams?: Record<string, string>;
@@ -88,11 +93,15 @@ export const getCoachInsight = (chess: Chess): CoachInsight | null => {
   if (moves.length === 0) return null;
 
   const lastMove = moves[moves.length - 1];
+  const fen = chess.fen();
   const uciMoves = getUciMoves(moves);
   const opening = findOpening(uciMoves);
 
   const moveNumber = Math.ceil(moves.length / 2);
+  const ply = moves.length;
   const pieceKey = getPieceKey(lastMove.piece);
+  const san = lastMove.san;
+  const uci = `${lastMove.from}${lastMove.to}${lastMove.promotion || ''}`;
 
   let principleKey = 'coach.principles.general';
   let principleParams: Record<string, string> = { pieceKey };
@@ -136,6 +145,11 @@ export const getCoachInsight = (chess: Chess): CoachInsight | null => {
   }
 
   return {
+    fen,
+    moveNumber,
+    ply,
+    san,
+    uci,
     openingKey: opening?.key,
     principleKey,
     principleParams,

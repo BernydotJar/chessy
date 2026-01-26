@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ChessBoard } from './components/ChessBoard';
 import { GameControls } from './components/GameControls';
 import { MoveHistory } from './components/MoveHistory';
@@ -7,33 +8,50 @@ import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { CoachInsights } from './components/CoachInsights';
 import { useGameStore } from './store/gameStore';
 import { useTranslation } from 'react-i18next';
+import { Settings } from 'lucide-react';
 import './styles/glassmorphism.css';
 
 function App() {
   const { startAIGame, isAIGame, toggleSound, soundEnabled } = useGameStore();
   const { t } = useTranslation();
+  const [aiSettingsOpen, setAiSettingsOpen] = useState(false);
 
   return (
     <div className="min-h-screen animated-gradient p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <header className="text-center mb-8 animate-fade-in">
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-2 drop-shadow-lg">
-            Glass<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-purple-200">Chess</span>
-          </h1>
-          <p className="text-white/80 text-lg">
-            {t('app.subtitle')}
-          </p>
-          <div className="mt-4 flex justify-center">
-            <LanguageSwitcher />
-          </div>
-          {isAIGame && (
-            <div className="mt-2 glass-container inline-block px-4 py-2 rounded-lg">
-              <p className="text-white/90 text-sm font-semibold">
-                {t('app.aiBadge')}
-              </p>
+        <header className="mb-8">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
+            <div className="hidden sm:block sm:flex-1" />
+            <div className="flex justify-center sm:flex-1">
+              <button
+                onClick={() => setAiSettingsOpen((prev) => !prev)}
+                className={`glass-button top-control flex items-center gap-2 text-white/90 text-sm font-semibold ${aiSettingsOpen ? 'top-control--active' : ''}`}
+                aria-pressed={aiSettingsOpen}
+              >
+                <Settings size={16} />
+                <span>{t('ai.settings')}</span>
+              </button>
             </div>
-          )}
+            <div className="flex justify-end sm:flex-1">
+              <LanguageSwitcher />
+            </div>
+          </div>
+          <div className="text-center animate-fade-in">
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-2 drop-shadow-lg">
+              Glass<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-purple-200">Chess</span>
+            </h1>
+            <p className="text-white/80 text-lg">
+              {t('app.subtitle')}
+            </p>
+            {isAIGame && (
+              <div className="mt-3 glass-container inline-block px-4 py-2 rounded-lg">
+                <p className="text-white/90 text-sm font-semibold">
+                  {t('app.aiBadge')}
+                </p>
+              </div>
+            )}
+          </div>
         </header>
 
         {/* Main Game Area */}
@@ -45,6 +63,8 @@ function App() {
               isPlaying={isAIGame}
               soundEnabled={soundEnabled}
               onToggleSound={toggleSound}
+              settingsOpen={aiSettingsOpen}
+              onSettingsChange={setAiSettingsOpen}
             />
             <GameControls />
             <div className="hidden lg:block">

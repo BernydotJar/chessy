@@ -40,11 +40,11 @@ export const GameControls: React.FC = () => {
   };
 
   return (
-    <div className="glass-card rounded-xl p-6 space-y-4">
+    <div className="glass-card glass-card--subtle rounded-xl p-5 space-y-4">
       {/* Game Status */}
       <div className="text-center">
         <div className="glass-container rounded-lg p-4 mb-4">
-          <p className="text-white text-lg font-semibold flex items-center justify-center gap-2">
+          <p className="text-white text-base font-semibold flex items-center justify-center gap-2">
             {isGameOver && winner !== 'draw' && <Trophy size={24} className="text-yellow-400" />}
             {getGameStatus()}
           </p>
@@ -59,7 +59,7 @@ export const GameControls: React.FC = () => {
         <button
           onClick={undoMove}
           disabled={history.length === 0}
-          className="glass-button px-4 py-3 rounded-lg text-white font-medium flex items-center justify-center gap-2 hover:scale-105 transition-transform disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
+          className="glass-button glass-button--subtle px-4 py-3 rounded-lg text-white font-medium flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
           aria-label={t('controls.undo')}
         >
           <Undo2 size={20} />
@@ -68,7 +68,7 @@ export const GameControls: React.FC = () => {
 
         <button
           onClick={resetGame}
-          className="glass-button px-4 py-3 rounded-lg text-white font-medium flex items-center justify-center gap-2 hover:scale-105 transition-transform"
+          className="glass-button glass-button--subtle px-4 py-3 rounded-lg text-white font-medium flex items-center justify-center gap-2"
           aria-label={t('controls.newGame')}
         >
           <RotateCcw size={20} />
@@ -80,7 +80,7 @@ export const GameControls: React.FC = () => {
       <div className="glass-container rounded-lg p-4 space-y-3">
         <button
           onClick={() => setShowLegalMoves(!showLegalMoves)}
-          className="w-full glass-button px-4 py-3 rounded-lg text-white font-medium hover:scale-105 transition-transform"
+          className="w-full glass-button glass-button--subtle px-4 py-3 rounded-lg text-white font-medium"
           aria-label={showLegalMoves ? t('controls.hideLegalMoves') : t('controls.showLegalMoves')}
         >
           {showLegalMoves ? t('controls.hideLegalMoves') : t('controls.showLegalMoves')}
@@ -103,7 +103,7 @@ export const GameControls: React.FC = () => {
               resetGame();
             }
           }}
-          className="w-full glass-button px-4 py-3 rounded-lg text-red-300 font-medium flex items-center justify-center gap-2 hover:bg-red-500/20 transition-all"
+          className="w-full glass-button glass-button--subtle px-4 py-3 rounded-lg text-red-300 font-medium flex items-center justify-center gap-2 hover:bg-red-500/20 transition-colors"
           aria-label={t('controls.resign')}
         >
           <Flag size={20} />
@@ -119,7 +119,7 @@ export const GameControls: React.FC = () => {
           </p>
           <button
             onClick={resetGame}
-            className="w-full glass-button px-4 py-3 rounded-lg text-white font-semibold hover:scale-105 transition-transform bg-gradient-to-r from-blue-500/20 to-purple-500/20"
+            className="w-full glass-button glass-button--subtle px-4 py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-blue-500/20 to-purple-500/20"
           >
             {t('controls.playAgain')}
           </button>

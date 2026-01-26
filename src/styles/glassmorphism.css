@@ -16,6 +16,12 @@
   transition: all 0.3s ease;
 }
 
+.glass-card--subtle {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.28);
+}
+
 .glass-card:hover {
   background: rgba(255, 255, 255, 0.12);
   box-shadow: 0 6px 30px 0 rgba(0, 0, 0, 0.35);
@@ -30,9 +36,20 @@
   transition: all 0.3s ease;
 }
 
+.glass-button--subtle {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: none;
+}
+
 .glass-button:hover {
   background: rgba(255, 255, 255, 0.15);
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.glass-button--subtle:hover {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: none;
 }
 
 .coach-action {
@@ -75,6 +92,40 @@
   background: rgba(255, 255, 255, 0.2);
   box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
   color: #fff;
+}
+
+.coach-chip {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.coach-chip--white {
+  background: rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.coach-chip--black {
+  background: rgba(15, 23, 42, 0.4);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.top-control {
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+}
+
+.top-control--active {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.45);
+  box-shadow: 0 0 18px rgba(59, 130, 246, 0.35);
 }
 
 .glass-button:active {

@@ -123,6 +123,11 @@
     "title": "Consejo del mentor",
     "getInsight": "Obtener consejo",
     "noMoves": "Haz algunos movimientos y pulsa “Obtener consejo”.",
+    "listTitle": "Últimas {{count}} notas para {{side}}",
+    "listEmpty": "Aún no hay consejos para {{side}}. ¡Sigue jugando!",
+    "moveLabel": "Movimiento {{move}} · {{san}}",
+    "openingShort": "Apertura: {{name}}",
+    "tipShort": "Por qué: {{tip}}",
     "opening": "Apertura: {{name}}",
     "principle": "Principio",
     "principles": {
@@ -154,7 +159,14 @@
     },
     "mentor": {
       "title": "El mentor dice",
-      "line": "{{opening}}. {{principle}} {{evaluation}}"
+      "line": "{{opening}}. {{principle}} {{evaluation}}",
+      "openers": [
+        "¡Buen ritmo!",
+        "Ponte el sombrero de entrenador.",
+        "Vale, hablemos de ajedrez.",
+        "Buenos instintos.",
+        "Un detalle pequeño, gran impacto."
+      ]
     },
     "tips": {
       "title": "¿Por qué esta jugada?",
@@ -248,10 +260,25 @@
       "note": "Defensa sólida que busca un final resistente.",
       "history": "Revivida al máximo nivel por Kramnik en 2000."
     },
+    "ruyLopezExchange": {
+      "name": "Ruy López: Cambio",
+      "note": "Simplificación temprana que daña la estructura de peones negras.",
+      "history": "Popularizada por Capablanca en la década de 1910."
+    },
     "scotch": {
       "name": "Apertura Escocesa",
       "note": "Juego abierto en el centro y actividad rápida.",
       "history": "Popularizada en la década de 1820; sigue vigente."
+    },
+    "vienna": {
+      "name": "Apertura Vienesa",
+      "note": "Desarrollo flexible con un Nc3 temprano.",
+      "history": "Popular en clubes de Viena entre 1820 y 1840."
+    },
+    "kingsGambit": {
+      "name": "Gambito de Rey",
+      "note": "Gambito agresivo para desarrollo rápido y ataque.",
+      "history": "Conocido desde el siglo XVII; clásico del ajedrez romántico."
     },
     "sicilianNajdorf": {
       "name": "Siciliana Najdorf",
@@ -262,6 +289,21 @@
       "name": "Defensa Eslava",
       "note": "Estructura sólida con desarrollo flexible.",
       "history": "Pilar defensivo desde principios del siglo XX."
+    },
+    "queensIndian": {
+      "name": "Defensa India de Dama",
+      "note": "Defensa hipermoderna con ...b6 y ...Ab7.",
+      "history": "Desarrollada en la década de 1920; usada por Nimzowitsch."
+    },
+    "benoni": {
+      "name": "Defensa Benoni Moderna",
+      "note": "Desbalance dinámico con contrajuego en el flanco de dama.",
+      "history": "Revivida en los años 30; línea principal en los 50."
+    },
+    "benkoGambit": {
+      "name": "Gambito Benko",
+      "note": "Sacrificio de peón por presión duradera en el flanco de dama.",
+      "history": "Introducido por Pal Benko en los años 60."
     },
     "london": {
       "name": "Sistema Londres",
@@ -292,6 +334,11 @@
       "name": "Siciliana Dragón",
       "note": "Línea aguda con fiancheto y ataques opuestos.",
       "history": "Popularizada a mediados del siglo XX por su táctica."
+    },
+    "sicilianAcceleratedDragon": {
+      "name": "Siciliana Dragón Acelerado",
+      "note": "Fiancheto rápido sin ...d6, buscando actividad.",
+      "history": "Popularizada en las décadas de 1950 y 1960."
     },
     "frenchAdvance": {
       "name": "Francesa Avance",
@@ -332,6 +379,11 @@
       "name": "Defensa Pirc",
       "note": "Estructura flexible que invita a un gran centro blanco.",
       "history": "Nombrada por Vasja Pirc; popular en el siglo XX."
+    },
+    "modernDefense": {
+      "name": "Defensa Moderna",
+      "note": "Planteo hipermoderno con ...g6 y ...Ag7.",
+      "history": "Popularizada por Robatsch en los años 60."
     }
   }
 }

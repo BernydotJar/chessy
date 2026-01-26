@@ -1,17 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { useTranslation } from 'react-i18next';
 import { Lightbulb } from 'lucide-react';
-import { getCoachInsightWithEval } from '../utils/coach';
+import { CoachInsight, getCoachInsightWithEval } from '../utils/coach';
 
 export const CoachInsights: React.FC = () => {
   const { chess, fen } = useGameStore();
   const { t } = useTranslation();
-  const [insight, setInsight] = useState<Awaited<ReturnType<typeof getCoachInsightWithEval>> | null>(null);
+  const [insights, setInsights] = useState<CoachInsight[]>([]);
   const [status, setStatus] = useState<'idle' | 'running' | 'done'>('idle');
   const [mode, setMode] = useState<'off' | 'on' | 'paused'>('off');
   const [perspective, setPerspective] = useState<'white' | 'black'>('white');
   const requestId = useRef(0);
+  const maxVisible = 5;
+  const maxStored = 12;
 
   useEffect(() => {
     if (mode === 'on') {
@@ -24,7 +26,12 @@ export const CoachInsights: React.FC = () => {
     setStatus('running');
     const result = await getCoachInsightWithEval(chess);
     if (requestId.current !== id) return;
-    setInsight(result);
+    if (result) {
+      setInsights((prev) => {
+        const next = [result, ...prev.filter((item) => item.fen !== result.fen)];
+        return next.slice(0, maxStored);
+      });
+    }
     setStatus('done');
   };
 
@@ -56,12 +63,11 @@ export const CoachInsights: React.FC = () => {
     return `${sign}${pawn.toFixed(2)}`;
   };
 
-  const mover = insight?.lastMoveColor === 'w' ? 'white' : insight?.lastMoveColor === 'b' ? 'black' : null;
-  const isOpponentMove = mover && mover !== perspective;
-
-  const resolveEvaluationKey = () => {
-    if (!insight?.evaluation) return null;
-    const key = insight.evaluation.labelKey;
+  const resolveEvaluationKey = (entry: CoachInsight) => {
+    if (!entry.evaluation) return null;
+    const mover = entry.lastMoveColor === 'w' ? 'white' : entry.lastMoveColor === 'b' ? 'black' : null;
+    const isOpponentMove = mover && mover !== perspective;
+    const key = entry.evaluation.labelKey;
     if (!isOpponentMove) return key;
     const map: Record<string, string> = {
       'coach.evaluation.good': 'coach.evaluation.opponentGood',
@@ -71,6 +77,22 @@ export const CoachInsights: React.FC = () => {
     };
     return map[key] || key;
   };
+
+  const mentorOpeners = useMemo(() => {
+    const raw = t('coach.mentor.openers', { returnObjects: true });
+    return Array.isArray(raw) ? raw : [];
+  }, [t]);
+
+  const getMentorOpener = (entry: CoachInsight) => {
+    if (mentorOpeners.length === 0) return '';
+    const index = entry.ply ? (entry.ply - 1) % mentorOpeners.length : 0;
+    return mentorOpeners[index];
+  };
+
+  const visibleInsights = useMemo(() => {
+    const side = perspective === 'white' ? 'w' : 'b';
+    return insights.filter((entry) => entry.lastMoveColor === side).slice(0, maxVisible);
+  }, [insights, maxVisible, perspective]);
 
   return (
     <div className="glass-card rounded-xl p-6 space-y-4 mt-6">
@@ -104,81 +126,64 @@ export const CoachInsights: React.FC = () => {
         </div>
       </div>
 
-      {!insight && (
+      <p className="text-white/50 text-xs text-center">
+        {t('coach.listTitle', { count: maxVisible, side: t(`colors.${perspective}`) })}
+      </p>
+
+      {visibleInsights.length === 0 && (
         <p className="text-white/60 text-sm text-center">
-          {t('coach.noMoves')}
+          {t('coach.listEmpty', { side: t(`colors.${perspective}`) })}
         </p>
       )}
 
-      {insight && (
-        <div className="space-y-3 text-white/80 text-sm">
-          <div className="glass-container rounded-lg p-3">
-            <p className="text-white font-semibold">{t('coach.mentor.title')}</p>
-            <p className="text-white/80 mt-1">
-              {t('coach.mentor.line', {
-                opening: insight.openingKey ? t(`openings.${insight.openingKey}.name`) : '',
-                principle: t(insight.principleKey, {
-                  piece: t((insight.principleParams?.pieceKey || 'pieces.pawn') as string),
-                }),
-                evaluation: insight.evaluation ? t(resolveEvaluationKey() || insight.evaluation.labelKey, insight.evaluation.labelParams) : t('coach.evaluation.good'),
-              })}
-            </p>
-            <p className="text-white/50 mt-2 text-xs">
-              {t('coach.perspective', { side: t(`colors.${perspective}`) })}{mover ? ` · ${t('coach.lastMove', { side: t(`colors.${mover}`) })}` : ''}
-            </p>
-          </div>
-
-          {insight.openingKey && (
-            <div className="glass-container rounded-lg p-3">
-              <p className="text-white font-semibold">
-                {t('coach.opening', { name: t(`openings.${insight.openingKey}.name`) })}
+      <div className="space-y-3 text-white/80 text-sm">
+        {visibleInsights.map((entry) => {
+          const opener = getMentorOpener(entry);
+          const mentorLine = t('coach.mentor.line', {
+            opening: entry.openingKey ? t(`openings.${entry.openingKey}.name`) : '',
+            principle: t(entry.principleKey, {
+              piece: t((entry.principleParams?.pieceKey || 'pieces.pawn') as string),
+            }),
+            evaluation: entry.evaluation
+              ? t(resolveEvaluationKey(entry) || entry.evaluation.labelKey, entry.evaluation.labelParams)
+              : t('coach.evaluation.good'),
+          });
+          const sideKey = entry.lastMoveColor === 'w' ? 'white' : 'black';
+          return (
+            <div key={`${entry.fen}-${entry.ply}`} className="glass-container rounded-lg p-3 space-y-2">
+              <div className="flex items-center justify-between text-xs text-white/60">
+                <span>{t('coach.moveLabel', { move: entry.moveNumber, san: entry.san })}</span>
+                <span className={`coach-chip coach-chip--${sideKey}`}>
+                  {t(`colors.${sideKey}`)}
+                </span>
+              </div>
+              <p className="text-white font-semibold">{t('coach.mentor.title')}</p>
+              <p className="text-white/75 text-sm">
+                {[opener, mentorLine].filter(Boolean).join(' ')}
               </p>
-              {!!t(`openings.${insight.openingKey}.note`, { defaultValue: '' }) && (
-                <p className="text-white/70 mt-1">
-                  {t(`openings.${insight.openingKey}.note`)}
-                </p>
-              )}
-              {!!t(`openings.${insight.openingKey}.history`, { defaultValue: '' }) && (
-                <p className="text-white/50 mt-2 text-xs">
-                  {t(`openings.${insight.openingKey}.history`)}
-                </p>
-              )}
+              <div className="text-white/60 text-xs space-y-1">
+                {entry.openingKey && (
+                  <p>{t('coach.openingShort', { name: t(`openings.${entry.openingKey}.name`) })}</p>
+                )}
+                <p>{t(entry.principleKey, {
+                  piece: t((entry.principleParams?.pieceKey || 'pieces.pawn') as string),
+                })}</p>
+                {entry.evaluation && (
+                  <p>
+                    {t(resolveEvaluationKey(entry) || entry.evaluation.labelKey, entry.evaluation.labelParams)}
+                    {typeof entry.evaluation.delta === 'number'
+                      ? ` · ${t('coach.evaluation.delta', { delta: formatDelta(entry.evaluation.delta) })}`
+                      : ''}
+                  </p>
+                )}
+                {entry.tips && entry.tips.length > 0 && (
+                  <p>{t('coach.tipShort', { tip: t(entry.tips[0].key) })}</p>
+                )}
+              </div>
             </div>
-          )}
-
-          <div className="glass-container rounded-lg p-3">
-            <p className="text-white font-semibold">{t('coach.principle')}</p>
-            <p className="text-white/70 mt-1">
-              {t(insight.principleKey, {
-                piece: t((insight.principleParams?.pieceKey || 'pieces.pawn') as string),
-              })}
-            </p>
-          </div>
-
-          {insight.evaluation && (
-            <div className="glass-container rounded-lg p-3">
-              <p className="text-white font-semibold">{t('coach.evaluation.title')}</p>
-              <p className="text-white/70 mt-1">
-                {t(resolveEvaluationKey() || insight.evaluation.labelKey, insight.evaluation.labelParams)}
-              </p>
-              {typeof insight.evaluation.delta === 'number' && (
-                <p className="text-white/50 mt-1 text-xs">
-                  {t('coach.evaluation.delta', { delta: formatDelta(insight.evaluation.delta) })}
-                </p>
-              )}
-            </div>
-          )}
-
-          {insight.tips && insight.tips.length > 0 && (
-            <div className="glass-container rounded-lg p-3">
-              <p className="text-white font-semibold">{t('coach.tips.title')}</p>
-              <p className="text-white/70 mt-1">
-                {t(insight.tips[0].key)}
-              </p>
-            </div>
-          )}
-        </div>
-      )}
+          );
+        })}
+      </div>
     </div>
   );
 };

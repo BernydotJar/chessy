@@ -29,8 +29,20 @@ const OPENINGS: OpeningMatch[] = [
     moves: ['e2e4', 'e7e5', 'g1f3', 'b8c6', 'f1b5', 'g8f6'],
   },
   {
+    key: 'ruyLopezExchange',
+    moves: ['e2e4', 'e7e5', 'g1f3', 'b8c6', 'f1b5', 'a7a6', 'b5c6'],
+  },
+  {
     key: 'scotch',
     moves: ['e2e4', 'e7e5', 'g1f3', 'b8c6', 'd2d4'],
+  },
+  {
+    key: 'vienna',
+    moves: ['e2e4', 'e7e5', 'b1c3'],
+  },
+  {
+    key: 'kingsGambit',
+    moves: ['e2e4', 'e7e5', 'f2f4'],
   },
   {
     key: 'sicilian',
@@ -43,6 +55,10 @@ const OPENINGS: OpeningMatch[] = [
   {
     key: 'sicilianDragon',
     moves: ['e2e4', 'c7c5', 'g1f3', 'd7d6', 'd2d4', 'c5d4', 'f3d4', 'g8f6', 'b1c3', 'g7g6'],
+  },
+  {
+    key: 'sicilianAcceleratedDragon',
+    moves: ['e2e4', 'c7c5', 'g1f3', 'b8c6', 'd2d4', 'c5d4', 'f3d4', 'g7g6'],
   },
   {
     key: 'sicilianNajdorf',
@@ -105,8 +121,20 @@ const OPENINGS: OpeningMatch[] = [
     moves: ['d2d4', 'd7d5', 'c2c4', 'c7c6'],
   },
   {
+    key: 'queensIndian',
+    moves: ['d2d4', 'g8f6', 'c2c4', 'e7e6', 'g1f3', 'b7b6'],
+  },
+  {
     key: 'london',
     moves: ['d2d4', 'd7d5', 'g1f3', 'g8f6', 'c1f4'],
+  },
+  {
+    key: 'benoni',
+    moves: ['d2d4', 'g8f6', 'c2c4', 'c7c5', 'd4d5'],
+  },
+  {
+    key: 'benkoGambit',
+    moves: ['d2d4', 'g8f6', 'c2c4', 'c7c5', 'd4d5', 'b7b5'],
   },
   {
     key: 'kingsIndian',
@@ -119,6 +147,10 @@ const OPENINGS: OpeningMatch[] = [
   {
     key: 'pirc',
     moves: ['e2e4', 'd7d6', 'd2d4', 'g8f6', 'b1c3', 'g7g6'],
+  },
+  {
+    key: 'modernDefense',
+    moves: ['e2e4', 'g7g6', 'd2d4', 'f8g7'],
   },
   {
     key: 'grunfeld',

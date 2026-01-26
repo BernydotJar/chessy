@@ -123,6 +123,11 @@
     "title": "Coach Insight",
     "getInsight": "Get Insight",
     "noMoves": "Click Get Insight after a few moves.",
+    "listTitle": "Last {{count}} notes for {{side}}",
+    "listEmpty": "No insights for {{side}} yet. Keep playing!",
+    "moveLabel": "Move {{move}} · {{san}}",
+    "openingShort": "Opening: {{name}}",
+    "tipShort": "Why: {{tip}}",
     "opening": "Opening: {{name}}",
     "principle": "Principle",
     "principles": {
@@ -154,7 +159,14 @@
     },
     "mentor": {
       "title": "Mentor says",
-      "line": "{{opening}}. {{principle}} {{evaluation}}"
+      "line": "{{opening}}. {{principle}} {{evaluation}}",
+      "openers": [
+        "Nice tempo!",
+        "Coach hat on.",
+        "Alright, let’s talk chess.",
+        "Good instincts.",
+        "Tiny detail, big impact."
+      ]
     },
     "tips": {
       "title": "Why this move?",
@@ -248,10 +260,25 @@
       "note": "Solid defense aiming for a durable endgame.",
       "history": "Revived at elite level by Kramnik in 2000."
     },
+    "ruyLopezExchange": {
+      "name": "Ruy Lopez: Exchange",
+      "note": "Early simplification that damages Black’s pawn structure.",
+      "history": "Popularized by Capablanca in the 1910s."
+    },
     "scotch": {
       "name": "Scotch Game",
       "note": "Open central play and rapid piece activity.",
       "history": "Popularized in the 1820s; still a mainline choice."
+    },
+    "vienna": {
+      "name": "Vienna Game",
+      "note": "Flexible development with an early Nc3.",
+      "history": "Popular in Vienna clubs in the 1820s–1840s."
+    },
+    "kingsGambit": {
+      "name": "King's Gambit",
+      "note": "Aggressive pawn gambit for rapid development and attack.",
+      "history": "Known since the 17th century; a staple of 19th-century romantic chess."
     },
     "sicilianNajdorf": {
       "name": "Sicilian Najdorf",
@@ -262,6 +289,21 @@
       "name": "Slav Defense",
       "note": "Solid structure with flexible development.",
       "history": "A mainstay since the early 1900s."
+    },
+    "queensIndian": {
+      "name": "Queen's Indian Defense",
+      "note": "Solid hypermodern defense with ...b6 and ...Bb7.",
+      "history": "Developed in the 1920s; used by Nimzowitsch."
+    },
+    "benoni": {
+      "name": "Modern Benoni Defense",
+      "note": "Dynamic imbalance with queenside counterplay.",
+      "history": "Revived in the 1930s; became mainline in the 1950s."
+    },
+    "benkoGambit": {
+      "name": "Benko Gambit",
+      "note": "Pawn sacrifice for long-term queenside pressure.",
+      "history": "Introduced by Pal Benko in the 1960s."
     },
     "london": {
       "name": "London System",
@@ -292,6 +334,11 @@
       "name": "Sicilian Dragon",
       "note": "Sharp line with a fianchetto and opposite-side attacks.",
       "history": "Popularized in the mid-20th century for its tactics."
+    },
+    "sicilianAcceleratedDragon": {
+      "name": "Sicilian Accelerated Dragon",
+      "note": "Fast fianchetto without ...d6, aiming for activity.",
+      "history": "Popularized in the 1950s–1960s."
     },
     "frenchAdvance": {
       "name": "French Advance",
@@ -332,6 +379,11 @@
       "name": "Pirc Defense",
       "note": "Flexible setup inviting White to build a big center.",
       "history": "Named after Vasja Pirc; popular in mid-20th century."
+    },
+    "modernDefense": {
+      "name": "Modern Defense",
+      "note": "Hypermodern setup with ...g6 and ...Bg7.",
+      "history": "Popularized by Robatsch in the 1960s."
     }
   }
 }
