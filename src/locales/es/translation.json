@@ -177,13 +177,11 @@
     "mentor": {
       "title": "El mentor dice",
       "line": "{{opening}}. {{principle}} {{evaluation}}",
-      "openers": [
-        "¡Buen ritmo!",
-        "Ponte el sombrero de entrenador.",
-        "Vale, hablemos de ajedrez.",
-        "Buenos instintos.",
-        "Un detalle pequeño, gran impacto."
-      ]
+      "prefix": {
+        "suggest": "Ajustemos esto.",
+        "warn": "Sé preciso aquí.",
+        "book": "Jugada de libro."
+      }
     },
     "tips": {
       "title": "¿Por qué esta jugada?",

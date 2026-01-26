@@ -79,15 +79,15 @@ export const CoachInsights: React.FC = () => {
     return map[key] || key;
   };
 
-  const mentorOpeners = useMemo(() => {
-    const raw = t('coach.mentor.openers', { returnObjects: true });
-    return Array.isArray(raw) ? raw : [];
-  }, [t]);
-
-  const getMentorOpener = (entry: CoachInsight) => {
-    if (mentorOpeners.length === 0) return '';
-    const index = entry.ply ? (entry.ply - 1) % mentorOpeners.length : 0;
-    return mentorOpeners[index];
+  const getMentorPrefix = (entry: CoachInsight) => {
+    if (entry.suggestedSan) return t('coach.mentor.prefix.suggest');
+    if (entry.evaluation && entry.evaluation.labelKey !== 'coach.evaluation.good') {
+      return t('coach.mentor.prefix.warn');
+    }
+    if (entry.openingKey && entry.moveNumber <= 6) {
+      return t('coach.mentor.prefix.book');
+    }
+    return '';
   };
 
   const visibleInsights = useMemo(() => {
@@ -145,8 +145,8 @@ export const CoachInsights: React.FC = () => {
 
       {visibleInsights.length > 0 && (
         <div className={`space-y-3 text-white/80 text-sm ${expanded ? 'max-h-96 overflow-y-auto glass-scrollbar pr-1' : ''}`}>
-          {displayedInsights.map((entry) => {
-          const opener = getMentorOpener(entry);
+          {displayedInsights.map((entry, index) => {
+          const prefix = getMentorPrefix(entry);
           const openingName = entry.openingKey ? t(`openings.${entry.openingKey}.name`) : '';
           const openingNote = entry.openingKey ? t(`openings.${entry.openingKey}.note`, { defaultValue: '' }) : '';
           const openingHistory = entry.openingKey ? t(`openings.${entry.openingKey}.history`, { defaultValue: '' }) : '';
@@ -156,7 +156,13 @@ export const CoachInsights: React.FC = () => {
           const evaluationText = entry.evaluation
             ? t(resolveEvaluationKey(entry) || entry.evaluation.labelKey, entry.evaluation.labelParams)
             : t('coach.evaluation.good');
-          const mentorLine = [openingName, principleText, evaluationText].filter(Boolean).join(' · ');
+          const previousOpening = index > 0 ? displayedInsights[index - 1].openingKey : null;
+          const showOpeningSummary = !!openingName && (index === 0 || entry.openingKey !== previousOpening);
+          const mentorLine = [
+            showOpeningSummary ? openingName : '',
+            principleText,
+            evaluationText,
+          ].filter(Boolean).join(' · ');
           const sideKey = entry.lastMoveColor === 'w' ? 'white' : 'black';
           const suggestionIdea = entry.suggestedPrincipleKey
             ? t(`coach.principlesShort.${entry.suggestedPrincipleKey.replace('coach.principles.', '')}`)
@@ -171,16 +177,16 @@ export const CoachInsights: React.FC = () => {
               </div>
               <p className="text-white font-semibold">{t('coach.mentor.title')}</p>
               <p className="text-white/75 text-sm">
-                {[opener, mentorLine].filter(Boolean).join(' ')}
+                {[prefix, mentorLine].filter(Boolean).join(' ')}
               </p>
               <div className="text-white/60 text-xs space-y-1">
-                {openingName && (
+                {showOpeningSummary && (
                   <p>{t('coach.openingShort', { name: openingName })}</p>
                 )}
-                {openingNote && (
+                {showOpeningSummary && openingNote && (
                   <p>{t('coach.openingNote', { note: openingNote })}</p>
                 )}
-                {openingHistory && (
+                {showOpeningSummary && openingHistory && (
                   <p>{t('coach.openingHistory', { history: openingHistory })}</p>
                 )}
                 <p>{principleText}</p>

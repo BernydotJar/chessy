@@ -177,13 +177,11 @@
     "mentor": {
       "title": "Mentor says",
       "line": "{{opening}}. {{principle}} {{evaluation}}",
-      "openers": [
-        "Nice tempo!",
-        "Coach hat on.",
-        "Alright, let’s talk chess.",
-        "Good instincts.",
-        "Tiny detail, big impact."
-      ]
+      "prefix": {
+        "suggest": "Let’s tighten this.",
+        "warn": "Be precise here.",
+        "book": "Book move."
+      }
     },
     "tips": {
       "title": "Why this move?",

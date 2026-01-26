@@ -177,13 +177,11 @@
     "mentor": {
       "title": "O mentor diz",
       "line": "{{opening}}. {{principle}} {{evaluation}}",
-      "openers": [
-        "Boa cadência!",
-        "Chapéu de treinador ligado.",
-        "Certo, vamos falar de xadrez.",
-        "Bons instintos.",
-        "Detalhe pequeno, impacto grande."
-      ]
+      "prefix": {
+        "suggest": "Vamos ajustar isso.",
+        "warn": "Seja preciso aqui.",
+        "book": "Lance de livro."
+      }
     },
     "tips": {
       "title": "Por que esse lance?",
