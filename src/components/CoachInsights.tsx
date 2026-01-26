@@ -11,8 +11,9 @@ export const CoachInsights: React.FC = () => {
   const [status, setStatus] = useState<'idle' | 'running' | 'done'>('idle');
   const [mode, setMode] = useState<'off' | 'on' | 'paused'>('off');
   const [perspective, setPerspective] = useState<'white' | 'black'>('white');
+  const [expanded, setExpanded] = useState(false);
   const requestId = useRef(0);
-  const maxVisible = 5;
+  const maxVisible = 3;
   const maxStored = 12;
 
   useEffect(() => {
@@ -91,8 +92,10 @@ export const CoachInsights: React.FC = () => {
 
   const visibleInsights = useMemo(() => {
     const side = perspective === 'white' ? 'w' : 'b';
-    return insights.filter((entry) => entry.lastMoveColor === side).slice(0, maxVisible);
-  }, [insights, maxVisible, perspective]);
+    return insights.filter((entry) => entry.lastMoveColor === side);
+  }, [insights, perspective]);
+
+  const displayedInsights = expanded ? visibleInsights : visibleInsights.slice(0, maxVisible);
 
   return (
     <div className="glass-card rounded-xl p-6 space-y-4 mt-6">
@@ -127,7 +130,11 @@ export const CoachInsights: React.FC = () => {
       </div>
 
       <p className="text-white/50 text-xs text-center">
-        {t('coach.listTitle', { count: maxVisible, side: t(`colors.${perspective}`) })}
+        {t('coach.listTitle', {
+          shown: expanded ? displayedInsights.length : Math.min(displayedInsights.length, maxVisible),
+          total: visibleInsights.length,
+          side: t(`colors.${perspective}`),
+        })}
       </p>
 
       {visibleInsights.length === 0 && (
@@ -136,19 +143,24 @@ export const CoachInsights: React.FC = () => {
         </p>
       )}
 
-      <div className="space-y-3 text-white/80 text-sm">
-        {visibleInsights.map((entry) => {
+      {visibleInsights.length > 0 && (
+        <div className={`space-y-3 text-white/80 text-sm ${expanded ? 'max-h-96 overflow-y-auto glass-scrollbar pr-1' : ''}`}>
+          {displayedInsights.map((entry) => {
           const opener = getMentorOpener(entry);
-          const mentorLine = t('coach.mentor.line', {
-            opening: entry.openingKey ? t(`openings.${entry.openingKey}.name`) : '',
-            principle: t(entry.principleKey, {
-              piece: t((entry.principleParams?.pieceKey || 'pieces.pawn') as string),
-            }),
-            evaluation: entry.evaluation
-              ? t(resolveEvaluationKey(entry) || entry.evaluation.labelKey, entry.evaluation.labelParams)
-              : t('coach.evaluation.good'),
+          const openingName = entry.openingKey ? t(`openings.${entry.openingKey}.name`) : '';
+          const openingNote = entry.openingKey ? t(`openings.${entry.openingKey}.note`, { defaultValue: '' }) : '';
+          const openingHistory = entry.openingKey ? t(`openings.${entry.openingKey}.history`, { defaultValue: '' }) : '';
+          const principleText = t(entry.principleKey, {
+            piece: t((entry.principleParams?.pieceKey || 'pieces.pawn') as string),
           });
+          const evaluationText = entry.evaluation
+            ? t(resolveEvaluationKey(entry) || entry.evaluation.labelKey, entry.evaluation.labelParams)
+            : t('coach.evaluation.good');
+          const mentorLine = [openingName, principleText, evaluationText].filter(Boolean).join(' · ');
           const sideKey = entry.lastMoveColor === 'w' ? 'white' : 'black';
+          const suggestionIdea = entry.suggestedPrincipleKey
+            ? t(`coach.principlesShort.${entry.suggestedPrincipleKey.replace('coach.principles.', '')}`)
+            : '';
           return (
             <div key={`${entry.fen}-${entry.ply}`} className="glass-container rounded-lg p-3 space-y-2">
               <div className="flex items-center justify-between text-xs text-white/60">
@@ -162,12 +174,16 @@ export const CoachInsights: React.FC = () => {
                 {[opener, mentorLine].filter(Boolean).join(' ')}
               </p>
               <div className="text-white/60 text-xs space-y-1">
-                {entry.openingKey && (
-                  <p>{t('coach.openingShort', { name: t(`openings.${entry.openingKey}.name`) })}</p>
+                {openingName && (
+                  <p>{t('coach.openingShort', { name: openingName })}</p>
                 )}
-                <p>{t(entry.principleKey, {
-                  piece: t((entry.principleParams?.pieceKey || 'pieces.pawn') as string),
-                })}</p>
+                {openingNote && (
+                  <p>{t('coach.openingNote', { note: openingNote })}</p>
+                )}
+                {openingHistory && (
+                  <p>{t('coach.openingHistory', { history: openingHistory })}</p>
+                )}
+                <p>{principleText}</p>
                 {entry.evaluation && (
                   <p>
                     {t(resolveEvaluationKey(entry) || entry.evaluation.labelKey, entry.evaluation.labelParams)}
@@ -176,14 +192,30 @@ export const CoachInsights: React.FC = () => {
                       : ''}
                   </p>
                 )}
+                {entry.suggestedSan && (
+                  <p className="text-amber-200/80">
+                    {t('coach.suggestion.line', { move: entry.suggestedSan })}
+                    {suggestionIdea ? ` ${t('coach.suggestion.reason', { idea: suggestionIdea })}` : ''}
+                  </p>
+                )}
                 {entry.tips && entry.tips.length > 0 && (
                   <p>{t('coach.tipShort', { tip: t(entry.tips[0].key) })}</p>
                 )}
               </div>
             </div>
           );
-        })}
-      </div>
+          })}
+        </div>
+      )}
+
+      {visibleInsights.length > maxVisible && (
+        <button
+          onClick={() => setExpanded((prev) => !prev)}
+          className="glass-button glass-button--subtle w-full px-3 py-2 rounded-lg text-white text-sm"
+        >
+          {expanded ? t('coach.actions.showLess') : t('coach.actions.showAll')}
+        </button>
+      )}
     </div>
   );
 };

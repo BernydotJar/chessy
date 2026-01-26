@@ -123,10 +123,12 @@
     "title": "Coach Insight",
     "getInsight": "Get Insight",
     "noMoves": "Click Get Insight after a few moves.",
-    "listTitle": "Last {{count}} notes for {{side}}",
+    "listTitle": "Showing {{shown}} of {{total}} notes for {{side}}",
     "listEmpty": "No insights for {{side}} yet. Keep playing!",
     "moveLabel": "Move {{move}} · {{san}}",
     "openingShort": "Opening: {{name}}",
+    "openingNote": "Book idea: {{note}}",
+    "openingHistory": "Historical: {{history}}",
     "tipShort": "Why: {{tip}}",
     "opening": "Opening: {{name}}",
     "principle": "Principle",
@@ -138,6 +140,15 @@
       "earlyQueen": "Careful: early queen moves can be risky. Prioritize development.",
       "kingSafety": "Consider castling soon to improve king safety.",
       "enPassant": "Nice! En passant is a rare tactical capture."
+    },
+    "principlesShort": {
+      "general": "improve coordination",
+      "centerPawn": "control the center",
+      "development": "develop pieces",
+      "castle": "secure the king",
+      "earlyQueen": "avoid early queen moves",
+      "kingSafety": "protect the king",
+      "enPassant": "use a tactical capture"
     },
     "evaluation": {
       "title": "Evaluation",
@@ -155,7 +166,13 @@
     "actions": {
       "start": "Get Insight",
       "pause": "Pause Insight",
-      "resume": "Resume Insight"
+      "resume": "Resume Insight",
+      "showAll": "Show all",
+      "showLess": "Show less"
+    },
+    "suggestion": {
+      "line": "Better was {{move}}.",
+      "reason": "Idea: {{idea}}."
     },
     "mentor": {
       "title": "Mentor says",

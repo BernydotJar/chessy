@@ -123,10 +123,12 @@
     "title": "Consejo del mentor",
     "getInsight": "Obtener consejo",
     "noMoves": "Haz algunos movimientos y pulsa “Obtener consejo”.",
-    "listTitle": "Últimas {{count}} notas para {{side}}",
+    "listTitle": "Mostrando {{shown}} de {{total}} notas para {{side}}",
     "listEmpty": "Aún no hay consejos para {{side}}. ¡Sigue jugando!",
     "moveLabel": "Movimiento {{move}} · {{san}}",
     "openingShort": "Apertura: {{name}}",
+    "openingNote": "Idea de libro: {{note}}",
+    "openingHistory": "Dato histórico: {{history}}",
     "tipShort": "Por qué: {{tip}}",
     "opening": "Apertura: {{name}}",
     "principle": "Principio",
@@ -138,6 +140,15 @@
       "earlyQueen": "Cuidado: mover la dama muy pronto puede ser arriesgado. Prioriza el desarrollo.",
       "kingSafety": "Considera enrocar pronto para mejorar la seguridad del rey.",
       "enPassant": "¡Bien! El en passant es una captura táctica poco común."
+    },
+    "principlesShort": {
+      "general": "mejorar la coordinación",
+      "centerPawn": "controlar el centro",
+      "development": "desarrollar piezas",
+      "castle": "asegurar el rey",
+      "earlyQueen": "evitar la dama temprana",
+      "kingSafety": "proteger al rey",
+      "enPassant": "aprovechar una táctica"
     },
     "evaluation": {
       "title": "Evaluación",
@@ -155,7 +166,13 @@
     "actions": {
       "start": "Obtener consejo",
       "pause": "Pausar consejo",
-      "resume": "Reanudar consejo"
+      "resume": "Reanudar consejo",
+      "showAll": "Ver todo",
+      "showLess": "Ver menos"
+    },
+    "suggestion": {
+      "line": "Mejor era {{move}}.",
+      "reason": "Idea: {{idea}}."
     },
     "mentor": {
       "title": "El mentor dice",
