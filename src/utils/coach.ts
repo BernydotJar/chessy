@@ -11,6 +11,10 @@ export type CoachInsight = {
   openingKey?: string;
   principleKey: string;
   principleParams?: Record<string, string>;
+  suggestedSan?: string;
+  suggestedUci?: string;
+  suggestedPrincipleKey?: string;
+  suggestedPrincipleParams?: Record<string, string>;
   evaluation?: {
     labelKey: string;
     labelParams?: Record<string, string | number>;
@@ -54,10 +58,56 @@ const isKingUncastled = (chess: Chess, color: 'w' | 'b') => {
 const coachEngine = new StockfishService();
 
 const classifyEvaluation = (lossCp: number) => {
-  if (lossCp > 200) return 'coach.evaluation.blunder';
-  if (lossCp > 100) return 'coach.evaluation.mistake';
-  if (lossCp > 30) return 'coach.evaluation.inaccuracy';
+  if (lossCp > 120) return 'coach.evaluation.blunder';
+  if (lossCp > 50) return 'coach.evaluation.mistake';
+  if (lossCp > 15) return 'coach.evaluation.inaccuracy';
   return 'coach.evaluation.good';
+};
+
+const getPrincipleForMove = (chess: Chess, move: Move, moveNumber: number) => {
+  const pieceKey = getPieceKey(move.piece);
+  let principleKey = 'coach.principles.general';
+  let principleParams: Record<string, string> = { pieceKey };
+
+  if (move.flags.includes('e')) {
+    principleKey = 'coach.principles.enPassant';
+  } else if (move.flags.includes('k') || move.flags.includes('q')) {
+    principleKey = 'coach.principles.castle';
+  } else if (move.piece === 'p' && centerSquares.has(move.to)) {
+    principleKey = 'coach.principles.centerPawn';
+  } else if (move.piece === 'n' && knightDevSquares.has(move.to) && moveNumber <= 10) {
+    principleKey = 'coach.principles.development';
+  } else if (move.piece === 'b' && moveNumber <= 10) {
+    principleKey = 'coach.principles.development';
+  } else if (move.piece === 'q' && moveNumber <= 6 && !move.captured) {
+    principleKey = 'coach.principles.earlyQueen';
+  } else if (moveNumber >= 8 && isKingUncastled(chess, move.color)) {
+    principleKey = 'coach.principles.kingSafety';
+  }
+
+  const tips: Array<{ key: string; params?: Record<string, string> }> = [];
+
+  if (move.san.includes('+')) {
+    tips.push({ key: 'coach.tips.check' });
+  }
+
+  if (move.piece === 'n' && (move.to[0] === 'a' || move.to[0] === 'h')) {
+    tips.push({ key: 'coach.tips.knightRim' });
+  }
+
+  if (move.piece === 'p' && ['b', 'g'].includes(move.from[0]) && moveNumber <= 8) {
+    tips.push({ key: 'coach.tips.fianchetto' });
+  }
+
+  if (move.piece === 'p' && ['a', 'h'].includes(move.from[0]) && moveNumber <= 6) {
+    tips.push({ key: 'coach.tips.wingPawn' });
+  }
+
+  if (move.piece === 'k' && !move.flags.includes('k') && !move.flags.includes('q')) {
+    tips.push({ key: 'coach.tips.kingMove' });
+  }
+
+  return { principleKey, principleParams, tips };
 };
 
 const evaluateMoveQuality = async (chess: Chess, lastMove: Move) => {
@@ -85,6 +135,7 @@ const evaluateMoveQuality = async (chess: Chess, lastMove: Move) => {
   return {
     labelKey: classifyEvaluation(loss),
     delta,
+    bestMove: evalBefore.bestMove,
   };
 };
 
@@ -99,50 +150,10 @@ export const getCoachInsight = (chess: Chess): CoachInsight | null => {
 
   const moveNumber = Math.ceil(moves.length / 2);
   const ply = moves.length;
-  const pieceKey = getPieceKey(lastMove.piece);
   const san = lastMove.san;
   const uci = `${lastMove.from}${lastMove.to}${lastMove.promotion || ''}`;
 
-  let principleKey = 'coach.principles.general';
-  let principleParams: Record<string, string> = { pieceKey };
-
-  if (lastMove.flags.includes('e')) {
-    principleKey = 'coach.principles.enPassant';
-  } else if (lastMove.flags.includes('k') || lastMove.flags.includes('q')) {
-    principleKey = 'coach.principles.castle';
-  } else if (lastMove.piece === 'p' && centerSquares.has(lastMove.to)) {
-    principleKey = 'coach.principles.centerPawn';
-  } else if (lastMove.piece === 'n' && knightDevSquares.has(lastMove.to) && moveNumber <= 10) {
-    principleKey = 'coach.principles.development';
-  } else if (lastMove.piece === 'b' && moveNumber <= 10) {
-    principleKey = 'coach.principles.development';
-  } else if (lastMove.piece === 'q' && moveNumber <= 6 && !lastMove.captured) {
-    principleKey = 'coach.principles.earlyQueen';
-  } else if (moveNumber >= 8 && isKingUncastled(chess, lastMove.color)) {
-    principleKey = 'coach.principles.kingSafety';
-  }
-
-  const tips: Array<{ key: string; params?: Record<string, string> }> = [];
-
-  if (lastMove.san.includes('+')) {
-    tips.push({ key: 'coach.tips.check' });
-  }
-
-  if (lastMove.piece === 'n' && (lastMove.to[0] === 'a' || lastMove.to[0] === 'h')) {
-    tips.push({ key: 'coach.tips.knightRim' });
-  }
-
-  if (lastMove.piece === 'p' && ['b', 'g'].includes(lastMove.from[0]) && moveNumber <= 8) {
-    tips.push({ key: 'coach.tips.fianchetto' });
-  }
-
-  if (lastMove.piece === 'p' && ['a', 'h'].includes(lastMove.from[0]) && moveNumber <= 6) {
-    tips.push({ key: 'coach.tips.wingPawn' });
-  }
-
-  if (lastMove.piece === 'k' && !lastMove.flags.includes('k') && !lastMove.flags.includes('q')) {
-    tips.push({ key: 'coach.tips.kingMove' });
-  }
+  const { principleKey, principleParams, tips } = getPrincipleForMove(chess, lastMove, moveNumber);
 
   return {
     fen,
@@ -164,12 +175,53 @@ export const getCoachInsightWithEval = async (chess: Chess): Promise<CoachInsigh
 
   const moves = chess.history({ verbose: true }) as Move[];
   const lastMove = moves[moves.length - 1];
+  const before = new Chess(chess.fen());
+  const undone = before.undo();
+  if (!undone) return insight;
 
   try {
     const evaluation = await evaluateMoveQuality(chess, lastMove);
+    if (!evaluation) {
+      return insight;
+    }
+
+    const lastMoveUci = insight.uci;
+    const bestMoveUci = evaluation.bestMove;
+    const shouldSuggest = evaluation.labelKey !== 'coach.evaluation.good'
+      && typeof bestMoveUci === 'string'
+      && bestMoveUci !== lastMoveUci;
+
+    if (shouldSuggest && bestMoveUci) {
+      const bestChess = new Chess(before.fen());
+      const from = bestMoveUci.slice(0, 2);
+      const to = bestMoveUci.slice(2, 4);
+      const promotion = bestMoveUci.length > 4 ? bestMoveUci[4] : undefined;
+      const bestMove = bestChess.move({ from, to, promotion } as any);
+      if (bestMove) {
+        const { principleKey: suggestedPrincipleKey, principleParams: suggestedPrincipleParams } =
+          getPrincipleForMove(bestChess, bestMove as Move, insight.moveNumber);
+        return {
+          ...insight,
+          evaluation: {
+            labelKey: evaluation.labelKey,
+            labelParams: evaluation.labelParams,
+            delta: evaluation.delta,
+          },
+          suggestedSan: bestMove.san,
+          suggestedUci: bestMoveUci,
+          suggestedPrincipleKey,
+          suggestedPrincipleParams,
+        };
+      }
+    }
+
     return {
       ...insight,
-      evaluation: evaluation || undefined,
+      evaluation: {
+        labelKey: evaluation.labelKey,
+        labelParams: evaluation.labelParams,
+        delta: evaluation.delta,
+      },
     };
   } catch {
     return insight;
