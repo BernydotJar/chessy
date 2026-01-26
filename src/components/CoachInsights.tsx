@@ -1,17 +1,38 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { useTranslation } from 'react-i18next';
 import { Lightbulb } from 'lucide-react';
-import { getCoachInsight } from '../utils/coach';
+import { getCoachInsightWithEval } from '../utils/coach';
 
 export const CoachInsights: React.FC = () => {
-  const { chess } = useGameStore();
+  const { chess, fen } = useGameStore();
   const { t } = useTranslation();
-  const [insight, setInsight] = useState<ReturnType<typeof getCoachInsight> | null>(null);
+  const [insight, setInsight] = useState<Awaited<ReturnType<typeof getCoachInsightWithEval>> | null>(null);
+  const [status, setStatus] = useState<'idle' | 'running' | 'done'>('idle');
 
-  const handleInsight = () => {
-    const result = getCoachInsight(chess);
+  useEffect(() => {
+    setInsight(null);
+    setStatus('idle');
+  }, [fen]);
+
+  const handleInsight = async () => {
+    setStatus('running');
+    const result = await getCoachInsightWithEval(chess);
     setInsight(result);
+    setStatus('done');
+  };
+
+  const buttonClass = status === 'running'
+    ? 'coach-action coach-action--active'
+    : status === 'done'
+    ? 'coach-action coach-action--done'
+    : 'coach-action';
+
+  const formatDelta = (delta?: number) => {
+    if (typeof delta !== 'number') return '';
+    const pawn = delta / 100;
+    const sign = pawn >= 0 ? '+' : '';
+    return `${sign}${pawn.toFixed(2)}`;
   };
 
   return (
@@ -23,7 +44,8 @@ export const CoachInsights: React.FC = () => {
 
       <button
         onClick={handleInsight}
-        className="glass-button w-full px-4 py-3 rounded-lg text-white font-semibold hover:scale-105 transition-transform"
+        disabled={status === 'running'}
+        className={`glass-button w-full px-4 py-3 rounded-lg text-white font-semibold hover:scale-105 transition-transform ${buttonClass}`}
       >
         {t('coach.getInsight')}
       </button>
@@ -44,6 +66,9 @@ export const CoachInsights: React.FC = () => {
               <p className="text-white/70 mt-1">
                 {t(`openings.${insight.openingKey}.note`)}
               </p>
+              <p className="text-white/50 mt-2 text-xs">
+                {t(`openings.${insight.openingKey}.history`)}
+              </p>
             </div>
           )}
 
@@ -55,6 +80,20 @@ export const CoachInsights: React.FC = () => {
               })}
             </p>
           </div>
+
+          {insight.evaluation && (
+            <div className="glass-container rounded-lg p-3">
+              <p className="text-white font-semibold">{t('coach.evaluation.title')}</p>
+              <p className="text-white/70 mt-1">
+                {t(insight.evaluation.labelKey, insight.evaluation.labelParams)}
+              </p>
+              {typeof insight.evaluation.delta === 'number' && (
+                <p className="text-white/50 mt-1 text-xs">
+                  {t('coach.evaluation.delta', { delta: formatDelta(insight.evaluation.delta) })}
+                </p>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -23,7 +23,7 @@ type EngineLike = {
   terminate?: () => void;
 };
 
-class StockfishService {
+export class StockfishService {
   private engine: EngineLike | null = null;
   private isReady: boolean = false;
   private pendingCallback: ((result: any) => void) | null = null;

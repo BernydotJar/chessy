@@ -133,6 +133,15 @@
       "earlyQueen": "Cuidado: mover la dama muy pronto puede ser arriesgado. Prioriza el desarrollo.",
       "kingSafety": "Considera enrocar pronto para mejorar la seguridad del rey.",
       "enPassant": "¡Bien! El en passant es una captura táctica poco común."
+    },
+    "evaluation": {
+      "title": "Evaluación",
+      "good": "Buena jugada",
+      "inaccuracy": "Imprecisión",
+      "mistake": "Error",
+      "blunder": "Grave error",
+      "mate": "Mate en {{moves}}",
+      "delta": "Δ {{delta}}"
     }
   },
   "openings": {
@@ -183,6 +192,61 @@
     "english": {
       "name": "Apertura Inglesa",
       "note": "Apertura flexible que controla el centro desde el flanco."
+    },
+    "italianTwoKnights": {
+      "name": "Italiana: Dos Caballos",
+      "note": "Desarrollo agudo con presión temprana sobre f7.",
+      "history": "Muy popular en el ajedrez romántico del siglo XIX."
+    },
+    "italianGiuocoPiano": {
+      "name": "Giuoco Piano",
+      "note": "Línea tranquila con maniobras flexibles.",
+      "history": "Estudiada desde el siglo XVIII por sus planes estratégicos."
+    },
+    "italianEvansGambit": {
+      "name": "Gambito Evans",
+      "note": "Las blancas sacrifican un peón por rápido desarrollo.",
+      "history": "Popularizado por W. D. Evans en la década de 1820."
+    },
+    "ruyLopezBerlin": {
+      "name": "Ruy López: Defensa Berlín",
+      "note": "Defensa sólida que busca un final resistente.",
+      "history": "Revivida al máximo nivel por Kramnik en 2000."
+    },
+    "scotch": {
+      "name": "Apertura Escocesa",
+      "note": "Juego abierto en el centro y actividad rápida.",
+      "history": "Popularizada en la década de 1820; sigue vigente."
+    },
+    "sicilianNajdorf": {
+      "name": "Siciliana Najdorf",
+      "note": "Dinámica y compleja, rica en táctica.",
+      "history": "Desarrollada en el siglo XX; favorita de Kasparov."
+    },
+    "slav": {
+      "name": "Defensa Eslava",
+      "note": "Estructura sólida con desarrollo flexible.",
+      "history": "Pilar defensivo desde principios del siglo XX."
+    },
+    "london": {
+      "name": "Sistema Londres",
+      "note": "Estructura simple con buen control central.",
+      "history": "Popular en el ajedrez moderno por su practicidad."
+    },
+    "nimzoIndian": {
+      "name": "Defensa Nimzoindia",
+      "note": "Presiona el centro y la estructura blanca.",
+      "history": "Introducida por Nimzowitsch en la década de 1910."
+    },
+    "grunfeld": {
+      "name": "Defensa Grünfeld",
+      "note": "Las negras atacan el centro con actividad de piezas.",
+      "history": "Nombrada por Ernst Grünfeld, popular desde los años 20."
+    },
+    "catalan": {
+      "name": "Apertura Catalana",
+      "note": "Presión a largo plazo en el flanco de dama.",
+      "history": "Popularizada en el torneo de Barcelona de 1929."
     }
   }
 }

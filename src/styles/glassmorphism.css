@@ -35,6 +35,22 @@
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
 }
 
+.coach-action {
+  transition: all 0.3s ease;
+}
+
+.coach-action--active {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.25), rgba(16, 185, 129, 0.2));
+  border: 1px solid rgba(34, 197, 94, 0.45);
+  box-shadow: 0 0 18px rgba(34, 197, 94, 0.35);
+}
+
+.coach-action--done {
+  background: linear-gradient(135deg, rgba(248, 113, 113, 0.18), rgba(244, 63, 94, 0.16));
+  border: 1px solid rgba(248, 113, 113, 0.4);
+  box-shadow: 0 0 16px rgba(248, 113, 113, 0.25);
+}
+
 .glass-button:active {
   transform: scale(0.98);
 }
