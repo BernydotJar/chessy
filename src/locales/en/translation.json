@@ -141,7 +141,11 @@
       "mistake": "Mistake",
       "blunder": "Blunder",
       "mate": "Mate in {{moves}}",
-      "delta": "Δ {{delta}}"
+      "delta": "Δ {{delta}}",
+      "opponentGood": "Opponent found a strong move",
+      "opponentInaccuracy": "Opponent made an inaccuracy",
+      "opponentMistake": "Opponent made a mistake",
+      "opponentBlunder": "Opponent blundered"
     },
     "actions": {
       "start": "Get Insight",
@@ -159,7 +163,9 @@
       "fianchetto": "This prepares a fianchetto, strengthening the long diagonal.",
       "wingPawn": "Early wing pawn moves can be committal—watch your center.",
       "kingMove": "Moving the king early can be risky; look for safer squares."
-    }
+    },
+    "perspective": "Perspective: {{side}}",
+    "lastMove": "Last move: {{side}}"
   },
   "openings": {
     "italian": {

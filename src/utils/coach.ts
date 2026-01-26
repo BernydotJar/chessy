@@ -12,6 +12,7 @@ export type CoachInsight = {
     delta?: number;
   };
   tips?: Array<{ key: string; params?: Record<string, string> }>;
+  lastMoveColor?: 'w' | 'b';
 };
 
 const getUciMoves = (moves: Move[]) =>
@@ -139,6 +140,7 @@ export const getCoachInsight = (chess: Chess): CoachInsight | null => {
     principleKey,
     principleParams,
     tips,
+    lastMoveColor: lastMove.color,
   };
 };
 

@@ -141,7 +141,11 @@
       "mistake": "Erro",
       "blunder": "Erro grave",
       "mate": "Mate em {{moves}}",
-      "delta": "Δ {{delta}}"
+      "delta": "Δ {{delta}}",
+      "opponentGood": "Oponente encontrou um bom lance",
+      "opponentInaccuracy": "Oponente cometeu uma imprecisão",
+      "opponentMistake": "Oponente cometeu um erro",
+      "opponentBlunder": "Oponente cometeu um erro grave"
     },
     "actions": {
       "start": "Obter dica",
@@ -159,7 +163,9 @@
       "fianchetto": "Isso prepara o fianqueto e fortalece a diagonal longa.",
       "wingPawn": "Peões de ala cedo são compromissos; cuide do centro.",
       "kingMove": "Mover o rei cedo pode ser arriscado; procure segurança."
-    }
+    },
+    "perspective": "Perspectiva: {{side}}",
+    "lastMove": "Último lance: {{side}}"
   },
   "openings": {
     "italian": {

@@ -51,6 +51,32 @@
   box-shadow: 0 0 16px rgba(248, 113, 113, 0.25);
 }
 
+.coach-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 6px;
+}
+
+.coach-toggle__btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.75rem;
+  padding: 6px 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.coach-toggle__btn--active {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
 .glass-button:active {
   transform: scale(0.98);
 }

@@ -141,7 +141,11 @@
       "mistake": "Error",
       "blunder": "Grave error",
       "mate": "Mate en {{moves}}",
-      "delta": "Δ {{delta}}"
+      "delta": "Δ {{delta}}",
+      "opponentGood": "El rival encontró una buena jugada",
+      "opponentInaccuracy": "El rival hizo una imprecisión",
+      "opponentMistake": "El rival cometió un error",
+      "opponentBlunder": "El rival cometió un grave error"
     },
     "actions": {
       "start": "Obtener consejo",
@@ -159,7 +163,9 @@
       "fianchetto": "Prepara un fiancheto y fortalece la diagonal larga.",
       "wingPawn": "Los peones de banda temprano son compromisos; cuida el centro.",
       "kingMove": "Mover el rey temprano puede ser arriesgado; busca seguridad."
-    }
+    },
+    "perspective": "Perspectiva: {{side}}",
+    "lastMove": "Última jugada: {{side}}"
   },
   "openings": {
     "italian": {
