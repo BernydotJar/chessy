@@ -1,10 +1,24 @@
-import React from 'react';
+import { useState } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { useGameStore } from '../store/gameStore';
 import { Square } from 'chess.js';
+import { PromotionDialog } from './PromotionDialog';
 
 export const ChessBoard: React.FC = () => {
-  const { fen, makeMove, theme, chess } = useGameStore();
+  const { 
+    fen, 
+    makeMove, 
+    theme, 
+    chess, 
+    showLegalMoves, 
+    getLegalMovesForSquare,
+    pendingPromotion,
+    setPendingPromotion,
+    isAIThinking
+  } = useGameStore();
+  
+  const [highlightedSquares, setHighlightedSquares] = useState<string[]>([]);
+  const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
 
   const onDrop = (sourceSquare: Square, targetSquare: Square) => {
     // Check if the move requires promotion
@@ -15,11 +29,47 @@ export const ChessBoard: React.FC = () => {
         (piece.color === 'b' && targetSquare[1] === '1'));
 
     if (isPromotion) {
-      // For now, auto-promote to queen. In Phase 2, we'll add a promotion dialog
-      return makeMove(sourceSquare, targetSquare, 'q');
+      // Open promotion dialog
+      setPendingPromotion({ from: sourceSquare, to: targetSquare });
+      return false; // Don't make the move yet
     }
 
     return makeMove(sourceSquare, targetSquare);
+  };
+
+  const handlePromotionSelect = (piece: 'q' | 'r' | 'b' | 'n') => {
+    if (pendingPromotion) {
+      makeMove(pendingPromotion.from, pendingPromotion.to, piece);
+      setPendingPromotion(null);
+    }
+  };
+
+  const onSquareClick = (square: Square) => {
+    if (isAIThinking) return;
+
+    if (selectedSquare === square) {
+      // Deselect
+      setSelectedSquare(null);
+      setHighlightedSquares([]);
+      return;
+    }
+
+    const piece = chess.get(square);
+    
+    // If a piece is selected and we click on another square
+    if (selectedSquare) {
+      makeMove(selectedSquare as Square, square);
+      setSelectedSquare(null);
+      setHighlightedSquares([]);
+      return;
+    }
+
+    // Select piece and show legal moves
+    if (piece && showLegalMoves) {
+      setSelectedSquare(square);
+      const legalMoves = getLegalMovesForSquare(square);
+      setHighlightedSquares(legalMoves);
+    }
   };
 
   const customBoardStyle = {
@@ -30,50 +80,95 @@ export const ChessBoard: React.FC = () => {
     `,
   };
 
+  // Custom square styles for board colors
+  const baseSquareStyles = Object.fromEntries(
+    Array.from({ length: 64 }, (_, i) => {
+      const row = Math.floor(i / 8);
+      const col = i % 8;
+      const square = `${String.fromCharCode(97 + col)}${8 - row}` as Square;
+      const isLight = (row + col) % 2 === 0;
+      
+      return [
+        square,
+        {
+          backgroundColor: isLight ? theme.lightSquare : theme.darkSquare,
+        },
+      ];
+    })
+  );
+
+  // Add highlighted squares for legal moves
   const customSquareStyles = {
+    ...baseSquareStyles,
     ...Object.fromEntries(
-      Array.from({ length: 64 }, (_, i) => {
-        const row = Math.floor(i / 8);
-        const col = i % 8;
-        const square = `${String.fromCharCode(97 + col)}${8 - row}` as Square;
-        const isLight = (row + col) % 2 === 0;
-        
-        return [
-          square,
-          {
-            backgroundColor: isLight ? theme.lightSquare : theme.darkSquare,
-          },
-        ];
-      })
+      highlightedSquares.map(square => [
+        square,
+        {
+          ...baseSquareStyles[square],
+          backgroundColor: `${baseSquareStyles[square].backgroundColor}dd`,
+          boxShadow: 'inset 0 0 0 3px rgba(255, 255, 0, 0.5)',
+        },
+      ])
     ),
+    // Highlight selected square
+    ...(selectedSquare ? {
+      [selectedSquare]: {
+        ...baseSquareStyles[selectedSquare],
+        boxShadow: 'inset 0 0 0 3px rgba(100, 200, 255, 0.7)',
+      },
+    } : {}),
   };
 
   return (
-    <div className="relative">
-      {/* Glass overlay effect */}
-      <div
-        className="absolute inset-0 rounded-xl pointer-events-none"
-        style={{
-          background: `rgba(255, 255, 255, ${theme.glassOpacity})`,
-          backdropFilter: `blur(${theme.glassBlur}px)`,
-          WebkitBackdropFilter: `blur(${theme.glassBlur}px)`,
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          zIndex: 1,
-        }}
-      />
-      
-      {/* Chess board */}
-      <div className="relative z-10">
-        <Chessboard
-          position={fen}
-          onPieceDrop={onDrop}
-          boardWidth={560}
-          customBoardStyle={customBoardStyle}
-          customSquareStyles={customSquareStyles}
-          animationDuration={200}
-          arePiecesDraggable={!chess.isGameOver()}
+    <>
+      <div className="relative">
+        {/* AI Thinking Overlay */}
+        {isAIThinking && (
+          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 backdrop-blur-sm rounded-xl">
+            <div className="glass-card px-6 py-4 rounded-lg">
+              <div className="flex items-center gap-3">
+                <div className="spinner" />
+                <span className="text-white font-semibold">AI is thinking...</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Glass overlay effect */}
+        <div
+          className="absolute inset-0 rounded-xl pointer-events-none"
+          style={{
+            background: `rgba(255, 255, 255, ${theme.glassOpacity})`,
+            backdropFilter: `blur(${theme.glassBlur}px)`,
+            WebkitBackdropFilter: `blur(${theme.glassBlur}px)`,
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            zIndex: 1,
+          }}
         />
+        
+        {/* Chess board */}
+        <div className="relative z-10">
+          <Chessboard
+            position={fen}
+            onPieceDrop={onDrop}
+            onSquareClick={onSquareClick}
+            boardWidth={560}
+            customBoardStyle={customBoardStyle}
+            customSquareStyles={customSquareStyles}
+            animationDuration={200}
+            arePiecesDraggable={!chess.isGameOver() && !isAIThinking}
+            areArrowsAllowed={true}
+          />
+        </div>
       </div>
-    </div>
+
+      {/* Promotion Dialog */}
+      <PromotionDialog
+        isOpen={!!pendingPromotion}
+        color={chess.turn()}
+        onSelect={handlePromotionSelect}
+        onClose={() => setPendingPromotion(null)}
+      />
+    </>
   );
 };

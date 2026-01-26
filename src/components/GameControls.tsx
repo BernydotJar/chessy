@@ -3,7 +3,19 @@ import { useGameStore } from '../store/gameStore';
 import { RotateCcw, Undo2, Flag, Trophy } from 'lucide-react';
 
 export const GameControls: React.FC = () => {
-  const { resetGame, undoMove, isGameOver, winner, history, chess } = useGameStore();
+  const {
+    resetGame,
+    undoMove,
+    isGameOver,
+    winner,
+    history,
+    chess,
+    isAIGame,
+    aiDifficulty,
+    playerColor,
+    showLegalMoves,
+    setShowLegalMoves,
+  } = useGameStore();
 
   const getGameStatus = () => {
     if (!isGameOver) {
@@ -59,6 +71,23 @@ export const GameControls: React.FC = () => {
           <RotateCcw size={20} />
           <span>New Game</span>
         </button>
+      </div>
+
+      {/* Helpers */}
+      <div className="glass-container rounded-lg p-4 space-y-3">
+        <button
+          onClick={() => setShowLegalMoves(!showLegalMoves)}
+          className="w-full glass-button px-4 py-3 rounded-lg text-white font-medium hover:scale-105 transition-transform"
+          aria-label="Toggle legal move hints"
+        >
+          {showLegalMoves ? 'Hide Legal Moves' : 'Show Legal Moves'}
+        </button>
+        {isAIGame && (
+          <div className="text-white/70 text-xs text-center">
+            AI: {aiDifficulty.charAt(0).toUpperCase() + aiDifficulty.slice(1)} · You are{' '}
+            {playerColor.charAt(0).toUpperCase() + playerColor.slice(1)}
+          </div>
+        )}
       </div>
 
       {/* Resign Button */}

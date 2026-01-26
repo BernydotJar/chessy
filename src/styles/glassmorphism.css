@@ -118,9 +118,12 @@
 }
 
 .animated-gradient {
-  background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c);
-  background-size: 400% 400%;
-  animation: gradient-shift 15s ease infinite;
+  background:
+    radial-gradient(1200px circle at 10% 20%, rgba(99, 102, 241, 0.18), transparent 60%),
+    radial-gradient(900px circle at 85% 30%, rgba(14, 116, 144, 0.12), transparent 55%),
+    linear-gradient(135deg, #0f172a 0%, #111827 45%, #0b1220 100%);
+  background-size: 220% 220%;
+  animation: gradient-shift 40s ease infinite;
 }
 
 /* Piece Shadow Enhancement */

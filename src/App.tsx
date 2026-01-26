@@ -2,9 +2,13 @@ import { ChessBoard } from './components/ChessBoard';
 import { GameControls } from './components/GameControls';
 import { MoveHistory } from './components/MoveHistory';
 import { ThemeCustomizer } from './components/ThemeCustomizer';
+import { AIOpponent } from './components/AIOpponent';
+import { useGameStore } from './store/gameStore';
 import './styles/glassmorphism.css';
 
 function App() {
+  const { startAIGame, isAIGame, toggleSound, soundEnabled } = useGameStore();
+
   return (
     <div className="min-h-screen animated-gradient p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
@@ -16,12 +20,25 @@ function App() {
           <p className="text-white/80 text-lg">
             Free, Beautiful, Modern Chess Platform
           </p>
+          {isAIGame && (
+            <div className="mt-2 glass-container inline-block px-4 py-2 rounded-lg">
+              <p className="text-white/90 text-sm font-semibold">
+                🤖 Playing against AI
+              </p>
+            </div>
+          )}
         </header>
 
         {/* Main Game Area */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
-          {/* Left Sidebar - Game Controls */}
+          {/* Left Sidebar - Game Controls & AI */}
           <div className="lg:col-span-3 space-y-6 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+            <AIOpponent
+              onStartGame={startAIGame}
+              isPlaying={isAIGame}
+              soundEnabled={soundEnabled}
+              onToggleSound={toggleSound}
+            />
             <GameControls />
             <div className="hidden lg:block">
               <ThemeCustomizer />
@@ -57,6 +74,8 @@ function App() {
               >
                 View on GitHub
               </a>
+              {' · '}
+              <span className="text-white/40">Phase 2 - AI Enhanced</span>
             </p>
           </div>
         </footer>
