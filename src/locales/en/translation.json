@@ -142,56 +142,85 @@
       "blunder": "Blunder",
       "mate": "Mate in {{moves}}",
       "delta": "Δ {{delta}}"
+    },
+    "actions": {
+      "start": "Get Insight",
+      "pause": "Pause Insight",
+      "resume": "Resume Insight"
+    },
+    "mentor": {
+      "title": "Mentor says",
+      "line": "{{opening}}. {{principle}} {{evaluation}}"
+    },
+    "tips": {
+      "title": "Why this move?",
+      "check": "Checks are forcing—your opponent must respond.",
+      "knightRim": "Knights on the rim are dim—consider central squares.",
+      "fianchetto": "This prepares a fianchetto, strengthening the long diagonal.",
+      "wingPawn": "Early wing pawn moves can be committal—watch your center.",
+      "kingMove": "Moving the king early can be risky; look for safer squares."
     }
   },
   "openings": {
     "italian": {
       "name": "Italian Game",
-      "note": "A classical opening focused on rapid development and central control."
+      "note": "A classical opening focused on rapid development and central control.",
+      "history": "Documented in the 16th century; analyzed by Greco in the 1620s."
     },
     "ruyLopez": {
       "name": "Ruy Lopez",
-      "note": "A strategic opening that pressures the center and targets the knight on c6."
+      "note": "A strategic opening that pressures the center and targets the knight on c6.",
+      "history": "Named after Ruy López de Segura (1561)."
     },
     "sicilian": {
       "name": "Sicilian Defense",
-      "note": "Asymmetric structure that fights for the center from the flank."
+      "note": "Asymmetric structure that fights for the center from the flank.",
+      "history": "First recorded in the late 16th century; mainline in the 20th."
     },
     "french": {
       "name": "French Defense",
-      "note": "Solid structure aiming for counterplay against White's center."
+      "note": "Solid structure aiming for counterplay against White's center.",
+      "history": "First played in 1834 (London–Paris correspondence match)."
     },
     "caroKann": {
       "name": "Caro-Kann Defense",
-      "note": "Resilient defense aiming for a strong pawn structure."
+      "note": "Resilient defense aiming for a strong pawn structure.",
+      "history": "Introduced by Caro and Kann in 1886."
     },
     "scandinavian": {
       "name": "Scandinavian Defense",
-      "note": "Directly challenges White's center early."
+      "note": "Directly challenges White's center early.",
+      "history": "Known since the 19th century; revived in modern play."
     },
     "petrov": {
       "name": "Petrov Defense",
-      "note": "Solid and symmetrical, aiming for equal play."
+      "note": "Solid and symmetrical, aiming for equal play.",
+      "history": "Introduced by Alexander Petrov in the 1820s."
     },
     "philidor": {
       "name": "Philidor Defense",
-      "note": "A compact defense that supports a later central break."
+      "note": "A compact defense that supports a later central break.",
+      "history": "Named after François-André Philidor (1749)."
     },
     "queensGambit": {
       "name": "Queen's Gambit",
-      "note": "White offers a pawn to gain space and central control."
+      "note": "White offers a pawn to gain space and central control.",
+      "history": "Analyzed since the 15th century; key line of classical chess."
     },
     "queensGambitDeclined": {
       "name": "Queen's Gambit Declined",
-      "note": "Black holds the center and aims for solid development."
+      "note": "Black holds the center and aims for solid development.",
+      "history": "Solid mainline since the early 20th century."
     },
     "kingsIndian": {
       "name": "King's Indian Defense",
-      "note": "Black allows space but prepares a dynamic counterattack."
+      "note": "Black allows space but prepares a dynamic counterattack.",
+      "history": "Developed in the 1950s as a dynamic defense."
     },
     "english": {
       "name": "English Opening",
-      "note": "Flexible opening that builds control of the center from the side."
+      "note": "Flexible opening that builds control of the center from the side.",
+      "history": "Popularized by Staunton in the 1840s."
     },
     "italianTwoKnights": {
       "name": "Italian Game: Two Knights",
@@ -247,6 +276,56 @@
       "name": "Catalan Opening",
       "note": "Long-term pressure on the queenside.",
       "history": "Popularized at the 1929 Barcelona tournament."
+    },
+    "sicilianClassical": {
+      "name": "Sicilian Classical",
+      "note": "Natural development with flexible plans.",
+      "history": "A mainline since the early 20th century."
+    },
+    "sicilianDragon": {
+      "name": "Sicilian Dragon",
+      "note": "Sharp line with a fianchetto and opposite-side attacks.",
+      "history": "Popularized in the mid-20th century for its tactics."
+    },
+    "frenchAdvance": {
+      "name": "French Advance",
+      "note": "White gains space and restricts Black’s pieces.",
+      "history": "Popular since the late 19th century."
+    },
+    "frenchTarrasch": {
+      "name": "French Tarrasch",
+      "note": "Solid structure with clear plans for development.",
+      "history": "Associated with Tarrasch in the late 19th century."
+    },
+    "caroKannClassical": {
+      "name": "Caro-Kann Classical",
+      "note": "A sturdy line with clear development for both sides.",
+      "history": "Standard line since the early 20th century."
+    },
+    "alekhine": {
+      "name": "Alekhine Defense",
+      "note": "Provokes the center and aims to undermine it.",
+      "history": "Introduced by Alexander Alekhine in the 1920s."
+    },
+    "queensGambitAccepted": {
+      "name": "Queen's Gambit Accepted",
+      "note": "Black takes the pawn and aims for active piece play.",
+      "history": "Played since the 19th century at high level."
+    },
+    "queensGambitOrthodox": {
+      "name": "QGD Orthodox",
+      "note": "Classical development with solid central structure.",
+      "history": "A major mainline from the early 20th century."
+    },
+    "kingsIndianMainline": {
+      "name": "King's Indian Main Line",
+      "note": "Both sides build strong centers before attacking.",
+      "history": "Developed in the 1950s and popular in modern play."
+    },
+    "pirc": {
+      "name": "Pirc Defense",
+      "note": "Flexible setup inviting White to build a big center.",
+      "history": "Named after Vasja Pirc; popular in mid-20th century."
     }
   }
 }

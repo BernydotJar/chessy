@@ -37,6 +37,14 @@ const OPENINGS: OpeningMatch[] = [
     moves: ['e2e4', 'c7c5'],
   },
   {
+    key: 'sicilianClassical',
+    moves: ['e2e4', 'c7c5', 'g1f3', 'd7d6', 'd2d4', 'c5d4', 'f3d4', 'g8f6', 'b1c3', 'b8c6'],
+  },
+  {
+    key: 'sicilianDragon',
+    moves: ['e2e4', 'c7c5', 'g1f3', 'd7d6', 'd2d4', 'c5d4', 'f3d4', 'g8f6', 'b1c3', 'g7g6'],
+  },
+  {
     key: 'sicilianNajdorf',
     moves: ['e2e4', 'c7c5', 'g1f3', 'd7d6', 'd2d4', 'c5d4', 'f3d4', 'g8f6', 'b1c3', 'a7a6'],
   },
@@ -45,12 +53,28 @@ const OPENINGS: OpeningMatch[] = [
     moves: ['e2e4', 'e7e6', 'd2d4', 'd7d5'],
   },
   {
+    key: 'frenchAdvance',
+    moves: ['e2e4', 'e7e6', 'd2d4', 'd7d5', 'e4e5'],
+  },
+  {
+    key: 'frenchTarrasch',
+    moves: ['e2e4', 'e7e6', 'd2d4', 'd7d5', 'b1d2'],
+  },
+  {
     key: 'caroKann',
     moves: ['e2e4', 'c7c6', 'd2d4', 'd7d5'],
   },
   {
+    key: 'caroKannClassical',
+    moves: ['e2e4', 'c7c6', 'd2d4', 'd7d5', 'b1c3', 'd5e4', 'c3e4'],
+  },
+  {
     key: 'scandinavian',
     moves: ['e2e4', 'd7d5'],
+  },
+  {
+    key: 'alekhine',
+    moves: ['e2e4', 'g8f6'],
   },
   {
     key: 'petrov',
@@ -65,8 +89,16 @@ const OPENINGS: OpeningMatch[] = [
     moves: ['d2d4', 'd7d5', 'c2c4'],
   },
   {
+    key: 'queensGambitAccepted',
+    moves: ['d2d4', 'd7d5', 'c2c4', 'd5c4'],
+  },
+  {
     key: 'queensGambitDeclined',
     moves: ['d2d4', 'd7d5', 'c2c4', 'e7e6'],
+  },
+  {
+    key: 'queensGambitOrthodox',
+    moves: ['d2d4', 'd7d5', 'c2c4', 'e7e6', 'b1c3', 'g8f6', 'c1g5', 'f8e7'],
   },
   {
     key: 'slav',
@@ -79,6 +111,14 @@ const OPENINGS: OpeningMatch[] = [
   {
     key: 'kingsIndian',
     moves: ['d2d4', 'g8f6', 'c2c4', 'g7g6'],
+  },
+  {
+    key: 'kingsIndianMainline',
+    moves: ['d2d4', 'g8f6', 'c2c4', 'g7g6', 'b1c3', 'f8g7', 'e2e4', 'd7d6'],
+  },
+  {
+    key: 'pirc',
+    moves: ['e2e4', 'd7d6', 'd2d4', 'g8f6', 'b1c3', 'g7g6'],
   },
   {
     key: 'grunfeld',

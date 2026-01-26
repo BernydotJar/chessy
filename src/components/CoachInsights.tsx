@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { useTranslation } from 'react-i18next';
 import { Lightbulb } from 'lucide-react';
@@ -9,22 +9,42 @@ export const CoachInsights: React.FC = () => {
   const { t } = useTranslation();
   const [insight, setInsight] = useState<Awaited<ReturnType<typeof getCoachInsightWithEval>> | null>(null);
   const [status, setStatus] = useState<'idle' | 'running' | 'done'>('idle');
+  const [mode, setMode] = useState<'off' | 'on' | 'paused'>('off');
+  const requestId = useRef(0);
 
   useEffect(() => {
-    setInsight(null);
-    setStatus('idle');
-  }, [fen]);
+    if (mode === 'on') {
+      void runInsight();
+    }
+  }, [fen, mode]);
 
-  const handleInsight = async () => {
+  const runInsight = async () => {
+    const id = ++requestId.current;
     setStatus('running');
     const result = await getCoachInsightWithEval(chess);
+    if (requestId.current !== id) return;
     setInsight(result);
     setStatus('done');
   };
 
-  const buttonClass = status === 'running'
+  const handleToggle = () => {
+    if (mode === 'off') {
+      setMode('on');
+      void runInsight();
+      return;
+    }
+    if (mode === 'on') {
+      setMode('paused');
+      setStatus('done');
+      return;
+    }
+    setMode('on');
+    void runInsight();
+  };
+
+  const buttonClass = mode === 'on'
     ? 'coach-action coach-action--active'
-    : status === 'done'
+    : mode === 'paused'
     ? 'coach-action coach-action--done'
     : 'coach-action';
 
@@ -43,11 +63,11 @@ export const CoachInsights: React.FC = () => {
       </div>
 
       <button
-        onClick={handleInsight}
+        onClick={handleToggle}
         disabled={status === 'running'}
         className={`glass-button w-full px-4 py-3 rounded-lg text-white font-semibold hover:scale-105 transition-transform ${buttonClass}`}
       >
-        {t('coach.getInsight')}
+        {mode === 'on' ? t('coach.actions.pause') : mode === 'paused' ? t('coach.actions.resume') : t('coach.actions.start')}
       </button>
 
       {!insight && (
@@ -58,6 +78,19 @@ export const CoachInsights: React.FC = () => {
 
       {insight && (
         <div className="space-y-3 text-white/80 text-sm">
+          <div className="glass-container rounded-lg p-3">
+            <p className="text-white font-semibold">{t('coach.mentor.title')}</p>
+            <p className="text-white/80 mt-1">
+              {t('coach.mentor.line', {
+                opening: insight.openingKey ? t(`openings.${insight.openingKey}.name`) : '',
+                principle: t(insight.principleKey, {
+                  piece: t((insight.principleParams?.pieceKey || 'pieces.pawn') as string),
+                }),
+                evaluation: insight.evaluation ? t(insight.evaluation.labelKey, insight.evaluation.labelParams) : t('coach.evaluation.good'),
+              })}
+            </p>
+          </div>
+
           {insight.openingKey && (
             <div className="glass-container rounded-lg p-3">
               <p className="text-white font-semibold">
@@ -92,6 +125,15 @@ export const CoachInsights: React.FC = () => {
                   {t('coach.evaluation.delta', { delta: formatDelta(insight.evaluation.delta) })}
                 </p>
               )}
+            </div>
+          )}
+
+          {insight.tips && insight.tips.length > 0 && (
+            <div className="glass-container rounded-lg p-3">
+              <p className="text-white font-semibold">{t('coach.tips.title')}</p>
+              <p className="text-white/70 mt-1">
+                {t(insight.tips[0].key)}
+              </p>
             </div>
           )}
         </div>

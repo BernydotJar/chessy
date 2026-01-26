@@ -142,56 +142,85 @@
       "blunder": "Erro grave",
       "mate": "Mate em {{moves}}",
       "delta": "Δ {{delta}}"
+    },
+    "actions": {
+      "start": "Obter dica",
+      "pause": "Pausar dica",
+      "resume": "Retomar dica"
+    },
+    "mentor": {
+      "title": "O mentor diz",
+      "line": "{{opening}}. {{principle}} {{evaluation}}"
+    },
+    "tips": {
+      "title": "Por que esse lance?",
+      "check": "Xeques são forçados: seu oponente deve responder.",
+      "knightRim": "Cavalos na borda são fracos; busque o centro.",
+      "fianchetto": "Isso prepara o fianqueto e fortalece a diagonal longa.",
+      "wingPawn": "Peões de ala cedo são compromissos; cuide do centro.",
+      "kingMove": "Mover o rei cedo pode ser arriscado; procure segurança."
     }
   },
   "openings": {
     "italian": {
       "name": "Abertura Italiana",
-      "note": "Abertura clássica focada em desenvolvimento rápido e controle do centro."
+      "note": "Abertura clássica focada em desenvolvimento rápido e controle do centro.",
+      "history": "Documentada no século XVI; analisada por Greco nos anos 1620."
     },
     "ruyLopez": {
       "name": "Ruy López",
-      "note": "Abertura estratégica que pressiona o centro e o cavalo em c6."
+      "note": "Abertura estratégica que pressiona o centro e o cavalo em c6.",
+      "history": "Nomeada por Ruy López de Segura (1561)."
     },
     "sicilian": {
       "name": "Defesa Siciliana",
-      "note": "Estrutura assimétrica que luta pelo centro a partir do flanco."
+      "note": "Estrutura assimétrica que luta pelo centro a partir do flanco.",
+      "history": "Registrada no fim do século XVI; principal no século XX."
     },
     "french": {
       "name": "Defesa Francesa",
-      "note": "Estrutura sólida com contrajogo contra o centro das brancas."
+      "note": "Estrutura sólida com contrajogo contra o centro das brancas.",
+      "history": "Primeiro jogo em 1834 (correspondência Londres–Paris)."
     },
     "caroKann": {
       "name": "Defesa Caro-Kann",
-      "note": "Defesa resiliente com estrutura de peões sólida."
+      "note": "Defesa resiliente com estrutura de peões sólida.",
+      "history": "Introduzida por Caro e Kann em 1886."
     },
     "scandinavian": {
       "name": "Defesa Escandinava",
-      "note": "Desafia o centro das brancas logo no início."
+      "note": "Desafia o centro das brancas logo no início.",
+      "history": "Conhecida desde o século XIX; revitalizada no moderno."
     },
     "petrov": {
       "name": "Defesa Petrov",
-      "note": "Sólida e simétrica, busca igualdade."
+      "note": "Sólida e simétrica, busca igualdade.",
+      "history": "Introduzida por Alexander Petrov nos anos 1820."
     },
     "philidor": {
       "name": "Defesa Philidor",
-      "note": "Defesa compacta que prepara uma ruptura central."
+      "note": "Defesa compacta que prepara uma ruptura central.",
+      "history": "Nomeada por François-André Philidor (1749)."
     },
     "queensGambit": {
       "name": "Gambito da Dama",
-      "note": "As brancas oferecem um peão para ganhar espaço e controle central."
+      "note": "As brancas oferecem um peão para ganhar espaço e controle central.",
+      "history": "Analisada desde o século XV; linha clássica do xadrez."
     },
     "queensGambitDeclined": {
       "name": "Gambito da Dama Recusado",
-      "note": "As negras mantêm o centro e se desenvolvem com solidez."
+      "note": "As negras mantêm o centro e se desenvolvem com solidez.",
+      "history": "Linha sólida desde o início do século XX."
     },
     "kingsIndian": {
       "name": "Defesa Índia do Rei",
-      "note": "As negras cedem espaço e buscam contrajogo dinâmico."
+      "note": "As negras cedem espaço e buscam contrajogo dinâmico.",
+      "history": "Desenvolvida nos anos 1950 como defesa dinâmica."
     },
     "english": {
       "name": "Abertura Inglesa",
-      "note": "Abertura flexível que controla o centro pelo flanco."
+      "note": "Abertura flexível que controla o centro pelo flanco.",
+      "history": "Popularizada por Staunton nos anos 1840."
     },
     "italianTwoKnights": {
       "name": "Italiana: Dois Cavalos",
@@ -247,6 +276,56 @@
       "name": "Abertura Catalã",
       "note": "Pressão de longo prazo na ala da dama.",
       "history": "Popularizada no torneio de Barcelona em 1929."
+    },
+    "sicilianClassical": {
+      "name": "Siciliana Clássica",
+      "note": "Desenvolvimento natural com planos flexíveis.",
+      "history": "Linha principal desde o início do século XX."
+    },
+    "sicilianDragon": {
+      "name": "Siciliana Dragão",
+      "note": "Linha aguda com fianqueto e ataques opostos.",
+      "history": "Popularizada em meados do século XX por sua tática."
+    },
+    "frenchAdvance": {
+      "name": "Francesa Avanço",
+      "note": "As brancas ganham espaço e restringem as peças pretas.",
+      "history": "Popular desde o fim do século XIX."
+    },
+    "frenchTarrasch": {
+      "name": "Francesa Tarrasch",
+      "note": "Estrutura sólida com planos claros de desenvolvimento.",
+      "history": "Associada a Tarrasch no fim do século XIX."
+    },
+    "caroKannClassical": {
+      "name": "Caro-Kann Clássica",
+      "note": "Linha sólida com desenvolvimento claro para ambos.",
+      "history": "Linha padrão desde o início do século XX."
+    },
+    "alekhine": {
+      "name": "Defesa Alekhine",
+      "note": "Provoca o centro e busca miná-lo.",
+      "history": "Introduzida por Alexander Alekhine nos anos 1920."
+    },
+    "queensGambitAccepted": {
+      "name": "Gambito da Dama Aceito",
+      "note": "As pretas aceitam o peão e buscam atividade.",
+      "history": "Jogada desde o século XIX em alto nível."
+    },
+    "queensGambitOrthodox": {
+      "name": "Gambito da Dama Ortodoxo",
+      "note": "Desenvolvimento clássico com estrutura central sólida.",
+      "history": "Linha principal desde o início do século XX."
+    },
+    "kingsIndianMainline": {
+      "name": "Índia do Rei Linha Principal",
+      "note": "Ambos constroem centros fortes antes de atacar.",
+      "history": "Desenvolvida nos anos 1950 e popular moderna."
+    },
+    "pirc": {
+      "name": "Defesa Pirc",
+      "note": "Estrutura flexível que convida a um grande centro branco.",
+      "history": "Nomeada por Vasja Pirc; popular no século XX."
     }
   }
 }

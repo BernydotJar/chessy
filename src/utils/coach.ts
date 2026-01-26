@@ -11,6 +11,7 @@ export type CoachInsight = {
     labelParams?: Record<string, string | number>;
     delta?: number;
   };
+  tips?: Array<{ key: string; params?: Record<string, string> }>;
 };
 
 const getUciMoves = (moves: Move[]) =>
@@ -111,10 +112,33 @@ export const getCoachInsight = (chess: Chess): CoachInsight | null => {
     principleKey = 'coach.principles.kingSafety';
   }
 
+  const tips: Array<{ key: string; params?: Record<string, string> }> = [];
+
+  if (lastMove.san.includes('+')) {
+    tips.push({ key: 'coach.tips.check' });
+  }
+
+  if (lastMove.piece === 'n' && (lastMove.to[0] === 'a' || lastMove.to[0] === 'h')) {
+    tips.push({ key: 'coach.tips.knightRim' });
+  }
+
+  if (lastMove.piece === 'p' && ['b', 'g'].includes(lastMove.from[0]) && moveNumber <= 8) {
+    tips.push({ key: 'coach.tips.fianchetto' });
+  }
+
+  if (lastMove.piece === 'p' && ['a', 'h'].includes(lastMove.from[0]) && moveNumber <= 6) {
+    tips.push({ key: 'coach.tips.wingPawn' });
+  }
+
+  if (lastMove.piece === 'k' && !lastMove.flags.includes('k') && !lastMove.flags.includes('q')) {
+    tips.push({ key: 'coach.tips.kingMove' });
+  }
+
   return {
     openingKey: opening?.key,
     principleKey,
     principleParams,
+    tips,
   };
 };
 
