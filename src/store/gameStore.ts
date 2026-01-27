@@ -15,6 +15,7 @@ interface GameStore extends GameState {
   showLegalMoves: boolean;
   legalMoves: string[];
   pendingPromotion: { from: string; to: string } | null;
+  setupMode: boolean;
   
   makeMove: (from: string, to: string, promotion?: string, isAIMove?: boolean) => boolean;
   makeAIMove: () => Promise<void>;
@@ -27,6 +28,7 @@ interface GameStore extends GameState {
   setShowLegalMoves: (show: boolean) => void;
   getLegalMovesForSquare: (square: string) => string[];
   setPendingPromotion: (promotion: { from: string; to: string } | null) => void;
+  setSetupMode: (open: boolean) => void;
 }
 
 const defaultTheme: BoardTheme = {
@@ -146,6 +148,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   showLegalMoves: true,
   legalMoves: [],
   pendingPromotion: null,
+  setupMode: false,
 
   makeMove: (from: string, to: string, promotion?: string, isAIMove: boolean = false) => {
     const { chess, isAIGame, playerColor, isAIThinking } = get();
@@ -359,5 +362,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   setPendingPromotion: (promotion: { from: string; to: string } | null) => {
     set({ pendingPromotion: promotion });
+  },
+
+  setSetupMode: (open: boolean) => {
+    set({ setupMode: open });
   },
 }));

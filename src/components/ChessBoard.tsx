@@ -3,6 +3,7 @@ import { Chessboard } from 'react-chessboard';
 import { useGameStore } from '../store/gameStore';
 import { Square } from 'chess.js';
 import { PromotionDialog } from './PromotionDialog';
+import { BoardSetupModal } from './BoardSetupModal';
 import { useTranslation } from 'react-i18next';
 
 export const ChessBoard: React.FC = () => {
@@ -15,7 +16,8 @@ export const ChessBoard: React.FC = () => {
     getLegalMovesForSquare,
     pendingPromotion,
     setPendingPromotion,
-    isAIThinking
+    isAIThinking,
+    setupMode
   } = useGameStore();
   
   const [highlightedSquares, setHighlightedSquares] = useState<string[]>([]);
@@ -49,7 +51,7 @@ export const ChessBoard: React.FC = () => {
   };
 
   const onSquareClick = (square: Square) => {
-    if (isAIThinking) return;
+    if (isAIThinking || setupMode) return;
 
     if (selectedSquare === square) {
       // Deselect
@@ -186,11 +188,13 @@ export const ChessBoard: React.FC = () => {
             customBoardStyle={customBoardStyle}
             customSquareStyles={customSquareStyles}
             animationDuration={200}
-            arePiecesDraggable={!chess.isGameOver() && !isAIThinking}
+            arePiecesDraggable={!chess.isGameOver() && !isAIThinking && !setupMode}
             areArrowsAllowed={true}
             showBoardNotation={false}
           />
         </div>
+
+        <BoardSetupModal />
       </div>
 
       {/* Promotion Dialog */}

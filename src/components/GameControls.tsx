@@ -2,7 +2,7 @@ import React from 'react';
 import { useGameStore } from '../store/gameStore';
 import { RotateCcw, Undo2, Flag, Trophy } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { BoardSetupModal } from './BoardSetupModal';
+import { BoardSetupButton } from './BoardSetupButton';
 
 export const GameControls: React.FC = () => {
   const {
@@ -86,7 +86,7 @@ export const GameControls: React.FC = () => {
         >
           {showLegalMoves ? t('controls.hideLegalMoves') : t('controls.showLegalMoves')}
         </button>
-        <BoardSetupModal />
+        <BoardSetupButton />
         {isAIGame && (
           <div className="text-white/70 text-xs text-center">
             {t('controls.aiInfo', {

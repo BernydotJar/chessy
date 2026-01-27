@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import './styles/glassmorphism.css';
 
 function App() {
-  const { startAIGame, isAIGame, toggleSound, soundEnabled } = useGameStore();
+  const { startAIGame, isAIGame, toggleSound, soundEnabled, setupMode } = useGameStore();
   const { t } = useTranslation();
 
   return (
@@ -56,16 +56,18 @@ function App() {
           </div>
 
           {/* Center - Chess Board */}
-          <div className="lg:col-span-6 flex justify-center animate-slide-up" style={{ animationDelay: '0.2s' }}>
+          <div className={`${setupMode ? 'lg:col-span-9' : 'lg:col-span-6'} flex justify-center animate-slide-up`} style={{ animationDelay: '0.2s' }}>
             <ChessBoard />
           </div>
 
           {/* Right Sidebar - Move History */}
-          <div className="lg:col-span-3 animate-slide-up" style={{ animationDelay: '0.3s' }}>
-            <MoveHistory />
-            <CoachInsights />
-            <ChessGlossary />
-          </div>
+          {!setupMode && (
+            <div className="lg:col-span-3 animate-slide-up" style={{ animationDelay: '0.3s' }}>
+              <MoveHistory />
+              <CoachInsights />
+              <ChessGlossary />
+            </div>
+          )}
         </div>
 
         {/* Mobile Theme Customizer */}
