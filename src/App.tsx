@@ -8,12 +8,16 @@ import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { CoachInsights } from './components/CoachInsights';
 import { ChessGlossary } from './components/ChessGlossary';
 import { BoardSetupPanel } from './components/BoardSetupPanel';
+import { TopNav } from './components/TopNav';
+import { GamesHub } from './components/GamesHub';
+import { ReviewView } from './components/ReviewView';
+import { AnalysisView } from './components/AnalysisView';
 import { useGameStore } from './store/gameStore';
 import { useTranslation } from 'react-i18next';
 import './styles/glassmorphism.css';
 
 function App() {
-  const { startAIGame, isAIGame, toggleSound, soundEnabled, setupMode, setSetupMode } = useGameStore();
+  const { startAIGame, isAIGame, toggleSound, soundEnabled, setupMode, setSetupMode, view } = useGameStore();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -36,7 +40,8 @@ function App() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <header className="mb-8">
-          <div className="flex justify-end mb-6">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
+            <TopNav />
             <LanguageSwitcher />
           </div>
           <div className="text-center animate-fade-in">
@@ -57,7 +62,26 @@ function App() {
         </header>
 
         {/* Main Game Area */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+        {view === 'games' && (
+          <div className="grid grid-cols-1 gap-6 mb-8">
+            <GamesHub />
+          </div>
+        )}
+
+        {view === 'review' && (
+          <div className="grid grid-cols-1 gap-6 mb-8">
+            <ReviewView />
+          </div>
+        )}
+
+        {view === 'analysis' && (
+          <div className="grid grid-cols-1 gap-6 mb-8">
+            <AnalysisView />
+          </div>
+        )}
+
+        {view === 'play' && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
           {/* Left Sidebar - Game Controls & AI */}
           <div className="lg:col-span-3 space-y-6 animate-slide-up" style={{ animationDelay: '0.1s' }}>
             {setupMode ? (
@@ -91,12 +115,15 @@ function App() {
               <ChessGlossary />
             </div>
           )}
-        </div>
+          </div>
+        )}
 
         {/* Mobile Theme Customizer */}
-        <div className="lg:hidden flex justify-center mb-8 animate-fade-in">
-          <ThemeCustomizer />
-        </div>
+        {view === 'play' && (
+          <div className="lg:hidden flex justify-center mb-8 animate-fade-in">
+            <ThemeCustomizer />
+          </div>
+        )}
 
         {/* Footer */}
         <footer className="text-center text-white/60 text-sm animate-fade-in" style={{ animationDelay: '0.4s' }}>

@@ -15,6 +15,58 @@
     "es": "Español",
     "pt": "Português"
   },
+  "nav": {
+    "play": "Play",
+    "games": "Games",
+    "review": "Review",
+    "analysis": "Analysis"
+  },
+  "games": {
+    "title": "Your Games",
+    "count": "{{count}} games",
+    "search": "Search opponent or time control",
+    "empty": "No games yet. Finish a game to see it here.",
+    "accuracy": "Accuracy {{value}}%",
+    "filters": {
+      "all": "All"
+    },
+    "results": {
+      "win": "Win",
+      "loss": "Loss",
+      "draw": "Draw"
+    },
+    "color": {
+      "white": "White",
+      "black": "Black"
+    },
+    "actions": {
+      "review": "Review",
+      "analyze": "Analyze",
+      "continue": "Continue"
+    }
+  },
+  "review": {
+    "title": "Game Review",
+    "subtitle": "A quick breakdown of key moments.",
+    "accuracy": "Accuracy",
+    "bestMoves": "Best moves",
+    "blunders": "Blunders",
+    "coachSummary": "Coach Summary",
+    "coachLine": "Strong opening choices, but watch the king safety after move 12.",
+    "critical": "Critical moments",
+    "moment": "Critical idea after {{move}}.",
+    "noMoments": "No critical moments yet.",
+    "nextStep": "Jump into Analysis to explore deeper lines."
+  },
+  "analysis": {
+    "title": "Analysis",
+    "subtitle": "Explore engine lines and annotate ideas.",
+    "eval": "Engine evaluation",
+    "lines": "Main lines",
+    "line": "{{line}}",
+    "commentary": "Your notes",
+    "addNote": "Add a note or plan..."
+  },
   "controls": {
     "undo": "Undo",
     "newGame": "New Game",

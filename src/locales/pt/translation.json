@@ -15,6 +15,58 @@
     "es": "Espanhol",
     "pt": "Português"
   },
+  "nav": {
+    "play": "Jogar",
+    "games": "Partidas",
+    "review": "Revisão",
+    "analysis": "Análise"
+  },
+  "games": {
+    "title": "Suas partidas",
+    "count": "{{count}} partidas",
+    "search": "Buscar adversário ou tempo",
+    "empty": "Ainda não há partidas. Termine uma para ver aqui.",
+    "accuracy": "Precisão {{value}}%",
+    "filters": {
+      "all": "Todas"
+    },
+    "results": {
+      "win": "Vitória",
+      "loss": "Derrota",
+      "draw": "Empate"
+    },
+    "color": {
+      "white": "Brancas",
+      "black": "Pretas"
+    },
+    "actions": {
+      "review": "Revisar",
+      "analyze": "Analisar",
+      "continue": "Continuar"
+    }
+  },
+  "review": {
+    "title": "Revisão da partida",
+    "subtitle": "Um resumo rápido dos momentos chave.",
+    "accuracy": "Precisão",
+    "bestMoves": "Melhores lances",
+    "blunders": "Erros graves",
+    "coachSummary": "Resumo do mentor",
+    "coachLine": "Boa abertura, mas cuide da segurança do rei após o lance 12.",
+    "critical": "Momentos críticos",
+    "moment": "Ideia crítica após {{move}}.",
+    "noMoments": "Ainda não há momentos críticos.",
+    "nextStep": "Vá para Análise para aprofundar."
+  },
+  "analysis": {
+    "title": "Análise",
+    "subtitle": "Explore linhas do motor e anote ideias.",
+    "eval": "Avaliação do motor",
+    "lines": "Linhas principais",
+    "line": "{{line}}",
+    "commentary": "Suas notas",
+    "addNote": "Adicione uma nota ou plano..."
+  },
   "controls": {
     "undo": "Desfazer",
     "newGame": "Nova partida",

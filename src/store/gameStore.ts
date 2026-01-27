@@ -20,13 +20,16 @@ interface GameStore extends GameState {
   setupSideToMove: 'w' | 'b';
   setupSelectedPiece: SetupPiece;
   setupFen: string;
-  
+  view: 'play' | 'games' | 'review' | 'analysis';
+  activeGameId: string | null;
+
   makeMove: (from: string, to: string, promotion?: string, isAIMove?: boolean) => boolean;
   makeAIMove: () => Promise<void>;
   resetGame: () => void;
   undoMove: () => void;
   setTheme: (theme: BoardTheme) => void;
   loadGame: (fen: string) => void;
+  loadPgn: (pgn: string) => void;
   startAIGame: (difficulty: DifficultyLevel, playerColor: 'white' | 'black' | 'random') => void;
   toggleSound: () => void;
   setShowLegalMoves: (show: boolean) => void;
@@ -39,6 +42,8 @@ interface GameStore extends GameState {
   clearSetupBoard: () => void;
   applySetupBoard: () => { ok: boolean; error?: string };
   loadSetupExample: (fen: string) => void;
+  setView: (view: GameStore['view']) => void;
+  setActiveGameId: (id: string | null) => void;
 }
 
 const defaultTheme: BoardTheme = {
@@ -244,6 +249,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   setupSideToMove: 'w',
   setupSelectedPiece: 'wP',
   setupFen: '8/8/8/8/8/8/8/8 w - - 0 1',
+  view: 'play',
+  activeGameId: null,
 
   makeMove: (from: string, to: string, promotion?: string, isAIMove: boolean = false) => {
     const { chess, isAIGame, playerColor, isAIThinking } = get();
@@ -439,6 +446,31 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
+  loadPgn: (pgn: string) => {
+    const newChess = new Chess();
+    newChess.loadPgn(pgn);
+    const capturedPieces = getCapturedPieces(newChess);
+    const isGameOver = newChess.isGameOver();
+    const winner = newChess.isCheckmate()
+      ? newChess.turn() === 'w'
+        ? 'black'
+        : 'white'
+      : newChess.isDraw()
+      ? 'draw'
+      : null;
+
+    set({
+      chess: newChess,
+      fen: newChess.fen(),
+      history: newChess.history(),
+      currentMove: newChess.history().length,
+      capturedPieces,
+      isGameOver,
+      winner,
+      legalMoves: [],
+    });
+  },
+
   toggleSound: () => {
     const enabled = !get().soundEnabled;
     set({ soundEnabled: enabled });
@@ -537,4 +569,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       setupFen: buildSetupFen(setupBoard, side),
     });
   },
+
+  setView: (view) => set({ view }),
+  setActiveGameId: (id) => set({ activeGameId: id }),
 }));

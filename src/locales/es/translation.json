@@ -15,6 +15,58 @@
     "es": "Español",
     "pt": "Portugués"
   },
+  "nav": {
+    "play": "Jugar",
+    "games": "Partidas",
+    "review": "Revisión",
+    "analysis": "Análisis"
+  },
+  "games": {
+    "title": "Tus partidas",
+    "count": "{{count}} partidas",
+    "search": "Buscar rival o control de tiempo",
+    "empty": "Aún no hay partidas. Termina una para verla aquí.",
+    "accuracy": "Precisión {{value}}%",
+    "filters": {
+      "all": "Todas"
+    },
+    "results": {
+      "win": "Victoria",
+      "loss": "Derrota",
+      "draw": "Empate"
+    },
+    "color": {
+      "white": "Blancas",
+      "black": "Negras"
+    },
+    "actions": {
+      "review": "Revisar",
+      "analyze": "Analizar",
+      "continue": "Continuar"
+    }
+  },
+  "review": {
+    "title": "Revisión de partida",
+    "subtitle": "Un resumen rápido de los momentos clave.",
+    "accuracy": "Precisión",
+    "bestMoves": "Mejores jugadas",
+    "blunders": "Errores graves",
+    "coachSummary": "Resumen del mentor",
+    "coachLine": "Buena apertura, pero cuida la seguridad del rey tras la jugada 12.",
+    "critical": "Momentos críticos",
+    "moment": "Idea crítica después de {{move}}.",
+    "noMoments": "Aún no hay momentos críticos.",
+    "nextStep": "Pasa a Análisis para profundizar."
+  },
+  "analysis": {
+    "title": "Análisis",
+    "subtitle": "Explora líneas del motor y anota ideas.",
+    "eval": "Evaluación del motor",
+    "lines": "Líneas principales",
+    "line": "{{line}}",
+    "commentary": "Tus notas",
+    "addNote": "Agrega una nota o plan..."
+  },
   "controls": {
     "undo": "Deshacer",
     "newGame": "Nueva partida",
