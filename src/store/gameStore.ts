@@ -30,65 +30,56 @@ interface GameStore extends GameState {
 }
 
 const defaultTheme: BoardTheme = {
-  lightSquare: '#f0d9b5',
-  darkSquare: '#b58863',
-  glassOpacity: 0.15,
-  glassBlur: 10,
+  lightSquare: '#bfe7ff',
+  darkSquare: '#2f6fb8',
+  glassOpacity: 0.16,
+  glassBlur: 11,
 };
 
 export const themePresets: ThemePreset[] = [
   {
-    name: 'Classic',
+    name: 'Guatemala',
     theme: {
-      lightSquare: '#f0d9b5',
-      darkSquare: '#b58863',
-      glassOpacity: 0.15,
-      glassBlur: 10,
-    },
-  },
-  {
-    name: 'Ocean',
-    theme: {
-      lightSquare: '#9dd9f3',
-      darkSquare: '#4a90a4',
-      glassOpacity: 0.2,
-      glassBlur: 12,
-    },
-  },
-  {
-    name: 'Forest',
-    theme: {
-      lightSquare: '#c8e6c9',
-      darkSquare: '#66bb6a',
-      glassOpacity: 0.18,
+      lightSquare: '#bfe7ff',
+      darkSquare: '#2f6fb8',
+      glassOpacity: 0.16,
       glassBlur: 11,
     },
   },
   {
-    name: 'Sunset',
+    name: 'Colombia',
     theme: {
-      lightSquare: '#ffccbc',
-      darkSquare: '#ff7043',
-      glassOpacity: 0.22,
-      glassBlur: 13,
+      lightSquare: '#f6d369',
+      darkSquare: '#1f4e9e',
+      glassOpacity: 0.17,
+      glassBlur: 11,
     },
   },
   {
-    name: 'Midnight',
+    name: 'México',
     theme: {
-      lightSquare: '#7986cb',
-      darkSquare: '#3f51b5',
-      glassOpacity: 0.25,
-      glassBlur: 15,
+      lightSquare: '#f4f4f4',
+      darkSquare: '#0f6b3e',
+      glassOpacity: 0.16,
+      glassBlur: 11,
     },
   },
   {
-    name: 'Rose',
+    name: 'Brasil',
     theme: {
-      lightSquare: '#f8bbd0',
-      darkSquare: '#ec407a',
-      glassOpacity: 0.2,
-      glassBlur: 12,
+      lightSquare: '#f7d14b',
+      darkSquare: '#1e7a3b',
+      glassOpacity: 0.17,
+      glassBlur: 11,
+    },
+  },
+  {
+    name: 'USA',
+    theme: {
+      lightSquare: '#f5f6fb',
+      darkSquare: '#294b9a',
+      glassOpacity: 0.16,
+      glassBlur: 11,
     },
   },
 ];
@@ -329,13 +320,24 @@ export const useGameStore = create<GameStore>((set, get) => ({
   loadGame: (fen: string) => {
     const newChess = new Chess(fen);
     const capturedPieces = getCapturedPieces(newChess);
-    
+    const isGameOver = newChess.isGameOver();
+    const winner = newChess.isCheckmate()
+      ? newChess.turn() === 'w'
+        ? 'black'
+        : 'white'
+      : newChess.isDraw()
+      ? 'draw'
+      : null;
+
     set({
       chess: newChess,
       fen: newChess.fen(),
       history: newChess.history(),
       currentMove: newChess.history().length,
       capturedPieces,
+      isGameOver,
+      winner,
+      legalMoves: [],
     });
   },
 

@@ -1,6 +1,6 @@
 {
   "app": {
-    "subtitle": "Plataforma de ajedrez moderna, hermosa y gratuita",
+    "subtitle": "Instructor José Saldarriaga",
     "aiBadge": "🤖 Jugando contra la IA",
     "footer": {
       "madeBy": "Hecho con ♟️ y ❤️ por el equipo de GlassChess",
@@ -27,6 +27,35 @@
     "hideLegalMoves": "Ocultar movimientos legales",
     "aiInfo": "IA: {{level}} · Juegas con {{color}}"
   },
+  "setup": {
+    "button": "Preparar tablero",
+    "title": "Configuración del tablero",
+    "close": "Cerrar configuración",
+    "palette": "Paleta de piezas",
+    "erase": "Borrar",
+    "side": "Lado que mueve",
+    "apply": "Aplicar posición",
+    "clear": "Vaciar tablero",
+    "examplesTitle": "Ejemplos",
+    "examples": [
+      {
+        "label": "Posición inicial",
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+      },
+      {
+        "label": "Rey + dama vs rey",
+        "fen": "6k1/8/8/8/8/8/7Q/6K1 w - - 0 1"
+      },
+      {
+        "label": "Rey + torre vs rey",
+        "fen": "6k1/8/8/8/8/8/7R/6K1 w - - 0 1"
+      }
+    ],
+    "errors": {
+      "kings": "Se requieren ambos reyes.",
+      "invalid": "Esa posición no es válida."
+    }
+  },
   "status": {
     "turn": "Turno de {{color}}",
     "inCheck": "{{color}} en jaque",
@@ -48,6 +77,50 @@
     "noMoves": "Aún no hay movimientos. ¡Empieza a jugar!",
     "show": "Mostrar historial",
     "hide": "Ocultar historial"
+  },
+  "glossary": {
+    "title": "Términos de ajedrez",
+    "show": "Ver términos",
+    "hide": "Ocultar términos",
+    "sections": [
+      {
+        "title": "Tablero y notación",
+        "items": [
+          "Columnas: a–h, filas: 1–8",
+          "Notación algebraica: e4, Cf3, Dxd5+",
+          "Enroque: O-O (corto), O-O-O (largo)",
+          "Símbolos: ! buena, ? mala, !! brillante, ?? muy mala, !? interesante, ?! dudosa"
+        ]
+      },
+      {
+        "title": "Reglas básicas",
+        "items": [
+          "Jaque: el rey está atacado",
+          "Jaque mate: sin escapes legales",
+          "Ahogado: sin jugadas legales, no en jaque",
+          "En passant: captura especial de peón",
+          "Promoción: peón llega a la última fila"
+        ]
+      },
+      {
+        "title": "Táctica",
+        "items": [
+          "Tenedor: una jugada ataca dos piezas",
+          "Clavada: una pieza no puede moverse",
+          "Pincho: se ataca una pieza detrás de otra",
+          "Ataque descubierto: al mover se revela un ataque"
+        ]
+      },
+      {
+        "title": "Estrategia",
+        "items": [
+          "Desarrollo: activar piezas temprano",
+          "Control del centro: d4/e4/d5/e5",
+          "Seguridad del rey: enrocar y evitar líneas abiertas",
+          "Columna abierta: columna sin peones"
+        ]
+      }
+    ]
   },
   "ai": {
     "title": "Oponente IA",

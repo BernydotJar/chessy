@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bot, Play, Volume2, VolumeX } from 'lucide-react';
+import { Bot, Play, Settings, Volume2, VolumeX } from 'lucide-react';
 import { DifficultyLevel } from '../utils/stockfishService';
 import { useTranslation } from 'react-i18next';
 
@@ -8,8 +8,6 @@ interface AIOpponentProps {
   isPlaying: boolean;
   soundEnabled: boolean;
   onToggleSound: () => void;
-  settingsOpen: boolean;
-  onSettingsChange: (open: boolean) => void;
 }
 
 export const AIOpponent: React.FC<AIOpponentProps> = ({
@@ -17,11 +15,10 @@ export const AIOpponent: React.FC<AIOpponentProps> = ({
   isPlaying,
   soundEnabled,
   onToggleSound,
-  settingsOpen,
-  onSettingsChange,
 }) => {
   const [difficulty, setDifficulty] = useState<DifficultyLevel>('medium');
   const [playerColor, setPlayerColor] = useState<'white' | 'black' | 'random'>('white');
+  const [showSettings, setShowSettings] = useState(false);
   const { t } = useTranslation();
 
   const difficulties: Array<{ value: DifficultyLevel; label: string; description: string }> = [
@@ -54,7 +51,7 @@ export const AIOpponent: React.FC<AIOpponentProps> = ({
 
   const handleStartGame = () => {
     onStartGame(difficulty, playerColor);
-    onSettingsChange(false);
+    setShowSettings(false);
   };
 
   return (
@@ -64,9 +61,16 @@ export const AIOpponent: React.FC<AIOpponentProps> = ({
           <Bot size={24} />
           {t('ai.title')}
         </h3>
+        <button
+          onClick={() => setShowSettings(!showSettings)}
+          className="glass-button glass-button--subtle p-2 rounded-lg text-white hover:scale-105 transition-transform"
+          aria-label={t('ai.settings')}
+        >
+          <Settings size={18} />
+        </button>
       </div>
 
-      {settingsOpen && (
+      {showSettings && (
         <div className="space-y-4 animate-slide-up">
           {/* Difficulty Selection */}
           <div>
@@ -147,7 +151,7 @@ export const AIOpponent: React.FC<AIOpponentProps> = ({
         </div>
       )}
 
-      {!settingsOpen && (
+      {!showSettings && (
         <div className="glass-container rounded-lg p-4">
           <div className="text-white/80 text-sm">
             <p className="mb-2">

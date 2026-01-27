@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Chessboard } from 'react-chessboard';
 import { useGameStore } from '../store/gameStore';
 import { Square } from 'chess.js';
@@ -20,6 +20,8 @@ export const ChessBoard: React.FC = () => {
   
   const [highlightedSquares, setHighlightedSquares] = useState<string[]>([]);
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
+  const [boardWidth, setBoardWidth] = useState(560);
+  const boardRef = useRef<HTMLDivElement | null>(null);
   const { t } = useTranslation();
 
   const onDrop = (sourceSquare: Square, targetSquare: Square) => {
@@ -82,6 +84,21 @@ export const ChessBoard: React.FC = () => {
     `,
   };
 
+  useEffect(() => {
+    const updateSize = () => {
+      if (!boardRef.current) return;
+      const maxSize = 560;
+      const width = Math.min(boardRef.current.clientWidth, maxSize);
+      setBoardWidth(width);
+    };
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+
+  const files = useMemo(() => ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], []);
+  const ranks = useMemo(() => ['8', '7', '6', '5', '4', '3', '2', '1'], []);
+
   // Custom square styles for board colors
   const baseSquareStyles = Object.fromEntries(
     Array.from({ length: 64 }, (_, i) => {
@@ -123,7 +140,7 @@ export const ChessBoard: React.FC = () => {
 
   return (
     <>
-      <div className="relative">
+      <div className="relative board-shell" ref={boardRef}>
         {/* AI Thinking Overlay */}
         {isAIThinking && (
           <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 backdrop-blur-sm rounded-xl">
@@ -135,6 +152,17 @@ export const ChessBoard: React.FC = () => {
             </div>
           </div>
         )}
+
+        <div className="board-notation board-notation--left">
+          {ranks.map((rank) => (
+            <span key={rank} className="board-notation__label">{rank}</span>
+          ))}
+        </div>
+        <div className="board-notation board-notation--bottom">
+          {files.map((file) => (
+            <span key={file} className="board-notation__label">{file}</span>
+          ))}
+        </div>
 
         {/* Glass overlay effect */}
         <div
@@ -154,12 +182,13 @@ export const ChessBoard: React.FC = () => {
             position={fen}
             onPieceDrop={onDrop}
             onSquareClick={onSquareClick}
-            boardWidth={560}
+            boardWidth={boardWidth}
             customBoardStyle={customBoardStyle}
             customSquareStyles={customSquareStyles}
             animationDuration={200}
             arePiecesDraggable={!chess.isGameOver() && !isAIThinking}
             areArrowsAllowed={true}
+            showBoardNotation={false}
           />
         </div>
       </div>

@@ -1,6 +1,6 @@
 {
   "app": {
-    "subtitle": "Plataforma de xadrez moderna, bonita e gratuita",
+    "subtitle": "Instructor José Saldarriaga",
     "aiBadge": "🤖 Jogando contra a IA",
     "footer": {
       "madeBy": "Feito com ♟️ e ❤️ pela equipe GlassChess",
@@ -27,6 +27,35 @@
     "hideLegalMoves": "Ocultar movimentos legais",
     "aiInfo": "IA: {{level}} · Você joga com {{color}}"
   },
+  "setup": {
+    "button": "Preparar tabuleiro",
+    "title": "Configuração do tabuleiro",
+    "close": "Fechar configuração",
+    "palette": "Paleta de peças",
+    "erase": "Apagar",
+    "side": "Lado a jogar",
+    "apply": "Aplicar posição",
+    "clear": "Limpar tabuleiro",
+    "examplesTitle": "Exemplos",
+    "examples": [
+      {
+        "label": "Posição inicial",
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+      },
+      {
+        "label": "Rei + dama vs rei",
+        "fen": "6k1/8/8/8/8/8/7Q/6K1 w - - 0 1"
+      },
+      {
+        "label": "Rei + torre vs rei",
+        "fen": "6k1/8/8/8/8/8/7R/6K1 w - - 0 1"
+      }
+    ],
+    "errors": {
+      "kings": "Os dois reis são necessários.",
+      "invalid": "Essa posição não é válida."
+    }
+  },
   "status": {
     "turn": "Vez de {{color}}",
     "inCheck": "{{color}} em xeque",
@@ -48,6 +77,50 @@
     "noMoves": "Ainda não há jogadas. Comece a jogar!",
     "show": "Mostrar histórico",
     "hide": "Ocultar histórico"
+  },
+  "glossary": {
+    "title": "Termos de xadrez",
+    "show": "Ver termos",
+    "hide": "Ocultar termos",
+    "sections": [
+      {
+        "title": "Tabuleiro e notação",
+        "items": [
+          "Colunas: a–h, fileiras: 1–8",
+          "Notação algébrica: e4, Cf3, Dxd5+",
+          "Roque: O-O (curto), O-O-O (longo)",
+          "Símbolos: ! boa, ? ruim, !! brilhante, ?? muito ruim, !? interessante, ?! duvidosa"
+        ]
+      },
+      {
+        "title": "Regras básicas",
+        "items": [
+          "Xeque: o rei está atacado",
+          "Xeque-mate: sem escapes legais",
+          "Afogamento: sem jogadas legais, sem xeque",
+          "En passant: captura especial de peão",
+          "Promoção: peão chega à última fileira"
+        ]
+      },
+      {
+        "title": "Tática",
+        "items": [
+          "Garfo: uma jogada ataca dois alvos",
+          "Cravada: peça não pode se mover",
+          "Espeto: ataca peça atrás de outra",
+          "Ataque descoberto: mover revela ataque"
+        ]
+      },
+      {
+        "title": "Estratégia",
+        "items": [
+          "Desenvolvimento: ativar peças cedo",
+          "Controle do centro: d4/e4/d5/e5",
+          "Segurança do rei: rocar e evitar linhas abertas",
+          "Coluna aberta: coluna sem peões"
+        ]
+      }
+    ]
   },
   "ai": {
     "title": "Oponente IA",
