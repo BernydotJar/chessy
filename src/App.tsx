@@ -6,7 +6,7 @@ import { AIOpponent } from './components/AIOpponent';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { CoachInsights } from './components/CoachInsights';
 import { ChessGlossary } from './components/ChessGlossary';
-import { BoardSetupModal } from './components/BoardSetupModal';
+import { BoardSetupPanel } from './components/BoardSetupPanel';
 import { useGameStore } from './store/gameStore';
 import { useTranslation } from 'react-i18next';
 import './styles/glassmorphism.css';
@@ -62,13 +62,17 @@ function App() {
           </div>
 
           {/* Right Sidebar - Move History */}
-          {!setupMode && (
-            <div className="lg:col-span-3 animate-slide-up" style={{ animationDelay: '0.3s' }}>
-              <MoveHistory />
-              <CoachInsights />
-              <ChessGlossary />
-            </div>
-          )}
+          <div className="lg:col-span-3 animate-slide-up" style={{ animationDelay: '0.3s' }}>
+            {setupMode ? (
+              <BoardSetupPanel />
+            ) : (
+              <>
+                <MoveHistory />
+                <CoachInsights />
+                <ChessGlossary />
+              </>
+            )}
+          </div>
         </div>
 
         {/* Mobile Theme Customizer */}
@@ -99,7 +103,6 @@ function App() {
         </footer>
       </div>
 
-      <BoardSetupModal />
     </div>
   );
 }

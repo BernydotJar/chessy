@@ -16,6 +16,10 @@ interface GameStore extends GameState {
   legalMoves: string[];
   pendingPromotion: { from: string; to: string } | null;
   setupMode: boolean;
+  setupBoard: Array<Array<SetupPiece>>;
+  setupSideToMove: 'w' | 'b';
+  setupSelectedPiece: SetupPiece;
+  setupFen: string;
   
   makeMove: (from: string, to: string, promotion?: string, isAIMove?: boolean) => boolean;
   makeAIMove: () => Promise<void>;
@@ -29,6 +33,12 @@ interface GameStore extends GameState {
   getLegalMovesForSquare: (square: string) => string[];
   setPendingPromotion: (promotion: { from: string; to: string } | null) => void;
   setSetupMode: (open: boolean) => void;
+  setSetupSelectedPiece: (piece: SetupPiece) => void;
+  setSetupSideToMove: (side: 'w' | 'b') => void;
+  setSetupSquare: (square: string, piece: SetupPiece) => void;
+  clearSetupBoard: () => void;
+  applySetupBoard: () => { ok: boolean; error?: string };
+  loadSetupExample: (fen: string) => void;
 }
 
 const defaultTheme: BoardTheme = {
@@ -131,6 +141,87 @@ const playMoveSound = (chess: Chess, moveObj: any) => {
   }
 };
 
+type SetupPiece =
+  | 'wK' | 'wQ' | 'wR' | 'wB' | 'wN' | 'wP'
+  | 'bK' | 'bQ' | 'bR' | 'bB' | 'bN' | 'bP'
+  | null;
+
+const pieceToFen: Record<Exclude<SetupPiece, null>, string> = {
+  wK: 'K',
+  wQ: 'Q',
+  wR: 'R',
+  wB: 'B',
+  wN: 'N',
+  wP: 'P',
+  bK: 'k',
+  bQ: 'q',
+  bR: 'r',
+  bB: 'b',
+  bN: 'n',
+  bP: 'p',
+};
+
+const fenToPiece: Record<string, Exclude<SetupPiece, null>> = {
+  K: 'wK',
+  Q: 'wQ',
+  R: 'wR',
+  B: 'wB',
+  N: 'wN',
+  P: 'wP',
+  k: 'bK',
+  q: 'bQ',
+  r: 'bR',
+  b: 'bB',
+  n: 'bN',
+  p: 'bP',
+};
+
+const createEmptySetupBoard = (): Array<Array<SetupPiece>> =>
+  Array.from({ length: 8 }, () => Array.from({ length: 8 }, () => null));
+
+const parseFenToSetupBoard = (fen: string) => {
+  const board = createEmptySetupBoard();
+  const boardPart = fen.split(' ')[0];
+  const rows = boardPart.split('/');
+  rows.forEach((row, rowIndex) => {
+    let col = 0;
+    for (const char of row) {
+      if (/\d/.test(char)) {
+        col += parseInt(char, 10);
+      } else {
+        board[rowIndex][col] = fenToPiece[char];
+        col += 1;
+      }
+    }
+  });
+  return board;
+};
+
+const boardToFen = (board: Array<Array<SetupPiece>>) => {
+  return board
+    .map((row) => {
+      let empty = 0;
+      let fenRow = '';
+      row.forEach((cell) => {
+        if (!cell) {
+          empty += 1;
+          return;
+        }
+        if (empty > 0) {
+          fenRow += empty;
+          empty = 0;
+        }
+        fenRow += pieceToFen[cell];
+      });
+      if (empty > 0) fenRow += empty;
+      return fenRow;
+    })
+    .join('/');
+};
+
+const buildSetupFen = (board: Array<Array<SetupPiece>>, side: 'w' | 'b') =>
+  `${boardToFen(board)} ${side} - - 0 1`;
+
 export const useGameStore = create<GameStore>((set, get) => ({
   chess: new Chess(),
   fen: new Chess().fen(),
@@ -149,6 +240,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
   legalMoves: [],
   pendingPromotion: null,
   setupMode: false,
+  setupBoard: createEmptySetupBoard(),
+  setupSideToMove: 'w',
+  setupSelectedPiece: 'wP',
+  setupFen: '8/8/8/8/8/8/8/8 w - - 0 1',
 
   makeMove: (from: string, to: string, promotion?: string, isAIMove: boolean = false) => {
     const { chess, isAIGame, playerColor, isAIThinking } = get();
@@ -365,6 +460,81 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   setSetupMode: (open: boolean) => {
-    set({ setupMode: open });
+    if (open) {
+      const { fen } = get();
+      const setupBoard = parseFenToSetupBoard(fen);
+      const side = fen.split(' ')[1] === 'b' ? 'b' : 'w';
+      set({
+        setupMode: true,
+        setupBoard,
+        setupSideToMove: side,
+        setupSelectedPiece: 'wP',
+        setupFen: buildSetupFen(setupBoard, side),
+      });
+      return;
+    }
+    set({ setupMode: false });
+  },
+
+  setSetupSelectedPiece: (piece: SetupPiece) => {
+    set({ setupSelectedPiece: piece });
+  },
+
+  setSetupSideToMove: (side: 'w' | 'b') => {
+    const { setupBoard } = get();
+    set({
+      setupSideToMove: side,
+      setupFen: buildSetupFen(setupBoard, side),
+    });
+  },
+
+  setSetupSquare: (square: string, piece: SetupPiece) => {
+    const { setupBoard, setupSideToMove } = get();
+    const file = square.charCodeAt(0) - 97;
+    const rank = 8 - parseInt(square[1], 10);
+    if (file < 0 || file > 7 || rank < 0 || rank > 7) return;
+    const next = setupBoard.map((row) => row.slice());
+    next[rank][file] = piece;
+    set({
+      setupBoard: next,
+      setupFen: buildSetupFen(next, setupSideToMove),
+    });
+  },
+
+  clearSetupBoard: () => {
+    const { setupSideToMove } = get();
+    const empty = createEmptySetupBoard();
+    set({
+      setupBoard: empty,
+      setupFen: buildSetupFen(empty, setupSideToMove),
+    });
+  },
+
+  applySetupBoard: () => {
+    const { setupBoard, setupSideToMove } = get();
+    const flat = setupBoard.flat();
+    const hasWhiteKing = flat.includes('wK');
+    const hasBlackKing = flat.includes('bK');
+    if (!hasWhiteKing || !hasBlackKing) {
+      return { ok: false, error: 'kings' };
+    }
+    const fen = buildSetupFen(setupBoard, setupSideToMove);
+    try {
+      get().loadGame(fen);
+      set({ setupMode: false });
+      return { ok: true };
+    } catch {
+      return { ok: false, error: 'invalid' };
+    }
+  },
+
+  loadSetupExample: (fen: string) => {
+    const setupBoard = parseFenToSetupBoard(fen);
+    const side = fen.split(' ')[1] === 'b' ? 'b' : 'w';
+    set({
+      setupBoard,
+      setupSideToMove: side,
+      setupFen: buildSetupFen(setupBoard, side),
+    });
   },
 }));

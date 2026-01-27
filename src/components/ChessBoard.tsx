@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 export const ChessBoard: React.FC = () => {
   const { 
-    fen, 
+    fen,
     makeMove, 
     theme, 
     chess, 
@@ -16,7 +16,10 @@ export const ChessBoard: React.FC = () => {
     pendingPromotion,
     setPendingPromotion,
     isAIThinking,
-    setupMode
+    setupMode,
+    setupFen,
+    setupSelectedPiece,
+    setSetupSquare
   } = useGameStore();
   
   const [highlightedSquares, setHighlightedSquares] = useState<string[]>([]);
@@ -26,6 +29,7 @@ export const ChessBoard: React.FC = () => {
   const { t } = useTranslation();
 
   const onDrop = (sourceSquare: Square, targetSquare: Square) => {
+    if (setupMode) return false;
     // Check if the move requires promotion
     const piece = chess.get(sourceSquare);
     const isPromotion =
@@ -50,7 +54,11 @@ export const ChessBoard: React.FC = () => {
   };
 
   const onSquareClick = (square: Square) => {
-    if (isAIThinking || setupMode) return;
+    if (isAIThinking) return;
+    if (setupMode) {
+      setSetupSquare(square, setupSelectedPiece);
+      return;
+    }
 
     if (selectedSquare === square) {
       // Deselect
@@ -180,7 +188,7 @@ export const ChessBoard: React.FC = () => {
         {/* Chess board */}
         <div className="relative z-10">
           <Chessboard
-            position={fen}
+            position={setupMode ? setupFen : fen}
             onPieceDrop={onDrop}
             onSquareClick={onSquareClick}
             boardWidth={boardWidth}

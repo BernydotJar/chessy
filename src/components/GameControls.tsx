@@ -17,6 +17,7 @@ export const GameControls: React.FC = () => {
     playerColor,
     showLegalMoves,
     setShowLegalMoves,
+    setupMode,
   } = useGameStore();
   const { t } = useTranslation();
 
@@ -86,7 +87,7 @@ export const GameControls: React.FC = () => {
         >
           {showLegalMoves ? t('controls.hideLegalMoves') : t('controls.showLegalMoves')}
         </button>
-        <BoardSetupButton />
+        {!setupMode && <BoardSetupButton />}
         {isAIGame && (
           <div className="text-white/70 text-xs text-center">
             {t('controls.aiInfo', {
