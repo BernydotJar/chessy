@@ -63,6 +63,30 @@
   cursor: crosshair;
 }
 
+.board-setup-disable {
+  pointer-events: none;
+}
+
+.board-setup-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+}
+
+.board-setup-cell {
+  background: transparent;
+  border: none;
+  cursor: crosshair;
+}
+
+.board-setup-cell:hover {
+  box-shadow: inset 0 0 0 2px rgba(125, 211, 252, 0.6);
+  background: rgba(125, 211, 252, 0.08);
+}
+
 .board-setup-badge {
   position: absolute;
   top: -48px;

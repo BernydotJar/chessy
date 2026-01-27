@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { X, LayoutGrid } from 'lucide-react';
+import { X, LayoutGrid, Eraser } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useGameStore } from '../store/gameStore';
 
@@ -85,6 +85,10 @@ export const BoardSetupPanel: React.FC = () => {
               <button
                 key={piece.code}
                 onClick={() => setSetupSelectedPiece(piece.code)}
+                draggable
+                onDragStart={(event) => {
+                  event.dataTransfer.setData('text/plain', piece.code);
+                }}
                 className={`glass-button glass-button--subtle px-2 py-2 rounded-lg text-lg ${
                   setupSelectedPiece === piece.code ? 'ring-2 ring-white/50' : ''
                 }`}
@@ -94,11 +98,18 @@ export const BoardSetupPanel: React.FC = () => {
             ))}
             <button
               onClick={() => setSetupSelectedPiece(null)}
+              draggable
+              onDragStart={(event) => {
+                event.dataTransfer.setData('text/plain', 'erase');
+              }}
               className={`glass-button glass-button--subtle px-2 py-2 rounded-lg text-xs text-white ${
                 setupSelectedPiece === null ? 'ring-2 ring-white/50' : ''
               }`}
             >
-              {t('setup.erase')}
+              <span className="flex items-center justify-center gap-1">
+                <Eraser size={14} />
+                {t('setup.erase')}
+              </span>
             </button>
           </div>
           <p className="text-white/70 text-xs mt-2">

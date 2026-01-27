@@ -521,6 +521,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const fen = buildSetupFen(setupBoard, setupSideToMove);
     try {
       get().loadGame(fen);
+      set({ setupMode: false });
       return { ok: true };
     } catch {
       return { ok: false, error: 'invalid' };

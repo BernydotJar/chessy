@@ -107,6 +107,10 @@ export const ChessBoard: React.FC = () => {
 
   const files = useMemo(() => ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], []);
   const ranks = useMemo(() => ['8', '7', '6', '5', '4', '3', '2', '1'], []);
+  const setupSquares = useMemo(
+    () => ranks.flatMap((rank) => files.map((file) => `${file}${rank}` as Square)),
+    [files, ranks]
+  );
 
   useEffect(() => {
     if (!setupMode) return;
@@ -201,7 +205,7 @@ export const ChessBoard: React.FC = () => {
         />
         
         {/* Chess board */}
-        <div className="relative z-10">
+        <div className={`relative z-10 ${setupMode ? 'board-setup-disable' : ''}`}>
           <Chessboard
             position={setupMode ? setupFen : fen}
             onPieceDrop={onDrop}
@@ -215,6 +219,30 @@ export const ChessBoard: React.FC = () => {
             showBoardNotation={false}
           />
         </div>
+
+        {setupMode && (
+          <div className="board-setup-overlay">
+            {setupSquares.map((square) => (
+              <button
+                key={square}
+                className="board-setup-cell"
+                onClick={() => setSetupSquare(square, setupSelectedPiece)}
+                onDragOver={(event) => event.preventDefault()}
+                onDrop={(event) => {
+                  event.preventDefault();
+                  const data = event.dataTransfer.getData('text/plain');
+                  if (!data) return;
+                  if (data === 'erase') {
+                    setSetupSquare(square, null);
+                    return;
+                  }
+                  setSetupSquare(square, data as any);
+                }}
+                aria-label={square}
+              />
+            ))}
+          </div>
+        )}
 
       </div>
 
