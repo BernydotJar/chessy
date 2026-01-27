@@ -54,6 +54,7 @@
 
 .board-shell {
   width: min(92vw, 560px);
+  padding: 22px 18px 32px 30px;
   margin: 0 auto;
   position: relative;
 }
@@ -70,26 +71,26 @@
 }
 
 .board-notation--left {
-  top: 8px;
-  bottom: 8px;
+  top: 22px;
+  bottom: 32px;
   left: 8px;
   flex-direction: column;
   justify-content: space-between;
 }
 
 .board-notation--bottom {
-  left: 8px;
-  right: 8px;
+  left: 30px;
+  right: 18px;
   bottom: 8px;
   justify-content: space-between;
 }
 
 .board-notation__label {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   padding: 2px 8px;
-  border-radius: 8px;
-  background: rgba(15, 23, 42, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   backdrop-filter: blur(6px);
 }
 

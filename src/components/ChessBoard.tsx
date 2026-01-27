@@ -140,7 +140,7 @@ export const ChessBoard: React.FC = () => {
 
   return (
     <>
-      <div className="relative board-shell" ref={boardRef} style={{ height: boardWidth }}>
+      <div className="relative board-shell" ref={boardRef} style={{ height: boardWidth + 54 }}>
         {/* AI Thinking Overlay */}
         {isAIThinking && (
           <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 backdrop-blur-sm rounded-xl">
