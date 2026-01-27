@@ -1,16 +1,55 @@
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGameStore } from '../store/gameStore';
 import { Activity } from 'lucide-react';
+import { StockfishService, MultiPVLine } from '../utils/stockfishService';
+import { getExplorerLines } from '../utils/openingsExplorer';
+import { Chess } from 'chess.js';
 
 export const AnalysisView: React.FC = () => {
   const { t } = useTranslation();
-  const { history } = useGameStore();
+  const { history, fen } = useGameStore();
+  const [lines, setLines] = useState<MultiPVLine[]>([]);
+  const [evalScore, setEvalScore] = useState<string>('0.00');
+  const [loading, setLoading] = useState(false);
 
-  const lines = [
-    t('analysis.line', { line: history.slice(-6).join(' ') || 'e4 e5 Nf3 Nc6' }),
-    t('analysis.line', { line: 'd4 d5 c4 e6 Nc3 Nf6' }),
-  ];
+  const explorerMoves = useMemo(() => {
+    const chess = new Chess();
+    history.forEach((move) => {
+      try {
+        chess.move(move);
+      } catch {
+        // ignore invalid SAN in history
+      }
+    });
+    const verbose = chess.history({ verbose: true }) as any[];
+    const uciMoves = verbose.map((m) => `${m.from}${m.to}${m.promotion || ''}`);
+    return getExplorerLines(uciMoves);
+  }, [history]);
+
+  useEffect(() => {
+    let alive = true;
+    const engine = new StockfishService();
+    const run = async () => {
+      setLoading(true);
+      const result = await engine.evaluatePositionMultiPV(fen, 12, 2);
+      if (!alive) return;
+      setLines(result);
+      const best = result[0];
+      if (best?.mate) {
+        setEvalScore(`#${best.mate}`);
+      } else if (typeof best?.score === 'number') {
+        setEvalScore((best.score / 100).toFixed(2));
+      }
+      setLoading(false);
+      engine.terminate();
+    };
+    void run();
+    return () => {
+      alive = false;
+      engine.terminate();
+    };
+  }, [fen]);
 
   return (
     <div className="glass-card rounded-xl p-6 space-y-5">
@@ -23,15 +62,36 @@ export const AnalysisView: React.FC = () => {
         <Activity size={18} className="text-emerald-300" />
         <div>
           <p className="text-white/70 text-xs">{t('analysis.eval')}</p>
-          <p className="text-white font-semibold">+0.35</p>
+          <p className="text-white font-semibold">
+            {loading ? t('analysis.loading') : evalScore}
+          </p>
         </div>
       </div>
 
       <div className="glass-container rounded-lg p-4 space-y-2">
         <p className="text-white font-semibold">{t('analysis.lines')}</p>
-        {lines.map((line, idx) => (
-          <p key={idx} className="text-white/70 text-sm">{line}</p>
+        {lines.length === 0 && (
+          <p className="text-white/60 text-sm">{t('analysis.noLines')}</p>
+        )}
+        {lines.map((line) => (
+          <p key={line.multipv} className="text-white/70 text-sm">
+            {t('analysis.line', { line: line.pv || '' })}
+          </p>
         ))}
+      </div>
+
+      <div className="glass-container rounded-lg p-4 space-y-2">
+        <p className="text-white font-semibold">{t('analysis.explorer')}</p>
+        {explorerMoves.length === 0 ? (
+          <p className="text-white/60 text-sm">{t('analysis.noExplorer')}</p>
+        ) : (
+          explorerMoves.map((entry) => (
+            <div key={entry.move} className="flex items-center justify-between text-white/70 text-sm">
+              <span>{entry.name || entry.move}</span>
+              <span>{entry.white}% / {entry.draw}% / {entry.black}%</span>
+            </div>
+          ))
+        )}
       </div>
 
       <div className="glass-container rounded-lg p-4">

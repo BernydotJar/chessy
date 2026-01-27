@@ -17,6 +17,13 @@ export interface EngineEvaluation {
   depth: number;
 }
 
+export interface MultiPVLine {
+  multipv: number;
+  score?: number;
+  mate?: number;
+  pv?: string;
+}
+
 type EngineLike = {
   postMessage: (command: string) => void;
   onmessage: ((event: MessageEvent | string) => void) | null;
@@ -189,6 +196,69 @@ export class StockfishService {
       this.engine = null;
       this.isReady = false;
     }
+  }
+
+  async evaluatePositionMultiPV(fen: string, depth: number = 15, lines: number = 2): Promise<MultiPVLine[]> {
+    if (!this.isReady) {
+      await this.initialize();
+    }
+
+    return new Promise((resolve) => {
+      const results: MultiPVLine[] = [];
+
+      const handleMessage = (message: string) => {
+        if (message.startsWith('info') && message.includes('multipv')) {
+          const multipvMatch = message.match(/multipv (\d+)/);
+          const scoreMatch = message.match(/score cp (-?\d+)/);
+          const mateMatch = message.match(/score mate (-?\d+)/);
+          const pvMatch = message.match(/ pv (.+)$/);
+
+          const multipv = multipvMatch ? parseInt(multipvMatch[1]) : 1;
+          const existingIndex = results.findIndex((line) => line.multipv === multipv);
+          const line: MultiPVLine = {
+            multipv,
+            score: scoreMatch ? parseInt(scoreMatch[1]) : undefined,
+            mate: mateMatch ? parseInt(mateMatch[1]) : undefined,
+            pv: pvMatch ? pvMatch[1] : undefined,
+          };
+
+          if (existingIndex >= 0) {
+            results[existingIndex] = line;
+          } else {
+            results.push(line);
+          }
+        }
+
+        if (message.startsWith('bestmove')) {
+          if (this.engine) {
+            this.engine.onmessage = baseHandler;
+          }
+          resolve(results.sort((a, b) => a.multipv - b.multipv));
+        }
+      };
+
+      const baseHandler = this.engine?.onmessage || null;
+      if (this.engine) {
+        this.engine.onmessage = (event) => {
+          const message = typeof event === 'string' ? event : event.data;
+          handleMessage(message);
+          if (baseHandler) {
+            baseHandler(event);
+          }
+        };
+      }
+
+      this.sendCommand('setoption name MultiPV value ' + lines);
+      this.sendCommand(`position fen ${fen}`);
+      this.sendCommand(`go depth ${depth}`);
+
+      setTimeout(() => {
+        if (this.engine) {
+          this.engine.onmessage = baseHandler;
+        }
+        resolve(results.sort((a, b) => a.multipv - b.multipv));
+      }, 6000);
+    });
   }
 }
 

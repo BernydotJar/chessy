@@ -64,6 +64,10 @@
     "eval": "Avaliação do motor",
     "lines": "Linhas principais",
     "line": "{{line}}",
+    "loading": "Calculando...",
+    "noLines": "Ainda não há linhas.",
+    "explorer": "Explorador de aberturas",
+    "noExplorer": "Sem dados do explorador para esta posição.",
     "commentary": "Suas notas",
     "addNote": "Adicione uma nota ou plano..."
   },

@@ -64,6 +64,10 @@
     "eval": "Engine evaluation",
     "lines": "Main lines",
     "line": "{{line}}",
+    "loading": "Calculating...",
+    "noLines": "No lines yet.",
+    "explorer": "Opening Explorer",
+    "noExplorer": "No explorer data for this position.",
     "commentary": "Your notes",
     "addNote": "Add a note or plan..."
   },
