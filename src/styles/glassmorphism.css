@@ -70,25 +70,25 @@
 }
 
 .board-notation--left {
-  top: 12px;
-  bottom: 12px;
-  left: -34px;
+  top: 8px;
+  bottom: 8px;
+  left: 8px;
   flex-direction: column;
   justify-content: space-between;
 }
 
 .board-notation--bottom {
-  left: 12px;
-  right: 12px;
-  bottom: -32px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
   justify-content: space-between;
 }
 
 .board-notation__label {
-  font-size: 1rem;
-  padding: 2px 6px;
+  font-size: 0.85rem;
+  padding: 2px 8px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(15, 23, 42, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(6px);
 }
