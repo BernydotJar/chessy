@@ -44,16 +44,22 @@ function App() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
           {/* Left Sidebar - Game Controls & AI */}
           <div className="lg:col-span-3 space-y-6 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-            <AIOpponent
-              onStartGame={startAIGame}
-              isPlaying={isAIGame}
-              soundEnabled={soundEnabled}
-              onToggleSound={toggleSound}
-            />
-            <GameControls />
-            <div className="hidden lg:block">
-              <ThemeCustomizer />
-            </div>
+            {setupMode ? (
+              <BoardSetupPanel />
+            ) : (
+              <>
+                <AIOpponent
+                  onStartGame={startAIGame}
+                  isPlaying={isAIGame}
+                  soundEnabled={soundEnabled}
+                  onToggleSound={toggleSound}
+                />
+                <GameControls />
+                <div className="hidden lg:block">
+                  <ThemeCustomizer />
+                </div>
+              </>
+            )}
           </div>
 
           {/* Center - Chess Board */}
@@ -62,17 +68,13 @@ function App() {
           </div>
 
           {/* Right Sidebar - Move History */}
-          <div className="lg:col-span-3 animate-slide-up" style={{ animationDelay: '0.3s' }}>
-            {setupMode ? (
-              <BoardSetupPanel />
-            ) : (
-              <>
-                <MoveHistory />
-                <CoachInsights />
-                <ChessGlossary />
-              </>
-            )}
-          </div>
+          {!setupMode && (
+            <div className="lg:col-span-3 animate-slide-up" style={{ animationDelay: '0.3s' }}>
+              <MoveHistory />
+              <CoachInsights />
+              <ChessGlossary />
+            </div>
+          )}
         </div>
 
         {/* Mobile Theme Customizer */}
