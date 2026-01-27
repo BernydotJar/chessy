@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { ChessBoard } from './components/ChessBoard';
 import { GameControls } from './components/GameControls';
 import { MoveHistory } from './components/MoveHistory';
@@ -12,8 +13,23 @@ import { useTranslation } from 'react-i18next';
 import './styles/glassmorphism.css';
 
 function App() {
-  const { startAIGame, isAIGame, toggleSound, soundEnabled, setupMode } = useGameStore();
+  const { startAIGame, isAIGame, toggleSound, soundEnabled, setupMode, setSetupMode } = useGameStore();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    const handler = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) return;
+      if (event.key.toLowerCase() === 's') {
+        setSetupMode(!setupMode);
+      }
+      if (event.key === 'Escape' && setupMode) {
+        setSetupMode(false);
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [setSetupMode, setupMode]);
 
   return (
     <div className="min-h-screen animated-gradient p-4 md:p-8">

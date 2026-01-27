@@ -101,6 +101,11 @@ export const BoardSetupPanel: React.FC = () => {
               {t('setup.erase')}
             </button>
           </div>
+          <p className="text-white/70 text-xs mt-2">
+            {t('setup.selected', {
+              piece: setupSelectedPiece ? pieceSymbols[setupSelectedPiece as Exclude<SetupPiece, null>] : t('setup.erase'),
+            })}
+          </p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -151,6 +156,12 @@ export const BoardSetupPanel: React.FC = () => {
             className="glass-button glass-button--subtle w-full px-4 py-2 rounded-lg text-white text-sm"
           >
             {t('setup.clear')}
+          </button>
+          <button
+            onClick={() => setSetupMode(false)}
+            className="glass-button glass-button--subtle w-full px-4 py-2 rounded-lg text-white text-sm"
+          >
+            {t('setup.exit')}
           </button>
         </div>
       </div>

@@ -108,6 +108,12 @@ export const ChessBoard: React.FC = () => {
   const files = useMemo(() => ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], []);
   const ranks = useMemo(() => ['8', '7', '6', '5', '4', '3', '2', '1'], []);
 
+  useEffect(() => {
+    if (!setupMode) return;
+    setSelectedSquare(null);
+    setHighlightedSquares([]);
+  }, [setupMode]);
+
   // Custom square styles for board colors
   const baseSquareStyles = Object.fromEntries(
     Array.from({ length: 64 }, (_, i) => {
@@ -126,30 +132,32 @@ export const ChessBoard: React.FC = () => {
   );
 
   // Add highlighted squares for legal moves
-  const customSquareStyles = {
-    ...baseSquareStyles,
-    ...Object.fromEntries(
-      highlightedSquares.map(square => [
-        square,
-        {
-          ...baseSquareStyles[square],
-          backgroundColor: `${baseSquareStyles[square].backgroundColor}dd`,
-          boxShadow: 'inset 0 0 0 3px rgba(255, 255, 0, 0.5)',
-        },
-      ])
-    ),
-    // Highlight selected square
-    ...(selectedSquare ? {
-      [selectedSquare]: {
-        ...baseSquareStyles[selectedSquare],
-        boxShadow: 'inset 0 0 0 3px rgba(100, 200, 255, 0.7)',
-      },
-    } : {}),
-  };
+  const customSquareStyles = setupMode
+    ? baseSquareStyles
+    : {
+        ...baseSquareStyles,
+        ...Object.fromEntries(
+          highlightedSquares.map(square => [
+            square,
+            {
+              ...baseSquareStyles[square],
+              backgroundColor: `${baseSquareStyles[square].backgroundColor}dd`,
+              boxShadow: 'inset 0 0 0 3px rgba(255, 255, 0, 0.5)',
+            },
+          ])
+        ),
+        // Highlight selected square
+        ...(selectedSquare ? {
+          [selectedSquare]: {
+            ...baseSquareStyles[selectedSquare],
+            boxShadow: 'inset 0 0 0 3px rgba(100, 200, 255, 0.7)',
+          },
+        } : {}),
+      };
 
   return (
     <>
-      <div className="relative board-shell" ref={boardRef} style={{ height: boardWidth }}>
+      <div className={`relative board-shell ${setupMode ? 'board-shell--setup' : ''}`} ref={boardRef} style={{ height: boardWidth }}>
         {/* AI Thinking Overlay */}
         {isAIThinking && (
           <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 backdrop-blur-sm rounded-xl">
@@ -172,6 +180,13 @@ export const ChessBoard: React.FC = () => {
             <span key={file} className="board-notation__label">{file}</span>
           ))}
         </div>
+
+        {setupMode && (
+          <div className="board-setup-badge">
+            <span className="board-setup-badge__title">{t('setup.mode')}</span>
+            <span className="board-setup-badge__hint">{t('setup.hint')}</span>
+          </div>
+        )}
 
         {/* Glass overlay effect */}
         <div

@@ -59,6 +59,40 @@
   overflow: visible;
 }
 
+.board-shell--setup {
+  cursor: crosshair;
+}
+
+.board-setup-badge {
+  position: absolute;
+  top: -48px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  padding: 6px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  z-index: 20;
+  backdrop-filter: blur(8px);
+}
+
+.board-setup-badge__title {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.board-setup-badge__hint {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.7rem;
+}
+
 .board-notation {
   position: absolute;
   pointer-events: none;
