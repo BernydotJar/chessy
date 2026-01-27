@@ -132,6 +132,10 @@
   filter: brightness(1.1);
 }
 
+.board-setup-modal {
+  width: min(92vw, 560px);
+}
+
 .coach-action {
   transition: all 0.3s ease;
 }

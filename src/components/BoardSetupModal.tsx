@@ -151,8 +151,8 @@ export const BoardSetupModal: React.FC = () => {
   if (!setupMode) return null;
 
   return (
-    <div className="absolute inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm rounded-xl">
-      <div className="glass-card rounded-2xl p-6 w-full max-w-3xl max-h-[90vh] overflow-y-auto glass-scrollbar animate-slide-up">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <div className="glass-card board-setup-modal rounded-2xl p-6 w-full max-h-[90vh] overflow-y-auto glass-scrollbar animate-slide-up">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-white">{t('setup.title')}</h2>
           <button

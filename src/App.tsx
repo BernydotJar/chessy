@@ -6,6 +6,7 @@ import { AIOpponent } from './components/AIOpponent';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { CoachInsights } from './components/CoachInsights';
 import { ChessGlossary } from './components/ChessGlossary';
+import { BoardSetupModal } from './components/BoardSetupModal';
 import { useGameStore } from './store/gameStore';
 import { useTranslation } from 'react-i18next';
 import './styles/glassmorphism.css';
@@ -97,6 +98,8 @@ function App() {
           </div>
         </footer>
       </div>
+
+      <BoardSetupModal />
     </div>
   );
 }

@@ -3,7 +3,6 @@ import { Chessboard } from 'react-chessboard';
 import { useGameStore } from '../store/gameStore';
 import { Square } from 'chess.js';
 import { PromotionDialog } from './PromotionDialog';
-import { BoardSetupModal } from './BoardSetupModal';
 import { useTranslation } from 'react-i18next';
 
 export const ChessBoard: React.FC = () => {
@@ -194,7 +193,6 @@ export const ChessBoard: React.FC = () => {
           />
         </div>
 
-        <BoardSetupModal />
       </div>
 
       {/* Promotion Dialog */}
