@@ -134,7 +134,7 @@ export const BoardSetupModal: React.FC = () => {
     const fenString = `${boardFen} ${sideToMove} - - 0 1`;
     try {
       loadGame(fenString);
-      setIsOpen(false);
+      setSetupMode(false);
     } catch {
       setError(t('setup.errors.invalid'));
     }
