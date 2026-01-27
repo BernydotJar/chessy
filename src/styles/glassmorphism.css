@@ -54,9 +54,9 @@
 
 .board-shell {
   width: min(92vw, 560px);
-  padding: 22px 18px 32px 30px;
   margin: 0 auto;
   position: relative;
+  overflow: visible;
 }
 
 .board-notation {
@@ -71,17 +71,17 @@
 }
 
 .board-notation--left {
-  top: 22px;
-  bottom: 32px;
-  left: 8px;
+  top: 0;
+  bottom: 0;
+  left: -30px;
   flex-direction: column;
   justify-content: space-between;
 }
 
 .board-notation--bottom {
-  left: 30px;
-  right: 18px;
-  bottom: 8px;
+  left: 0;
+  right: 0;
+  bottom: -30px;
   justify-content: space-between;
 }
 
