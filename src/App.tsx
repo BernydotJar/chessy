@@ -12,6 +12,7 @@ import { TopNav } from './components/TopNav';
 import { GamesHub } from './components/GamesHub';
 import { ReviewView } from './components/ReviewView';
 import { AnalysisView } from './components/AnalysisView';
+import { ExerciseView } from './components/ExerciseView';
 import { useGameStore } from './store/gameStore';
 import { useTranslation } from 'react-i18next';
 import './styles/glassmorphism.css';
@@ -77,6 +78,17 @@ function App() {
         {view === 'analysis' && (
           <div className="grid grid-cols-1 gap-6 mb-8">
             <AnalysisView />
+          </div>
+        )}
+
+        {view === 'training' && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+            <div className="lg:col-span-7 flex justify-center">
+              <ChessBoard />
+            </div>
+            <div className="lg:col-span-5">
+              <ExerciseView />
+            </div>
           </div>
         )}
 

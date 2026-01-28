@@ -20,8 +20,9 @@ interface GameStore extends GameState {
   setupSideToMove: 'w' | 'b';
   setupSelectedPiece: SetupPiece;
   setupFen: string;
-  view: 'play' | 'games' | 'review' | 'analysis';
+  view: 'play' | 'games' | 'review' | 'analysis' | 'training';
   activeGameId: string | null;
+  trainingMode: boolean;
 
   makeMove: (from: string, to: string, promotion?: string, isAIMove?: boolean) => boolean;
   makeAIMove: () => Promise<void>;
@@ -44,6 +45,7 @@ interface GameStore extends GameState {
   loadSetupExample: (fen: string) => void;
   setView: (view: GameStore['view']) => void;
   setActiveGameId: (id: string | null) => void;
+  setTrainingMode: (mode: boolean) => void;
 }
 
 const defaultTheme: BoardTheme = {
@@ -251,9 +253,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
   setupFen: '8/8/8/8/8/8/8/8 w - - 0 1',
   view: 'play',
   activeGameId: null,
+  trainingMode: false,
 
   makeMove: (from: string, to: string, promotion?: string, isAIMove: boolean = false) => {
-    const { chess, isAIGame, playerColor, isAIThinking } = get();
+    const { chess, isAIGame, playerColor, isAIThinking, trainingMode } = get();
     
     // Prevent moves during AI thinking
     if (isAIThinking && !isAIMove) return false;
@@ -297,7 +300,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         
         // If AI game and it's now AI's turn, trigger AI move
         const aiTurn = playerColor === 'white' ? 'b' : 'w';
-        if (isAIGame && !chess.isGameOver() && chess.turn() === aiTurn) {
+        if (isAIGame && !trainingMode && !chess.isGameOver() && chess.turn() === aiTurn) {
           setTimeout(() => {
             get().makeAIMove();
           }, 500);
@@ -572,4 +575,5 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   setView: (view) => set({ view }),
   setActiveGameId: (id) => set({ activeGameId: id }),
+  setTrainingMode: (mode) => set({ trainingMode: mode }),
 }));

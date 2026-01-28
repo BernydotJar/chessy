@@ -17,6 +17,7 @@
   },
   "nav": {
     "play": "Jogar",
+    "training": "Treino",
     "games": "Partidas",
     "review": "Revisão",
     "analysis": "Análise"
@@ -70,6 +71,14 @@
     "noExplorer": "Sem dados do explorador para esta posição.",
     "commentary": "Suas notas",
     "addNote": "Adicione uma nota ou plano..."
+  },
+  "exercise": {
+    "progress": "Exercício {{value}}",
+    "retry": "Tentar novamente",
+    "next": "Próximo",
+    "tip": "Busque linhas simples e capturas seguras.",
+    "correct": "Correto! {{explanation}}",
+    "wrong": "Ainda não. Procure a captura limpa."
   },
   "controls": {
     "undo": "Desfazer",

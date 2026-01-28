@@ -1,10 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { LayoutGrid, ListChecks, BarChart2, PlayCircle } from 'lucide-react';
+import { LayoutGrid, ListChecks, BarChart2, PlayCircle, GraduationCap } from 'lucide-react';
 import { useGameStore } from '../store/gameStore';
 
 const navItems = [
   { id: 'play', icon: PlayCircle, key: 'nav.play' },
+  { id: 'training', icon: GraduationCap, key: 'nav.training' },
   { id: 'games', icon: ListChecks, key: 'nav.games' },
   { id: 'review', icon: BarChart2, key: 'nav.review' },
   { id: 'analysis', icon: LayoutGrid, key: 'nav.analysis' },
