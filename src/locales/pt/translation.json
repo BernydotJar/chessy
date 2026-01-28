@@ -78,7 +78,13 @@
     "next": "Próximo",
     "tip": "Busque linhas simples e capturas seguras.",
     "correct": "Correto! {{explanation}}",
-    "wrong": "Ainda não. Procure a captura limpa."
+    "wrong": "Ainda não. Procure a captura limpa.",
+    "sourceLabel": "Fonte do exercício",
+    "sourceBlock1": "Bloco 1",
+    "sourceCamp": "Chess Camp Vol. 1",
+    "campTitle": "Chess Camp Volume 1",
+    "campHint": "Lista em ordem fiel ao livro. Este exercício ainda não foi mapeado para uma posição.",
+    "campStatus": "Status: {{value}}"
   },
   "controls": {
     "undo": "Desfazer",

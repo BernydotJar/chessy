@@ -78,7 +78,13 @@
     "next": "Next",
     "tip": "Focus on simple lines and safe captures.",
     "correct": "Correct! {{explanation}}",
-    "wrong": "Not quite. Look again for the clean capture."
+    "wrong": "Not quite. Look again for the clean capture.",
+    "sourceLabel": "Exercise source",
+    "sourceBlock1": "Block 1",
+    "sourceCamp": "Chess Camp Vol. 1",
+    "campTitle": "Chess Camp Volume 1",
+    "campHint": "Book-faithful order list. This exercise is waiting to be mapped to a position.",
+    "campStatus": "Status: {{value}}"
   },
   "controls": {
     "undo": "Undo",
