@@ -161,6 +161,13 @@ export const ChessBoard: React.FC = () => {
 
   return (
     <>
+      {setupMode && (
+        <div className="board-setup-banner">
+          <span className="board-setup-banner__title">{t('setup.mode')}</span>
+          <span className="board-setup-banner__hint">{t('setup.hint')}</span>
+        </div>
+      )}
+
       <div className={`relative board-shell ${setupMode ? 'board-shell--setup' : ''}`} ref={boardRef} style={{ height: boardWidth }}>
         {/* AI Thinking Overlay */}
         {isAIThinking && (
@@ -184,13 +191,6 @@ export const ChessBoard: React.FC = () => {
             <span key={file} className="board-notation__label">{file}</span>
           ))}
         </div>
-
-        {setupMode && (
-          <div className="board-setup-badge">
-            <span className="board-setup-badge__title">{t('setup.mode')}</span>
-            <span className="board-setup-badge__hint">{t('setup.hint')}</span>
-          </div>
-        )}
 
         {/* Glass overlay effect */}
         <div

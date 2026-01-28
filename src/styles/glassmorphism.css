@@ -87,11 +87,9 @@
   background: rgba(125, 211, 252, 0.08);
 }
 
-.board-setup-badge {
-  position: absolute;
-  top: -48px;
-  left: 50%;
-  transform: translateX(-50%);
+.board-setup-banner {
+  width: min(92vw, 560px);
+  margin: 0 auto 12px auto;
   background: rgba(15, 23, 42, 0.65);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 999px;
@@ -104,7 +102,7 @@
   backdrop-filter: blur(8px);
 }
 
-.board-setup-badge__title {
+.board-setup-banner__title {
   color: rgba(255, 255, 255, 0.95);
   font-size: 0.85rem;
   font-weight: 600;
@@ -112,7 +110,7 @@
   letter-spacing: 0.08em;
 }
 
-.board-setup-badge__hint {
+.board-setup-banner__hint {
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.7rem;
 }
