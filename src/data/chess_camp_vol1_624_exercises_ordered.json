@@ -1,0 +1,6250 @@
+{
+  "metadata": {
+    "title": "Chess Camp Volume 1 – Book-faithful Exercise Index",
+    "total_exercises": 624,
+    "generated_at": "2026-01-28",
+    "purpose": "Canonical ordering layer for all exercises (no semantics yet)"
+  },
+  "exercises": [
+    {
+      "global_order": 1,
+      "exercise_id": "CCV1-EX-001",
+      "book": {
+        "volume": 1,
+        "order": 1
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 2,
+      "exercise_id": "CCV1-EX-002",
+      "book": {
+        "volume": 1,
+        "order": 2
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 3,
+      "exercise_id": "CCV1-EX-003",
+      "book": {
+        "volume": 1,
+        "order": 3
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 4,
+      "exercise_id": "CCV1-EX-004",
+      "book": {
+        "volume": 1,
+        "order": 4
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 5,
+      "exercise_id": "CCV1-EX-005",
+      "book": {
+        "volume": 1,
+        "order": 5
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 6,
+      "exercise_id": "CCV1-EX-006",
+      "book": {
+        "volume": 1,
+        "order": 6
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 7,
+      "exercise_id": "CCV1-EX-007",
+      "book": {
+        "volume": 1,
+        "order": 7
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 8,
+      "exercise_id": "CCV1-EX-008",
+      "book": {
+        "volume": 1,
+        "order": 8
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 9,
+      "exercise_id": "CCV1-EX-009",
+      "book": {
+        "volume": 1,
+        "order": 9
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 10,
+      "exercise_id": "CCV1-EX-010",
+      "book": {
+        "volume": 1,
+        "order": 10
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 11,
+      "exercise_id": "CCV1-EX-011",
+      "book": {
+        "volume": 1,
+        "order": 11
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 12,
+      "exercise_id": "CCV1-EX-012",
+      "book": {
+        "volume": 1,
+        "order": 12
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 13,
+      "exercise_id": "CCV1-EX-013",
+      "book": {
+        "volume": 1,
+        "order": 13
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 14,
+      "exercise_id": "CCV1-EX-014",
+      "book": {
+        "volume": 1,
+        "order": 14
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 15,
+      "exercise_id": "CCV1-EX-015",
+      "book": {
+        "volume": 1,
+        "order": 15
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 16,
+      "exercise_id": "CCV1-EX-016",
+      "book": {
+        "volume": 1,
+        "order": 16
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 17,
+      "exercise_id": "CCV1-EX-017",
+      "book": {
+        "volume": 1,
+        "order": 17
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 18,
+      "exercise_id": "CCV1-EX-018",
+      "book": {
+        "volume": 1,
+        "order": 18
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 19,
+      "exercise_id": "CCV1-EX-019",
+      "book": {
+        "volume": 1,
+        "order": 19
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 20,
+      "exercise_id": "CCV1-EX-020",
+      "book": {
+        "volume": 1,
+        "order": 20
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 21,
+      "exercise_id": "CCV1-EX-021",
+      "book": {
+        "volume": 1,
+        "order": 21
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 22,
+      "exercise_id": "CCV1-EX-022",
+      "book": {
+        "volume": 1,
+        "order": 22
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 23,
+      "exercise_id": "CCV1-EX-023",
+      "book": {
+        "volume": 1,
+        "order": 23
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 24,
+      "exercise_id": "CCV1-EX-024",
+      "book": {
+        "volume": 1,
+        "order": 24
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 25,
+      "exercise_id": "CCV1-EX-025",
+      "book": {
+        "volume": 1,
+        "order": 25
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 26,
+      "exercise_id": "CCV1-EX-026",
+      "book": {
+        "volume": 1,
+        "order": 26
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 27,
+      "exercise_id": "CCV1-EX-027",
+      "book": {
+        "volume": 1,
+        "order": 27
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 28,
+      "exercise_id": "CCV1-EX-028",
+      "book": {
+        "volume": 1,
+        "order": 28
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 29,
+      "exercise_id": "CCV1-EX-029",
+      "book": {
+        "volume": 1,
+        "order": 29
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 30,
+      "exercise_id": "CCV1-EX-030",
+      "book": {
+        "volume": 1,
+        "order": 30
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 31,
+      "exercise_id": "CCV1-EX-031",
+      "book": {
+        "volume": 1,
+        "order": 31
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 32,
+      "exercise_id": "CCV1-EX-032",
+      "book": {
+        "volume": 1,
+        "order": 32
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 33,
+      "exercise_id": "CCV1-EX-033",
+      "book": {
+        "volume": 1,
+        "order": 33
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 34,
+      "exercise_id": "CCV1-EX-034",
+      "book": {
+        "volume": 1,
+        "order": 34
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 35,
+      "exercise_id": "CCV1-EX-035",
+      "book": {
+        "volume": 1,
+        "order": 35
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 36,
+      "exercise_id": "CCV1-EX-036",
+      "book": {
+        "volume": 1,
+        "order": 36
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 37,
+      "exercise_id": "CCV1-EX-037",
+      "book": {
+        "volume": 1,
+        "order": 37
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 38,
+      "exercise_id": "CCV1-EX-038",
+      "book": {
+        "volume": 1,
+        "order": 38
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 39,
+      "exercise_id": "CCV1-EX-039",
+      "book": {
+        "volume": 1,
+        "order": 39
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 40,
+      "exercise_id": "CCV1-EX-040",
+      "book": {
+        "volume": 1,
+        "order": 40
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 41,
+      "exercise_id": "CCV1-EX-041",
+      "book": {
+        "volume": 1,
+        "order": 41
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 42,
+      "exercise_id": "CCV1-EX-042",
+      "book": {
+        "volume": 1,
+        "order": 42
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 43,
+      "exercise_id": "CCV1-EX-043",
+      "book": {
+        "volume": 1,
+        "order": 43
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 44,
+      "exercise_id": "CCV1-EX-044",
+      "book": {
+        "volume": 1,
+        "order": 44
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 45,
+      "exercise_id": "CCV1-EX-045",
+      "book": {
+        "volume": 1,
+        "order": 45
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 46,
+      "exercise_id": "CCV1-EX-046",
+      "book": {
+        "volume": 1,
+        "order": 46
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 47,
+      "exercise_id": "CCV1-EX-047",
+      "book": {
+        "volume": 1,
+        "order": 47
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 48,
+      "exercise_id": "CCV1-EX-048",
+      "book": {
+        "volume": 1,
+        "order": 48
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 49,
+      "exercise_id": "CCV1-EX-049",
+      "book": {
+        "volume": 1,
+        "order": 49
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 50,
+      "exercise_id": "CCV1-EX-050",
+      "book": {
+        "volume": 1,
+        "order": 50
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 51,
+      "exercise_id": "CCV1-EX-051",
+      "book": {
+        "volume": 1,
+        "order": 51
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 52,
+      "exercise_id": "CCV1-EX-052",
+      "book": {
+        "volume": 1,
+        "order": 52
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 53,
+      "exercise_id": "CCV1-EX-053",
+      "book": {
+        "volume": 1,
+        "order": 53
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 54,
+      "exercise_id": "CCV1-EX-054",
+      "book": {
+        "volume": 1,
+        "order": 54
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 55,
+      "exercise_id": "CCV1-EX-055",
+      "book": {
+        "volume": 1,
+        "order": 55
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 56,
+      "exercise_id": "CCV1-EX-056",
+      "book": {
+        "volume": 1,
+        "order": 56
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 57,
+      "exercise_id": "CCV1-EX-057",
+      "book": {
+        "volume": 1,
+        "order": 57
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 58,
+      "exercise_id": "CCV1-EX-058",
+      "book": {
+        "volume": 1,
+        "order": 58
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 59,
+      "exercise_id": "CCV1-EX-059",
+      "book": {
+        "volume": 1,
+        "order": 59
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 60,
+      "exercise_id": "CCV1-EX-060",
+      "book": {
+        "volume": 1,
+        "order": 60
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 61,
+      "exercise_id": "CCV1-EX-061",
+      "book": {
+        "volume": 1,
+        "order": 61
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 62,
+      "exercise_id": "CCV1-EX-062",
+      "book": {
+        "volume": 1,
+        "order": 62
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 63,
+      "exercise_id": "CCV1-EX-063",
+      "book": {
+        "volume": 1,
+        "order": 63
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 64,
+      "exercise_id": "CCV1-EX-064",
+      "book": {
+        "volume": 1,
+        "order": 64
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 65,
+      "exercise_id": "CCV1-EX-065",
+      "book": {
+        "volume": 1,
+        "order": 65
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 66,
+      "exercise_id": "CCV1-EX-066",
+      "book": {
+        "volume": 1,
+        "order": 66
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 67,
+      "exercise_id": "CCV1-EX-067",
+      "book": {
+        "volume": 1,
+        "order": 67
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 68,
+      "exercise_id": "CCV1-EX-068",
+      "book": {
+        "volume": 1,
+        "order": 68
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 69,
+      "exercise_id": "CCV1-EX-069",
+      "book": {
+        "volume": 1,
+        "order": 69
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 70,
+      "exercise_id": "CCV1-EX-070",
+      "book": {
+        "volume": 1,
+        "order": 70
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 71,
+      "exercise_id": "CCV1-EX-071",
+      "book": {
+        "volume": 1,
+        "order": 71
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 72,
+      "exercise_id": "CCV1-EX-072",
+      "book": {
+        "volume": 1,
+        "order": 72
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 73,
+      "exercise_id": "CCV1-EX-073",
+      "book": {
+        "volume": 1,
+        "order": 73
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 74,
+      "exercise_id": "CCV1-EX-074",
+      "book": {
+        "volume": 1,
+        "order": 74
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 75,
+      "exercise_id": "CCV1-EX-075",
+      "book": {
+        "volume": 1,
+        "order": 75
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 76,
+      "exercise_id": "CCV1-EX-076",
+      "book": {
+        "volume": 1,
+        "order": 76
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 77,
+      "exercise_id": "CCV1-EX-077",
+      "book": {
+        "volume": 1,
+        "order": 77
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 78,
+      "exercise_id": "CCV1-EX-078",
+      "book": {
+        "volume": 1,
+        "order": 78
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 79,
+      "exercise_id": "CCV1-EX-079",
+      "book": {
+        "volume": 1,
+        "order": 79
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 80,
+      "exercise_id": "CCV1-EX-080",
+      "book": {
+        "volume": 1,
+        "order": 80
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 81,
+      "exercise_id": "CCV1-EX-081",
+      "book": {
+        "volume": 1,
+        "order": 81
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 82,
+      "exercise_id": "CCV1-EX-082",
+      "book": {
+        "volume": 1,
+        "order": 82
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 83,
+      "exercise_id": "CCV1-EX-083",
+      "book": {
+        "volume": 1,
+        "order": 83
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 84,
+      "exercise_id": "CCV1-EX-084",
+      "book": {
+        "volume": 1,
+        "order": 84
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 85,
+      "exercise_id": "CCV1-EX-085",
+      "book": {
+        "volume": 1,
+        "order": 85
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 86,
+      "exercise_id": "CCV1-EX-086",
+      "book": {
+        "volume": 1,
+        "order": 86
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 87,
+      "exercise_id": "CCV1-EX-087",
+      "book": {
+        "volume": 1,
+        "order": 87
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 88,
+      "exercise_id": "CCV1-EX-088",
+      "book": {
+        "volume": 1,
+        "order": 88
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 89,
+      "exercise_id": "CCV1-EX-089",
+      "book": {
+        "volume": 1,
+        "order": 89
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 90,
+      "exercise_id": "CCV1-EX-090",
+      "book": {
+        "volume": 1,
+        "order": 90
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 91,
+      "exercise_id": "CCV1-EX-091",
+      "book": {
+        "volume": 1,
+        "order": 91
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 92,
+      "exercise_id": "CCV1-EX-092",
+      "book": {
+        "volume": 1,
+        "order": 92
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 93,
+      "exercise_id": "CCV1-EX-093",
+      "book": {
+        "volume": 1,
+        "order": 93
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 94,
+      "exercise_id": "CCV1-EX-094",
+      "book": {
+        "volume": 1,
+        "order": 94
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 95,
+      "exercise_id": "CCV1-EX-095",
+      "book": {
+        "volume": 1,
+        "order": 95
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 96,
+      "exercise_id": "CCV1-EX-096",
+      "book": {
+        "volume": 1,
+        "order": 96
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 97,
+      "exercise_id": "CCV1-EX-097",
+      "book": {
+        "volume": 1,
+        "order": 97
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 98,
+      "exercise_id": "CCV1-EX-098",
+      "book": {
+        "volume": 1,
+        "order": 98
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 99,
+      "exercise_id": "CCV1-EX-099",
+      "book": {
+        "volume": 1,
+        "order": 99
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 100,
+      "exercise_id": "CCV1-EX-100",
+      "book": {
+        "volume": 1,
+        "order": 100
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 101,
+      "exercise_id": "CCV1-EX-101",
+      "book": {
+        "volume": 1,
+        "order": 101
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 102,
+      "exercise_id": "CCV1-EX-102",
+      "book": {
+        "volume": 1,
+        "order": 102
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 103,
+      "exercise_id": "CCV1-EX-103",
+      "book": {
+        "volume": 1,
+        "order": 103
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 104,
+      "exercise_id": "CCV1-EX-104",
+      "book": {
+        "volume": 1,
+        "order": 104
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 105,
+      "exercise_id": "CCV1-EX-105",
+      "book": {
+        "volume": 1,
+        "order": 105
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 106,
+      "exercise_id": "CCV1-EX-106",
+      "book": {
+        "volume": 1,
+        "order": 106
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 107,
+      "exercise_id": "CCV1-EX-107",
+      "book": {
+        "volume": 1,
+        "order": 107
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 108,
+      "exercise_id": "CCV1-EX-108",
+      "book": {
+        "volume": 1,
+        "order": 108
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 109,
+      "exercise_id": "CCV1-EX-109",
+      "book": {
+        "volume": 1,
+        "order": 109
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 110,
+      "exercise_id": "CCV1-EX-110",
+      "book": {
+        "volume": 1,
+        "order": 110
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 111,
+      "exercise_id": "CCV1-EX-111",
+      "book": {
+        "volume": 1,
+        "order": 111
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 112,
+      "exercise_id": "CCV1-EX-112",
+      "book": {
+        "volume": 1,
+        "order": 112
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 113,
+      "exercise_id": "CCV1-EX-113",
+      "book": {
+        "volume": 1,
+        "order": 113
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 114,
+      "exercise_id": "CCV1-EX-114",
+      "book": {
+        "volume": 1,
+        "order": 114
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 115,
+      "exercise_id": "CCV1-EX-115",
+      "book": {
+        "volume": 1,
+        "order": 115
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 116,
+      "exercise_id": "CCV1-EX-116",
+      "book": {
+        "volume": 1,
+        "order": 116
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 117,
+      "exercise_id": "CCV1-EX-117",
+      "book": {
+        "volume": 1,
+        "order": 117
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 118,
+      "exercise_id": "CCV1-EX-118",
+      "book": {
+        "volume": 1,
+        "order": 118
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 119,
+      "exercise_id": "CCV1-EX-119",
+      "book": {
+        "volume": 1,
+        "order": 119
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 120,
+      "exercise_id": "CCV1-EX-120",
+      "book": {
+        "volume": 1,
+        "order": 120
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 121,
+      "exercise_id": "CCV1-EX-121",
+      "book": {
+        "volume": 1,
+        "order": 121
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 122,
+      "exercise_id": "CCV1-EX-122",
+      "book": {
+        "volume": 1,
+        "order": 122
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 123,
+      "exercise_id": "CCV1-EX-123",
+      "book": {
+        "volume": 1,
+        "order": 123
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 124,
+      "exercise_id": "CCV1-EX-124",
+      "book": {
+        "volume": 1,
+        "order": 124
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 125,
+      "exercise_id": "CCV1-EX-125",
+      "book": {
+        "volume": 1,
+        "order": 125
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 126,
+      "exercise_id": "CCV1-EX-126",
+      "book": {
+        "volume": 1,
+        "order": 126
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 127,
+      "exercise_id": "CCV1-EX-127",
+      "book": {
+        "volume": 1,
+        "order": 127
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 128,
+      "exercise_id": "CCV1-EX-128",
+      "book": {
+        "volume": 1,
+        "order": 128
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 129,
+      "exercise_id": "CCV1-EX-129",
+      "book": {
+        "volume": 1,
+        "order": 129
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 130,
+      "exercise_id": "CCV1-EX-130",
+      "book": {
+        "volume": 1,
+        "order": 130
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 131,
+      "exercise_id": "CCV1-EX-131",
+      "book": {
+        "volume": 1,
+        "order": 131
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 132,
+      "exercise_id": "CCV1-EX-132",
+      "book": {
+        "volume": 1,
+        "order": 132
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 133,
+      "exercise_id": "CCV1-EX-133",
+      "book": {
+        "volume": 1,
+        "order": 133
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 134,
+      "exercise_id": "CCV1-EX-134",
+      "book": {
+        "volume": 1,
+        "order": 134
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 135,
+      "exercise_id": "CCV1-EX-135",
+      "book": {
+        "volume": 1,
+        "order": 135
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 136,
+      "exercise_id": "CCV1-EX-136",
+      "book": {
+        "volume": 1,
+        "order": 136
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 137,
+      "exercise_id": "CCV1-EX-137",
+      "book": {
+        "volume": 1,
+        "order": 137
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 138,
+      "exercise_id": "CCV1-EX-138",
+      "book": {
+        "volume": 1,
+        "order": 138
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 139,
+      "exercise_id": "CCV1-EX-139",
+      "book": {
+        "volume": 1,
+        "order": 139
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 140,
+      "exercise_id": "CCV1-EX-140",
+      "book": {
+        "volume": 1,
+        "order": 140
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 141,
+      "exercise_id": "CCV1-EX-141",
+      "book": {
+        "volume": 1,
+        "order": 141
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 142,
+      "exercise_id": "CCV1-EX-142",
+      "book": {
+        "volume": 1,
+        "order": 142
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 143,
+      "exercise_id": "CCV1-EX-143",
+      "book": {
+        "volume": 1,
+        "order": 143
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 144,
+      "exercise_id": "CCV1-EX-144",
+      "book": {
+        "volume": 1,
+        "order": 144
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 145,
+      "exercise_id": "CCV1-EX-145",
+      "book": {
+        "volume": 1,
+        "order": 145
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 146,
+      "exercise_id": "CCV1-EX-146",
+      "book": {
+        "volume": 1,
+        "order": 146
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 147,
+      "exercise_id": "CCV1-EX-147",
+      "book": {
+        "volume": 1,
+        "order": 147
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 148,
+      "exercise_id": "CCV1-EX-148",
+      "book": {
+        "volume": 1,
+        "order": 148
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 149,
+      "exercise_id": "CCV1-EX-149",
+      "book": {
+        "volume": 1,
+        "order": 149
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 150,
+      "exercise_id": "CCV1-EX-150",
+      "book": {
+        "volume": 1,
+        "order": 150
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 151,
+      "exercise_id": "CCV1-EX-151",
+      "book": {
+        "volume": 1,
+        "order": 151
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 152,
+      "exercise_id": "CCV1-EX-152",
+      "book": {
+        "volume": 1,
+        "order": 152
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 153,
+      "exercise_id": "CCV1-EX-153",
+      "book": {
+        "volume": 1,
+        "order": 153
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 154,
+      "exercise_id": "CCV1-EX-154",
+      "book": {
+        "volume": 1,
+        "order": 154
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 155,
+      "exercise_id": "CCV1-EX-155",
+      "book": {
+        "volume": 1,
+        "order": 155
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 156,
+      "exercise_id": "CCV1-EX-156",
+      "book": {
+        "volume": 1,
+        "order": 156
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 157,
+      "exercise_id": "CCV1-EX-157",
+      "book": {
+        "volume": 1,
+        "order": 157
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 158,
+      "exercise_id": "CCV1-EX-158",
+      "book": {
+        "volume": 1,
+        "order": 158
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 159,
+      "exercise_id": "CCV1-EX-159",
+      "book": {
+        "volume": 1,
+        "order": 159
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 160,
+      "exercise_id": "CCV1-EX-160",
+      "book": {
+        "volume": 1,
+        "order": 160
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 161,
+      "exercise_id": "CCV1-EX-161",
+      "book": {
+        "volume": 1,
+        "order": 161
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 162,
+      "exercise_id": "CCV1-EX-162",
+      "book": {
+        "volume": 1,
+        "order": 162
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 163,
+      "exercise_id": "CCV1-EX-163",
+      "book": {
+        "volume": 1,
+        "order": 163
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 164,
+      "exercise_id": "CCV1-EX-164",
+      "book": {
+        "volume": 1,
+        "order": 164
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 165,
+      "exercise_id": "CCV1-EX-165",
+      "book": {
+        "volume": 1,
+        "order": 165
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 166,
+      "exercise_id": "CCV1-EX-166",
+      "book": {
+        "volume": 1,
+        "order": 166
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 167,
+      "exercise_id": "CCV1-EX-167",
+      "book": {
+        "volume": 1,
+        "order": 167
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 168,
+      "exercise_id": "CCV1-EX-168",
+      "book": {
+        "volume": 1,
+        "order": 168
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 169,
+      "exercise_id": "CCV1-EX-169",
+      "book": {
+        "volume": 1,
+        "order": 169
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 170,
+      "exercise_id": "CCV1-EX-170",
+      "book": {
+        "volume": 1,
+        "order": 170
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 171,
+      "exercise_id": "CCV1-EX-171",
+      "book": {
+        "volume": 1,
+        "order": 171
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 172,
+      "exercise_id": "CCV1-EX-172",
+      "book": {
+        "volume": 1,
+        "order": 172
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 173,
+      "exercise_id": "CCV1-EX-173",
+      "book": {
+        "volume": 1,
+        "order": 173
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 174,
+      "exercise_id": "CCV1-EX-174",
+      "book": {
+        "volume": 1,
+        "order": 174
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 175,
+      "exercise_id": "CCV1-EX-175",
+      "book": {
+        "volume": 1,
+        "order": 175
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 176,
+      "exercise_id": "CCV1-EX-176",
+      "book": {
+        "volume": 1,
+        "order": 176
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 177,
+      "exercise_id": "CCV1-EX-177",
+      "book": {
+        "volume": 1,
+        "order": 177
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 178,
+      "exercise_id": "CCV1-EX-178",
+      "book": {
+        "volume": 1,
+        "order": 178
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 179,
+      "exercise_id": "CCV1-EX-179",
+      "book": {
+        "volume": 1,
+        "order": 179
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 180,
+      "exercise_id": "CCV1-EX-180",
+      "book": {
+        "volume": 1,
+        "order": 180
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 181,
+      "exercise_id": "CCV1-EX-181",
+      "book": {
+        "volume": 1,
+        "order": 181
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 182,
+      "exercise_id": "CCV1-EX-182",
+      "book": {
+        "volume": 1,
+        "order": 182
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 183,
+      "exercise_id": "CCV1-EX-183",
+      "book": {
+        "volume": 1,
+        "order": 183
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 184,
+      "exercise_id": "CCV1-EX-184",
+      "book": {
+        "volume": 1,
+        "order": 184
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 185,
+      "exercise_id": "CCV1-EX-185",
+      "book": {
+        "volume": 1,
+        "order": 185
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 186,
+      "exercise_id": "CCV1-EX-186",
+      "book": {
+        "volume": 1,
+        "order": 186
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 187,
+      "exercise_id": "CCV1-EX-187",
+      "book": {
+        "volume": 1,
+        "order": 187
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 188,
+      "exercise_id": "CCV1-EX-188",
+      "book": {
+        "volume": 1,
+        "order": 188
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 189,
+      "exercise_id": "CCV1-EX-189",
+      "book": {
+        "volume": 1,
+        "order": 189
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 190,
+      "exercise_id": "CCV1-EX-190",
+      "book": {
+        "volume": 1,
+        "order": 190
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 191,
+      "exercise_id": "CCV1-EX-191",
+      "book": {
+        "volume": 1,
+        "order": 191
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 192,
+      "exercise_id": "CCV1-EX-192",
+      "book": {
+        "volume": 1,
+        "order": 192
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 193,
+      "exercise_id": "CCV1-EX-193",
+      "book": {
+        "volume": 1,
+        "order": 193
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 194,
+      "exercise_id": "CCV1-EX-194",
+      "book": {
+        "volume": 1,
+        "order": 194
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 195,
+      "exercise_id": "CCV1-EX-195",
+      "book": {
+        "volume": 1,
+        "order": 195
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 196,
+      "exercise_id": "CCV1-EX-196",
+      "book": {
+        "volume": 1,
+        "order": 196
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 197,
+      "exercise_id": "CCV1-EX-197",
+      "book": {
+        "volume": 1,
+        "order": 197
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 198,
+      "exercise_id": "CCV1-EX-198",
+      "book": {
+        "volume": 1,
+        "order": 198
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 199,
+      "exercise_id": "CCV1-EX-199",
+      "book": {
+        "volume": 1,
+        "order": 199
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 200,
+      "exercise_id": "CCV1-EX-200",
+      "book": {
+        "volume": 1,
+        "order": 200
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 201,
+      "exercise_id": "CCV1-EX-201",
+      "book": {
+        "volume": 1,
+        "order": 201
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 202,
+      "exercise_id": "CCV1-EX-202",
+      "book": {
+        "volume": 1,
+        "order": 202
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 203,
+      "exercise_id": "CCV1-EX-203",
+      "book": {
+        "volume": 1,
+        "order": 203
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 204,
+      "exercise_id": "CCV1-EX-204",
+      "book": {
+        "volume": 1,
+        "order": 204
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 205,
+      "exercise_id": "CCV1-EX-205",
+      "book": {
+        "volume": 1,
+        "order": 205
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 206,
+      "exercise_id": "CCV1-EX-206",
+      "book": {
+        "volume": 1,
+        "order": 206
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 207,
+      "exercise_id": "CCV1-EX-207",
+      "book": {
+        "volume": 1,
+        "order": 207
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 208,
+      "exercise_id": "CCV1-EX-208",
+      "book": {
+        "volume": 1,
+        "order": 208
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 209,
+      "exercise_id": "CCV1-EX-209",
+      "book": {
+        "volume": 1,
+        "order": 209
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 210,
+      "exercise_id": "CCV1-EX-210",
+      "book": {
+        "volume": 1,
+        "order": 210
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 211,
+      "exercise_id": "CCV1-EX-211",
+      "book": {
+        "volume": 1,
+        "order": 211
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 212,
+      "exercise_id": "CCV1-EX-212",
+      "book": {
+        "volume": 1,
+        "order": 212
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 213,
+      "exercise_id": "CCV1-EX-213",
+      "book": {
+        "volume": 1,
+        "order": 213
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 214,
+      "exercise_id": "CCV1-EX-214",
+      "book": {
+        "volume": 1,
+        "order": 214
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 215,
+      "exercise_id": "CCV1-EX-215",
+      "book": {
+        "volume": 1,
+        "order": 215
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 216,
+      "exercise_id": "CCV1-EX-216",
+      "book": {
+        "volume": 1,
+        "order": 216
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 217,
+      "exercise_id": "CCV1-EX-217",
+      "book": {
+        "volume": 1,
+        "order": 217
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 218,
+      "exercise_id": "CCV1-EX-218",
+      "book": {
+        "volume": 1,
+        "order": 218
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 219,
+      "exercise_id": "CCV1-EX-219",
+      "book": {
+        "volume": 1,
+        "order": 219
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 220,
+      "exercise_id": "CCV1-EX-220",
+      "book": {
+        "volume": 1,
+        "order": 220
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 221,
+      "exercise_id": "CCV1-EX-221",
+      "book": {
+        "volume": 1,
+        "order": 221
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 222,
+      "exercise_id": "CCV1-EX-222",
+      "book": {
+        "volume": 1,
+        "order": 222
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 223,
+      "exercise_id": "CCV1-EX-223",
+      "book": {
+        "volume": 1,
+        "order": 223
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 224,
+      "exercise_id": "CCV1-EX-224",
+      "book": {
+        "volume": 1,
+        "order": 224
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 225,
+      "exercise_id": "CCV1-EX-225",
+      "book": {
+        "volume": 1,
+        "order": 225
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 226,
+      "exercise_id": "CCV1-EX-226",
+      "book": {
+        "volume": 1,
+        "order": 226
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 227,
+      "exercise_id": "CCV1-EX-227",
+      "book": {
+        "volume": 1,
+        "order": 227
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 228,
+      "exercise_id": "CCV1-EX-228",
+      "book": {
+        "volume": 1,
+        "order": 228
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 229,
+      "exercise_id": "CCV1-EX-229",
+      "book": {
+        "volume": 1,
+        "order": 229
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 230,
+      "exercise_id": "CCV1-EX-230",
+      "book": {
+        "volume": 1,
+        "order": 230
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 231,
+      "exercise_id": "CCV1-EX-231",
+      "book": {
+        "volume": 1,
+        "order": 231
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 232,
+      "exercise_id": "CCV1-EX-232",
+      "book": {
+        "volume": 1,
+        "order": 232
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 233,
+      "exercise_id": "CCV1-EX-233",
+      "book": {
+        "volume": 1,
+        "order": 233
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 234,
+      "exercise_id": "CCV1-EX-234",
+      "book": {
+        "volume": 1,
+        "order": 234
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 235,
+      "exercise_id": "CCV1-EX-235",
+      "book": {
+        "volume": 1,
+        "order": 235
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 236,
+      "exercise_id": "CCV1-EX-236",
+      "book": {
+        "volume": 1,
+        "order": 236
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 237,
+      "exercise_id": "CCV1-EX-237",
+      "book": {
+        "volume": 1,
+        "order": 237
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 238,
+      "exercise_id": "CCV1-EX-238",
+      "book": {
+        "volume": 1,
+        "order": 238
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 239,
+      "exercise_id": "CCV1-EX-239",
+      "book": {
+        "volume": 1,
+        "order": 239
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 240,
+      "exercise_id": "CCV1-EX-240",
+      "book": {
+        "volume": 1,
+        "order": 240
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 241,
+      "exercise_id": "CCV1-EX-241",
+      "book": {
+        "volume": 1,
+        "order": 241
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 242,
+      "exercise_id": "CCV1-EX-242",
+      "book": {
+        "volume": 1,
+        "order": 242
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 243,
+      "exercise_id": "CCV1-EX-243",
+      "book": {
+        "volume": 1,
+        "order": 243
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 244,
+      "exercise_id": "CCV1-EX-244",
+      "book": {
+        "volume": 1,
+        "order": 244
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 245,
+      "exercise_id": "CCV1-EX-245",
+      "book": {
+        "volume": 1,
+        "order": 245
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 246,
+      "exercise_id": "CCV1-EX-246",
+      "book": {
+        "volume": 1,
+        "order": 246
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 247,
+      "exercise_id": "CCV1-EX-247",
+      "book": {
+        "volume": 1,
+        "order": 247
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 248,
+      "exercise_id": "CCV1-EX-248",
+      "book": {
+        "volume": 1,
+        "order": 248
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 249,
+      "exercise_id": "CCV1-EX-249",
+      "book": {
+        "volume": 1,
+        "order": 249
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 250,
+      "exercise_id": "CCV1-EX-250",
+      "book": {
+        "volume": 1,
+        "order": 250
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 251,
+      "exercise_id": "CCV1-EX-251",
+      "book": {
+        "volume": 1,
+        "order": 251
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 252,
+      "exercise_id": "CCV1-EX-252",
+      "book": {
+        "volume": 1,
+        "order": 252
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 253,
+      "exercise_id": "CCV1-EX-253",
+      "book": {
+        "volume": 1,
+        "order": 253
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 254,
+      "exercise_id": "CCV1-EX-254",
+      "book": {
+        "volume": 1,
+        "order": 254
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 255,
+      "exercise_id": "CCV1-EX-255",
+      "book": {
+        "volume": 1,
+        "order": 255
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 256,
+      "exercise_id": "CCV1-EX-256",
+      "book": {
+        "volume": 1,
+        "order": 256
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 257,
+      "exercise_id": "CCV1-EX-257",
+      "book": {
+        "volume": 1,
+        "order": 257
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 258,
+      "exercise_id": "CCV1-EX-258",
+      "book": {
+        "volume": 1,
+        "order": 258
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 259,
+      "exercise_id": "CCV1-EX-259",
+      "book": {
+        "volume": 1,
+        "order": 259
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 260,
+      "exercise_id": "CCV1-EX-260",
+      "book": {
+        "volume": 1,
+        "order": 260
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 261,
+      "exercise_id": "CCV1-EX-261",
+      "book": {
+        "volume": 1,
+        "order": 261
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 262,
+      "exercise_id": "CCV1-EX-262",
+      "book": {
+        "volume": 1,
+        "order": 262
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 263,
+      "exercise_id": "CCV1-EX-263",
+      "book": {
+        "volume": 1,
+        "order": 263
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 264,
+      "exercise_id": "CCV1-EX-264",
+      "book": {
+        "volume": 1,
+        "order": 264
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 265,
+      "exercise_id": "CCV1-EX-265",
+      "book": {
+        "volume": 1,
+        "order": 265
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 266,
+      "exercise_id": "CCV1-EX-266",
+      "book": {
+        "volume": 1,
+        "order": 266
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 267,
+      "exercise_id": "CCV1-EX-267",
+      "book": {
+        "volume": 1,
+        "order": 267
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 268,
+      "exercise_id": "CCV1-EX-268",
+      "book": {
+        "volume": 1,
+        "order": 268
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 269,
+      "exercise_id": "CCV1-EX-269",
+      "book": {
+        "volume": 1,
+        "order": 269
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 270,
+      "exercise_id": "CCV1-EX-270",
+      "book": {
+        "volume": 1,
+        "order": 270
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 271,
+      "exercise_id": "CCV1-EX-271",
+      "book": {
+        "volume": 1,
+        "order": 271
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 272,
+      "exercise_id": "CCV1-EX-272",
+      "book": {
+        "volume": 1,
+        "order": 272
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 273,
+      "exercise_id": "CCV1-EX-273",
+      "book": {
+        "volume": 1,
+        "order": 273
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 274,
+      "exercise_id": "CCV1-EX-274",
+      "book": {
+        "volume": 1,
+        "order": 274
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 275,
+      "exercise_id": "CCV1-EX-275",
+      "book": {
+        "volume": 1,
+        "order": 275
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 276,
+      "exercise_id": "CCV1-EX-276",
+      "book": {
+        "volume": 1,
+        "order": 276
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 277,
+      "exercise_id": "CCV1-EX-277",
+      "book": {
+        "volume": 1,
+        "order": 277
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 278,
+      "exercise_id": "CCV1-EX-278",
+      "book": {
+        "volume": 1,
+        "order": 278
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 279,
+      "exercise_id": "CCV1-EX-279",
+      "book": {
+        "volume": 1,
+        "order": 279
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 280,
+      "exercise_id": "CCV1-EX-280",
+      "book": {
+        "volume": 1,
+        "order": 280
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 281,
+      "exercise_id": "CCV1-EX-281",
+      "book": {
+        "volume": 1,
+        "order": 281
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 282,
+      "exercise_id": "CCV1-EX-282",
+      "book": {
+        "volume": 1,
+        "order": 282
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 283,
+      "exercise_id": "CCV1-EX-283",
+      "book": {
+        "volume": 1,
+        "order": 283
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 284,
+      "exercise_id": "CCV1-EX-284",
+      "book": {
+        "volume": 1,
+        "order": 284
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 285,
+      "exercise_id": "CCV1-EX-285",
+      "book": {
+        "volume": 1,
+        "order": 285
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 286,
+      "exercise_id": "CCV1-EX-286",
+      "book": {
+        "volume": 1,
+        "order": 286
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 287,
+      "exercise_id": "CCV1-EX-287",
+      "book": {
+        "volume": 1,
+        "order": 287
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 288,
+      "exercise_id": "CCV1-EX-288",
+      "book": {
+        "volume": 1,
+        "order": 288
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 289,
+      "exercise_id": "CCV1-EX-289",
+      "book": {
+        "volume": 1,
+        "order": 289
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 290,
+      "exercise_id": "CCV1-EX-290",
+      "book": {
+        "volume": 1,
+        "order": 290
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 291,
+      "exercise_id": "CCV1-EX-291",
+      "book": {
+        "volume": 1,
+        "order": 291
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 292,
+      "exercise_id": "CCV1-EX-292",
+      "book": {
+        "volume": 1,
+        "order": 292
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 293,
+      "exercise_id": "CCV1-EX-293",
+      "book": {
+        "volume": 1,
+        "order": 293
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 294,
+      "exercise_id": "CCV1-EX-294",
+      "book": {
+        "volume": 1,
+        "order": 294
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 295,
+      "exercise_id": "CCV1-EX-295",
+      "book": {
+        "volume": 1,
+        "order": 295
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 296,
+      "exercise_id": "CCV1-EX-296",
+      "book": {
+        "volume": 1,
+        "order": 296
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 297,
+      "exercise_id": "CCV1-EX-297",
+      "book": {
+        "volume": 1,
+        "order": 297
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 298,
+      "exercise_id": "CCV1-EX-298",
+      "book": {
+        "volume": 1,
+        "order": 298
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 299,
+      "exercise_id": "CCV1-EX-299",
+      "book": {
+        "volume": 1,
+        "order": 299
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 300,
+      "exercise_id": "CCV1-EX-300",
+      "book": {
+        "volume": 1,
+        "order": 300
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 301,
+      "exercise_id": "CCV1-EX-301",
+      "book": {
+        "volume": 1,
+        "order": 301
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 302,
+      "exercise_id": "CCV1-EX-302",
+      "book": {
+        "volume": 1,
+        "order": 302
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 303,
+      "exercise_id": "CCV1-EX-303",
+      "book": {
+        "volume": 1,
+        "order": 303
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 304,
+      "exercise_id": "CCV1-EX-304",
+      "book": {
+        "volume": 1,
+        "order": 304
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 305,
+      "exercise_id": "CCV1-EX-305",
+      "book": {
+        "volume": 1,
+        "order": 305
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 306,
+      "exercise_id": "CCV1-EX-306",
+      "book": {
+        "volume": 1,
+        "order": 306
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 307,
+      "exercise_id": "CCV1-EX-307",
+      "book": {
+        "volume": 1,
+        "order": 307
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 308,
+      "exercise_id": "CCV1-EX-308",
+      "book": {
+        "volume": 1,
+        "order": 308
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 309,
+      "exercise_id": "CCV1-EX-309",
+      "book": {
+        "volume": 1,
+        "order": 309
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 310,
+      "exercise_id": "CCV1-EX-310",
+      "book": {
+        "volume": 1,
+        "order": 310
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 311,
+      "exercise_id": "CCV1-EX-311",
+      "book": {
+        "volume": 1,
+        "order": 311
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 312,
+      "exercise_id": "CCV1-EX-312",
+      "book": {
+        "volume": 1,
+        "order": 312
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 313,
+      "exercise_id": "CCV1-EX-313",
+      "book": {
+        "volume": 1,
+        "order": 313
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 314,
+      "exercise_id": "CCV1-EX-314",
+      "book": {
+        "volume": 1,
+        "order": 314
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 315,
+      "exercise_id": "CCV1-EX-315",
+      "book": {
+        "volume": 1,
+        "order": 315
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 316,
+      "exercise_id": "CCV1-EX-316",
+      "book": {
+        "volume": 1,
+        "order": 316
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 317,
+      "exercise_id": "CCV1-EX-317",
+      "book": {
+        "volume": 1,
+        "order": 317
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 318,
+      "exercise_id": "CCV1-EX-318",
+      "book": {
+        "volume": 1,
+        "order": 318
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 319,
+      "exercise_id": "CCV1-EX-319",
+      "book": {
+        "volume": 1,
+        "order": 319
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 320,
+      "exercise_id": "CCV1-EX-320",
+      "book": {
+        "volume": 1,
+        "order": 320
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 321,
+      "exercise_id": "CCV1-EX-321",
+      "book": {
+        "volume": 1,
+        "order": 321
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 322,
+      "exercise_id": "CCV1-EX-322",
+      "book": {
+        "volume": 1,
+        "order": 322
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 323,
+      "exercise_id": "CCV1-EX-323",
+      "book": {
+        "volume": 1,
+        "order": 323
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 324,
+      "exercise_id": "CCV1-EX-324",
+      "book": {
+        "volume": 1,
+        "order": 324
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 325,
+      "exercise_id": "CCV1-EX-325",
+      "book": {
+        "volume": 1,
+        "order": 325
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 326,
+      "exercise_id": "CCV1-EX-326",
+      "book": {
+        "volume": 1,
+        "order": 326
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 327,
+      "exercise_id": "CCV1-EX-327",
+      "book": {
+        "volume": 1,
+        "order": 327
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 328,
+      "exercise_id": "CCV1-EX-328",
+      "book": {
+        "volume": 1,
+        "order": 328
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 329,
+      "exercise_id": "CCV1-EX-329",
+      "book": {
+        "volume": 1,
+        "order": 329
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 330,
+      "exercise_id": "CCV1-EX-330",
+      "book": {
+        "volume": 1,
+        "order": 330
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 331,
+      "exercise_id": "CCV1-EX-331",
+      "book": {
+        "volume": 1,
+        "order": 331
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 332,
+      "exercise_id": "CCV1-EX-332",
+      "book": {
+        "volume": 1,
+        "order": 332
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 333,
+      "exercise_id": "CCV1-EX-333",
+      "book": {
+        "volume": 1,
+        "order": 333
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 334,
+      "exercise_id": "CCV1-EX-334",
+      "book": {
+        "volume": 1,
+        "order": 334
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 335,
+      "exercise_id": "CCV1-EX-335",
+      "book": {
+        "volume": 1,
+        "order": 335
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 336,
+      "exercise_id": "CCV1-EX-336",
+      "book": {
+        "volume": 1,
+        "order": 336
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 337,
+      "exercise_id": "CCV1-EX-337",
+      "book": {
+        "volume": 1,
+        "order": 337
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 338,
+      "exercise_id": "CCV1-EX-338",
+      "book": {
+        "volume": 1,
+        "order": 338
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 339,
+      "exercise_id": "CCV1-EX-339",
+      "book": {
+        "volume": 1,
+        "order": 339
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 340,
+      "exercise_id": "CCV1-EX-340",
+      "book": {
+        "volume": 1,
+        "order": 340
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 341,
+      "exercise_id": "CCV1-EX-341",
+      "book": {
+        "volume": 1,
+        "order": 341
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 342,
+      "exercise_id": "CCV1-EX-342",
+      "book": {
+        "volume": 1,
+        "order": 342
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 343,
+      "exercise_id": "CCV1-EX-343",
+      "book": {
+        "volume": 1,
+        "order": 343
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 344,
+      "exercise_id": "CCV1-EX-344",
+      "book": {
+        "volume": 1,
+        "order": 344
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 345,
+      "exercise_id": "CCV1-EX-345",
+      "book": {
+        "volume": 1,
+        "order": 345
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 346,
+      "exercise_id": "CCV1-EX-346",
+      "book": {
+        "volume": 1,
+        "order": 346
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 347,
+      "exercise_id": "CCV1-EX-347",
+      "book": {
+        "volume": 1,
+        "order": 347
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 348,
+      "exercise_id": "CCV1-EX-348",
+      "book": {
+        "volume": 1,
+        "order": 348
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 349,
+      "exercise_id": "CCV1-EX-349",
+      "book": {
+        "volume": 1,
+        "order": 349
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 350,
+      "exercise_id": "CCV1-EX-350",
+      "book": {
+        "volume": 1,
+        "order": 350
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 351,
+      "exercise_id": "CCV1-EX-351",
+      "book": {
+        "volume": 1,
+        "order": 351
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 352,
+      "exercise_id": "CCV1-EX-352",
+      "book": {
+        "volume": 1,
+        "order": 352
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 353,
+      "exercise_id": "CCV1-EX-353",
+      "book": {
+        "volume": 1,
+        "order": 353
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 354,
+      "exercise_id": "CCV1-EX-354",
+      "book": {
+        "volume": 1,
+        "order": 354
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 355,
+      "exercise_id": "CCV1-EX-355",
+      "book": {
+        "volume": 1,
+        "order": 355
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 356,
+      "exercise_id": "CCV1-EX-356",
+      "book": {
+        "volume": 1,
+        "order": 356
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 357,
+      "exercise_id": "CCV1-EX-357",
+      "book": {
+        "volume": 1,
+        "order": 357
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 358,
+      "exercise_id": "CCV1-EX-358",
+      "book": {
+        "volume": 1,
+        "order": 358
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 359,
+      "exercise_id": "CCV1-EX-359",
+      "book": {
+        "volume": 1,
+        "order": 359
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 360,
+      "exercise_id": "CCV1-EX-360",
+      "book": {
+        "volume": 1,
+        "order": 360
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 361,
+      "exercise_id": "CCV1-EX-361",
+      "book": {
+        "volume": 1,
+        "order": 361
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 362,
+      "exercise_id": "CCV1-EX-362",
+      "book": {
+        "volume": 1,
+        "order": 362
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 363,
+      "exercise_id": "CCV1-EX-363",
+      "book": {
+        "volume": 1,
+        "order": 363
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 364,
+      "exercise_id": "CCV1-EX-364",
+      "book": {
+        "volume": 1,
+        "order": 364
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 365,
+      "exercise_id": "CCV1-EX-365",
+      "book": {
+        "volume": 1,
+        "order": 365
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 366,
+      "exercise_id": "CCV1-EX-366",
+      "book": {
+        "volume": 1,
+        "order": 366
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 367,
+      "exercise_id": "CCV1-EX-367",
+      "book": {
+        "volume": 1,
+        "order": 367
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 368,
+      "exercise_id": "CCV1-EX-368",
+      "book": {
+        "volume": 1,
+        "order": 368
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 369,
+      "exercise_id": "CCV1-EX-369",
+      "book": {
+        "volume": 1,
+        "order": 369
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 370,
+      "exercise_id": "CCV1-EX-370",
+      "book": {
+        "volume": 1,
+        "order": 370
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 371,
+      "exercise_id": "CCV1-EX-371",
+      "book": {
+        "volume": 1,
+        "order": 371
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 372,
+      "exercise_id": "CCV1-EX-372",
+      "book": {
+        "volume": 1,
+        "order": 372
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 373,
+      "exercise_id": "CCV1-EX-373",
+      "book": {
+        "volume": 1,
+        "order": 373
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 374,
+      "exercise_id": "CCV1-EX-374",
+      "book": {
+        "volume": 1,
+        "order": 374
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 375,
+      "exercise_id": "CCV1-EX-375",
+      "book": {
+        "volume": 1,
+        "order": 375
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 376,
+      "exercise_id": "CCV1-EX-376",
+      "book": {
+        "volume": 1,
+        "order": 376
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 377,
+      "exercise_id": "CCV1-EX-377",
+      "book": {
+        "volume": 1,
+        "order": 377
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 378,
+      "exercise_id": "CCV1-EX-378",
+      "book": {
+        "volume": 1,
+        "order": 378
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 379,
+      "exercise_id": "CCV1-EX-379",
+      "book": {
+        "volume": 1,
+        "order": 379
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 380,
+      "exercise_id": "CCV1-EX-380",
+      "book": {
+        "volume": 1,
+        "order": 380
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 381,
+      "exercise_id": "CCV1-EX-381",
+      "book": {
+        "volume": 1,
+        "order": 381
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 382,
+      "exercise_id": "CCV1-EX-382",
+      "book": {
+        "volume": 1,
+        "order": 382
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 383,
+      "exercise_id": "CCV1-EX-383",
+      "book": {
+        "volume": 1,
+        "order": 383
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 384,
+      "exercise_id": "CCV1-EX-384",
+      "book": {
+        "volume": 1,
+        "order": 384
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 385,
+      "exercise_id": "CCV1-EX-385",
+      "book": {
+        "volume": 1,
+        "order": 385
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 386,
+      "exercise_id": "CCV1-EX-386",
+      "book": {
+        "volume": 1,
+        "order": 386
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 387,
+      "exercise_id": "CCV1-EX-387",
+      "book": {
+        "volume": 1,
+        "order": 387
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 388,
+      "exercise_id": "CCV1-EX-388",
+      "book": {
+        "volume": 1,
+        "order": 388
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 389,
+      "exercise_id": "CCV1-EX-389",
+      "book": {
+        "volume": 1,
+        "order": 389
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 390,
+      "exercise_id": "CCV1-EX-390",
+      "book": {
+        "volume": 1,
+        "order": 390
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 391,
+      "exercise_id": "CCV1-EX-391",
+      "book": {
+        "volume": 1,
+        "order": 391
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 392,
+      "exercise_id": "CCV1-EX-392",
+      "book": {
+        "volume": 1,
+        "order": 392
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 393,
+      "exercise_id": "CCV1-EX-393",
+      "book": {
+        "volume": 1,
+        "order": 393
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 394,
+      "exercise_id": "CCV1-EX-394",
+      "book": {
+        "volume": 1,
+        "order": 394
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 395,
+      "exercise_id": "CCV1-EX-395",
+      "book": {
+        "volume": 1,
+        "order": 395
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 396,
+      "exercise_id": "CCV1-EX-396",
+      "book": {
+        "volume": 1,
+        "order": 396
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 397,
+      "exercise_id": "CCV1-EX-397",
+      "book": {
+        "volume": 1,
+        "order": 397
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 398,
+      "exercise_id": "CCV1-EX-398",
+      "book": {
+        "volume": 1,
+        "order": 398
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 399,
+      "exercise_id": "CCV1-EX-399",
+      "book": {
+        "volume": 1,
+        "order": 399
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 400,
+      "exercise_id": "CCV1-EX-400",
+      "book": {
+        "volume": 1,
+        "order": 400
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 401,
+      "exercise_id": "CCV1-EX-401",
+      "book": {
+        "volume": 1,
+        "order": 401
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 402,
+      "exercise_id": "CCV1-EX-402",
+      "book": {
+        "volume": 1,
+        "order": 402
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 403,
+      "exercise_id": "CCV1-EX-403",
+      "book": {
+        "volume": 1,
+        "order": 403
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 404,
+      "exercise_id": "CCV1-EX-404",
+      "book": {
+        "volume": 1,
+        "order": 404
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 405,
+      "exercise_id": "CCV1-EX-405",
+      "book": {
+        "volume": 1,
+        "order": 405
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 406,
+      "exercise_id": "CCV1-EX-406",
+      "book": {
+        "volume": 1,
+        "order": 406
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 407,
+      "exercise_id": "CCV1-EX-407",
+      "book": {
+        "volume": 1,
+        "order": 407
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 408,
+      "exercise_id": "CCV1-EX-408",
+      "book": {
+        "volume": 1,
+        "order": 408
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 409,
+      "exercise_id": "CCV1-EX-409",
+      "book": {
+        "volume": 1,
+        "order": 409
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 410,
+      "exercise_id": "CCV1-EX-410",
+      "book": {
+        "volume": 1,
+        "order": 410
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 411,
+      "exercise_id": "CCV1-EX-411",
+      "book": {
+        "volume": 1,
+        "order": 411
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 412,
+      "exercise_id": "CCV1-EX-412",
+      "book": {
+        "volume": 1,
+        "order": 412
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 413,
+      "exercise_id": "CCV1-EX-413",
+      "book": {
+        "volume": 1,
+        "order": 413
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 414,
+      "exercise_id": "CCV1-EX-414",
+      "book": {
+        "volume": 1,
+        "order": 414
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 415,
+      "exercise_id": "CCV1-EX-415",
+      "book": {
+        "volume": 1,
+        "order": 415
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 416,
+      "exercise_id": "CCV1-EX-416",
+      "book": {
+        "volume": 1,
+        "order": 416
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 417,
+      "exercise_id": "CCV1-EX-417",
+      "book": {
+        "volume": 1,
+        "order": 417
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 418,
+      "exercise_id": "CCV1-EX-418",
+      "book": {
+        "volume": 1,
+        "order": 418
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 419,
+      "exercise_id": "CCV1-EX-419",
+      "book": {
+        "volume": 1,
+        "order": 419
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 420,
+      "exercise_id": "CCV1-EX-420",
+      "book": {
+        "volume": 1,
+        "order": 420
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 421,
+      "exercise_id": "CCV1-EX-421",
+      "book": {
+        "volume": 1,
+        "order": 421
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 422,
+      "exercise_id": "CCV1-EX-422",
+      "book": {
+        "volume": 1,
+        "order": 422
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 423,
+      "exercise_id": "CCV1-EX-423",
+      "book": {
+        "volume": 1,
+        "order": 423
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 424,
+      "exercise_id": "CCV1-EX-424",
+      "book": {
+        "volume": 1,
+        "order": 424
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 425,
+      "exercise_id": "CCV1-EX-425",
+      "book": {
+        "volume": 1,
+        "order": 425
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 426,
+      "exercise_id": "CCV1-EX-426",
+      "book": {
+        "volume": 1,
+        "order": 426
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 427,
+      "exercise_id": "CCV1-EX-427",
+      "book": {
+        "volume": 1,
+        "order": 427
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 428,
+      "exercise_id": "CCV1-EX-428",
+      "book": {
+        "volume": 1,
+        "order": 428
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 429,
+      "exercise_id": "CCV1-EX-429",
+      "book": {
+        "volume": 1,
+        "order": 429
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 430,
+      "exercise_id": "CCV1-EX-430",
+      "book": {
+        "volume": 1,
+        "order": 430
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 431,
+      "exercise_id": "CCV1-EX-431",
+      "book": {
+        "volume": 1,
+        "order": 431
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 432,
+      "exercise_id": "CCV1-EX-432",
+      "book": {
+        "volume": 1,
+        "order": 432
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 433,
+      "exercise_id": "CCV1-EX-433",
+      "book": {
+        "volume": 1,
+        "order": 433
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 434,
+      "exercise_id": "CCV1-EX-434",
+      "book": {
+        "volume": 1,
+        "order": 434
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 435,
+      "exercise_id": "CCV1-EX-435",
+      "book": {
+        "volume": 1,
+        "order": 435
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 436,
+      "exercise_id": "CCV1-EX-436",
+      "book": {
+        "volume": 1,
+        "order": 436
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 437,
+      "exercise_id": "CCV1-EX-437",
+      "book": {
+        "volume": 1,
+        "order": 437
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 438,
+      "exercise_id": "CCV1-EX-438",
+      "book": {
+        "volume": 1,
+        "order": 438
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 439,
+      "exercise_id": "CCV1-EX-439",
+      "book": {
+        "volume": 1,
+        "order": 439
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 440,
+      "exercise_id": "CCV1-EX-440",
+      "book": {
+        "volume": 1,
+        "order": 440
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 441,
+      "exercise_id": "CCV1-EX-441",
+      "book": {
+        "volume": 1,
+        "order": 441
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 442,
+      "exercise_id": "CCV1-EX-442",
+      "book": {
+        "volume": 1,
+        "order": 442
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 443,
+      "exercise_id": "CCV1-EX-443",
+      "book": {
+        "volume": 1,
+        "order": 443
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 444,
+      "exercise_id": "CCV1-EX-444",
+      "book": {
+        "volume": 1,
+        "order": 444
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 445,
+      "exercise_id": "CCV1-EX-445",
+      "book": {
+        "volume": 1,
+        "order": 445
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 446,
+      "exercise_id": "CCV1-EX-446",
+      "book": {
+        "volume": 1,
+        "order": 446
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 447,
+      "exercise_id": "CCV1-EX-447",
+      "book": {
+        "volume": 1,
+        "order": 447
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 448,
+      "exercise_id": "CCV1-EX-448",
+      "book": {
+        "volume": 1,
+        "order": 448
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 449,
+      "exercise_id": "CCV1-EX-449",
+      "book": {
+        "volume": 1,
+        "order": 449
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 450,
+      "exercise_id": "CCV1-EX-450",
+      "book": {
+        "volume": 1,
+        "order": 450
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 451,
+      "exercise_id": "CCV1-EX-451",
+      "book": {
+        "volume": 1,
+        "order": 451
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 452,
+      "exercise_id": "CCV1-EX-452",
+      "book": {
+        "volume": 1,
+        "order": 452
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 453,
+      "exercise_id": "CCV1-EX-453",
+      "book": {
+        "volume": 1,
+        "order": 453
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 454,
+      "exercise_id": "CCV1-EX-454",
+      "book": {
+        "volume": 1,
+        "order": 454
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 455,
+      "exercise_id": "CCV1-EX-455",
+      "book": {
+        "volume": 1,
+        "order": 455
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 456,
+      "exercise_id": "CCV1-EX-456",
+      "book": {
+        "volume": 1,
+        "order": 456
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 457,
+      "exercise_id": "CCV1-EX-457",
+      "book": {
+        "volume": 1,
+        "order": 457
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 458,
+      "exercise_id": "CCV1-EX-458",
+      "book": {
+        "volume": 1,
+        "order": 458
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 459,
+      "exercise_id": "CCV1-EX-459",
+      "book": {
+        "volume": 1,
+        "order": 459
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 460,
+      "exercise_id": "CCV1-EX-460",
+      "book": {
+        "volume": 1,
+        "order": 460
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 461,
+      "exercise_id": "CCV1-EX-461",
+      "book": {
+        "volume": 1,
+        "order": 461
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 462,
+      "exercise_id": "CCV1-EX-462",
+      "book": {
+        "volume": 1,
+        "order": 462
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 463,
+      "exercise_id": "CCV1-EX-463",
+      "book": {
+        "volume": 1,
+        "order": 463
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 464,
+      "exercise_id": "CCV1-EX-464",
+      "book": {
+        "volume": 1,
+        "order": 464
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 465,
+      "exercise_id": "CCV1-EX-465",
+      "book": {
+        "volume": 1,
+        "order": 465
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 466,
+      "exercise_id": "CCV1-EX-466",
+      "book": {
+        "volume": 1,
+        "order": 466
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 467,
+      "exercise_id": "CCV1-EX-467",
+      "book": {
+        "volume": 1,
+        "order": 467
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 468,
+      "exercise_id": "CCV1-EX-468",
+      "book": {
+        "volume": 1,
+        "order": 468
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 469,
+      "exercise_id": "CCV1-EX-469",
+      "book": {
+        "volume": 1,
+        "order": 469
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 470,
+      "exercise_id": "CCV1-EX-470",
+      "book": {
+        "volume": 1,
+        "order": 470
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 471,
+      "exercise_id": "CCV1-EX-471",
+      "book": {
+        "volume": 1,
+        "order": 471
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 472,
+      "exercise_id": "CCV1-EX-472",
+      "book": {
+        "volume": 1,
+        "order": 472
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 473,
+      "exercise_id": "CCV1-EX-473",
+      "book": {
+        "volume": 1,
+        "order": 473
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 474,
+      "exercise_id": "CCV1-EX-474",
+      "book": {
+        "volume": 1,
+        "order": 474
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 475,
+      "exercise_id": "CCV1-EX-475",
+      "book": {
+        "volume": 1,
+        "order": 475
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 476,
+      "exercise_id": "CCV1-EX-476",
+      "book": {
+        "volume": 1,
+        "order": 476
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 477,
+      "exercise_id": "CCV1-EX-477",
+      "book": {
+        "volume": 1,
+        "order": 477
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 478,
+      "exercise_id": "CCV1-EX-478",
+      "book": {
+        "volume": 1,
+        "order": 478
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 479,
+      "exercise_id": "CCV1-EX-479",
+      "book": {
+        "volume": 1,
+        "order": 479
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 480,
+      "exercise_id": "CCV1-EX-480",
+      "book": {
+        "volume": 1,
+        "order": 480
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 481,
+      "exercise_id": "CCV1-EX-481",
+      "book": {
+        "volume": 1,
+        "order": 481
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 482,
+      "exercise_id": "CCV1-EX-482",
+      "book": {
+        "volume": 1,
+        "order": 482
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 483,
+      "exercise_id": "CCV1-EX-483",
+      "book": {
+        "volume": 1,
+        "order": 483
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 484,
+      "exercise_id": "CCV1-EX-484",
+      "book": {
+        "volume": 1,
+        "order": 484
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 485,
+      "exercise_id": "CCV1-EX-485",
+      "book": {
+        "volume": 1,
+        "order": 485
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 486,
+      "exercise_id": "CCV1-EX-486",
+      "book": {
+        "volume": 1,
+        "order": 486
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 487,
+      "exercise_id": "CCV1-EX-487",
+      "book": {
+        "volume": 1,
+        "order": 487
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 488,
+      "exercise_id": "CCV1-EX-488",
+      "book": {
+        "volume": 1,
+        "order": 488
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 489,
+      "exercise_id": "CCV1-EX-489",
+      "book": {
+        "volume": 1,
+        "order": 489
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 490,
+      "exercise_id": "CCV1-EX-490",
+      "book": {
+        "volume": 1,
+        "order": 490
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 491,
+      "exercise_id": "CCV1-EX-491",
+      "book": {
+        "volume": 1,
+        "order": 491
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 492,
+      "exercise_id": "CCV1-EX-492",
+      "book": {
+        "volume": 1,
+        "order": 492
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 493,
+      "exercise_id": "CCV1-EX-493",
+      "book": {
+        "volume": 1,
+        "order": 493
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 494,
+      "exercise_id": "CCV1-EX-494",
+      "book": {
+        "volume": 1,
+        "order": 494
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 495,
+      "exercise_id": "CCV1-EX-495",
+      "book": {
+        "volume": 1,
+        "order": 495
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 496,
+      "exercise_id": "CCV1-EX-496",
+      "book": {
+        "volume": 1,
+        "order": 496
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 497,
+      "exercise_id": "CCV1-EX-497",
+      "book": {
+        "volume": 1,
+        "order": 497
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 498,
+      "exercise_id": "CCV1-EX-498",
+      "book": {
+        "volume": 1,
+        "order": 498
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 499,
+      "exercise_id": "CCV1-EX-499",
+      "book": {
+        "volume": 1,
+        "order": 499
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 500,
+      "exercise_id": "CCV1-EX-500",
+      "book": {
+        "volume": 1,
+        "order": 500
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 501,
+      "exercise_id": "CCV1-EX-501",
+      "book": {
+        "volume": 1,
+        "order": 501
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 502,
+      "exercise_id": "CCV1-EX-502",
+      "book": {
+        "volume": 1,
+        "order": 502
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 503,
+      "exercise_id": "CCV1-EX-503",
+      "book": {
+        "volume": 1,
+        "order": 503
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 504,
+      "exercise_id": "CCV1-EX-504",
+      "book": {
+        "volume": 1,
+        "order": 504
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 505,
+      "exercise_id": "CCV1-EX-505",
+      "book": {
+        "volume": 1,
+        "order": 505
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 506,
+      "exercise_id": "CCV1-EX-506",
+      "book": {
+        "volume": 1,
+        "order": 506
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 507,
+      "exercise_id": "CCV1-EX-507",
+      "book": {
+        "volume": 1,
+        "order": 507
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 508,
+      "exercise_id": "CCV1-EX-508",
+      "book": {
+        "volume": 1,
+        "order": 508
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 509,
+      "exercise_id": "CCV1-EX-509",
+      "book": {
+        "volume": 1,
+        "order": 509
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 510,
+      "exercise_id": "CCV1-EX-510",
+      "book": {
+        "volume": 1,
+        "order": 510
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 511,
+      "exercise_id": "CCV1-EX-511",
+      "book": {
+        "volume": 1,
+        "order": 511
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 512,
+      "exercise_id": "CCV1-EX-512",
+      "book": {
+        "volume": 1,
+        "order": 512
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 513,
+      "exercise_id": "CCV1-EX-513",
+      "book": {
+        "volume": 1,
+        "order": 513
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 514,
+      "exercise_id": "CCV1-EX-514",
+      "book": {
+        "volume": 1,
+        "order": 514
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 515,
+      "exercise_id": "CCV1-EX-515",
+      "book": {
+        "volume": 1,
+        "order": 515
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 516,
+      "exercise_id": "CCV1-EX-516",
+      "book": {
+        "volume": 1,
+        "order": 516
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 517,
+      "exercise_id": "CCV1-EX-517",
+      "book": {
+        "volume": 1,
+        "order": 517
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 518,
+      "exercise_id": "CCV1-EX-518",
+      "book": {
+        "volume": 1,
+        "order": 518
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 519,
+      "exercise_id": "CCV1-EX-519",
+      "book": {
+        "volume": 1,
+        "order": 519
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 520,
+      "exercise_id": "CCV1-EX-520",
+      "book": {
+        "volume": 1,
+        "order": 520
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 521,
+      "exercise_id": "CCV1-EX-521",
+      "book": {
+        "volume": 1,
+        "order": 521
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 522,
+      "exercise_id": "CCV1-EX-522",
+      "book": {
+        "volume": 1,
+        "order": 522
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 523,
+      "exercise_id": "CCV1-EX-523",
+      "book": {
+        "volume": 1,
+        "order": 523
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 524,
+      "exercise_id": "CCV1-EX-524",
+      "book": {
+        "volume": 1,
+        "order": 524
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 525,
+      "exercise_id": "CCV1-EX-525",
+      "book": {
+        "volume": 1,
+        "order": 525
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 526,
+      "exercise_id": "CCV1-EX-526",
+      "book": {
+        "volume": 1,
+        "order": 526
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 527,
+      "exercise_id": "CCV1-EX-527",
+      "book": {
+        "volume": 1,
+        "order": 527
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 528,
+      "exercise_id": "CCV1-EX-528",
+      "book": {
+        "volume": 1,
+        "order": 528
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 529,
+      "exercise_id": "CCV1-EX-529",
+      "book": {
+        "volume": 1,
+        "order": 529
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 530,
+      "exercise_id": "CCV1-EX-530",
+      "book": {
+        "volume": 1,
+        "order": 530
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 531,
+      "exercise_id": "CCV1-EX-531",
+      "book": {
+        "volume": 1,
+        "order": 531
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 532,
+      "exercise_id": "CCV1-EX-532",
+      "book": {
+        "volume": 1,
+        "order": 532
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 533,
+      "exercise_id": "CCV1-EX-533",
+      "book": {
+        "volume": 1,
+        "order": 533
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 534,
+      "exercise_id": "CCV1-EX-534",
+      "book": {
+        "volume": 1,
+        "order": 534
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 535,
+      "exercise_id": "CCV1-EX-535",
+      "book": {
+        "volume": 1,
+        "order": 535
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 536,
+      "exercise_id": "CCV1-EX-536",
+      "book": {
+        "volume": 1,
+        "order": 536
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 537,
+      "exercise_id": "CCV1-EX-537",
+      "book": {
+        "volume": 1,
+        "order": 537
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 538,
+      "exercise_id": "CCV1-EX-538",
+      "book": {
+        "volume": 1,
+        "order": 538
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 539,
+      "exercise_id": "CCV1-EX-539",
+      "book": {
+        "volume": 1,
+        "order": 539
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 540,
+      "exercise_id": "CCV1-EX-540",
+      "book": {
+        "volume": 1,
+        "order": 540
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 541,
+      "exercise_id": "CCV1-EX-541",
+      "book": {
+        "volume": 1,
+        "order": 541
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 542,
+      "exercise_id": "CCV1-EX-542",
+      "book": {
+        "volume": 1,
+        "order": 542
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 543,
+      "exercise_id": "CCV1-EX-543",
+      "book": {
+        "volume": 1,
+        "order": 543
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 544,
+      "exercise_id": "CCV1-EX-544",
+      "book": {
+        "volume": 1,
+        "order": 544
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 545,
+      "exercise_id": "CCV1-EX-545",
+      "book": {
+        "volume": 1,
+        "order": 545
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 546,
+      "exercise_id": "CCV1-EX-546",
+      "book": {
+        "volume": 1,
+        "order": 546
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 547,
+      "exercise_id": "CCV1-EX-547",
+      "book": {
+        "volume": 1,
+        "order": 547
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 548,
+      "exercise_id": "CCV1-EX-548",
+      "book": {
+        "volume": 1,
+        "order": 548
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 549,
+      "exercise_id": "CCV1-EX-549",
+      "book": {
+        "volume": 1,
+        "order": 549
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 550,
+      "exercise_id": "CCV1-EX-550",
+      "book": {
+        "volume": 1,
+        "order": 550
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 551,
+      "exercise_id": "CCV1-EX-551",
+      "book": {
+        "volume": 1,
+        "order": 551
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 552,
+      "exercise_id": "CCV1-EX-552",
+      "book": {
+        "volume": 1,
+        "order": 552
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 553,
+      "exercise_id": "CCV1-EX-553",
+      "book": {
+        "volume": 1,
+        "order": 553
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 554,
+      "exercise_id": "CCV1-EX-554",
+      "book": {
+        "volume": 1,
+        "order": 554
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 555,
+      "exercise_id": "CCV1-EX-555",
+      "book": {
+        "volume": 1,
+        "order": 555
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 556,
+      "exercise_id": "CCV1-EX-556",
+      "book": {
+        "volume": 1,
+        "order": 556
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 557,
+      "exercise_id": "CCV1-EX-557",
+      "book": {
+        "volume": 1,
+        "order": 557
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 558,
+      "exercise_id": "CCV1-EX-558",
+      "book": {
+        "volume": 1,
+        "order": 558
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 559,
+      "exercise_id": "CCV1-EX-559",
+      "book": {
+        "volume": 1,
+        "order": 559
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 560,
+      "exercise_id": "CCV1-EX-560",
+      "book": {
+        "volume": 1,
+        "order": 560
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 561,
+      "exercise_id": "CCV1-EX-561",
+      "book": {
+        "volume": 1,
+        "order": 561
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 562,
+      "exercise_id": "CCV1-EX-562",
+      "book": {
+        "volume": 1,
+        "order": 562
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 563,
+      "exercise_id": "CCV1-EX-563",
+      "book": {
+        "volume": 1,
+        "order": 563
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 564,
+      "exercise_id": "CCV1-EX-564",
+      "book": {
+        "volume": 1,
+        "order": 564
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 565,
+      "exercise_id": "CCV1-EX-565",
+      "book": {
+        "volume": 1,
+        "order": 565
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 566,
+      "exercise_id": "CCV1-EX-566",
+      "book": {
+        "volume": 1,
+        "order": 566
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 567,
+      "exercise_id": "CCV1-EX-567",
+      "book": {
+        "volume": 1,
+        "order": 567
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 568,
+      "exercise_id": "CCV1-EX-568",
+      "book": {
+        "volume": 1,
+        "order": 568
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 569,
+      "exercise_id": "CCV1-EX-569",
+      "book": {
+        "volume": 1,
+        "order": 569
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 570,
+      "exercise_id": "CCV1-EX-570",
+      "book": {
+        "volume": 1,
+        "order": 570
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 571,
+      "exercise_id": "CCV1-EX-571",
+      "book": {
+        "volume": 1,
+        "order": 571
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 572,
+      "exercise_id": "CCV1-EX-572",
+      "book": {
+        "volume": 1,
+        "order": 572
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 573,
+      "exercise_id": "CCV1-EX-573",
+      "book": {
+        "volume": 1,
+        "order": 573
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 574,
+      "exercise_id": "CCV1-EX-574",
+      "book": {
+        "volume": 1,
+        "order": 574
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 575,
+      "exercise_id": "CCV1-EX-575",
+      "book": {
+        "volume": 1,
+        "order": 575
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 576,
+      "exercise_id": "CCV1-EX-576",
+      "book": {
+        "volume": 1,
+        "order": 576
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 577,
+      "exercise_id": "CCV1-EX-577",
+      "book": {
+        "volume": 1,
+        "order": 577
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 578,
+      "exercise_id": "CCV1-EX-578",
+      "book": {
+        "volume": 1,
+        "order": 578
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 579,
+      "exercise_id": "CCV1-EX-579",
+      "book": {
+        "volume": 1,
+        "order": 579
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 580,
+      "exercise_id": "CCV1-EX-580",
+      "book": {
+        "volume": 1,
+        "order": 580
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 581,
+      "exercise_id": "CCV1-EX-581",
+      "book": {
+        "volume": 1,
+        "order": 581
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 582,
+      "exercise_id": "CCV1-EX-582",
+      "book": {
+        "volume": 1,
+        "order": 582
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 583,
+      "exercise_id": "CCV1-EX-583",
+      "book": {
+        "volume": 1,
+        "order": 583
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 584,
+      "exercise_id": "CCV1-EX-584",
+      "book": {
+        "volume": 1,
+        "order": 584
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 585,
+      "exercise_id": "CCV1-EX-585",
+      "book": {
+        "volume": 1,
+        "order": 585
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 586,
+      "exercise_id": "CCV1-EX-586",
+      "book": {
+        "volume": 1,
+        "order": 586
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 587,
+      "exercise_id": "CCV1-EX-587",
+      "book": {
+        "volume": 1,
+        "order": 587
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 588,
+      "exercise_id": "CCV1-EX-588",
+      "book": {
+        "volume": 1,
+        "order": 588
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 589,
+      "exercise_id": "CCV1-EX-589",
+      "book": {
+        "volume": 1,
+        "order": 589
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 590,
+      "exercise_id": "CCV1-EX-590",
+      "book": {
+        "volume": 1,
+        "order": 590
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 591,
+      "exercise_id": "CCV1-EX-591",
+      "book": {
+        "volume": 1,
+        "order": 591
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 592,
+      "exercise_id": "CCV1-EX-592",
+      "book": {
+        "volume": 1,
+        "order": 592
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 593,
+      "exercise_id": "CCV1-EX-593",
+      "book": {
+        "volume": 1,
+        "order": 593
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 594,
+      "exercise_id": "CCV1-EX-594",
+      "book": {
+        "volume": 1,
+        "order": 594
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 595,
+      "exercise_id": "CCV1-EX-595",
+      "book": {
+        "volume": 1,
+        "order": 595
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 596,
+      "exercise_id": "CCV1-EX-596",
+      "book": {
+        "volume": 1,
+        "order": 596
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 597,
+      "exercise_id": "CCV1-EX-597",
+      "book": {
+        "volume": 1,
+        "order": 597
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 598,
+      "exercise_id": "CCV1-EX-598",
+      "book": {
+        "volume": 1,
+        "order": 598
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 599,
+      "exercise_id": "CCV1-EX-599",
+      "book": {
+        "volume": 1,
+        "order": 599
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 600,
+      "exercise_id": "CCV1-EX-600",
+      "book": {
+        "volume": 1,
+        "order": 600
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 601,
+      "exercise_id": "CCV1-EX-601",
+      "book": {
+        "volume": 1,
+        "order": 601
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 602,
+      "exercise_id": "CCV1-EX-602",
+      "book": {
+        "volume": 1,
+        "order": 602
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 603,
+      "exercise_id": "CCV1-EX-603",
+      "book": {
+        "volume": 1,
+        "order": 603
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 604,
+      "exercise_id": "CCV1-EX-604",
+      "book": {
+        "volume": 1,
+        "order": 604
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 605,
+      "exercise_id": "CCV1-EX-605",
+      "book": {
+        "volume": 1,
+        "order": 605
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 606,
+      "exercise_id": "CCV1-EX-606",
+      "book": {
+        "volume": 1,
+        "order": 606
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 607,
+      "exercise_id": "CCV1-EX-607",
+      "book": {
+        "volume": 1,
+        "order": 607
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 608,
+      "exercise_id": "CCV1-EX-608",
+      "book": {
+        "volume": 1,
+        "order": 608
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 609,
+      "exercise_id": "CCV1-EX-609",
+      "book": {
+        "volume": 1,
+        "order": 609
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 610,
+      "exercise_id": "CCV1-EX-610",
+      "book": {
+        "volume": 1,
+        "order": 610
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 611,
+      "exercise_id": "CCV1-EX-611",
+      "book": {
+        "volume": 1,
+        "order": 611
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 612,
+      "exercise_id": "CCV1-EX-612",
+      "book": {
+        "volume": 1,
+        "order": 612
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 613,
+      "exercise_id": "CCV1-EX-613",
+      "book": {
+        "volume": 1,
+        "order": 613
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 614,
+      "exercise_id": "CCV1-EX-614",
+      "book": {
+        "volume": 1,
+        "order": 614
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 615,
+      "exercise_id": "CCV1-EX-615",
+      "book": {
+        "volume": 1,
+        "order": 615
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 616,
+      "exercise_id": "CCV1-EX-616",
+      "book": {
+        "volume": 1,
+        "order": 616
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 617,
+      "exercise_id": "CCV1-EX-617",
+      "book": {
+        "volume": 1,
+        "order": 617
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 618,
+      "exercise_id": "CCV1-EX-618",
+      "book": {
+        "volume": 1,
+        "order": 618
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 619,
+      "exercise_id": "CCV1-EX-619",
+      "book": {
+        "volume": 1,
+        "order": 619
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 620,
+      "exercise_id": "CCV1-EX-620",
+      "book": {
+        "volume": 1,
+        "order": 620
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 621,
+      "exercise_id": "CCV1-EX-621",
+      "book": {
+        "volume": 1,
+        "order": 621
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 622,
+      "exercise_id": "CCV1-EX-622",
+      "book": {
+        "volume": 1,
+        "order": 622
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 623,
+      "exercise_id": "CCV1-EX-623",
+      "book": {
+        "volume": 1,
+        "order": 623
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    },
+    {
+      "global_order": 624,
+      "exercise_id": "CCV1-EX-624",
+      "book": {
+        "volume": 1,
+        "order": 624
+      },
+      "status": "pending_mapping",
+      "notes": "Book-faithful order placeholder"
+    }
+  ]
+}
