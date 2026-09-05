@@ -1,266 +1,81 @@
-// AI Opponent Service using Stockfish
-// This provides chess engine capabilities with multiple difficulty levels
-
-
 export type DifficultyLevel = 'beginner' | 'easy' | 'medium' | 'hard' | 'master';
-
-export interface AIMove {
-  from: string;
-  to: string;
-  promotion?: string;
-}
-
-export interface EngineEvaluation {
-  score: number; // Centipawns (100 = 1 pawn advantage)
-  mate?: number; // Moves to mate (if applicable)
-  bestMove?: string;
-  depth: number;
-}
-
-export interface MultiPVLine {
-  multipv: number;
-  score?: number;
-  mate?: number;
-  pv?: string;
-}
-
-type EngineLike = {
-  postMessage: (command: string) => void;
-  onmessage: ((event: MessageEvent | string) => void) | null;
-  terminate?: () => void;
-};
-
+export interface AIMove { from: string; to: string; promotion?: string }
+export interface EngineEvaluation { score: number; mate?: number; bestMove?: string; depth: number }
+export interface MultiPVLine { multipv: number; score?: number; mate?: number; pv?: string }
+/** One request at a time per worker; no stale timers or overwritten message handlers. */
 export class StockfishService {
-  private engine: EngineLike | null = null;
-  private isReady: boolean = false;
-  private pendingCallback: ((result: any) => void) | null = null;
-
-  // Difficulty settings map to Stockfish skill level (0-20)
-  private difficultySettings: Record<DifficultyLevel, { skillLevel: number; depth: number; thinkTime: number }> = {
-    beginner: { skillLevel: 1, depth: 1, thinkTime: 100 },
-    easy: { skillLevel: 5, depth: 3, thinkTime: 500 },
-    medium: { skillLevel: 10, depth: 8, thinkTime: 1000 },
-    hard: { skillLevel: 15, depth: 13, thinkTime: 2000 },
-    master: { skillLevel: 20, depth: 18, thinkTime: 3000 },
-  };
-
-  async initialize(): Promise<void> {
-    if (this.engine) {
-      return; // Already initialized
-    }
-
-    return new Promise((resolve, reject) => {
-      try {
-        const stockfishUrl = `${import.meta.env.BASE_URL}stockfish.js`;
-        this.engine = new Worker(stockfishUrl) as unknown as EngineLike;
-
-        this.engine.onmessage = (event) => {
-          const message = typeof event === 'string' ? event : event.data;
-
-          if (!this.isReady && (message === 'uciok' || message === 'readyok')) {
-            this.isReady = true;
-            resolve();
-          } else if (this.pendingCallback && message.startsWith('bestmove')) {
-            const move = this.parseBestMove(message);
-            this.pendingCallback(move);
-            this.pendingCallback = null;
+  private engine: Worker | null = null;
+  private initializing: Promise<void> | null = null;
+  private cancel: (() => void) | null = null;
+  private queue: Promise<unknown> = Promise.resolve();
+  private generation = 0;
+  private settings = {beginner:[1,2,150],easy:[5,5,500],medium:[10,10,1000],hard:[15,15,2000],master:[20,18,3000]} as const;
+  initialize(): Promise<void> {
+    if (this.initializing) return this.initializing;
+    if (this.engine) return Promise.resolve();
+    this.initializing = new Promise<void>((resolve,reject) => {
+      const worker = new Worker(`${import.meta.env.BASE_URL}stockfish.js`);
+      this.engine = worker;
+      const finish = (error?: Error) => {
+        clearTimeout(timer); worker.onmessage = null; worker.onerror = null; this.cancel = null;
+        if (error) { worker.terminate(); if (this.engine === worker) this.engine = null; reject(error); } else resolve();
+      };
+      const timer = setTimeout(() => finish(new Error('Engine initialization timeout')),8000);
+      this.cancel = () => finish(new Error('Engine cancelled'));
+      worker.onmessage = e => { if (e.data === 'uciok') worker.postMessage('isready'); if (e.data === 'readyok') finish(); };
+      worker.onerror = () => finish(new Error('Engine could not load'));
+      worker.postMessage('uci');
+    }).finally(() => { this.initializing = null; });
+    return this.initializing;
+  }
+  private search(fen: string, depth: number, ms: number, skill: number, count: number): Promise<{move: AIMove | null; lines: MultiPVLine[]; depth: number}> {
+    const generation = this.generation;
+    const run = async () => {
+      if (generation !== this.generation) throw new Error('Engine cancelled');
+      await this.initialize();
+      if (generation !== this.generation || !this.engine) throw new Error('Engine cancelled');
+      const worker = this.engine;
+      return new Promise<{move:AIMove|null;lines:MultiPVLine[];depth:number}>((resolve,reject) => {
+        const lines = new Map<number,MultiPVLine>(); let reached = 0;
+        const finish = (move: AIMove | null, error?: Error) => {
+          clearTimeout(timer); worker.onmessage = null; worker.onerror = null; this.cancel = null;
+          if (error) { worker.terminate(); if (this.engine === worker) this.engine = null; reject(error); }
+          else resolve({move,lines:[...lines.values()].sort((a,b)=>a.multipv-b.multipv),depth:reached});
+        };
+        const timer = setTimeout(() => finish(null,new Error('Engine search timeout')),ms+4000);
+        this.cancel = () => finish(null,new Error('Engine cancelled'));
+        worker.onerror = () => finish(null,new Error('Engine worker error'));
+        worker.onmessage = event => {
+          const text=String(event.data);
+          if (text.startsWith('info ') && text.includes('score ')) {
+            const index=Number(text.match(/\bmultipv (\d+)/)?.[1] || 1);
+            const cp=text.match(/\bscore cp (-?\d+)/), mate=text.match(/\bscore mate (-?\d+)/);
+            reached=Number(text.match(/\bdepth (\d+)/)?.[1] || reached);
+            lines.set(index,{multipv:index,score:cp?Number(cp[1]):undefined,mate:mate?Number(mate[1]):undefined,pv:text.match(/\bpv (.+)$/)?.[1]});
+          }
+          if (text.startsWith('bestmove ')) {
+            const m=text.match(/^bestmove ([a-h][1-8])([a-h][1-8])([qrbn])?/);
+            finish(m?{from:m[1],to:m[2],promotion:m[3]}:null);
           }
         };
-
-        // Initialize UCI protocol
-        this.sendCommand('uci');
-        this.sendCommand('isready');
-      } catch (error) {
-        this.engine = null;
-        reject(error);
-      }
-    });
+        worker.postMessage(`setoption name Skill Level value ${skill}`);
+        worker.postMessage(`setoption name MultiPV value ${count}`);
+        worker.postMessage(`position fen ${fen}`);
+        worker.postMessage(`go depth ${depth} movetime ${ms}`);
+      });
+    };
+    const result=this.queue.then(run,run); this.queue=result.catch(()=>undefined); return result;
   }
-
-  private sendCommand(command: string): void {
-    if (this.engine) {
-      this.engine.postMessage(command);
-    }
+  async getBestMove(fen:string,difficulty:DifficultyLevel='medium'):Promise<AIMove|null> {
+    const [skill,depth,ms]=this.settings[difficulty]; return (await this.search(fen,depth,ms,skill,1)).move;
   }
-
-  private parseBestMove(message: string): AIMove | null {
-    // Parse "bestmove e2e4" format
-    const match = message.match(/bestmove ([a-h][1-8])([a-h][1-8])([qrbn])?/);
-    if (match) {
-      return {
-        from: match[1],
-        to: match[2],
-        promotion: match[3],
-      };
-    }
-    return null;
+  async evaluatePosition(fen:string,depth=15):Promise<EngineEvaluation> {
+    const r=await this.search(fen,depth,2500,20,1), best=r.lines[0];
+    return {score:best?.score ?? 0,mate:best?.mate,depth:r.depth,bestMove:r.move?`${r.move.from}${r.move.to}${r.move.promotion||''}`:undefined};
   }
-
-  async getBestMove(fen: string, difficulty: DifficultyLevel = 'medium'): Promise<AIMove | null> {
-    if (!this.isReady) {
-      await this.initialize();
-    }
-
-    const settings = this.difficultySettings[difficulty];
-
-    return new Promise((resolve) => {
-      this.pendingCallback = resolve;
-
-      // Set position
-      this.sendCommand(`position fen ${fen}`);
-      
-      // Set skill level
-      this.sendCommand(`setoption name Skill Level value ${settings.skillLevel}`);
-      
-      // Calculate best move
-      this.sendCommand(`go depth ${settings.depth} movetime ${settings.thinkTime}`);
-      
-      // Timeout fallback
-      setTimeout(() => {
-        if (this.pendingCallback) {
-          this.pendingCallback(null);
-          this.pendingCallback = null;
-        }
-      }, settings.thinkTime + 2000);
-    });
+  async evaluatePositionMultiPV(fen:string,depth=15,lines=2):Promise<MultiPVLine[]> {
+    return (await this.search(fen,depth,3000,20,Math.max(1,Math.min(5,lines)))).lines;
   }
-
-  async evaluatePosition(fen: string, depth: number = 15): Promise<EngineEvaluation> {
-    if (!this.isReady) {
-      await this.initialize();
-    }
-
-    return new Promise((resolve) => {
-      let evaluation: Partial<EngineEvaluation> = { depth: 0, score: 0 };
-
-      const handleMessage = (message: string) => {
-        if (message.startsWith('info') && message.includes('score')) {
-          // Parse evaluation
-          const depthMatch = message.match(/depth (\d+)/);
-          const scoreMatch = message.match(/score cp (-?\d+)/);
-          const mateMatch = message.match(/score mate (-?\d+)/);
-          
-          if (depthMatch) {
-            evaluation.depth = parseInt(depthMatch[1]);
-          }
-          
-          if (scoreMatch) {
-            evaluation.score = parseInt(scoreMatch[1]);
-          }
-          
-          if (mateMatch) {
-            evaluation.mate = parseInt(mateMatch[1]);
-          }
-        }
-        
-        if (message.startsWith('bestmove')) {
-          const move = this.parseBestMove(message);
-          evaluation.bestMove = move ? `${move.from}${move.to}` : undefined;
-
-          // Restore original handler if we replaced it
-          if (this.engine) {
-            this.engine.onmessage = baseHandler;
-          }
-          resolve(evaluation as EngineEvaluation);
-        }
-      };
-
-      const baseHandler = this.engine?.onmessage || null;
-      if (this.engine) {
-        this.engine.onmessage = (event) => {
-          const message = typeof event === 'string' ? event : event.data;
-          handleMessage(message);
-          if (baseHandler) {
-            baseHandler(event);
-          }
-        };
-      }
-      
-      this.sendCommand(`position fen ${fen}`);
-      this.sendCommand(`go depth ${depth}`);
-      
-      // Timeout
-      setTimeout(() => {
-        if (this.engine) {
-          this.engine.onmessage = baseHandler;
-        }
-        resolve(evaluation as EngineEvaluation);
-      }, 5000);
-    });
-  }
-
-  terminate(): void {
-    if (this.engine) {
-      this.sendCommand('quit');
-      this.engine.terminate?.();
-      this.engine = null;
-      this.isReady = false;
-    }
-  }
-
-  async evaluatePositionMultiPV(fen: string, depth: number = 15, lines: number = 2): Promise<MultiPVLine[]> {
-    if (!this.isReady) {
-      await this.initialize();
-    }
-
-    return new Promise((resolve) => {
-      const results: MultiPVLine[] = [];
-
-      const handleMessage = (message: string) => {
-        if (message.startsWith('info') && message.includes('multipv')) {
-          const multipvMatch = message.match(/multipv (\d+)/);
-          const scoreMatch = message.match(/score cp (-?\d+)/);
-          const mateMatch = message.match(/score mate (-?\d+)/);
-          const pvMatch = message.match(/ pv (.+)$/);
-
-          const multipv = multipvMatch ? parseInt(multipvMatch[1]) : 1;
-          const existingIndex = results.findIndex((line) => line.multipv === multipv);
-          const line: MultiPVLine = {
-            multipv,
-            score: scoreMatch ? parseInt(scoreMatch[1]) : undefined,
-            mate: mateMatch ? parseInt(mateMatch[1]) : undefined,
-            pv: pvMatch ? pvMatch[1] : undefined,
-          };
-
-          if (existingIndex >= 0) {
-            results[existingIndex] = line;
-          } else {
-            results.push(line);
-          }
-        }
-
-        if (message.startsWith('bestmove')) {
-          if (this.engine) {
-            this.engine.onmessage = baseHandler;
-          }
-          resolve(results.sort((a, b) => a.multipv - b.multipv));
-        }
-      };
-
-      const baseHandler = this.engine?.onmessage || null;
-      if (this.engine) {
-        this.engine.onmessage = (event) => {
-          const message = typeof event === 'string' ? event : event.data;
-          handleMessage(message);
-          if (baseHandler) {
-            baseHandler(event);
-          }
-        };
-      }
-
-      this.sendCommand('setoption name MultiPV value ' + lines);
-      this.sendCommand(`position fen ${fen}`);
-      this.sendCommand(`go depth ${depth}`);
-
-      setTimeout(() => {
-        if (this.engine) {
-          this.engine.onmessage = baseHandler;
-        }
-        resolve(results.sort((a, b) => a.multipv - b.multipv));
-      }, 6000);
-    });
-  }
+  terminate():void { this.generation++; this.cancel?.(); this.engine?.terminate(); this.engine=null; this.initializing=null; }
 }
-
-// Singleton instance
 export const stockfishService = new StockfishService();

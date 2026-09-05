@@ -1,0 +1,6 @@
+# Chessy premium learning release
+Authorization: Eduardo's 2026-09-04 request to finish Chessy through Graph Engineering with premium effects, challenges, academy and languages, reusing the existing workstation and Chrome bridge. This authorizes implementation and verification of that scope; it is not a claim of human review of subsequent output.
+
+Scope: retain and repair existing local chess, Stockfish, analysis and saved games; replace the placeholder training UI with legal, original, multi-theme exercises; provide original guided lessons with quizzes; persistent device-local progress with validated backup; Spanish, English and Portuguese parity; accessible premium responsive UI and reduced motion. No accounts, payments, fake live opponents or invented rating claims. No new containers, paid services, copyrighted book reproductions or private data sent to external models.
+
+Acceptance: typecheck/build/lint; deterministic chess legality and solution tests; progress idempotency and malformed data tests; i18n parity; desktop/mobile browser walkthrough on existing Chrome bridge; no browser errors; independent review recorded accurately; release artifact hash and explicit deployment status. Production gate must not pass on unavailable evidence.

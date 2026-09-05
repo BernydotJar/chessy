@@ -1,30 +1,13 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from 'path'
-
-// https://vitejs.dev/config/
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { fileURLToPath, URL } from 'node:url';
 export default defineConfig({
-  base: process.env.GITHUB_PAGES === 'true' ? '/chessy/' : '/',
-  plugins: [react()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-  },
-  server: {
-    port: 5173,
-    open: true,
-  },
-  build: {
-    outDir: 'dist',
-    sourcemap: true,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom'],
-          'chess-vendor': ['chess.js', 'react-chessboard'],
-        },
-      },
-    },
-  },
-})
+ plugins:[react()],
+ base:process.env.GITHUB_PAGES==='true'?'/chessy/':'/',
+ resolve:{alias:{'@':fileURLToPath(new URL('./src',import.meta.url))}},
+ server:{host:'127.0.0.1',port:5173},
+ build:{sourcemap:false,rollupOptions:{output:{manualChunks(id){
+  if(/node_modules\/(react|react-dom|scheduler)\//.test(id))return 'react-vendor';
+  if(/node_modules\/(chess.js|react-chessboard)\//.test(id))return 'chess-vendor';
+ }}}},
+});

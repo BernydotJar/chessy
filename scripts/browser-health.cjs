@@ -1,0 +1,2 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.connectOverCDP('http://192.168.65.254:9222');const c=await b.newContext();const p=await c.newPage();await p.setContent('<main><h1>Chessy browser verification</h1></main>');console.log(JSON.stringify({browser:await b.version(),heading:await p.locator('h1').innerText()}));await c.close();process.exit(0)})().catch(e=>{console.error(e.message);process.exit(1)});

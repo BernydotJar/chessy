@@ -1,0 +1,4 @@
+# CH-002 core verification
+Commands: npm test -- --run (154 passing, including 10 new core tests and 144 learning data/progress assertions); npm run lint (0 errors, 0 warnings); npm run build (previous core build PASS; final integration re-run mandatory).
+Core fixes: promotion hook ordering and click underpromotion; black orientation; serialized UCI requests with cancellation/timeouts/worker error handling; stale AI response rejection; no silent random fallback; explicit engine retry state; resignation preserves history; no automatic fictional game insertion; typed code and hook dependencies.
+Known remaining final release work: security dependency remediation, full browser workflow, integration labels, persistent real game saving, independent release review. CH-002 is a source-level core repair node, not a public release.

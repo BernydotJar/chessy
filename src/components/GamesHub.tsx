@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Search, Filter, CheckCircle2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { GameRecord, getAllGames, seedGames } from '../utils/gamesDb';
+import { GameRecord, getAllGames } from '../utils/gamesDb';
 import { useGameStore } from '../store/gameStore';
 
 const resultColor = (result: GameRecord['result']) => {
@@ -13,23 +13,19 @@ const resultColor = (result: GameRecord['result']) => {
 export const GamesHub: React.FC = () => {
   const { t } = useTranslation();
   const { setView, setActiveGameId, loadPgn } = useGameStore();
+  const [loadError, setLoadError] = useState(false);
   const [games, setGames] = useState<GameRecord[]>([]);
   const [query, setQuery] = useState('');
   const [color, setColor] = useState<'all' | 'white' | 'black'>('all');
-  const [result, setResult] = useState<'all' | 'win' | 'loss' | 'draw'>('all');
+  const [result, setResult] = useState<'all' | 'win' | 'loss' | 'draw' | 'ongoing'>('all');
   const [timeControl, setTimeControl] = useState<'all' | 'Blitz' | 'Rapid' | 'Classical'>('all');
 
   useEffect(() => {
     const load = async () => {
       const existing = await getAllGames();
-      if (existing.length === 0) {
-        const seeded = await seedGames();
-        setGames(seeded);
-      } else {
-        setGames(existing);
-      }
+      setGames(existing);
     };
-    void load();
+    void load().catch(() => setLoadError(true));
   }, []);
 
   const filtered = useMemo(() => {
@@ -43,8 +39,8 @@ export const GamesHub: React.FC = () => {
   }, [games, color, result, timeControl, query]);
 
   const openGame = (game: GameRecord, target: 'review' | 'analysis' | 'play') => {
-    setActiveGameId(game.id);
     loadPgn(game.pgn);
+    setActiveGameId(game.id);
     setView(target);
   };
 
@@ -59,6 +55,7 @@ export const GamesHub: React.FC = () => {
         <div className="glass-input flex items-center gap-2 px-3 py-2 rounded-lg">
           <Search size={16} className="text-white/60" />
           <input
+            aria-label={t('games.search')}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder={t('games.search')}
@@ -68,8 +65,9 @@ export const GamesHub: React.FC = () => {
         <div className="glass-input flex items-center gap-2 px-3 py-2 rounded-lg">
           <Filter size={16} className="text-white/60" />
           <select
+            aria-label={t('games.colorLabel')}
             value={color}
-            onChange={(event) => setColor(event.target.value as any)}
+            onChange={(event) => setColor(event.target.value as typeof color)}
             className="bg-transparent text-white text-sm w-full outline-none"
           >
             <option value="all">{t('games.filters.all')}</option>
@@ -80,21 +78,23 @@ export const GamesHub: React.FC = () => {
         <div className="glass-input flex items-center gap-2 px-3 py-2 rounded-lg">
           <Filter size={16} className="text-white/60" />
           <select
+            aria-label={t('games.resultLabel')}
             value={result}
-            onChange={(event) => setResult(event.target.value as any)}
+            onChange={(event) => setResult(event.target.value as typeof result)}
             className="bg-transparent text-white text-sm w-full outline-none"
           >
             <option value="all">{t('games.filters.all')}</option>
             <option value="win">{t('games.results.win')}</option>
             <option value="loss">{t('games.results.loss')}</option>
-            <option value="draw">{t('games.results.draw')}</option>
+            <option value="draw">{t('games.results.draw')}</option><option value="ongoing">{t('games.results.ongoing')}</option>
           </select>
         </div>
         <div className="glass-input flex items-center gap-2 px-3 py-2 rounded-lg">
           <Filter size={16} className="text-white/60" />
           <select
+            aria-label={t('games.timeControlLabel')}
             value={timeControl}
-            onChange={(event) => setTimeControl(event.target.value as any)}
+            onChange={(event) => setTimeControl(event.target.value as typeof timeControl)}
             className="bg-transparent text-white text-sm w-full outline-none"
           >
             <option value="all">{t('games.filters.all')}</option>
@@ -143,6 +143,7 @@ export const GamesHub: React.FC = () => {
             </div>
           </div>
         ))}
+        {loadError && <p role="status">{t('studio.saveError')}</p>}
         {filtered.length === 0 && (
           <p className="text-white/60 text-sm">{t('games.empty')}</p>
         )}

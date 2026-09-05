@@ -1,0 +1,4 @@
+# Design
+Keep React 18 + Vite + chess.js + react-chessboard; use isolated puzzle state so training cannot corrupt a running game. Local-first, no backend required. Midnight/ivory/teal visual system, responsive navigation, motion constrained to compositor properties and reduced-motion support. Six academy tracks with original explanatory content and checked quizzes. Daily, thematic and mixed challenges; multi-ply solutions with legal automatic replies. Progress is versioned, bounded, idempotent and exportable; achievements are learning indicators, never Elo.
+
+Graph runtime: shared Graph-harness-sdlc pinned at 6a5f201e2bc640ac46cc0b4b6a3d11b788555664. No prior Chessy graph/checkpoint existed at recovered source f81813a83484bd6e0046dabb1737a24e7ba18f7b. Bootstrap rather than fabricate continuity.

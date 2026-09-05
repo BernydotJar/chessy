@@ -1,0 +1,3 @@
+# Recovery verification
+Recovered commit f81813a83484bd6e0046dabb1737a24e7ba18f7b from BernydotJar/chessy main; clean checkout before work, isolated branch graph/premium-academy-v1. npm ci and npm run build passed. Independent subprocesses npm run lint and npm test -- --run reproduced 12 errors + 3 warnings and no test files respectively. Inspected training dataset: 624 pending_mapping placeholders, not playable puzzles. All artifacts remain in progress/evidence/baseline. No previous Chessy graph/checkpoints found in checkout. Shared harness validates new typed graph. No containers created.
+Recovery gate verifies baseline discovery, not application correctness. Known failures transfer to CH-002; they are not waived for final release.

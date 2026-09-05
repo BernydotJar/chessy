@@ -16,10 +16,11 @@ export const ChessBoard: React.FC = () => {
     pendingPromotion,
     setPendingPromotion,
     isAIThinking,
+    isGameOver,
     setupMode,
     setupFen,
     setupSelectedPiece,
-    setSetupSquare
+    setSetupSquare, playerColor, isAIGame
   } = useGameStore();
   
   const [highlightedSquares, setHighlightedSquares] = useState<string[]>([]);
@@ -29,7 +30,8 @@ export const ChessBoard: React.FC = () => {
   const { t } = useTranslation();
 
   const onDrop = (sourceSquare: Square, targetSquare: Square) => {
-    if (setupMode) return false;
+    if (setupMode || isAIThinking || isGameOver) return false;
+    if (!chess.moves({ square: sourceSquare, verbose: true }).some(m => m.to === targetSquare)) return false;
     // Check if the move requires promotion
     const piece = chess.get(sourceSquare);
     const isPromotion =
@@ -54,7 +56,7 @@ export const ChessBoard: React.FC = () => {
   };
 
   const onSquareClick = (square: Square) => {
-    if (isAIThinking) return;
+    if (isAIThinking || isGameOver) return;
     if (setupMode) {
       setSetupSquare(square, setupSelectedPiece);
       return;
@@ -71,17 +73,17 @@ export const ChessBoard: React.FC = () => {
     
     // If a piece is selected and we click on another square
     if (selectedSquare) {
-      makeMove(selectedSquare as Square, square);
+      onDrop(selectedSquare as Square, square);
       setSelectedSquare(null);
       setHighlightedSquares([]);
       return;
     }
 
     // Select piece and show legal moves
-    if (piece && showLegalMoves) {
+    if (piece && piece.color === chess.turn()) {
       setSelectedSquare(square);
       const legalMoves = getLegalMovesForSquare(square);
-      setHighlightedSquares(legalMoves);
+      setHighlightedSquares(showLegalMoves ? legalMoves : []);
     }
   };
 
@@ -105,8 +107,8 @@ export const ChessBoard: React.FC = () => {
     return () => window.removeEventListener('resize', updateSize);
   }, []);
 
-  const files = useMemo(() => ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], []);
-  const ranks = useMemo(() => ['8', '7', '6', '5', '4', '3', '2', '1'], []);
+  const files = useMemo(() => isAIGame && playerColor === 'black' ? ['h','g','f','e','d','c','b','a'] : ['a','b','c','d','e','f','g','h'], [isAIGame, playerColor]);
+  const ranks = useMemo(() => isAIGame && playerColor === 'black' ? ['1','2','3','4','5','6','7','8'] : ['8','7','6','5','4','3','2','1'], [isAIGame, playerColor]);
   const setupSquares = useMemo(
     () => ranks.flatMap((rank) => files.map((file) => `${file}${rank}` as Square)),
     [files, ranks]
@@ -207,14 +209,15 @@ export const ChessBoard: React.FC = () => {
         {/* Chess board */}
         <div className={`relative z-10 ${setupMode ? 'board-setup-disable' : ''}`}>
           <Chessboard
+            boardOrientation={isAIGame ? playerColor : 'white'}
             position={setupMode ? setupFen : fen}
             onPieceDrop={onDrop}
             onSquareClick={onSquareClick}
             boardWidth={boardWidth}
             customBoardStyle={customBoardStyle}
             customSquareStyles={customSquareStyles}
-            animationDuration={200}
-            arePiecesDraggable={!chess.isGameOver() && !isAIThinking && !setupMode}
+            animationDuration={window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 220}
+            arePiecesDraggable={!isGameOver && !isAIThinking && !setupMode}
             areArrowsAllowed={true}
             showBoardNotation={false}
           />
@@ -236,7 +239,7 @@ export const ChessBoard: React.FC = () => {
                     setSetupSquare(square, null);
                     return;
                   }
-                  setSetupSquare(square, data as any);
+                  if (/^[wb][KQRBNP]$/.test(data)) setSetupSquare(square, data as Exclude<typeof setupSelectedPiece, null>);
                 }}
                 aria-label={square}
               />

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { useTranslation } from 'react-i18next';
 import { Lightbulb } from 'lucide-react';
@@ -16,13 +16,7 @@ export const CoachInsights: React.FC = () => {
   const maxVisible = 3;
   const maxStored = 12;
 
-  useEffect(() => {
-    if (mode === 'on') {
-      void runInsight();
-    }
-  }, [fen, mode]);
-
-  const runInsight = async () => {
+  const runInsight = useCallback(async () => {
     const id = ++requestId.current;
     setStatus('running');
     const result = await getCoachInsightWithEval(chess);
@@ -34,12 +28,16 @@ export const CoachInsights: React.FC = () => {
       });
     }
     setStatus('done');
-  };
+  }, [chess]);
+
+  useEffect(() => {
+    if (mode === 'on') void runInsight();
+    return () => { requestId.current += 1; };
+  }, [fen, mode, runInsight]);
 
   const handleToggle = () => {
     if (mode === 'off') {
       setMode('on');
-      void runInsight();
       return;
     }
     if (mode === 'on') {
@@ -48,7 +46,6 @@ export const CoachInsights: React.FC = () => {
       return;
     }
     setMode('on');
-    void runInsight();
   };
 
   const buttonClass = mode === 'on'

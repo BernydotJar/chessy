@@ -22,7 +22,7 @@ export const AnalysisView: React.FC = () => {
         // ignore invalid SAN in history
       }
     });
-    const verbose = chess.history({ verbose: true }) as any[];
+    const verbose = chess.history({ verbose: true });
     const uciMoves = verbose.map((m) => `${m.from}${m.to}${m.promotion || ''}`);
     return getExplorerLines(uciMoves);
   }, [history]);
@@ -39,17 +39,17 @@ export const AnalysisView: React.FC = () => {
       if (best?.mate) {
         setEvalScore(`#${best.mate}`);
       } else if (typeof best?.score === 'number') {
-        setEvalScore((best.score / 100).toFixed(2));
+        setEvalScore((best.score * (fen.split(' ')[1] === 'w' ? 1 : -1) / 100).toFixed(2));
       }
       setLoading(false);
       engine.terminate();
     };
-    void run();
+    void run().catch(() => { if (alive) { setLoading(false); setLines([]); setEvalScore(t('analysis.noLines')); } });
     return () => {
       alive = false;
       engine.terminate();
     };
-  }, [fen]);
+  }, [fen, t]);
 
   return (
     <div className="glass-card rounded-xl p-6 space-y-5">

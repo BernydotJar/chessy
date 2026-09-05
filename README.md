@@ -1,238 +1,73 @@
-# 🎮 GlassChess - Free Modern Chess Platform
+# Chessy
 
-A beautiful, free, and modern chess application with glassmorphism design inspired by Apple's latest UI aesthetic. Built as an alternative to chess.com with focus on accessibility and customization.
+A local-first chess learning studio: thoughtful design, original lessons, legal challenges and Stockfish practice. English, Spanish and Portuguese.
 
-## ✨ Features
+## What is included
 
-### Current (MVP - Phase 1)
-- 🎨 **Glassmorphism UI** - Beautiful translucent design with blur effects
-- ♟️ **Full Chess Functionality** - Complete chess rules implementation
-- 🎨 **Board Customization** - Customize board colors and themes
-- 📱 **Responsive Design** - Works on desktop, tablet, and mobile
-- ⚡ **Lightning Fast** - Built with Vite for optimal performance
+- Responsive learning dashboard, daily challenge, theme/difficulty filters and five-position practice sessions.
+- **112 playable positions:** 16 original teaching positions and 96 puzzles from the official Lichess CC0 database. Legal opponent replies, hints, underpromotion, solution review and explanations for original exercises.
+- **12 original lessons across six paths:** fundamentals, tactics, strategy, openings, endgames and calculation. Each lesson has a knowledge check and related practice. All lesson text is available in three languages.
+- Device-local progress, idempotent learning points, activity streaks, achievements and validated JSON backup/restore. Hints and revealed solutions do not award completion points. Learning points are not Elo ratings or qualifications.
+- Local two-player chess and five Stockfish difficulty settings. Actual saved games, PGN import/export, move replay and an analysis laboratory. No invented opponents, accuracy percentages or seeded user statistics.
+- Keyboard move entry, a native accessible promotion dialog, visible focus states, reduced-motion support and responsive layouts.
+- A bibliographic reading shelf. Referenced books are not included, copied or available as PDF downloads.
 
-### Roadmap
-- **Phase 2**: AI Opponent with multiple difficulty levels
-- **Phase 3**: Real-time Multiplayer via WebSockets
-- **Phase 4**: User Accounts, Game History, and ELO Ratings
-- **Phase 5**: Puzzles, Tournaments, and Social Features
+## Scope and privacy
 
-## 🏗️ Architecture
+This release does not include accounts, cloud sync, payments, online matchmaking, live tournaments or a backend. Progress is stored in this browser's localStorage; saved games use IndexedDB. Clearing browser data removes it. Export a backup to transfer progress. No application analytics or third-party AI API is required. Book/source links open external websites only when selected.
 
-### Frontend
-- **React 18** + **TypeScript** - Type-safe component development
-- **Vite** - Next-generation frontend tooling
-- **Tailwind CSS** - Utility-first CSS framework
-- **Chess.js** - Chess logic and move validation
-- **React-Chessboard** - Customizable chess board component
-- **Zustand** - Lightweight state management
+Stockfish runs locally in a Web Worker. Its bundled version is retained from the original project; it is not claimed to be the latest engine. Engine failure is visible and retryable; it is never silently replaced with random moves.
 
-### Backend (Phase 3+)
-- **Node.js** + **Express** - RESTful API
-- **Socket.io** - Real-time communication
-- **PostgreSQL** - Relational database for users and games
-- **Redis** - Session management and caching
-- **Prisma** - Type-safe database ORM
+## Run and verify
 
-### Deployment
-- **Frontend**: Vercel (Free tier)
-- **Backend**: Railway/Render (Free tier)
-- **Database**: Supabase (Free tier)
-- **CDN**: Cloudflare (Free tier)
+Requires Node.js 22.12 or newer; the release was checked on Node 22.23.2.
 
-## 🚀 Quick Start
-
-### Prerequisites
-- Node.js 18+ and npm/pnpm/yarn
-- Git
-
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/BernydotJar/chessy.git
-cd chessy
-
-# Install dependencies
-npm install
-
-# Start development server
+```sh
+npm ci
 npm run dev
-
-# Open http://localhost:5173 in your browser
 ```
 
-### Build for Production
-
-```bash
-# Create optimized production build
+```sh
+npm run lint
+EXPORT_CHESS_FIXTURES=1 npm test -- --run
 npm run build
-
-# Preview production build locally
-npm run preview
-```
-
-### Deploy to GitHub Pages
-
-```bash
-npm run deploy
-```
-
-Then enable Pages in GitHub: Settings → Pages → Source: **GitHub Actions**.
-Your site will be available at `https://bernydotjar.github.io/chessy/`.
-
-On every push to `main`, GitHub Actions will build and deploy automatically.
-
-## 🎨 Customization
-
-The app includes a built-in theme customizer allowing users to:
-- Change board square colors (light and dark)
-- Adjust glassmorphism opacity and blur
-- Select from preset themes (Classic, Ocean, Forest, Sunset, Midnight)
-- Create and save custom color schemes
-
-## 📁 Project Structure
-
-```
-chessy/
-├── src/
-│   ├── components/        # React components
-│   │   ├── ChessBoard.tsx
-│   │   ├── GameControls.tsx
-│   │   ├── ThemeCustomizer.tsx
-│   │   └── MoveHistory.tsx
-│   ├── hooks/            # Custom React hooks
-│   │   ├── useChessGame.ts
-│   │   └── useTheme.ts
-│   ├── store/            # Zustand state management
-│   │   └── gameStore.ts
-│   ├── types/            # TypeScript types
-│   │   └── chess.types.ts
-│   ├── utils/            # Utility functions
-│   │   └── chessHelpers.ts
-│   ├── styles/           # Global styles
-│   │   └── glassmorphism.css
-│   ├── App.tsx           # Main app component
-│   └── main.tsx          # Entry point
-├── public/               # Static assets
-├── .gitignore
-├── package.json
-├── tsconfig.json
-├── vite.config.ts
-├── tailwind.config.js
-└── README.md
-```
-
-## 🧪 Testing
-
-```bash
-# Run unit tests
-npm run test
-
-# Run e2e tests
 npm run test:e2e
-
-# Generate coverage report
-npm run test:coverage
 ```
 
-## 🤝 Contributing
+The browser verifier uses the existing Chrome bridge through `CHROME_CDP_URL` outside GitHub Actions. It opens and closes its own isolated browser context; it does not inspect user tabs or close the user's browser. Its localhost route is an isolated QA origin, **not evidence of public deployment**. In GitHub Actions it uses a dedicated headless Chromium installed by the workflow.
 
-We welcome contributions! Please follow these steps:
+The second chess-rules implementation is optional locally and mandatory in CI:
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+```sh
+uv run --no-project --with python-chess==1.999 python scripts/verify-independent.py
+```
 
-## 📋 Development Roadmap
+This validates exported FENs, every solution move and claimed terminal mates using python-chess instead of the application's chess.js. It is not a human or LLM review and does not certify every alternative line as strategically optimal.
 
-### Phase 1: Core Chess Board ✅ (Current)
-- [x] Basic chess board rendering
-- [x] Glassmorphism design implementation
-- [x] Color customization system
-- [x] Move validation
-- [x] Responsive layout
+## Graph Engineering
 
-### Phase 2: Enhanced Gameplay
-- [ ] AI opponent (Stockfish integration)
-- [ ] Multiple difficulty levels
-- [ ] Move hints and suggestions
-- [ ] Game analysis tools
+The recovered baseline had no Chessy graph. `graph/project.json` defines the new typed execution graph; `graph/events.jsonl` is append-only evidence. Recovery did not invent earlier approvals or checkpoints.
 
-### Phase 3: Multiplayer
-- [ ] WebSocket server setup
-- [ ] Real-time game synchronization
-- [ ] Matchmaking system
-- [ ] Friend challenges
-- [ ] Spectator mode
+```sh
+GRAPH_HARNESS_PATH=/path/to/Graph-harness-sdlc python3 scripts/graph.py validate
+GRAPH_HARNESS_PATH=/path/to/Graph-harness-sdlc python3 scripts/graph.py status --pretty
+```
 
-### Phase 4: User System
-- [ ] User authentication (OAuth + Email)
-- [ ] Profile management
-- [ ] Game history and statistics
-- [ ] ELO rating system
-- [ ] Achievements and badges
+The shared harness revision is pinned in `graph/framework.lock.json`. Source review, deterministic verification and external model review are distinguished in the evidence. No new local container is needed.
 
-### Phase 5: Advanced Features
-- [ ] Daily puzzles
-- [ ] Tournament system
-- [ ] Chess variants (960, Crazyhouse, etc.)
-- [ ] Video chat during games
-- [ ] Mobile native apps
+## Build and deployment
 
-## 🛠️ Tech Stack Deep Dive
+```sh
+npm run build                         # root-hosted artifact in dist/
+GITHUB_PAGES=true npm run build       # GitHub Pages /chessy/ artifact
+```
 
-### Why These Technologies?
+The GitHub workflow gates release on lint, unit tests, independent rules validation, build, real browser workflows and a dependency audit. It deploys only from `main` to the repository's GitHub Pages environment. A successful local build is not reported as a live site; publication and host recovery status are recorded separately under `progress/`.
 
-**React + TypeScript**: Type safety prevents bugs and improves developer experience
-**Vite**: 10-100x faster than webpack, instant HMR
-**Tailwind CSS**: Rapid UI development with consistent design
-**Chess.js**: Battle-tested chess logic, no need to reinvent the wheel
-**Zustand**: Simpler than Redux, perfect for our state needs
-**Socket.io**: Industry standard for real-time bidirectional communication
+The shared Mac/Cloudflare host reconciler currently implements a different product's multi-container runtime. It must not be invoked for Chessy without a compatible static-site/reused-runtime adapter. The user explicitly prohibited creating additional local containers.
 
-## 📊 Performance Targets
+## Content and licenses
 
-- **First Contentful Paint**: < 1.5s
-- **Time to Interactive**: < 3s
-- **Lighthouse Score**: > 95
-- **Bundle Size**: < 200KB (gzipped)
+Project source retains its MIT license. Third-party engine and libraries keep their own licenses. See `THIRD_PARTY_NOTICES.md` and `public/legal/stockfish-gpl-3.0.txt`.
 
-## 🔒 Security
-
-- XSS protection via React's built-in escaping
-- CSRF tokens for API requests
-- Rate limiting on backend endpoints
-- Input validation and sanitization
-- Secure WebSocket connections (WSS)
-
-## 📄 License
-
-MIT License - feel free to use this project for learning or building your own chess platform!
-
-## 👥 Team & Credits
-
-**Solution Architect**: Eduardo (Edu) - Lead architect and technical director
-
-**Core Team**:
-- Frontend Lead: Glass UI implementation and UX
-- Backend Lead: Game logic and multiplayer infrastructure  
-- DevOps Engineer: CI/CD and deployment
-- QA Engineer: Testing and quality assurance
-
-**Special Thanks**:
-- Chess.js library maintainers
-- React-Chessboard contributors
-- The chess community
-
-## 📞 Contact & Support
-
-- **Issues**: [GitHub Issues](https://github.com/BernydotJar/chessy/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/BernydotJar/chessy/discussions)
-- **Email**: your.email@example.com
-
----
-
-Made with ♟️ and ❤️ by the GlassChess Team
+Lichess sample provenance, selection criteria and source hash are recorded in `progress/evidence/baseline/puzzle-provenance.json`. Import is bounded and build-time only; the application does not download the full database at runtime. Original lesson text and teaching positions were authored for this project rather than copied from the referenced books.

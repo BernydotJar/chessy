@@ -43,3 +43,5 @@ pnpm-debug.log*
 
 # Typescript
 *.tsbuildinfo
+
+progress/runtime/

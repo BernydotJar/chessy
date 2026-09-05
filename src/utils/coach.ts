@@ -67,7 +67,7 @@ const classifyEvaluation = (lossCp: number) => {
 const getPrincipleForMove = (chess: Chess, move: Move, moveNumber: number) => {
   const pieceKey = getPieceKey(move.piece);
   let principleKey = 'coach.principles.general';
-  let principleParams: Record<string, string> = { pieceKey };
+  const principleParams: Record<string, string> = { pieceKey };
 
   if (move.flags.includes('e')) {
     principleKey = 'coach.principles.enPassant';
@@ -110,13 +110,15 @@ const getPrincipleForMove = (chess: Chess, move: Move, moveNumber: number) => {
   return { principleKey, principleParams, tips };
 };
 
-const evaluateMoveQuality = async (chess: Chess, lastMove: Move) => {
-  const before = new Chess(chess.fen());
+const evaluateMoveQuality = async (chess: Chess) => {
+  const before = new Chess();
+  before.loadPgn(chess.pgn());
   const undone = before.undo();
   if (!undone) return null;
 
+  const afterFen = chess.fen();
   const evalBefore = await coachEngine.evaluatePosition(before.fen(), 12);
-  const evalAfter = await coachEngine.evaluatePosition(chess.fen(), 12);
+  const evalAfter = await coachEngine.evaluatePosition(afterFen, 12);
 
   if (typeof evalAfter.mate === 'number') {
     return {
@@ -127,9 +129,8 @@ const evaluateMoveQuality = async (chess: Chess, lastMove: Move) => {
 
   if (typeof evalBefore.score !== 'number' || typeof evalAfter.score !== 'number') return null;
 
-  const delta = lastMove.color === 'w'
-    ? evalAfter.score - evalBefore.score
-    : evalBefore.score - evalAfter.score;
+  // UCI scores change perspective when the side to move changes.
+  const delta = -evalAfter.score - evalBefore.score;
   const loss = Math.max(0, -delta);
 
   return {
@@ -173,14 +174,13 @@ export const getCoachInsightWithEval = async (chess: Chess): Promise<CoachInsigh
   const insight = getCoachInsight(chess);
   if (!insight) return null;
 
-  const moves = chess.history({ verbose: true }) as Move[];
-  const lastMove = moves[moves.length - 1];
-  const before = new Chess(chess.fen());
+  const before = new Chess();
+  before.loadPgn(chess.pgn());
   const undone = before.undo();
   if (!undone) return insight;
 
   try {
-    const evaluation = await evaluateMoveQuality(chess, lastMove);
+    const evaluation = await evaluateMoveQuality(chess);
     if (!evaluation) {
       return insight;
     }
@@ -196,7 +196,7 @@ export const getCoachInsightWithEval = async (chess: Chess): Promise<CoachInsigh
       const from = bestMoveUci.slice(0, 2);
       const to = bestMoveUci.slice(2, 4);
       const promotion = bestMoveUci.length > 4 ? bestMoveUci[4] : undefined;
-      const bestMove = bestChess.move({ from, to, promotion } as any);
+      const bestMove = bestChess.move({ from, to, promotion });
       if (bestMove) {
         const { principleKey: suggestedPrincipleKey, principleParams: suggestedPrincipleParams } =
           getPrincipleForMove(bestChess, bestMove as Move, insight.moveNumber);

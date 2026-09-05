@@ -1,21 +1,20 @@
 {
-  "name": "glasschess",
+  "name": "chessy",
   "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
-  "description": "A beautiful, free chess platform with glassmorphism design",
-  "author": "GlassChess Team",
+  "description": "Local-first chess academy, verified challenges and Stockfish practice",
+  "author": "Chessy contributors",
   "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "predeploy": "GITHUB_PAGES=true npm run build",
-    "deploy": "gh-pages -d dist",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "vitest",
-    "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage"
+    "typecheck": "tsc --noEmit",
+    "test:e2e": "node scripts/browser-verify.cjs",
+    "verify": "npm run lint && npm test -- --run && npm run build"
   },
   "dependencies": {
     "chess.js": "^1.0.0-beta.6",
@@ -31,30 +30,30 @@
     "zustand": "^4.4.7"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.11.0",
+    "@playwright/test": "1.58.2",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
-    "@typescript-eslint/eslint-plugin": "^6.14.0",
-    "@typescript-eslint/parser": "^6.14.0",
-    "@vitejs/plugin-react": "^4.2.1",
+    "@typescript-eslint/eslint-plugin": "8.69.0",
+    "@typescript-eslint/parser": "8.69.0",
+    "@vitejs/plugin-react": "6.1.1",
     "autoprefixer": "^10.4.16",
     "eslint": "^8.55.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
-    "gh-pages": "^6.3.0",
     "postcss": "^8.4.32",
     "tailwindcss": "^3.3.6",
     "typescript": "^5.2.2",
-    "vite": "^5.0.8",
-    "vitest": "^1.0.4"
+    "vite": "8.2.2",
+    "vitest": "5.0.0"
   },
   "keywords": [
     "chess",
+    "academy",
+    "challenges",
     "react",
     "typescript",
-    "glassmorphism",
-    "free",
-    "game",
-    "multiplayer"
+    "local-first"
   ],
   "repository": {
     "type": "git",
@@ -63,5 +62,8 @@
   "bugs": {
     "url": "https://github.com/BernydotJar/chessy/issues"
   },
-  "homepage": "https://bernydotjar.github.io/chessy/"
+  "homepage": "https://bernydotjar.github.io/chessy/",
+  "engines": {
+    "node": ">=22.12.0"
+  }
 }

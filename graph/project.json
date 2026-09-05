@@ -1,0 +1,210 @@
+{
+  "schema_version": "graph-harness.project.v1",
+  "project_id": "chessy-premium-v1",
+  "mode": "SHIP",
+  "gate_definitions": [
+    {
+      "id": "spec",
+      "required_evidence_kinds": [
+        "spec"
+      ],
+      "blocking": true
+    },
+    {
+      "id": "verification",
+      "required_evidence_kinds": [
+        "verification"
+      ],
+      "blocking": true
+    },
+    {
+      "id": "critic",
+      "required_evidence_kinds": [
+        "critic"
+      ],
+      "blocking": true
+    },
+    {
+      "id": "release",
+      "required_evidence_kinds": [
+        "release"
+      ],
+      "blocking": true
+    }
+  ],
+  "nodes": [
+    {
+      "id": "CH-001",
+      "title": "Recovery and executable baseline",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**",
+        "specs/**",
+        "public/**",
+        "*.json",
+        "*.ts",
+        "*.md",
+        ".github/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "CH-002",
+      "title": "Core correctness and quality",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CH-001"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**",
+        "specs/**",
+        "public/**",
+        "*.json",
+        "*.ts",
+        "*.md",
+        ".github/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "CH-003",
+      "title": "Original academy and challenges",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CH-002"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**",
+        "specs/**",
+        "public/**",
+        "*.json",
+        "*.ts",
+        "*.md",
+        ".github/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "CH-004",
+      "title": "Premium multilingual experience",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CH-003"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**",
+        "specs/**",
+        "public/**",
+        "*.json",
+        "*.ts",
+        "*.md",
+        ".github/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "CH-005",
+      "title": "Independent verification and publication",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CH-004"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**",
+        "specs/**",
+        "public/**",
+        "*.json",
+        "*.ts",
+        "*.md",
+        ".github/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    }
+  ]
+}

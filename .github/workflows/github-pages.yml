@@ -1,44 +1,53 @@
-name: Deploy to GitHub Pages
+name: Verify Chessy release
 
 on:
   push:
-    branches: [ main ]
+    branches: [main, 'graph/**']
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: chessy-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build:
+  verify:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js 20
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '22'
           cache: npm
-      - name: Install dependencies
+      - name: Install locked dependencies
         run: npm ci
-      - name: Build
-        run: GITHUB_PAGES=true npm run build
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Lint
+        run: npm run lint
+      - name: Unit tests and exact puzzle fixtures
+        run: EXPORT_CHESS_FIXTURES=1 npm test -- --run
+      - name: Independent chess rules implementation
+        run: |
+          python3 -m pip install python-chess==1.999
+          python3 scripts/verify-independent.py
+      - name: Build production artifact
+        run: npm run build
+      - name: Dependency security audit
+        run: npm audit --audit-level=low
+      - name: Install dedicated CI browser
+        run: npx playwright install --with-deps chromium
+      - name: Browser workflows and accessibility checks
+        run: npm run test:e2e
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          path: dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          name: chessy-verification-${{ github.sha }}
+          path: |
+            progress/evidence/browser/
+            progress/evidence/release/
+          retention-days: 14
