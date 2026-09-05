@@ -20,9 +20,12 @@ interface GameStore extends GameState {
   setupSideToMove: 'w' | 'b';
   setupSelectedPiece: SetupPiece;
   setupFen: string;
-  view: 'play' | 'games' | 'review' | 'analysis' | 'training';
+  view: 'home' | 'academy' | 'progress' | 'library' | 'play' | 'games' | 'review' | 'analysis' | 'training';
   activeGameId: string | null;
   trainingMode: boolean;
+  engineError: boolean;
+  endReason: 'resignation' | null;
+  resignGame: () => void;
 
   makeMove: (from: string, to: string, promotion?: string, isAIMove?: boolean) => boolean;
   makeAIMove: () => Promise<void>;
@@ -49,8 +52,8 @@ interface GameStore extends GameState {
 }
 
 const defaultTheme: BoardTheme = {
-  lightSquare: '#bfe7ff',
-  darkSquare: '#2f6fb8',
+  lightSquare: '#ece6d9',
+  darkSquare: '#51766b',
   glassOpacity: 0.16,
   glassBlur: 11,
 };
@@ -104,37 +107,14 @@ export const themePresets: ThemePreset[] = [
 ];
 
 const getCapturedPieces = (chess: Chess) => {
-  const capturedWhite: string[] = [];
-  const capturedBlack: string[] = [];
-  
-  const pieceCount: { [key: string]: number } = {
-    p: 8, n: 2, b: 2, r: 2, q: 1, k: 1,
-  };
-  
-  const currentPieces = chess.board().flat().filter(p => p !== null);
-  
-  const whitePieces = currentPieces.filter(p => p?.color === 'w');
-  const blackPieces = currentPieces.filter(p => p?.color === 'b');
-  
-  for (const [piece, count] of Object.entries(pieceCount)) {
-    const whiteCount = whitePieces.filter(p => p?.type === piece).length;
-    const blackCount = blackPieces.filter(p => p?.type === piece).length;
-    
-    const whiteCaptured = count - whiteCount;
-    const blackCaptured = count - blackCount;
-    
-    for (let i = 0; i < whiteCaptured; i++) {
-      capturedBlack.push(piece);
-    }
-    for (let i = 0; i < blackCaptured; i++) {
-      capturedWhite.push(piece);
-    }
+  const captured: { white: string[]; black: string[] } = { white: [], black: [] };
+  for (const move of chess.history({ verbose: true })) {
+    if (move.captured) captured[move.color === 'w' ? 'white' : 'black'].push(move.captured);
   }
-  
-  return { white: capturedWhite, black: capturedBlack };
+  return captured;
 };
 
-const playMoveSound = (chess: Chess, moveObj: any) => {
+const playMoveSound = (chess: Chess, moveObj: Move) => {
   if (chess.isCheckmate()) {
     soundManager.play('checkmate');
   } else if (chess.isCheck()) {
@@ -251,15 +231,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
   setupSideToMove: 'w',
   setupSelectedPiece: 'wP',
   setupFen: '8/8/8/8/8/8/8/8 w - - 0 1',
-  view: 'play',
+  view: 'home',
   activeGameId: null,
   trainingMode: false,
+  engineError: false, endReason: null,
 
   makeMove: (from: string, to: string, promotion?: string, isAIMove: boolean = false) => {
     const { chess, isAIGame, playerColor, isAIThinking, trainingMode } = get();
     
     // Prevent moves during AI thinking
-    if (isAIThinking && !isAIMove) return false;
+    if (get().isGameOver || (isAIThinking && !isAIMove)) return false;
     
     // In AI game, prevent moves when it's not player's turn
     if (isAIGame && !isAIMove) {
@@ -302,14 +283,14 @@ export const useGameStore = create<GameStore>((set, get) => ({
         const aiTurn = playerColor === 'white' ? 'b' : 'w';
         if (isAIGame && !trainingMode && !chess.isGameOver() && chess.turn() === aiTurn) {
           setTimeout(() => {
-            get().makeAIMove();
+            if (get().chess === chess) void get().makeAIMove();
           }, 500);
         }
         
         return true;
       }
       return false;
-    } catch (error) {
+    } catch {
       return false;
     }
   },
@@ -318,36 +299,30 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const { chess, aiDifficulty, isAIGame, playerColor } = get();
     const aiTurn = playerColor === 'white' ? 'b' : 'w';
     
-    if (!isAIGame || chess.isGameOver() || chess.turn() !== aiTurn) return;
+    if (!isAIGame || get().isGameOver || get().isAIThinking || chess.isGameOver() || chess.turn() !== aiTurn) return;
     
-    set({ isAIThinking: true });
+    set({ isAIThinking: true, engineError: false });
     
     try {
-      const aiMove: AIMove | null = await stockfishService.getBestMove(chess.fen(), aiDifficulty);
+      const position = chess.fen();
+      const aiMove: AIMove | null = await stockfishService.getBestMove(position, aiDifficulty);
+      if (get().chess !== chess || get().fen !== position || !get().isAIGame || get().isGameOver) return;
 
       if (aiMove) {
         get().makeMove(aiMove.from, aiMove.to, aiMove.promotion, true);
         return;
       }
 
-      const fallbackMoves = chess.moves({ verbose: true }) as Move[];
-      if (fallbackMoves.length > 0) {
-        const randomMove = fallbackMoves[Math.floor(Math.random() * fallbackMoves.length)];
-        get().makeMove(randomMove.from, randomMove.to, randomMove.promotion, true);
-      }
-    } catch (error) {
-      console.error('AI move error:', error);
-      const fallbackMoves = chess.moves({ verbose: true }) as Move[];
-      if (fallbackMoves.length > 0) {
-        const randomMove = fallbackMoves[Math.floor(Math.random() * fallbackMoves.length)];
-        get().makeMove(randomMove.from, randomMove.to, randomMove.promotion, true);
-      }
+      set({ engineError: true });
+    } catch {
+      if (get().chess === chess && get().isAIGame && !get().isGameOver) set({ engineError: true });
     } finally {
-      set({ isAIThinking: false });
+      if (get().chess === chess) set({ isAIThinking: false });
     }
   },
 
   startAIGame: (difficulty: DifficultyLevel, playerColor: 'white' | 'black' | 'random') => {
+    stockfishService.terminate();
     const actualColor = playerColor === 'random' 
       ? Math.random() > 0.5 ? 'white' : 'black'
       : playerColor;
@@ -361,9 +336,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
       currentMove: 0,
       isGameOver: false,
       winner: null,
+      endReason: null, engineError: false, activeGameId: null,
       capturedPieces: { white: [], black: [] },
       aiDifficulty: difficulty,
       isAIGame: true,
+      trainingMode: false, setupMode: false, pendingPromotion: null, view: 'play',
       playerColor: actualColor,
       isAIThinking: false,
     });
@@ -373,12 +350,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
     // If player chose black, AI moves first
     if (actualColor === 'black') {
       setTimeout(() => {
-        get().makeAIMove();
+        if (get().chess === newChess) void get().makeAIMove();
       }, 1000);
     }
   },
 
+  resignGame: () => {
+    const state = get();
+    stockfishService.terminate();
+    set({isGameOver:true,isAIThinking:false,endReason:'resignation',winner:state.isAIGame ? (state.playerColor==='white'?'black':'white') : (state.chess.turn()==='w'?'black':'white')});
+  },
   resetGame: () => {
+    stockfishService.terminate();
     const newChess = new Chess();
     set({
       chess: newChess,
@@ -387,8 +370,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
       currentMove: 0,
       isGameOver: false,
       winner: null,
+      endReason: null, engineError: false, activeGameId: null,
       capturedPieces: { white: [], black: [] },
       isAIGame: false,
+      playerColor: 'white',
       isAIThinking: false,
       legalMoves: [],
       pendingPromotion: null,
@@ -397,13 +382,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   undoMove: () => {
-    const { chess, isAIGame } = get();
-    
-    // In AI game, undo both player and AI move
+    const { chess, isAIGame, isAIThinking, playerColor } = get();
+    if (isAIThinking) return;
     if (isAIGame) {
-      chess.undo(); // Undo AI move
-      chess.undo(); // Undo player move
+      const human = playerColor === 'white' ? 'w' : 'b';
+      const moves = chess.history({ verbose: true });
+      if (!moves.some(move => move.color === human)) return;
+      chess.undo();
+      if (chess.turn() !== human) chess.undo();
     } else {
+      if (chess.history().length === 0) return;
       chess.undo();
     }
     
@@ -416,6 +404,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       currentMove: newHistory.length,
       isGameOver: false,
       winner: null,
+      endReason: null, engineError: false, activeGameId: null,
       capturedPieces,
       legalMoves: [],
     });
@@ -426,6 +415,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   loadGame: (fen: string) => {
+    stockfishService.terminate();
     const newChess = new Chess(fen);
     const capturedPieces = getCapturedPieces(newChess);
     const isGameOver = newChess.isGameOver();
@@ -442,6 +432,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       fen: newChess.fen(),
       history: newChess.history(),
       currentMove: newChess.history().length,
+      isAIGame: false, isAIThinking: false, pendingPromotion: null, endReason: null, engineError: false, activeGameId: null,
       capturedPieces,
       isGameOver,
       winner,
@@ -450,6 +441,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   loadPgn: (pgn: string) => {
+    stockfishService.terminate();
     const newChess = new Chess();
     newChess.loadPgn(pgn);
     const capturedPieces = getCapturedPieces(newChess);
@@ -467,6 +459,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       fen: newChess.fen(),
       history: newChess.history(),
       currentMove: newChess.history().length,
+      isAIGame: false, isAIThinking: false, pendingPromotion: null, endReason: null, engineError: false, activeGameId: null,
       capturedPieces,
       isGameOver,
       winner,
@@ -573,7 +566,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
-  setView: (view) => set({ view }),
+  setView: (view) => {
+    set({ view });
+    if (typeof window !== 'undefined' && window.location.hash !== '#/'+view) window.location.hash='/'+view;
+  },
   setActiveGameId: (id) => set({ activeGameId: id }),
   setTrainingMode: (mode) => set({ trainingMode: mode }),
 }));

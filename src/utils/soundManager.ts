@@ -11,7 +11,9 @@ class SoundManager {
     if (!this.enabled) return;
 
     try {
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const Audio = window.AudioContext || (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (!Audio) return;
+      const audioContext = new Audio();
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
 

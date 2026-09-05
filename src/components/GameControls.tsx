@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { RotateCcw, Undo2, Flag, Trophy } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -17,9 +17,10 @@ export const GameControls: React.FC = () => {
     playerColor,
     showLegalMoves,
     setShowLegalMoves,
-    setupMode,
+    setupMode, isAIThinking, engineError, makeAIMove, resignGame, endReason,
   } = useGameStore();
   const { t } = useTranslation();
+  const [confirmResign, setConfirmResign] = useState(false);
 
   const getGameStatus = () => {
     if (!isGameOver) {
@@ -38,7 +39,7 @@ export const GameControls: React.FC = () => {
     }
 
     const winnerColor = winner === 'white' ? t('colors.white') : t('colors.black');
-    return t('status.winsCheckmate', { color: winnerColor });
+    return t(endReason === 'resignation' ? 'status.winsResignation' : 'status.winsCheckmate', { color: winnerColor });
   };
 
   return (
@@ -60,7 +61,7 @@ export const GameControls: React.FC = () => {
       <div className="grid grid-cols-2 gap-3">
         <button
           onClick={undoMove}
-          disabled={history.length === 0}
+          disabled={history.length <= (isAIGame && playerColor === 'black' ? 1 : 0) || isAIThinking}
           className="glass-button glass-button--subtle px-4 py-3 rounded-lg text-white font-medium flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
           aria-label={t('controls.undo')}
         >
@@ -101,11 +102,7 @@ export const GameControls: React.FC = () => {
       {/* Resign Button */}
       {!isGameOver && history.length > 0 && (
         <button
-          onClick={() => {
-            if (confirm(t('controls.resignConfirm'))) {
-              resetGame();
-            }
-          }}
+          onClick={() => setConfirmResign(true)}
           className="w-full glass-button glass-button--subtle px-4 py-3 rounded-lg text-red-300 font-medium flex items-center justify-center gap-2 hover:bg-red-500/20 transition-colors"
           aria-label={t('controls.resign')}
         >
@@ -114,6 +111,8 @@ export const GameControls: React.FC = () => {
         </button>
       )}
 
+      {confirmResign && <div className="glass-container rounded-lg p-4" role="group" aria-label={t('controls.resignConfirm')}><p className="text-white mb-3">{t('controls.resignConfirm')}</p><div className="flex gap-2"><button className="glass-button p-3 rounded-lg text-white" onClick={() => { resignGame(); setConfirmResign(false); }}>{t('controls.resign')}</button><button className="glass-button p-3 rounded-lg text-white" onClick={() => setConfirmResign(false)}>{t('studio.cancel')}</button></div></div>}
+      {engineError && !isGameOver && <div className="feedback wrong" role="status"><p>{t('studio.engineError')}</p><button className="btn secondary" onClick={() => void makeAIMove()}>{t('studio.retry')}</button></div>}
       {/* Game Over Actions */}
       {isGameOver && (
         <div className="glass-container rounded-lg p-4 text-center animate-fade-in">

@@ -52,7 +52,7 @@ export const ExerciseView: React.FC = () => {
       setStatus('wrong');
       setMessage(t('exercise.wrong'));
     }
-  }, [history, chess, exercise, t]);
+  }, [history, chess, exercise, t, source]);
 
   const progress = useMemo(() => {
     if (source === 'camp') {

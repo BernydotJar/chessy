@@ -1,0 +1,172 @@
+{
+  "createdAt": "2026-09-05T01:27:57.904Z",
+  "browser": "152.0.7977.83",
+  "checks": [
+    {
+      "name": "All nine routes load without untranslated UI keys",
+      "result": "PASS",
+      "ms": 1127
+    },
+    {
+      "name": "Incorrect quiz does not award completion; correct answer does",
+      "result": "PASS",
+      "ms": 256
+    },
+    {
+      "name": "Wrong challenge preserves position; correct solution persists once",
+      "result": "PASS",
+      "ms": 907
+    },
+    {
+      "name": "Hint-assisted play does not award XP",
+      "result": "PASS",
+      "ms": 196
+    },
+    {
+      "name": "Native promotion dialog supports rook underpromotion and focus",
+      "result": "PASS",
+      "ms": 230
+    },
+    {
+      "name": "Multi-ply puzzle plays legal opponent reply and accepts final mate",
+      "result": "PASS",
+      "ms": 168
+    },
+    {
+      "name": "Black-side Lichess line solves through the same input contract",
+      "result": "PASS",
+      "ms": 197
+    },
+    {
+      "name": "Language switches and survives reload in English and Portuguese",
+      "result": "PASS",
+      "ms": 1829
+    },
+    {
+      "name": "Local play survives training navigation and saves a real PGN game",
+      "result": "PASS",
+      "ms": 475
+    },
+    {
+      "name": "Invalid progress backup is rejected without overwriting progress",
+      "result": "PASS",
+      "ms": 17
+    },
+    {
+      "name": "Progress restore requires explicit confirmation",
+      "result": "PASS",
+      "ms": 66
+    },
+    {
+      "name": "Actual Stockfish responds after a legal opening move",
+      "result": "PASS",
+      "ms": 1443
+    },
+    {
+      "name": "Mobile drawer hides inactive links and closes with Escape",
+      "result": "PASS",
+      "ms": 204
+    },
+    {
+      "name": "Reduced motion has no running interface animations",
+      "result": "PASS",
+      "ms": 10
+    },
+    {
+      "name": "No horizontal overflow on mobile, tablet and desktop routes",
+      "result": "PASS",
+      "ms": 702
+    },
+    {
+      "name": "WCAG 2.1 AA automated scan: home",
+      "result": "PASS",
+      "ms": 595
+    },
+    {
+      "name": "WCAG 2.1 AA automated scan: play",
+      "result": "PASS",
+      "ms": 576
+    },
+    {
+      "name": "WCAG 2.1 AA automated scan: training",
+      "result": "PASS",
+      "ms": 487
+    },
+    {
+      "name": "WCAG 2.1 AA automated scan: academy",
+      "result": "PASS",
+      "ms": 248
+    },
+    {
+      "name": "WCAG 2.1 AA automated scan: progress",
+      "result": "PASS",
+      "ms": 279
+    },
+    {
+      "name": "WCAG 2.1 AA automated scan: library",
+      "result": "PASS",
+      "ms": 298
+    },
+    {
+      "name": "WCAG 2.1 AA automated scan: games",
+      "result": "PASS",
+      "ms": 281
+    },
+    {
+      "name": "WCAG 2.1 AA automated scan: analysis",
+      "result": "PASS",
+      "ms": 301
+    },
+    {
+      "name": "WCAG 2.1 AA automated scan: review",
+      "result": "PASS",
+      "ms": 494
+    },
+    {
+      "name": "No uncaught JavaScript errors",
+      "result": "PASS",
+      "ms": 0
+    }
+  ],
+  "pageErrors": [],
+  "accessibility": [
+    {
+      "view": "home",
+      "violations": []
+    },
+    {
+      "view": "play",
+      "violations": []
+    },
+    {
+      "view": "training",
+      "violations": []
+    },
+    {
+      "view": "academy",
+      "violations": []
+    },
+    {
+      "view": "progress",
+      "violations": []
+    },
+    {
+      "view": "library",
+      "violations": []
+    },
+    {
+      "view": "games",
+      "violations": []
+    },
+    {
+      "view": "analysis",
+      "violations": []
+    },
+    {
+      "view": "review",
+      "violations": []
+    }
+  ],
+  "passed": 25,
+  "failed": 0
+}

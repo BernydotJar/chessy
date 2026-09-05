@@ -1,0 +1,3 @@
+# Chessy Graph Engineering
+Read specs/premium-v1/{requirements,design,tasks}.md and graph/project.json. The append-only graph/events.jsonl is execution truth; progress files are projections. Use the shared pinned Graph Harness, never copy its implementation.
+Only edit this checkout. No new containers. Never claim independent model verification for a self-review. Never claim public deployment based on local health alone. Do not publish placeholders as puzzles or reproduce copyrighted book text. Keep original curriculum, i18n parity, legal chess solutions, accessible controls, device-local data disclosure and reduced motion.

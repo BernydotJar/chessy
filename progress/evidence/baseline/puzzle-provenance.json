@@ -1,0 +1,15 @@
+{
+  "source": "https://database.lichess.org/lichess_db_puzzle.csv.zst",
+  "license": "CC0-1.0",
+  "licenseReference": "https://database.lichess.org/#puzzles",
+  "compressedBytesRead": 65536,
+  "counts": {
+    "mate": 16,
+    "fork": 16,
+    "tactics": 16,
+    "endgame": 16,
+    "calculation": 16,
+    "mixed": 16
+  },
+  "sampleSHA256": "8d10ada010139f997a040e99562c4ee75549d6f8b1de737f23d297f6ec745318"
+}

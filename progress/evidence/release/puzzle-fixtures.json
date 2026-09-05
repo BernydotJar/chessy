@@ -1,0 +1,2415 @@
+[
+  {
+    "id": "rook-file",
+    "fen": "4k3/8/8/p7/8/8/8/R3K3 w - - 0 1",
+    "solution": [
+      "a1a5"
+    ],
+    "category": "basics",
+    "level": "beginner",
+    "source": "original",
+    "tags": [
+      "capture"
+    ],
+    "title": {
+      "es": "La torre y la columna",
+      "en": "Rook on an open file",
+      "pt": "A torre e a coluna"
+    },
+    "explanation": {
+      "es": "La torre avanza en línea recta. Revisa que no haya piezas entre el origen y el destino.",
+      "en": "A rook travels in a straight line. Check that no piece blocks its path.",
+      "pt": "A torre anda em linha reta. Verifique se há peças bloqueando o caminho."
+    }
+  },
+  {
+    "id": "rook-rank",
+    "fen": "4k3/8/8/8/8/8/8/R5nK w - - 0 1",
+    "solution": [
+      "a1g1"
+    ],
+    "category": "basics",
+    "level": "beginner",
+    "source": "original",
+    "tags": [
+      "capture"
+    ],
+    "title": {
+      "es": "Una fila libre",
+      "en": "An open rank",
+      "pt": "Uma fileira livre"
+    },
+    "explanation": {
+      "es": "Las torres también capturan horizontalmente. La pieza capturada sale del tablero.",
+      "en": "Rooks also capture horizontally. The captured piece leaves the board.",
+      "pt": "As torres também capturam na horizontal. A peça capturada sai do tabuleiro."
+    }
+  },
+  {
+    "id": "bishop-diagonal",
+    "fen": "4k3/8/8/7p/8/8/8/K1B5 w - - 0 1",
+    "solution": [
+      "c1h6"
+    ],
+    "category": "basics",
+    "level": "beginner",
+    "source": "original",
+    "tags": [
+      "diagonal"
+    ],
+    "title": {
+      "es": "Sigue la diagonal",
+      "en": "Follow the diagonal",
+      "pt": "Siga a diagonal"
+    },
+    "explanation": {
+      "es": "Un alfil siempre conserva el color de su casilla. En este ejercicio lo desarrollamos hasta h6.",
+      "en": "A bishop always stays on the same square color. Here we develop it to h6.",
+      "pt": "Um bispo permanece na mesma cor de casa. Aqui o desenvolvemos até h6."
+    }
+  },
+  {
+    "id": "bishop-capture",
+    "fen": "4k3/8/7p/8/8/8/8/K1B5 w - - 0 1",
+    "solution": [
+      "c1h6"
+    ],
+    "category": "basics",
+    "level": "beginner",
+    "source": "original",
+    "tags": [
+      "capture"
+    ],
+    "title": {
+      "es": "Captura en diagonal",
+      "en": "Diagonal capture",
+      "pt": "Captura diagonal"
+    },
+    "explanation": {
+      "es": "Sigue c1-d2-e3-f4-g5-h6. La diagonal está libre y el peón no tiene defensa.",
+      "en": "Follow c1-d2-e3-f4-g5-h6. The diagonal is open and the pawn is undefended.",
+      "pt": "Siga c1-d2-e3-f4-g5-h6. A diagonal está livre e o peão está indefeso."
+    }
+  },
+  {
+    "id": "knight-jump",
+    "fen": "4k3/8/8/8/8/2p5/PPPP4/1N2K3 w - - 0 1",
+    "solution": [
+      "b1c3"
+    ],
+    "category": "basics",
+    "level": "beginner",
+    "source": "original",
+    "tags": [
+      "capture"
+    ],
+    "title": {
+      "es": "El salto del caballo",
+      "en": "The knight jumps",
+      "pt": "O salto do cavalo"
+    },
+    "explanation": {
+      "es": "El caballo salta sobre otras piezas: dos casillas en una dirección y una perpendicular.",
+      "en": "A knight jumps over pieces: two squares in one direction and one perpendicular.",
+      "pt": "O cavalo salta sobre peças: duas casas numa direção e uma perpendicular."
+    }
+  },
+  {
+    "id": "pawn-capture",
+    "fen": "4k3/8/8/3p4/4P3/8/8/4K3 w - - 0 1",
+    "solution": [
+      "e4d5"
+    ],
+    "category": "basics",
+    "level": "beginner",
+    "source": "original",
+    "tags": [
+      "capture"
+    ],
+    "title": {
+      "es": "El peón captura distinto",
+      "en": "Pawns capture differently",
+      "pt": "O peão captura diferente"
+    },
+    "explanation": {
+      "es": "Un peón avanza recto, pero captura una casilla en diagonal hacia adelante.",
+      "en": "A pawn moves straight forward but captures one square diagonally forward.",
+      "pt": "O peão avança em linha reta, mas captura uma casa na diagonal para a frente."
+    }
+  },
+  {
+    "id": "castle-short",
+    "fen": "4k3/8/8/8/8/8/8/4K2R w K - 0 1",
+    "solution": [
+      "e1g1"
+    ],
+    "category": "basics",
+    "level": "beginner",
+    "source": "original",
+    "tags": [
+      "castling"
+    ],
+    "title": {
+      "es": "Un refugio para el rey",
+      "en": "Shelter for the king",
+      "pt": "Um abrigo para o rei"
+    },
+    "explanation": {
+      "es": "Enroca: el rey avanza dos casillas y la torre lo acompaña. No puedes enrocar desde, a través de, ni hacia el jaque.",
+      "en": "Castle: the king moves two squares and the rook follows. You cannot castle out of, through, or into check.",
+      "pt": "Roque: o rei anda duas casas e a torre o acompanha. Não é permitido sair de, passar por ou entrar em xeque."
+    }
+  },
+  {
+    "id": "en-passant",
+    "fen": "4k3/8/8/3pP3/8/8/8/4K3 w - d6 0 2",
+    "solution": [
+      "e5d6"
+    ],
+    "category": "basics",
+    "level": "easy",
+    "source": "original",
+    "tags": [
+      "enPassant"
+    ],
+    "title": {
+      "es": "Una oportunidad inmediata",
+      "en": "An immediate opportunity",
+      "pt": "Uma oportunidade imediata"
+    },
+    "explanation": {
+      "es": "La captura al paso solo está disponible inmediatamente después del avance doble del peón rival.",
+      "en": "En passant is available only immediately after the opposing pawn advances two squares.",
+      "pt": "A captura en passant só está disponível imediatamente após o avanço duplo do peão adversário."
+    }
+  },
+  {
+    "id": "promotion",
+    "fen": "8/5P1k/5K2/8/8/8/8/8 w - - 0 1",
+    "solution": [
+      "f7f8q"
+    ],
+    "category": "endgame",
+    "level": "beginner",
+    "source": "original",
+    "tags": [
+      "promotion"
+    ],
+    "title": {
+      "es": "Un peón, una dama",
+      "en": "A pawn becomes a queen",
+      "pt": "Um peão vira dama"
+    },
+    "explanation": {
+      "es": "Al alcanzar la última fila, un peón debe convertirse en dama, torre, alfil o caballo.",
+      "en": "On reaching the last rank, a pawn must become a queen, rook, bishop or knight.",
+      "pt": "Ao chegar à última fileira, um peão deve virar dama, torre, bispo ou cavalo."
+    }
+  },
+  {
+    "id": "underpromotion",
+    "fen": "8/k1P5/2K5/8/8/8/8/8 w - - 0 1",
+    "solution": [
+      "c7c8r"
+    ],
+    "category": "endgame",
+    "level": "intermediate",
+    "source": "original",
+    "tags": [
+      "underPromotion"
+    ],
+    "title": {
+      "es": "La dama no siempre es mejor",
+      "en": "A queen is not always best",
+      "pt": "A dama nem sempre é melhor"
+    },
+    "explanation": {
+      "es": "Coronar dama aquí ahoga al rey rival. La torre mantiene una casilla de escape y conserva una posición ganadora.",
+      "en": "Promoting to a queen here stalemates the opponent. A rook leaves an escape square and preserves a winning position.",
+      "pt": "Promover a dama aqui causa afogamento. A torre deixa uma casa de fuga e mantém uma posição vencedora."
+    }
+  },
+  {
+    "id": "back-rank",
+    "fen": "6k1/5ppp/8/8/8/8/8/4R1K1 w - - 0 1",
+    "solution": [
+      "e1e8"
+    ],
+    "category": "mate",
+    "level": "easy",
+    "source": "original",
+    "tags": [
+      "mateIn1",
+      "backRankMate"
+    ],
+    "title": {
+      "es": "La última fila",
+      "en": "The back rank",
+      "pt": "A última fileira"
+    },
+    "explanation": {
+      "es": "Los peones del propio rey bloquean sus escapatorias. La torre domina toda la última fila.",
+      "en": "The king's own pawns block its escape squares. The rook controls the entire back rank.",
+      "pt": "Os próprios peões do rei bloqueiam suas fugas. A torre domina toda a última fileira."
+    }
+  },
+  {
+    "id": "queen-net",
+    "fen": "7k/8/5KQ1/8/8/8/8/8 w - - 0 1",
+    "solution": [
+      "g6g7"
+    ],
+    "category": "mate",
+    "level": "easy",
+    "source": "original",
+    "tags": [
+      "mateIn1"
+    ],
+    "title": {
+      "es": "Rey y dama en equipo",
+      "en": "King and queen cooperate",
+      "pt": "Rei e dama em equipe"
+    },
+    "explanation": {
+      "es": "La dama da jaque y cubre las salidas; su rey la protege. Comprueba ambas funciones antes de mover.",
+      "en": "The queen checks and covers escape squares; her king protects her. Check both roles before moving.",
+      "pt": "A dama dá xeque e cobre as fugas; seu rei a protege. Verifique as duas funções antes de mover."
+    }
+  },
+  {
+    "id": "smothered",
+    "fen": "6rk/6pp/7N/8/8/8/8/6K1 w - - 0 1",
+    "solution": [
+      "h6f7"
+    ],
+    "category": "mate",
+    "level": "intermediate",
+    "source": "original",
+    "tags": [
+      "mateIn1",
+      "smotheredMate"
+    ],
+    "title": {
+      "es": "Mate de la coz",
+      "en": "Smothered mate",
+      "pt": "Mate abafado"
+    },
+    "explanation": {
+      "es": "El caballo da jaque sin poder ser bloqueado. Las piezas del propio rey lo dejan sin escapatoria.",
+      "en": "A knight's check cannot be blocked. The king's own pieces leave it without an escape.",
+      "pt": "O xeque de cavalo não pode ser bloqueado. As próprias peças do rei o deixam sem fuga."
+    }
+  },
+  {
+    "id": "arabian",
+    "fen": "7k/R7/5N2/8/8/8/8/K7 w - - 0 1",
+    "solution": [
+      "a7h7"
+    ],
+    "category": "mate",
+    "level": "intermediate",
+    "source": "original",
+    "tags": [
+      "mateIn1"
+    ],
+    "title": {
+      "es": "Torre y caballo",
+      "en": "Rook and knight",
+      "pt": "Torre e cavalo"
+    },
+    "explanation": {
+      "es": "El caballo protege h7 y controla g8. La torre completa la red de mate por la columna h.",
+      "en": "The knight protects h7 and controls g8. The rook completes the mating net on the h-file.",
+      "pt": "O cavalo protege h7 e controla g8. A torre completa a rede de mate na coluna h."
+    }
+  },
+  {
+    "id": "rook-two",
+    "fen": "6k1/8/8/8/8/8/R7/1R4K1 w - - 0 1",
+    "solution": [
+      "a2a7",
+      "g8f8",
+      "b1b8"
+    ],
+    "category": "mate",
+    "level": "intermediate",
+    "source": "original",
+    "tags": [
+      "mateIn2"
+    ],
+    "title": {
+      "es": "Piensa dos jugadas adelante",
+      "en": "Think two moves ahead",
+      "pt": "Pense duas jogadas adiante"
+    },
+    "explanation": {
+      "es": "Una torre corta la séptima fila; la otra da mate en la octava. La primera jugada limita las escapatorias antes del jaque final.",
+      "en": "One rook cuts off the seventh rank; the other mates on the eighth. The first move limits escape squares before the final check.",
+      "pt": "Uma torre corta a sétima fileira; a outra dá mate na oitava. A primeira jogada limita as fugas antes do xeque final."
+    }
+  },
+  {
+    "id": "knight-fork",
+    "fen": "6k1/3q4/8/3N4/8/8/8/6K1 w - - 0 1",
+    "solution": [
+      "d5f6",
+      "g8f8",
+      "f6d7"
+    ],
+    "category": "fork",
+    "level": "intermediate",
+    "source": "original",
+    "tags": [
+      "fork"
+    ],
+    "title": {
+      "es": "Dos amenazas, una pieza",
+      "en": "Two threats, one piece",
+      "pt": "Duas ameaças, uma peça"
+    },
+    "explanation": {
+      "es": "El caballo ataca al rey y a la dama. En esta línea guiada, respondes al movimiento del rey capturando la dama.",
+      "en": "The knight attacks both king and queen. In this guided line, answer the king move by taking the queen.",
+      "pt": "O cavalo ataca o rei e a dama. Nesta linha guiada, responda ao movimento do rei capturando a dama."
+    }
+  },
+  {
+    "id": "lichess-000Zo",
+    "fen": "4r3/1k6/pp3P2/1b5p/3R1p2/P1R2P2/1P4PP/6K1 b - - 0 35",
+    "solution": [
+      "e8e1",
+      "g1f2",
+      "e1f1"
+    ],
+    "category": "mate",
+    "level": "intermediate",
+    "rating": 1363,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/000Zo",
+    "tags": [
+      "endgame",
+      "mate",
+      "mateIn2",
+      "operaMate",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-000hf",
+    "fen": "r1bq3r/pp1nbkp1/2p1p2p/8/2BP4/1PN3P1/P3QP1P/3R1RK1 w - - 0 20",
+    "solution": [
+      "e2e6",
+      "f7f8",
+      "e6f7"
+    ],
+    "category": "mate",
+    "level": "intermediate",
+    "rating": 1530,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/000hf",
+    "tags": [
+      "mate",
+      "mateIn2",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-000rZ",
+    "fen": "2kr1b1r/p1p2pp1/2pqN3/7p/6n1/2NPB3/PPP2PPP/R2Q1RK1 b - - 0 13",
+    "solution": [
+      "d6h2"
+    ],
+    "category": "mate",
+    "level": "easy",
+    "rating": 633,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/000rZ",
+    "tags": [
+      "kingsideAttack",
+      "mate",
+      "mateIn1",
+      "oneMove",
+      "opening"
+    ]
+  },
+  {
+    "id": "lichess-001KR",
+    "fen": "6k1/p1p3pp/4N3/1p6/2q1r1n1/2B5/PP4PP/3R1R1K w - - 0 29",
+    "solution": [
+      "f1f8"
+    ],
+    "category": "mate",
+    "level": "easy",
+    "rating": 588,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/001KR",
+    "tags": [
+      "mate",
+      "mateIn1",
+      "middlegame",
+      "oneMove"
+    ]
+  },
+  {
+    "id": "lichess-001cr",
+    "fen": "8/3B2pp/p5k1/6P1/1ppp1K2/8/1P6/8 w - - 0 39",
+    "solution": [
+      "d7e8"
+    ],
+    "category": "mate",
+    "level": "intermediate",
+    "rating": 1582,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/001cr",
+    "tags": [
+      "bishopEndgame",
+      "endgame",
+      "mate",
+      "mateIn1",
+      "oneMove"
+    ]
+  },
+  {
+    "id": "lichess-001om",
+    "fen": "5r1k/pp4pp/5p2/1BbQp1r1/7K/7P/1PP3P1/3R3R b - - 3 26",
+    "solution": [
+      "c5f2",
+      "g2g3",
+      "f2g3"
+    ],
+    "category": "mate",
+    "level": "easy",
+    "rating": 1018,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/001om",
+    "tags": [
+      "mate",
+      "mateIn2",
+      "middlegame",
+      "morphysMate",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-001pC",
+    "fen": "r4rk1/pp3ppp/3b4/2p1pPB1/7N/2PP3n/PP4PP/R2Q2RK b - - 0 18",
+    "solution": [
+      "h3f2"
+    ],
+    "category": "mate",
+    "level": "easy",
+    "rating": 870,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/001pC",
+    "tags": [
+      "mate",
+      "mateIn1",
+      "middlegame",
+      "oneMove",
+      "smotheredMate"
+    ]
+  },
+  {
+    "id": "lichess-001w5",
+    "fen": "1rb3k1/q4rP1/4p2p/3p3p/3P1P2/2P5/2QK3P/3R2R1 w - - 1 30",
+    "solution": [
+      "c2h7",
+      "g8h7",
+      "g7g8q"
+    ],
+    "category": "mate",
+    "level": "easy",
+    "rating": 1034,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/001w5",
+    "tags": [
+      "advancedPawn",
+      "attraction",
+      "mate",
+      "mateIn2",
+      "middlegame",
+      "promotion",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-001wR",
+    "fen": "6nr/p4p1p/k1p5/1p6/1QN5/2P1P3/4KPqP/8 w - - 0 27",
+    "solution": [
+      "b4a5",
+      "a6b7",
+      "c4d6",
+      "b7b8",
+      "a5d8"
+    ],
+    "category": "mate",
+    "level": "easy",
+    "rating": 1152,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/001wR",
+    "tags": [
+      "endgame",
+      "long",
+      "mate",
+      "mateIn3"
+    ]
+  },
+  {
+    "id": "lichess-001wb",
+    "fen": "r3k2r/pb1p1ppp/1b4q1/1Q2P3/8/2NP1PP1/PP4P1/R1B2R1K b kq - 0 17",
+    "solution": [
+      "g6h5"
+    ],
+    "category": "mate",
+    "level": "easy",
+    "rating": 1071,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/001wb",
+    "tags": [
+      "mate",
+      "mateIn1",
+      "middlegame",
+      "oneMove"
+    ]
+  },
+  {
+    "id": "lichess-002HE",
+    "fen": "1qr2rk1/1p1p1ppp/pB2p1n1/7n/2P1P3/1Q2NP1P/PP2BKPb/3R1R2 b - - 2 20",
+    "solution": [
+      "b8g3"
+    ],
+    "category": "mate",
+    "level": "easy",
+    "rating": 1116,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/002HE",
+    "tags": [
+      "master",
+      "mate",
+      "mateIn1",
+      "middlegame",
+      "oneMove"
+    ]
+  },
+  {
+    "id": "lichess-002Mm",
+    "fen": "rn1qrk2/ppp3pQ/3p1pP1/3Pp3/2P1P3/8/PP3PP1/R1B1K3 w Q - 3 17",
+    "solution": [
+      "h7h8",
+      "f8e7",
+      "h8g7"
+    ],
+    "category": "mate",
+    "level": "easy",
+    "rating": 921,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/002Mm",
+    "tags": [
+      "deflection",
+      "mate",
+      "mateIn2",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-002Q2",
+    "fen": "7k/p4R1p/3p3B/2pN1n2/2PbB1b1/3P2P1/P3r3/5R1K b - - 0 28",
+    "solution": [
+      "f5g3"
+    ],
+    "category": "mate",
+    "level": "easy",
+    "rating": 911,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/002Q2",
+    "tags": [
+      "cornerMate",
+      "mate",
+      "mateIn1",
+      "middlegame",
+      "oneMove"
+    ]
+  },
+  {
+    "id": "lichess-002p5",
+    "fen": "r1bqr1k1/pp1nbpp1/2p5/3n2P1/2BP4/P7/1PQNNPP1/R3K2R w KQ - 1 14",
+    "solution": [
+      "c2h7",
+      "g8f8",
+      "h7h8"
+    ],
+    "category": "mate",
+    "level": "easy",
+    "rating": 908,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/002p5",
+    "tags": [
+      "kingsideAttack",
+      "mate",
+      "mateIn2",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-002vV",
+    "fen": "8/6k1/1R5p/5p1P/5P1K/6P1/8/r7 b - - 3 58",
+    "solution": [
+      "a1h1"
+    ],
+    "category": "mate",
+    "level": "easy",
+    "rating": 564,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/002vV",
+    "tags": [
+      "endgame",
+      "master",
+      "mate",
+      "mateIn1",
+      "oneMove",
+      "rookEndgame"
+    ]
+  },
+  {
+    "id": "lichess-003AX",
+    "fen": "2r2rk1/5ppp/bq2p3/p2pP1N1/Pb1p2P1/1P2P2P/2QN4/2R1K2R w K - 0 19",
+    "solution": [
+      "c2h7"
+    ],
+    "category": "mate",
+    "level": "easy",
+    "rating": 1001,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/003AX",
+    "tags": [
+      "kingsideAttack",
+      "mate",
+      "mateIn1",
+      "middlegame",
+      "oneMove"
+    ]
+  },
+  {
+    "id": "lichess-000Pw",
+    "fen": "6k1/5p1p/4p3/4q3/3n4/2Q3P1/PP1N1P1P/6K1 b - - 3 37",
+    "solution": [
+      "d4e2",
+      "g1f1",
+      "e2c3"
+    ],
+    "category": "fork",
+    "level": "intermediate",
+    "rating": 1547,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/000Pw",
+    "tags": [
+      "crushing",
+      "endgame",
+      "fork",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-0017R",
+    "fen": "r2qk2r/pp2ppbp/1n1p2p1/3P4/2n5/2NBBP1P/PP3P2/R2QK2R w KQkq - 0 13",
+    "solution": [
+      "d3c4",
+      "b6c4",
+      "d1a4",
+      "d8d7",
+      "a4c4"
+    ],
+    "category": "fork",
+    "level": "intermediate",
+    "rating": 1610,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/0017R",
+    "tags": [
+      "advantage",
+      "fork",
+      "long",
+      "middlegame"
+    ]
+  },
+  {
+    "id": "lichess-001wr",
+    "fen": "r4rk1/p3ppbp/Pp1q1np1/3PpbB1/2B5/2N2P2/1PPQ2PP/3RR1K1 b - - 0 18",
+    "solution": [
+      "d6c5",
+      "g1h1",
+      "c5c4"
+    ],
+    "category": "fork",
+    "level": "easy",
+    "rating": 1068,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/001wr",
+    "tags": [
+      "advantage",
+      "fork",
+      "master",
+      "masterVsMaster",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-002Tf",
+    "fen": "r3kbnr/ppp1qppp/2n5/1B1pP3/5B2/4PQ2/PPP2PPP/RN2K2R b KQkq - 2 7",
+    "solution": [
+      "e7b4",
+      "b1c3",
+      "b4b2"
+    ],
+    "category": "fork",
+    "level": "intermediate",
+    "rating": 1561,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/002Tf",
+    "tags": [
+      "advantage",
+      "fork",
+      "opening",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-003Jb",
+    "fen": "6k1/Q2bqr1p/2rpp1pR/p7/Pp2P3/1B3P2/1PP3P1/2KR4 b - - 7 22",
+    "solution": [
+      "e7g5",
+      "c1b1",
+      "g5h6"
+    ],
+    "category": "fork",
+    "level": "easy",
+    "rating": 993,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/003Jb",
+    "tags": [
+      "advantage",
+      "fork",
+      "master",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-003jH",
+    "fen": "rn3rk1/p5pp/3N4/4np1q/5Q2/1P6/PB1P1KP1/2R4R b - - 1 25",
+    "solution": [
+      "e5d3",
+      "f2e3",
+      "d3f4",
+      "h1h5",
+      "f4h5"
+    ],
+    "category": "fork",
+    "level": "easy",
+    "rating": 1058,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/003jH",
+    "tags": [
+      "crushing",
+      "fork",
+      "long",
+      "middlegame"
+    ]
+  },
+  {
+    "id": "lichess-003jb",
+    "fen": "r3kb1r/p4ppp/b3p3/2pq4/3Q4/4BN2/PPP2PPP/R3K2R w KQkq - 0 12",
+    "solution": [
+      "d4a4",
+      "a6b5",
+      "a4b5"
+    ],
+    "category": "fork",
+    "level": "easy",
+    "rating": 961,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/003jb",
+    "tags": [
+      "crushing",
+      "fork",
+      "master",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-003jv",
+    "fen": "7R/1p2k2p/p2n2p1/4K3/8/6P1/P6P/8 b - - 11 37",
+    "solution": [
+      "d6f7",
+      "e5e4",
+      "f7h8"
+    ],
+    "category": "fork",
+    "level": "easy",
+    "rating": 1006,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/003jv",
+    "tags": [
+      "crushing",
+      "endgame",
+      "fork",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-003mh",
+    "fen": "4rk1r/1pp2p2/p2p3p/3N4/3P2q1/8/PPP5/1K2Q1NR w - - 2 24",
+    "solution": [
+      "e1e8",
+      "f8e8",
+      "d5f6",
+      "e8e7",
+      "f6g4"
+    ],
+    "category": "fork",
+    "level": "intermediate",
+    "rating": 1304,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/003mh",
+    "tags": [
+      "advantage",
+      "attraction",
+      "fork",
+      "long",
+      "middlegame",
+      "sacrifice"
+    ]
+  },
+  {
+    "id": "lichess-003o0",
+    "fen": "r1bqk2r/pp1nbppp/3p4/1B1p4/3P1B2/5N2/PPP2PPP/R2QK2R b KQkq - 3 9",
+    "solution": [
+      "d8a5",
+      "d1d2",
+      "a5b5"
+    ],
+    "category": "fork",
+    "level": "easy",
+    "rating": 1002,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/003o0",
+    "tags": [
+      "advantage",
+      "fork",
+      "master",
+      "opening",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-003r5",
+    "fen": "r2qr1k1/ppp2ppp/4P3/8/1nP2Q2/2N2N1P/PP3KP1/R4R2 b - - 0 15",
+    "solution": [
+      "b4d3",
+      "f2g1",
+      "d3f4"
+    ],
+    "category": "fork",
+    "level": "easy",
+    "rating": 1107,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/003r5",
+    "tags": [
+      "crushing",
+      "fork",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-004nd",
+    "fen": "3q2k1/3r4/pp3p1Q/2b1n3/P3N3/2P5/1P4PP/R6K w - - 1 25",
+    "solution": [
+      "e4f6",
+      "d8f6",
+      "h6f6"
+    ],
+    "category": "fork",
+    "level": "easy",
+    "rating": 898,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/004nd",
+    "tags": [
+      "crushing",
+      "fork",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-0050w",
+    "fen": "5rk1/1p2p2p/p2p4/2pPb2R/2P1P3/1P1BKPrR/8/8 w - - 5 31",
+    "solution": [
+      "h3g3",
+      "e5g3",
+      "h5g5",
+      "g8f7",
+      "g5g3"
+    ],
+    "category": "fork",
+    "level": "easy",
+    "rating": 1131,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/0050w",
+    "tags": [
+      "crushing",
+      "endgame",
+      "fork",
+      "long"
+    ]
+  },
+  {
+    "id": "lichess-005HG",
+    "fen": "r2q1rk1/p1p2pp1/3bbn1p/4N3/8/1P4P1/PBQPPP1P/RN2K2R b KQ - 2 12",
+    "solution": [
+      "d6e5",
+      "b2e5",
+      "d8d5",
+      "f2f3",
+      "d5e5"
+    ],
+    "category": "fork",
+    "level": "intermediate",
+    "rating": 1788,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/005HG",
+    "tags": [
+      "advantage",
+      "clearance",
+      "fork",
+      "long",
+      "opening"
+    ]
+  },
+  {
+    "id": "lichess-006om",
+    "fen": "1r3k2/5p1p/2p1pp2/P2n4/r3N3/P4PK1/2R2P1P/2R5 w - - 10 30",
+    "solution": [
+      "e4c5",
+      "a4a5",
+      "c5d7",
+      "f8g7",
+      "d7b8"
+    ],
+    "category": "fork",
+    "level": "advanced",
+    "rating": 1937,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/006om",
+    "tags": [
+      "crushing",
+      "endgame",
+      "fork",
+      "long",
+      "master"
+    ]
+  },
+  {
+    "id": "lichess-006wz",
+    "fen": "2r5/4ppkp/6p1/1p6/1P6/P3B3/1br2PPP/1R1R2K1 w - - 3 23",
+    "solution": [
+      "b1b2",
+      "c2b2",
+      "e3d4",
+      "f7f6",
+      "d4b2"
+    ],
+    "category": "fork",
+    "level": "intermediate",
+    "rating": 1426,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/006wz",
+    "tags": [
+      "attraction",
+      "crushing",
+      "endgame",
+      "fork",
+      "long",
+      "sacrifice"
+    ]
+  },
+  {
+    "id": "lichess-000qP",
+    "fen": "8/7R/8/5p2/4bk1P/8/2r5/5KR1 b - - 8 51",
+    "solution": [
+      "f4f3",
+      "f1e1",
+      "c2c1",
+      "e1d2",
+      "c1g1"
+    ],
+    "category": "tactics",
+    "level": "advanced",
+    "rating": 2104,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/000qP",
+    "tags": [
+      "crushing",
+      "endgame",
+      "exposedKing",
+      "long",
+      "skewer"
+    ]
+  },
+  {
+    "id": "lichess-001XA",
+    "fen": "2r2rk1/pbq1bppp/8/8/2p1N3/P1Bn2P1/2Q2PBP/1R3RK1 w - - 4 24",
+    "solution": [
+      "b1b7",
+      "c7b7",
+      "e4f6",
+      "e7f6",
+      "g2b7"
+    ],
+    "category": "tactics",
+    "level": "intermediate",
+    "rating": 1687,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/001XA",
+    "tags": [
+      "crushing",
+      "discoveredAttack",
+      "long",
+      "master",
+      "middlegame",
+      "sacrifice"
+    ]
+  },
+  {
+    "id": "lichess-001h8",
+    "fen": "2r3k1/2r4p/4p1p1/1p1q1pP1/p2P1P1Q/P6R/4bB2/2R3K1 w - - 6 35",
+    "solution": [
+      "h4h7",
+      "c7h7",
+      "c1c8",
+      "g8g7",
+      "c8c7"
+    ],
+    "category": "tactics",
+    "level": "intermediate",
+    "rating": 1780,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/001h8",
+    "tags": [
+      "crushing",
+      "deflection",
+      "kingsideAttack",
+      "long",
+      "middlegame",
+      "sacrifice"
+    ]
+  },
+  {
+    "id": "lichess-001kG",
+    "fen": "rnbq3r/1p3kpp/p4n2/2b5/2pNP3/2N5/PPP3PP/R1BQ1RK1 w - - 2 12",
+    "solution": [
+      "d1h5",
+      "f7g8",
+      "h5c5"
+    ],
+    "category": "tactics",
+    "level": "advanced",
+    "rating": 1963,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/001kG",
+    "tags": [
+      "advantage",
+      "opening",
+      "pin",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-001m3",
+    "fen": "7r/6k1/2b1Rp2/8/P1N3p1/5nP1/5P2/Q4K2 b - - 0 38",
+    "solution": [
+      "h8h1",
+      "f1e2",
+      "h1a1"
+    ],
+    "category": "tactics",
+    "level": "intermediate",
+    "rating": 1455,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/001m3",
+    "tags": [
+      "advantage",
+      "endgame",
+      "short",
+      "skewer"
+    ]
+  },
+  {
+    "id": "lichess-001xl",
+    "fen": "8/4R3/p4kpp/3B4/5q2/8/5P1P/6K1 w - - 6 41",
+    "solution": [
+      "e7f7",
+      "f6e5",
+      "f7f4"
+    ],
+    "category": "tactics",
+    "level": "easy",
+    "rating": 1131,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/001xl",
+    "tags": [
+      "advantage",
+      "endgame",
+      "master",
+      "masterVsMaster",
+      "short",
+      "skewer",
+      "superGM"
+    ]
+  },
+  {
+    "id": "lichess-002KJ",
+    "fen": "r3k2r/ppq1bppp/4pn2/2Ppn3/1P4bP/2P2N2/P3BPP1/RNBQ1RK1 w kq - 3 11",
+    "solution": [
+      "f3e5",
+      "c7e5",
+      "e2g4"
+    ],
+    "category": "tactics",
+    "level": "intermediate",
+    "rating": 1615,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/002KJ",
+    "tags": [
+      "crushing",
+      "discoveredAttack",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-0039T",
+    "fen": "1r5r/p3kp2/4p2p/4P3/R4Pp1/6P1/P1P4P/4K2R b K - 2 25",
+    "solution": [
+      "b8b1",
+      "e1f2",
+      "b1h1",
+      "a4a7",
+      "e7f8"
+    ],
+    "category": "tactics",
+    "level": "easy",
+    "rating": 1127,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/0039T",
+    "tags": [
+      "crushing",
+      "defensiveMove",
+      "endgame",
+      "long",
+      "rookEndgame",
+      "skewer"
+    ]
+  },
+  {
+    "id": "lichess-003Ec",
+    "fen": "3r4/p4R2/1pb2Pp1/n1p1Qqkp/8/P7/1P4PP/6RK w - - 3 33",
+    "solution": [
+      "e5e3",
+      "f5f4",
+      "h2h4",
+      "g5f5",
+      "e3h3"
+    ],
+    "category": "tactics",
+    "level": "advanced",
+    "rating": 2245,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/003Ec",
+    "tags": [
+      "crushing",
+      "long",
+      "middlegame",
+      "pin"
+    ]
+  },
+  {
+    "id": "lichess-003S3",
+    "fen": "1r3k1r/pNqnppb1/6pn/2p3Np/7P/2P2Q2/PP3PP1/R1B1K2R w KQ - 3 16",
+    "solution": [
+      "g5e6",
+      "f8g8",
+      "e6c7"
+    ],
+    "category": "tactics",
+    "level": "intermediate",
+    "rating": 1494,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/003S3",
+    "tags": [
+      "advantage",
+      "middlegame",
+      "pin",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-003eP",
+    "fen": "6k1/r1b1q3/2p3p1/2Pp4/1P2p1n1/2B1P3/NQ6/2K4R w - - 2 37",
+    "solution": [
+      "h1h8",
+      "g8f7",
+      "h8h7",
+      "f7e8",
+      "h7e7"
+    ],
+    "category": "tactics",
+    "level": "easy",
+    "rating": 1156,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/003eP",
+    "tags": [
+      "crushing",
+      "exposedKing",
+      "long",
+      "middlegame",
+      "skewer"
+    ]
+  },
+  {
+    "id": "lichess-003wQ",
+    "fen": "2r2rk1/6pp/3Q1q2/8/3N1B2/6P1/PP1K3P/5R2 b - - 0 24",
+    "solution": [
+      "f6d6",
+      "f4d6",
+      "f8f1"
+    ],
+    "category": "tactics",
+    "level": "advanced",
+    "rating": 1814,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/003wQ",
+    "tags": [
+      "advantage",
+      "discoveredAttack",
+      "middlegame",
+      "pin",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-004LZ",
+    "fen": "8/7R/5p2/p7/7P/2p5/3k2N1/1K6 b - - 0 48",
+    "solution": [
+      "c3c2",
+      "b1a2",
+      "c2c1q",
+      "h7d7",
+      "d2e2"
+    ],
+    "category": "tactics",
+    "level": "easy",
+    "rating": 1197,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/004LZ",
+    "tags": [
+      "advancedPawn",
+      "crushing",
+      "defensiveMove",
+      "deflection",
+      "endgame",
+      "long",
+      "promotion"
+    ]
+  },
+  {
+    "id": "lichess-004Op",
+    "fen": "2kr2r1/1bp4n/1pq1p2p/p1P5/1P3B2/P6P/5RP1/RB3QK1 b - - 4 26",
+    "solution": [
+      "d8d1",
+      "f1d1",
+      "g8g2",
+      "g1f1",
+      "g2g1",
+      "f1e2",
+      "g1d1"
+    ],
+    "category": "tactics",
+    "level": "advanced",
+    "rating": 2261,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/004Op",
+    "tags": [
+      "crushing",
+      "deflection",
+      "kingsideAttack",
+      "middlegame",
+      "pin",
+      "sacrifice",
+      "skewer",
+      "veryLong"
+    ]
+  },
+  {
+    "id": "lichess-004mT",
+    "fen": "5Q2/8/1bk1p1p1/5p2/3p4/5qPK/7P/8 w - - 2 52",
+    "solution": [
+      "f8a8",
+      "c6d6",
+      "a8f3"
+    ],
+    "category": "tactics",
+    "level": "intermediate",
+    "rating": 1331,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/004mT",
+    "tags": [
+      "advantage",
+      "endgame",
+      "short",
+      "skewer"
+    ]
+  },
+  {
+    "id": "lichess-0068B",
+    "fen": "r1q3k1/3nbppp/pp2p3/4B3/8/2N2Q2/PPPR1PPP/6K1 w - - 1 19",
+    "solution": [
+      "d2d7",
+      "c8d7",
+      "f3a8"
+    ],
+    "category": "tactics",
+    "level": "intermediate",
+    "rating": 1419,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/0068B",
+    "tags": [
+      "crushing",
+      "deflection",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-0000D",
+    "fen": "5rk1/1p3ppp/pq1Q1b2/8/8/1P3N2/P4PPP/3R2K1 b - - 3 27",
+    "solution": [
+      "f8d8",
+      "d6d8",
+      "f6d8"
+    ],
+    "category": "endgame",
+    "level": "intermediate",
+    "rating": 1559,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/0000D",
+    "tags": [
+      "advantage",
+      "endgame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-0008Q",
+    "fen": "8/5R2/1p2P3/p4r2/P6p/1P3Pk1/4K3/8 b - - 2 64",
+    "solution": [
+      "f5e5",
+      "e2f1",
+      "e5e6"
+    ],
+    "category": "endgame",
+    "level": "intermediate",
+    "rating": 1383,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/0008Q",
+    "tags": [
+      "advantage",
+      "endgame",
+      "rookEndgame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-000Sa",
+    "fen": "2Q2bk1/5p1p/p5p1/2p3P1/4B3/7P/qPr2P2/2K4R w - - 0 33",
+    "solution": [
+      "e4c2",
+      "a2a1",
+      "c2b1"
+    ],
+    "category": "endgame",
+    "level": "intermediate",
+    "rating": 1622,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/000Sa",
+    "tags": [
+      "advantage",
+      "endgame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-000o3",
+    "fen": "8/2p5/3k2p1/1p1P1p2/1P3P2/3K2Pp/7P/8 w - - 2 44",
+    "solution": [
+      "d3d4",
+      "g6g5",
+      "f4g5"
+    ],
+    "category": "endgame",
+    "level": "easy",
+    "rating": 944,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/000o3",
+    "tags": [
+      "crushing",
+      "endgame",
+      "pawnEndgame",
+      "short",
+      "zugzwang"
+    ]
+  },
+  {
+    "id": "lichess-0018P",
+    "fen": "5R2/1p6/p1p1k3/2P1r3/2K3p1/2P1p1P1/1P5P/8 w - - 2 45",
+    "solution": [
+      "f8e8",
+      "e6f5",
+      "e8e5",
+      "f5e5",
+      "c4d3",
+      "e5d5",
+      "d3e3",
+      "a6a5",
+      "e3f4",
+      "d5c4",
+      "f4g4"
+    ],
+    "category": "endgame",
+    "level": "advanced",
+    "rating": 1910,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/0018P",
+    "tags": [
+      "crushing",
+      "endgame",
+      "exposedKing",
+      "rookEndgame",
+      "veryLong"
+    ]
+  },
+  {
+    "id": "lichess-001aK",
+    "fen": "6k1/5p2/4p3/P1B5/2P4P/4Pnp1/Rb2r3/5K2 w - - 0 34",
+    "solution": [
+      "f1e2",
+      "g3g2",
+      "e3e4",
+      "f3d4",
+      "e2f2"
+    ],
+    "category": "endgame",
+    "level": "advanced",
+    "rating": 2082,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/001aK",
+    "tags": [
+      "crushing",
+      "endgame",
+      "hangingPiece",
+      "long",
+      "quietMove"
+    ]
+  },
+  {
+    "id": "lichess-002Ds",
+    "fen": "8/2p5/pp1p4/P2Pk2p/1PP1p2P/2n1K2P/3N4/8 w - - 0 46",
+    "solution": [
+      "b4b5",
+      "c3d1",
+      "e3e2",
+      "a6b5",
+      "a5a6"
+    ],
+    "category": "endgame",
+    "level": "advanced",
+    "rating": 1992,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/002Ds",
+    "tags": [
+      "crushing",
+      "endgame",
+      "knightEndgame",
+      "long"
+    ]
+  },
+  {
+    "id": "lichess-002LF",
+    "fen": "7r/p4pk1/1pp3p1/8/6q1/4Q3/PP1R1P1r/5KN1 w - - 0 39",
+    "solution": [
+      "e3e5",
+      "f7f6",
+      "e5c7",
+      "g7h6",
+      "c7h2"
+    ],
+    "category": "endgame",
+    "level": "advanced",
+    "rating": 2128,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/002LF",
+    "tags": [
+      "advantage",
+      "endgame",
+      "interference",
+      "long"
+    ]
+  },
+  {
+    "id": "lichess-002Uy",
+    "fen": "8/8/1p6/k7/P7/1KR4r/8/8 b - - 27 64",
+    "solution": [
+      "h3c3",
+      "b3c3",
+      "a5a4",
+      "c3b2",
+      "a4b4"
+    ],
+    "category": "endgame",
+    "level": "intermediate",
+    "rating": 1682,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/002Uy",
+    "tags": [
+      "crushing",
+      "defensiveMove",
+      "endgame",
+      "long",
+      "rookEndgame"
+    ]
+  },
+  {
+    "id": "lichess-002bK",
+    "fen": "8/7p/4k3/pb1p1pPB/1n1P3P/N1p1P3/4K3/8 w - - 2 43",
+    "solution": [
+      "a3b5",
+      "c3c2",
+      "e2d2"
+    ],
+    "category": "endgame",
+    "level": "easy",
+    "rating": 1113,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/002bK",
+    "tags": [
+      "advantage",
+      "endgame",
+      "hangingPiece",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-00347",
+    "fen": "8/2p5/8/2pPk2p/8/3K3P/6P1/8 b - - 2 42",
+    "solution": [
+      "h5h4",
+      "d3c4",
+      "e5d6"
+    ],
+    "category": "endgame",
+    "level": "advanced",
+    "rating": 2264,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/00347",
+    "tags": [
+      "crushing",
+      "endgame",
+      "pawnEndgame",
+      "quietMove",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-003UW",
+    "fen": "8/6pk/7p/2pq4/3p4/5PP1/P3QK1P/8 w - - 2 41",
+    "solution": [
+      "e2e4",
+      "d5e4",
+      "f3e4"
+    ],
+    "category": "endgame",
+    "level": "intermediate",
+    "rating": 1473,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/003UW",
+    "tags": [
+      "advantage",
+      "endgame",
+      "queenEndgame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-003aS",
+    "fen": "8/8/5k1p/6pP/1R4P1/1p2KP2/8/1r6 b - - 0 43",
+    "solution": [
+      "b3b2",
+      "b4b6",
+      "f6e5",
+      "f3f4",
+      "g5f4"
+    ],
+    "category": "endgame",
+    "level": "advanced",
+    "rating": 1890,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/003aS",
+    "tags": [
+      "advancedPawn",
+      "crushing",
+      "defensiveMove",
+      "endgame",
+      "long",
+      "rookEndgame"
+    ]
+  },
+  {
+    "id": "lichess-0040n",
+    "fen": "r7/p2k1pp1/p1p1pn2/3p4/3P4/P3PQp1/1PP2P1R/2K5 b - - 0 20",
+    "solution": [
+      "g3h2",
+      "f3h3",
+      "f6g4"
+    ],
+    "category": "endgame",
+    "level": "intermediate",
+    "rating": 1325,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/0040n",
+    "tags": [
+      "advancedPawn",
+      "advantage",
+      "endgame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-0048h",
+    "fen": "4r3/p5k1/2R4p/2Pp4/1P1pr1P1/P6P/8/3R3K b - - 0 35",
+    "solution": [
+      "e4e1",
+      "d1e1",
+      "e8e1",
+      "h1g2",
+      "d4d3"
+    ],
+    "category": "endgame",
+    "level": "easy",
+    "rating": 1134,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/0048h",
+    "tags": [
+      "crushing",
+      "endgame",
+      "exposedKing",
+      "long",
+      "rookEndgame"
+    ]
+  },
+  {
+    "id": "lichess-004Ax",
+    "fen": "8/5k2/4R2p/p7/5rPK/8/7P/8 w - - 3 43",
+    "solution": [
+      "e6h6",
+      "f4f6",
+      "h6h7",
+      "f7g6",
+      "h7a7"
+    ],
+    "category": "endgame",
+    "level": "advanced",
+    "rating": 2064,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/004Ax",
+    "tags": [
+      "crushing",
+      "endgame",
+      "exposedKing",
+      "long",
+      "rookEndgame"
+    ]
+  },
+  {
+    "id": "lichess-00008",
+    "fen": "r6k/pp2r2p/4Rp1Q/3p4/8/1N1P2b1/PqP3PP/7K w - - 0 25",
+    "solution": [
+      "e6e7",
+      "b2b1",
+      "b3c1",
+      "b1c1",
+      "h6c1"
+    ],
+    "category": "calculation",
+    "level": "advanced",
+    "rating": 1939,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/00008",
+    "tags": [
+      "crushing",
+      "hangingPiece",
+      "long",
+      "middlegame"
+    ]
+  },
+  {
+    "id": "lichess-000h0",
+    "fen": "5rk1/p5p1/3bRr1p/1Pp4q/3p4/1P1Q1N2/P4PPP/4R1K1 b - - 0 22",
+    "solution": [
+      "f6f3",
+      "g2f3",
+      "h5h2",
+      "g1f1",
+      "h2h3",
+      "f1e2",
+      "h3e6"
+    ],
+    "category": "calculation",
+    "level": "advanced",
+    "rating": 2067,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/000h0",
+    "tags": [
+      "advantage",
+      "interference",
+      "kingsideAttack",
+      "middlegame",
+      "veryLong"
+    ]
+  },
+  {
+    "id": "lichess-00143",
+    "fen": "r4rk1/5ppp/1np2q2/p1b5/2p1B3/P7/1P3PPP/R1BQ1RK1 w - - 2 18",
+    "solution": [
+      "d1h5",
+      "h7h6",
+      "h5c5"
+    ],
+    "category": "calculation",
+    "level": "intermediate",
+    "rating": 1798,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/00143",
+    "tags": [
+      "advantage",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-001uD",
+    "fen": "6k1/1p4p1/1p3p1p/2r1p3/2n5/r3PN2/2RnNPPP/2R3K1 w - - 0 33",
+    "solution": [
+      "f3d2",
+      "c4d2",
+      "c2d2",
+      "c5c1",
+      "e2c1"
+    ],
+    "category": "calculation",
+    "level": "advanced",
+    "rating": 1877,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/001uD",
+    "tags": [
+      "advantage",
+      "long",
+      "middlegame"
+    ]
+  },
+  {
+    "id": "lichess-001xO",
+    "fen": "k1r1b3/p1r1nppp/Bp1qpn2/2Np4/1P1P4/PQR1PN2/5PPP/2R3K1 b - - 1 19",
+    "solution": [
+      "b6c5",
+      "a6c8",
+      "c5c4"
+    ],
+    "category": "calculation",
+    "level": "advanced",
+    "rating": 1847,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/001xO",
+    "tags": [
+      "crushing",
+      "master",
+      "masterVsMaster",
+      "middlegame",
+      "sacrifice",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-002mG",
+    "fen": "5r1k/B1p3pp/2Qb1p2/3Pq3/P6P/8/2P2K2/3R1R2 b - - 2 36",
+    "solution": [
+      "f8e8",
+      "c6e8",
+      "e5e8"
+    ],
+    "category": "calculation",
+    "level": "advanced",
+    "rating": 2372,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/002mG",
+    "tags": [
+      "advantage",
+      "middlegame",
+      "quietMove",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-003md",
+    "fen": "r1b1k2N/ppp3pp/2n5/2bp4/7q/1B4n1/PPPP1P1P/RNBQR1K1 b q - 1 10",
+    "solution": [
+      "g3e4",
+      "e1e4",
+      "d5e4",
+      "d1h5",
+      "h4h5",
+      "b3f7",
+      "h5f7"
+    ],
+    "category": "calculation",
+    "level": "advanced",
+    "rating": 2171,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/003md",
+    "tags": [
+      "crushing",
+      "defensiveMove",
+      "middlegame",
+      "veryLong"
+    ]
+  },
+  {
+    "id": "lichess-004Ys",
+    "fen": "r4rk1/5pbp/p1n1p1p1/2p3NP/1p1q1B2/3P3Q/PPP3P1/R3R1K1 w - - 3 20",
+    "solution": [
+      "f4e3",
+      "d4f6",
+      "e1f1",
+      "f6e5",
+      "h5g6",
+      "e5e3",
+      "h3e3"
+    ],
+    "category": "calculation",
+    "level": "advanced",
+    "rating": 2384,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/004Ys",
+    "tags": [
+      "advantage",
+      "defensiveMove",
+      "middlegame",
+      "veryLong"
+    ]
+  },
+  {
+    "id": "lichess-0055Y",
+    "fen": "r1b2rk1/p3pp2/2B5/2Qpq3/3N2pp/4b3/2P2PPP/1R2K2R w K - 0 24",
+    "solution": [
+      "f2e3",
+      "e5e3",
+      "e1d1"
+    ],
+    "category": "calculation",
+    "level": "advanced",
+    "rating": 2055,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/0055Y",
+    "tags": [
+      "advantage",
+      "defensiveMove",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-005YM",
+    "fen": "5k2/p4pp1/1qn3r1/3pP2p/3N1P2/2PQ4/Pr3RPP/R5K1 b - - 6 24",
+    "solution": [
+      "b2f2",
+      "g1f2",
+      "c6d4",
+      "d3d4",
+      "b6b2"
+    ],
+    "category": "calculation",
+    "level": "advanced",
+    "rating": 2429,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/005YM",
+    "tags": [
+      "advantage",
+      "long",
+      "middlegame"
+    ]
+  },
+  {
+    "id": "lichess-0072T",
+    "fen": "3q1nk1/1bN2rpp/pp1P4/8/3Nn2b/8/PPP2PPP/R1BQ1RK1 b - - 2 16",
+    "solution": [
+      "h4f2",
+      "f1f2",
+      "e4f2"
+    ],
+    "category": "calculation",
+    "level": "advanced",
+    "rating": 2320,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/0072T",
+    "tags": [
+      "advantage",
+      "kingsideAttack",
+      "master",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-008nF",
+    "fen": "2rq1rk1/7p/1n4pb/1R2Q3/pPpP1P2/P1B5/3N2PP/2R3K1 b - - 0 31",
+    "solution": [
+      "f8e8",
+      "e5e8",
+      "d8e8"
+    ],
+    "category": "calculation",
+    "level": "advanced",
+    "rating": 2132,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/008nF",
+    "tags": [
+      "crushing",
+      "master",
+      "middlegame",
+      "short",
+      "trappedPiece"
+    ]
+  },
+  {
+    "id": "lichess-0091A",
+    "fen": "5rk1/q4ppp/p3Pb2/3nN3/P2P4/7Q/1r4PP/1R3RK1 w - - 0 25",
+    "solution": [
+      "e6f7",
+      "f8f7",
+      "h3c8",
+      "f7f8",
+      "c8e6"
+    ],
+    "category": "calculation",
+    "level": "advanced",
+    "rating": 2177,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/0091A",
+    "tags": [
+      "advancedPawn",
+      "advantage",
+      "kingsideAttack",
+      "long",
+      "middlegame"
+    ]
+  },
+  {
+    "id": "lichess-0092V",
+    "fen": "r2qk1nr/ppp3pp/2n5/1B1p4/1b1Pp3/5Q1P/PP1B1PP1/RN2K2R w KQkq - 0 12",
+    "solution": [
+      "b5c6",
+      "b7c6",
+      "f3h5",
+      "g7g6",
+      "h5e5"
+    ],
+    "category": "calculation",
+    "level": "advanced",
+    "rating": 2252,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/0092V",
+    "tags": [
+      "crushing",
+      "exposedKing",
+      "long",
+      "opening"
+    ]
+  },
+  {
+    "id": "lichess-009XT",
+    "fen": "rn1qk2r/pp3ppp/3bp1N1/3p4/3Pn3/3BB3/PPP2PPP/RN1Q1RK1 b kq - 0 10",
+    "solution": [
+      "d6h2",
+      "g1h1",
+      "h7g6"
+    ],
+    "category": "calculation",
+    "level": "advanced",
+    "rating": 2048,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/009XT",
+    "tags": [
+      "crushing",
+      "intermezzo",
+      "opening",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-00A1H",
+    "fen": "2r3k1/4brp1/2p3b1/2Pp1qNp/3B3P/2P5/PP3P1K/R2Q2R1 b - - 2 31",
+    "solution": [
+      "f5f4",
+      "h2g2",
+      "e7g5"
+    ],
+    "category": "calculation",
+    "level": "advanced",
+    "rating": 2041,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/00A1H",
+    "tags": [
+      "crushing",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-0009B",
+    "fen": "r2qr1k1/b1p2ppp/p5n1/P1p1p3/4P1n1/B2P2Pb/3NBP1P/RN1QR1K1 w - - 0 17",
+    "solution": [
+      "e2g4",
+      "h3g4",
+      "d1g4"
+    ],
+    "category": "mixed",
+    "level": "easy",
+    "rating": 1066,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/0009B",
+    "tags": [
+      "advantage",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-000lC",
+    "fen": "3r3r/pQNk1ppp/1qnR1n2/1B6/8/8/PPP3PP/5R1K b - - 0 19",
+    "solution": [
+      "d7d6",
+      "b7b6",
+      "a7b6"
+    ],
+    "category": "mixed",
+    "level": "intermediate",
+    "rating": 1349,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/000lC",
+    "tags": [
+      "advantage",
+      "hangingPiece",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-001Fg",
+    "fen": "5r1k/pQR3pp/5rp1/3B4/q2n4/7P/P4PP1/5RK1 b - - 4 30",
+    "solution": [
+      "d4e2",
+      "g1h2",
+      "a4f4",
+      "h2h1",
+      "e2g3",
+      "f2g3",
+      "f4f1"
+    ],
+    "category": "mixed",
+    "level": "intermediate",
+    "rating": 1286,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/001Fg",
+    "tags": [
+      "advantage",
+      "middlegame",
+      "veryLong"
+    ]
+  },
+  {
+    "id": "lichess-002O7",
+    "fen": "r3qrk1/2p2pp1/p2bpn1p/2ppN3/3P1Pb1/1PP1P1B1/P2N2PP/R2Q1RK1 w - - 1 15",
+    "solution": [
+      "e5g4",
+      "f6g4",
+      "d1g4"
+    ],
+    "category": "mixed",
+    "level": "easy",
+    "rating": 1008,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/002O7",
+    "tags": [
+      "crushing",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-002Ua",
+    "fen": "r4rk1/pp3ppp/3p1q2/P1P1p3/2B5/2B2n2/2P2P1P/R2Q1R1K b - - 1 16",
+    "solution": [
+      "f6f4",
+      "d1f3",
+      "f4f3"
+    ],
+    "category": "mixed",
+    "level": "intermediate",
+    "rating": 1646,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/002Ua",
+    "tags": [
+      "crushing",
+      "kingsideAttack",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-004BW",
+    "fen": "r1bk2r1/ppq2NQp/3bpn2/1Bpn4/5P2/1P6/PBPP2PP/RN2K2R b KQ - 0 13",
+    "solution": [
+      "d8e7",
+      "g7g8",
+      "f6g8"
+    ],
+    "category": "mixed",
+    "level": "intermediate",
+    "rating": 1617,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/004BW",
+    "tags": [
+      "advantage",
+      "master",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-004Ud",
+    "fen": "r1bqk2r/p3nppp/3p4/1pp5/4P3/4Q3/PPP2PPP/2KR1B1R w kq - 0 12",
+    "solution": [
+      "f1b5",
+      "c8d7",
+      "d1d6",
+      "d7b5",
+      "d6d8"
+    ],
+    "category": "mixed",
+    "level": "intermediate",
+    "rating": 1612,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/004Ud",
+    "tags": [
+      "advantage",
+      "interference",
+      "long",
+      "middlegame"
+    ]
+  },
+  {
+    "id": "lichess-0054a",
+    "fen": "r1b2rk1/ppq2p1p/6p1/4b2Q/4R3/3B4/PP3PPP/R1B3K1 w - - 0 16",
+    "solution": [
+      "h5e5",
+      "c7e5",
+      "e4e5"
+    ],
+    "category": "mixed",
+    "level": "intermediate",
+    "rating": 1408,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/0054a",
+    "tags": [
+      "advantage",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-006RM",
+    "fen": "1k1r3r/8/pp1n2p1/2q5/1Q6/3R2P1/PPP2P1P/3R2K1 w - - 5 30",
+    "solution": [
+      "b4c5",
+      "b6c5",
+      "d3d6",
+      "d8d6",
+      "d1d6"
+    ],
+    "category": "mixed",
+    "level": "intermediate",
+    "rating": 1445,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/006RM",
+    "tags": [
+      "crushing",
+      "long",
+      "middlegame"
+    ]
+  },
+  {
+    "id": "lichess-006cZ",
+    "fen": "3r1r1k/1p4p1/p1p3Qp/2q5/8/3n1N1P/PP1R2P1/5R1K w - - 8 29",
+    "solution": [
+      "d2d3",
+      "d8d3",
+      "g6d3"
+    ],
+    "category": "mixed",
+    "level": "intermediate",
+    "rating": 1374,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/006cZ",
+    "tags": [
+      "advantage",
+      "master",
+      "masterVsMaster",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-009FP",
+    "fen": "r1b1k1nr/ppp2pbp/3p1qp1/4p3/2BnP3/N2P2QP/PPP2PP1/R1B1K2R w KQkq - 0 10",
+    "solution": [
+      "c1g5",
+      "f6g5",
+      "g3g5"
+    ],
+    "category": "mixed",
+    "level": "intermediate",
+    "rating": 1321,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/009FP",
+    "tags": [
+      "advantage",
+      "opening",
+      "short",
+      "trappedPiece"
+    ]
+  },
+  {
+    "id": "lichess-009Wc",
+    "fen": "1r3rk1/1pqN1pbp/p1p1pnp1/2N5/3P4/1QP5/PP3PPP/3RR1K1 b - - 3 19",
+    "solution": [
+      "f6d7",
+      "c5d7",
+      "c7d7"
+    ],
+    "category": "mixed",
+    "level": "easy",
+    "rating": 1092,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/009Wc",
+    "tags": [
+      "crushing",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-009aD",
+    "fen": "r4k1r/pp3pp1/4p3/3pP1np/6Pq/1PP5/P3B1PP/RN1Q1RK1 b - - 0 14",
+    "solution": [
+      "h5g4",
+      "e2g4",
+      "h4h2"
+    ],
+    "category": "mixed",
+    "level": "intermediate",
+    "rating": 1426,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/009aD",
+    "tags": [
+      "advantage",
+      "kingsideAttack",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-00AhO",
+    "fen": "Q1b2rk1/2q2p1p/1p2pbp1/pP6/2P5/P2B1N2/5PPP/3R1RK1 b - - 0 20",
+    "solution": [
+      "c8b7",
+      "a8a7",
+      "f8a8",
+      "a7a8",
+      "b7a8"
+    ],
+    "category": "mixed",
+    "level": "intermediate",
+    "rating": 1233,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/00AhO",
+    "tags": [
+      "advantage",
+      "clearance",
+      "long",
+      "master",
+      "middlegame",
+      "trappedPiece"
+    ]
+  },
+  {
+    "id": "lichess-00Ahb",
+    "fen": "1k5r/pp1r1ppp/4p2n/1Nb2q2/2Pp4/6P1/PP3P1P/R1BQR1K1 w - - 3 15",
+    "solution": [
+      "c1f4",
+      "f5f4",
+      "g3f4"
+    ],
+    "category": "mixed",
+    "level": "easy",
+    "rating": 1123,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/00Ahb",
+    "tags": [
+      "crushing",
+      "middlegame",
+      "short"
+    ]
+  },
+  {
+    "id": "lichess-00Al5",
+    "fen": "2r3k1/p2B1pbp/1p2pnp1/n2p4/3P4/1Pr1P2P/P1QB1PP1/2R2RK1 b - - 0 19",
+    "solution": [
+      "c3c2",
+      "d7c8",
+      "c2d2"
+    ],
+    "category": "mixed",
+    "level": "intermediate",
+    "rating": 1640,
+    "source": "lichess",
+    "sourceUrl": "https://lichess.org/training/00Al5",
+    "tags": [
+      "advantage",
+      "middlegame",
+      "short"
+    ]
+  }
+]
