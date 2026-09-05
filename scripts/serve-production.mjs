@@ -2,13 +2,18 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(here, '..');
 const root = path.resolve(process.env.CHESSY_DIST || path.join(projectRoot, 'dist'));
 const host = process.env.HOST || '0.0.0.0';
 const port = Number(process.env.PORT || '14176');
-const gitSha = process.env.CHESSY_RELEASE_SHA || 'unknown';
+const gitSha = process.env.CHESSY_RELEASE_SHA || (() => {
+  try { return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: projectRoot, encoding: 'utf8' }).trim(); }
+  catch { return 'unknown'; }
+})();
+const deploymentClass = process.env.CHESSY_DEPLOYMENT_CLASS || 'public-web';
 const blocked = new Set(['/internal', '/metrics', '/meta', '/ready', '/debug', '/admin']);
 const mime = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
@@ -42,7 +47,7 @@ const server = http.createServer((req, res) => {
   catch { return respond(res, 400, 'Bad request\n'); }
 
   if (pathname === '/health') {
-    return respond(res, 200, JSON.stringify({ status: 'ok', product: 'chessy', git_sha: gitSha }) + '\n', 'application/json; charset=utf-8', { 'Cache-Control': 'no-store' });
+    return respond(res, 200, JSON.stringify({ status: 'ok', product: 'chessy', release_sha: gitSha, deployment_class: deploymentClass }) + '\n', 'application/json; charset=utf-8', { 'Cache-Control': 'no-store' });
   }
   if (blocked.has(pathname)) return respond(res, 404, 'Not found\n', undefined, { 'Cache-Control': 'no-store' });
   if (req.method !== 'GET' && req.method !== 'HEAD') return respond(res, 405, 'Method not allowed\n', undefined, { Allow: 'GET, HEAD' });
@@ -53,7 +58,6 @@ const server = http.createServer((req, res) => {
   let stat;
   try { stat = fs.statSync(candidate); } catch { stat = null; }
   if (!stat?.isFile()) {
-    // Hash-based routes normally do not hit the server, but this keeps the SPA resilient.
     if (!path.extname(pathname)) { candidate = path.join(root, 'index.html'); stat = fs.statSync(candidate); }
     else return respond(res, 404, 'Not found\n');
   }
