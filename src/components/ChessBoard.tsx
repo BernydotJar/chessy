@@ -34,6 +34,7 @@ export const ChessBoard: React.FC = () => {
   const onDrop = useCallback((sourceSquare: Square, targetSquare: Square) => {
     if (setupMode || isAIThinking || isGameOver) return false;
     if (!chess.moves({ square: sourceSquare, verbose: true }).some(m => m.to === targetSquare)) return false;
+    // Check if the move requires promotion
     const piece = chess.get(sourceSquare);
     const isPromotion =
       piece?.type === 'p' &&
@@ -41,8 +42,9 @@ export const ChessBoard: React.FC = () => {
         (piece.color === 'b' && targetSquare[1] === '1'));
 
     if (isPromotion) {
+      // Open promotion dialog
       setPendingPromotion({ from: sourceSquare, to: targetSquare });
-      return false;
+      return false; // Don't make the move yet
     }
 
     return makeMove(sourceSquare, targetSquare);
@@ -63,12 +65,15 @@ export const ChessBoard: React.FC = () => {
     }
 
     if (selectedSquare === square) {
+      // Deselect
       setSelectedSquare(null);
       setHighlightedSquares([]);
       return;
     }
 
     const piece = chess.get(square);
+    
+    // If a piece is selected and we click on another square
     if (selectedSquare) {
       onDrop(selectedSquare as Square, square);
       setSelectedSquare(null);
@@ -76,6 +81,7 @@ export const ChessBoard: React.FC = () => {
       return;
     }
 
+    // Select piece and show legal moves
     if (piece && piece.color === chess.turn()) {
       setSelectedSquare(square);
       const legalMoves = getLegalMovesForSquare(square);
@@ -114,6 +120,7 @@ export const ChessBoard: React.FC = () => {
     setHighlightedSquares([]);
   }, [setupMode]);
 
+  // Custom square styles for board colors
   const baseSquareStyles = useMemo(() => Object.fromEntries(
     Array.from({ length: 64 }, (_, i) => {
       const row = Math.floor(i / 8);
@@ -130,6 +137,7 @@ export const ChessBoard: React.FC = () => {
     })
   ), [theme.darkSquare, theme.lightSquare]);
 
+  // Add highlighted squares for legal moves
   const customSquareStyles = useMemo(() => setupMode
     ? baseSquareStyles
     : {
@@ -144,6 +152,7 @@ export const ChessBoard: React.FC = () => {
             },
           ])
         ),
+        // Highlight selected square
         ...(selectedSquare ? {
           [selectedSquare]: {
             ...baseSquareStyles[selectedSquare],
@@ -192,6 +201,7 @@ export const ChessBoard: React.FC = () => {
       )}
 
       <div className={`relative board-shell ${setupMode ? 'board-shell--setup' : ''}`} ref={boardRef} style={{ height: boardWidth }}>
+        {/* AI Thinking Overlay */}
         {isAIThinking && (
           <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 backdrop-blur-sm rounded-xl">
             <div className="glass-card px-6 py-4 rounded-lg">
@@ -214,6 +224,7 @@ export const ChessBoard: React.FC = () => {
           ))}
         </div>
 
+        {/* Glass overlay effect */}
         <div
           className="absolute inset-0 rounded-xl pointer-events-none"
           style={{
@@ -225,6 +236,7 @@ export const ChessBoard: React.FC = () => {
           }}
         />
         
+        {/* Chess board */}
         <div className={`relative z-10 h-full w-full ${setupMode ? 'board-setup-disable' : ''}`}>
           <Chessboard options={boardOptions} />
         </div>
@@ -255,6 +267,7 @@ export const ChessBoard: React.FC = () => {
 
       </div>
 
+      {/* Promotion Dialog */}
       <PromotionDialog
         isOpen={!!pendingPromotion}
         color={chess.turn()}
