@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Chessboard } from 'react-chessboard';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Chessboard, type ChessboardOptions } from 'react-chessboard';
 import { useGameStore } from '../store/gameStore';
 import { Square } from 'chess.js';
 import { PromotionDialog } from './PromotionDialog';
 import { useTranslation } from 'react-i18next';
+import { createAccessibleChessPieces } from './accessibleChessPieces';
 
 export const ChessBoard: React.FC = () => {
   const { 
@@ -28,8 +29,9 @@ export const ChessBoard: React.FC = () => {
   const [boardWidth, setBoardWidth] = useState(560);
   const boardRef = useRef<HTMLDivElement | null>(null);
   const { t } = useTranslation();
+  const accessiblePieces = useMemo(() => createAccessibleChessPieces(t), [t]);
 
-  const onDrop = (sourceSquare: Square, targetSquare: Square) => {
+  const onDrop = useCallback((sourceSquare: Square, targetSquare: Square) => {
     if (setupMode || isAIThinking || isGameOver) return false;
     if (!chess.moves({ square: sourceSquare, verbose: true }).some(m => m.to === targetSquare)) return false;
     // Check if the move requires promotion
@@ -46,7 +48,7 @@ export const ChessBoard: React.FC = () => {
     }
 
     return makeMove(sourceSquare, targetSquare);
-  };
+  }, [chess, isAIThinking, isGameOver, makeMove, setPendingPromotion, setupMode]);
 
   const handlePromotionSelect = (piece: 'q' | 'r' | 'b' | 'n') => {
     if (pendingPromotion) {
@@ -55,7 +57,7 @@ export const ChessBoard: React.FC = () => {
     }
   };
 
-  const onSquareClick = (square: Square) => {
+  const onSquareClick = useCallback((square: Square) => {
     if (isAIThinking || isGameOver) return;
     if (setupMode) {
       setSetupSquare(square, setupSelectedPiece);
@@ -85,26 +87,24 @@ export const ChessBoard: React.FC = () => {
       const legalMoves = getLegalMovesForSquare(square);
       setHighlightedSquares(showLegalMoves ? legalMoves : []);
     }
-  };
+  }, [chess, getLegalMovesForSquare, isAIThinking, isGameOver, onDrop, selectedSquare, setSetupSquare, setupMode, setupSelectedPiece, showLegalMoves]);
 
-  const customBoardStyle = {
+  const customBoardStyle = useMemo(() => ({
     borderRadius: '12px',
     boxShadow: `
       0 8px 32px 0 rgba(0, 0, 0, 0.4),
       inset 0 1px 0 rgba(255, 255, 255, 0.1)
     `,
-  };
+  }), []);
 
   useEffect(() => {
-    const updateSize = () => {
-      if (!boardRef.current) return;
-      const maxSize = 560;
-      const width = Math.min(boardRef.current.clientWidth, maxSize);
-      setBoardWidth(width);
-    };
+    const node = boardRef.current;
+    if (!node) return;
+    const updateSize = () => setBoardWidth(Math.min(node.clientWidth, 560));
     updateSize();
-    window.addEventListener('resize', updateSize);
-    return () => window.removeEventListener('resize', updateSize);
+    const observer = new ResizeObserver(updateSize);
+    observer.observe(node);
+    return () => observer.disconnect();
   }, []);
 
   const files = useMemo(() => isAIGame && playerColor === 'black' ? ['h','g','f','e','d','c','b','a'] : ['a','b','c','d','e','f','g','h'], [isAIGame, playerColor]);
@@ -121,13 +121,13 @@ export const ChessBoard: React.FC = () => {
   }, [setupMode]);
 
   // Custom square styles for board colors
-  const baseSquareStyles = Object.fromEntries(
+  const baseSquareStyles = useMemo(() => Object.fromEntries(
     Array.from({ length: 64 }, (_, i) => {
       const row = Math.floor(i / 8);
       const col = i % 8;
       const square = `${String.fromCharCode(97 + col)}${8 - row}` as Square;
       const isLight = (row + col) % 2 === 0;
-      
+
       return [
         square,
         {
@@ -135,10 +135,10 @@ export const ChessBoard: React.FC = () => {
         },
       ];
     })
-  );
+  ), [theme.darkSquare, theme.lightSquare]);
 
   // Add highlighted squares for legal moves
-  const customSquareStyles = setupMode
+  const customSquareStyles = useMemo(() => setupMode
     ? baseSquareStyles
     : {
         ...baseSquareStyles,
@@ -159,7 +159,30 @@ export const ChessBoard: React.FC = () => {
             boxShadow: 'inset 0 0 0 3px rgba(100, 200, 255, 0.7)',
           },
         } : {}),
-      };
+      }, [baseSquareStyles, highlightedSquares, selectedSquare, setupMode]);
+
+  const boardOptions = useMemo<ChessboardOptions>(() => ({
+    id: 'play-board',
+    boardOrientation: isAIGame ? playerColor : 'white',
+    position: setupMode ? setupFen : fen,
+    pieces: accessiblePieces,
+    onPieceDrop: ({ sourceSquare, targetSquare }) =>
+      !!targetSquare && onDrop(sourceSquare as Square, targetSquare as Square),
+    onSquareClick: ({ square }) => onSquareClick(square as Square),
+    boardStyle: {
+      ...customBoardStyle,
+      width: '100%',
+      height: '100%',
+    },
+    squareStyles: customSquareStyles,
+    animationDurationInMs: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 180,
+    allowDragging: !isGameOver && !isAIThinking && !setupMode,
+    allowDragOffBoard: false,
+    allowAutoScroll: false,
+    dragActivationDistance: 2,
+    allowDrawingArrows: true,
+    showNotation: false,
+  }), [accessiblePieces, customBoardStyle, customSquareStyles, fen, isAIGame, isAIThinking, isGameOver, onDrop, onSquareClick, playerColor, setupFen, setupMode]);
 
   return (
     <>
@@ -207,20 +230,8 @@ export const ChessBoard: React.FC = () => {
         />
         
         {/* Chess board */}
-        <div className={`relative z-10 ${setupMode ? 'board-setup-disable' : ''}`}>
-          <Chessboard
-            boardOrientation={isAIGame ? playerColor : 'white'}
-            position={setupMode ? setupFen : fen}
-            onPieceDrop={onDrop}
-            onSquareClick={onSquareClick}
-            boardWidth={boardWidth}
-            customBoardStyle={customBoardStyle}
-            customSquareStyles={customSquareStyles}
-            animationDuration={window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 220}
-            arePiecesDraggable={!isGameOver && !isAIThinking && !setupMode}
-            areArrowsAllowed={true}
-            showBoardNotation={false}
-          />
+        <div className={`relative z-10 h-full w-full ${setupMode ? 'board-setup-disable' : ''}`}>
+          <Chessboard options={boardOptions} />
         </div>
 
         {setupMode && (
