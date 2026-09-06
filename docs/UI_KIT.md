@@ -69,13 +69,15 @@ A theme changes both application tokens and the board palette. Selection persist
 
 ## Icon system
 
-Implementation: `src/design/icons.tsx`.
+Implementation: `src/design/icons.tsx`, `src/design/ChessyMark.tsx`, and the deterministic QA surface `src/design/IconGallery.tsx`.
 
-- 24x24 coordinate system
-- 1.7px rounded stroke
+- 24x24 coordinate system with a shared optical bounding box
+- rounded stroke with size-aware optical compensation (18–24px)
 - outline default state
 - optional filled state for selected navigation
 - all functional icons inherit `currentColor`; they are never exported as raster images
+- primary navigation concepts use chess/task-native silhouettes: Play uses a knight, Challenges combines board + tactical target, Academy combines learning + chess, Analysis uses board + evaluation line, and Review uses a return/check loop
+- the Chessy brand mark is a dedicated C-orbit + knight geometry; it must not be replaced by a generic crown/trophy
 - primary branded concepts: Home, Play, Challenges, Academy, Progress, Library, Games, Analysis, Review, Theme, Settings, Language, Profile, Streak, XP, Achievement, Hint, Share, Save, Import, Export, Sound, Engine, Timer
 - utility icons from Lucide remain acceptable for low-brand actions such as Undo, Back/Forward, Lock and Filter.
 

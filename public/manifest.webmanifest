@@ -1,0 +1,75 @@
+{
+  "id": "/",
+  "name": "Chessy — Learn, Practice, Play",
+  "short_name": "Chessy",
+  "description": "Calm, local-first chess learning with verified challenges, original lessons, review and Stockfish practice.",
+  "lang": "es",
+  "dir": "ltr",
+  "start_url": "/#/home",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "any",
+  "background_color": "#0b1411",
+  "theme_color": "#0d1813",
+  "categories": [
+    "education",
+    "games"
+  ],
+  "icons": [
+    {
+      "src": "/chess-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/chess-icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Jugar",
+      "short_name": "Jugar",
+      "url": "/#/play",
+      "icons": [
+        {
+          "src": "/chess-icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Retos",
+      "short_name": "Retos",
+      "url": "/#/training",
+      "icons": [
+        {
+          "src": "/chess-icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Academia",
+      "short_name": "Academia",
+      "url": "/#/academy",
+      "icons": [
+        {
+          "src": "/chess-icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ]
+}

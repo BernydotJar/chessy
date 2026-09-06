@@ -4,7 +4,7 @@ import { RotateCcw } from 'lucide-react';
 import { PUZZLES, CATEGORIES, dailyPuzzle } from '../../learning/puzzles';
 import { Category, Level, Puzzle, locale } from '../../learning/types';
 import { attempt, startSession, solutionSan } from '../../learning/session';
-import { localDay } from '../../learning/progress';
+import { localDay, reviewQueueIds } from '../../learning/progress';
 import { useLearningStore } from '../../learning/store';
 import { MoveEntry, PositionBoard, SectionHeading } from './Shared';
 import { ChessyIcon } from '../../design/icons';
@@ -19,7 +19,7 @@ function PuzzlePlayer({puzzle,onNext,hasNext}:{puzzle:Puzzle;onNext:()=>void;has
  const white=puzzle.fen.split(' ')[1]==='w';
  const onMove=(move:string)=>{
   const next=attempt(puzzle,session,move);
-  if(next.mistakes>session.mistakes)mistake();
+  if(next.mistakes>session.mistakes)mistake(puzzle.id);
   if(next.solved&&!session.solved&&!assisted)complete('puzzle',puzzle.id);
   setSession(next);
   return next.ply>session.ply;
@@ -55,10 +55,11 @@ function PuzzlePlayer({puzzle,onNext,hasNext}:{puzzle:Puzzle;onNext:()=>void;has
 }
 export function ChallengeView() {
  const {t,i18n}=useTranslation(),lang=locale(i18n.resolvedLanguage);
- const {mode,category,configure}=useLearningStore();
- const [level,setLevel]=useState<Level|'all'>('all');const [index,setIndex]=useState(0);const [finished,setFinished]=useState(false);const [sessionId,setSessionId]=useState(0);
+ const {mode,category,configure,progress}=useLearningStore();
+ const [level,setLevel]=useState<Level|'all'>('all');const [index,setIndex]=useState(0);const [finished,setFinished]=useState(false);const [sessionId,setSessionId]=useState(0);const [reviewIds,setReviewIds]=useState<string[]>([]);
  const pool=useMemo(()=>{
   if(mode==='daily')return [dailyPuzzle(localDay())];
+  if(mode==='review')return reviewIds.map(id=>PUZZLES.find(p=>p.id===id)).filter((p):p is Puzzle=>Boolean(p));
   const selected=PUZZLES.filter(p=>(category==='all'||p.category===category)&&(level==='all'||p.level===level));
   if(mode==='sprint'){
    const mixed=selected.filter(p=>p.source==='lichess');const source=mixed.length>=5?mixed:selected;
@@ -66,18 +67,19 @@ export function ChallengeView() {
    return [...source.slice(offset),...source.slice(0,offset)].slice(0,5);
   }
   return selected;
- },[mode,category,level,sessionId]);
+ },[mode,category,level,sessionId,reviewIds]);
  const current=pool[Math.min(index,Math.max(0,pool.length-1))];
  const reset=()=>{setIndex(0);setFinished(false);};
+ const startReview=()=>{setReviewIds(reviewQueueIds(progress));configure('review','all');setLevel('all');reset();setSessionId(s=>s+1);};
  return <div className="view-enter">
   <SectionHeading eyebrow={t('studio.training')} title={t('studio.challengeTitle')} subtitle={t('studio.challengeSubtitle')}/>
   <div className="challenge-toolbar">
-   <div className="segmented" aria-label={t('studio.training')}>{(['practice','daily','sprint'] as const).map(m=><button key={m} aria-pressed={mode===m} className={mode===m?'active':''} onClick={()=>{configure(m,category);reset();}}>{t(`studio.${m==='daily'?'dailyMode':m}`)}</button>)}</div>
-   {mode!=='daily'&&<div className="filters"><label>{t('studio.themeLabel')}<select value={category} onChange={e=>{configure(mode,e.target.value as Category|'all');reset();}}><option value="all">{t('studio.all')}</option>{CATEGORIES.map(c=><option key={c} value={c}>{t(`studio.category.${c}`)}</option>)}</select></label><label>{t('studio.difficulty')}<select value={level} onChange={e=>{setLevel(e.target.value as Level|'all');reset();}}><option value="all">{t('studio.all')}</option>{(['beginner','easy','intermediate','advanced'] as const).map(l=><option key={l} value={l}>{t(`studio.level.${l}`)}</option>)}</select></label></div>}
+   <div className="segmented" aria-label={t('studio.training')}>{(['practice','daily','sprint','review'] as const).map(m=><button key={m} aria-pressed={mode===m} className={mode===m?'active':''} onClick={()=>{if(m==='review')startReview();else{configure(m,category);reset();}}}>{t(m==='review'?'studio.reviewMistakes':`studio.${m==='daily'?'dailyMode':m}`)}</button>)}</div>
+   {mode!=='daily'&&mode!=='review'&&<div className="filters"><label>{t('studio.themeLabel')}<select value={category} onChange={e=>{configure(mode,e.target.value as Category|'all');reset();}}><option value="all">{t('studio.all')}</option>{CATEGORIES.map(c=><option key={c} value={c}>{t(`studio.category.${c}`)}</option>)}</select></label><label>{t('studio.difficulty')}<select value={level} onChange={e=>{setLevel(e.target.value as Level|'all');reset();}}><option value="all">{t('studio.all')}</option>{(['beginner','easy','intermediate','advanced'] as const).map(l=><option key={l} value={l}>{t(`studio.level.${l}`)}</option>)}</select></label></div>}
   </div>
-  {pool.length===0?<div className="panel empty-state"><ChessyIcon name="target" size={36}/><p>{t('studio.noPuzzles')}</p></div>:finished?<div className="panel session-complete"><ChessyIcon name="achievement" size={64}/><h2>{t('studio.sessionDone')}</h2><p>{t('studio.sessionSummary')}</p><button className="btn primary" onClick={()=>{setSessionId(s=>s+1);reset();}}>{t('studio.newSession')}</button></div>:<>
+  {pool.length===0?<div className="panel empty-state"><ChessyIcon name={mode==='review'?'review':'target'} size={36}/><p>{t(mode==='review'?'studio.reviewEmpty':'studio.noPuzzles')}</p></div>:finished?<div className="panel session-complete"><ChessyIcon name="achievement" size={64}/><h2>{t('studio.sessionDone')}</h2><p>{t('studio.sessionSummary')}</p><button className="btn primary" onClick={()=>{if(mode==='review')setReviewIds(reviewQueueIds(useLearningStore.getState().progress));setSessionId(s=>s+1);reset();}}>{t(mode==='review'?'studio.reviewAgain':'studio.newSession')}</button></div>:<>
    <div className="challenge-counter"><span>{Math.min(index+1,pool.length)} / {pool.length}</span>{mode==='practice'&&<label className="puzzle-select"><span className="sr-only">{t('studio.selectPuzzle')}</span><select aria-label={t('studio.selectPuzzle')} value={current.id} onChange={e=>setIndex(pool.findIndex(p=>p.id===e.target.value))}>{pool.map((p,i)=><option key={p.id} value={p.id}>{i+1}. {p.title?.[lang]||`${t(`studio.category.${p.category}`)} · ${p.rating}`}</option>)}</select></label>}</div>
-   <PuzzlePlayer key={`${mode}-${current.id}-${sessionId}`} puzzle={current} hasNext={mode!=='daily'} onNext={()=>{if(mode==='sprint'&&index+1>=pool.length)setFinished(true);else setIndex(i=>(i+1)%pool.length);}}/>
+   <PuzzlePlayer key={`${mode}-${current.id}-${sessionId}`} puzzle={current} hasNext={mode!=='daily'} onNext={()=>{if((mode==='sprint'||mode==='review')&&index+1>=pool.length)setFinished(true);else setIndex(i=>(i+1)%pool.length);}}/>
   </>}
  </div>;
 }

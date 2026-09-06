@@ -722,6 +722,15 @@
     "reviewReal": "Reproduce las jugadas de tu partida. No mostramos precisión ni errores estimados sin un análisis completo del motor.",
     "firstPosition": "Posición inicial",
     "nextPosition": "Siguiente posición",
-    "lastPosition": "Posición final"
+    "lastPosition": "Posición final",
+    "reviewMistakes": "Repasar errores",
+    "reviewEmpty": "No tienes errores pendientes. Cuando una idea te cueste, aparecerá aquí para volver a practicarla.",
+    "reviewAgain": "Actualizar repaso",
+    "reviewLabel": "Repaso basado en evidencia",
+    "reviewSummaryTitle": "Lo que merece otra mirada",
+    "reviewCount": "{{count}} por repasar",
+    "weakThemeEvidence": "{{mistakes}} errores observados · {{outstanding}} pendientes",
+    "weakThemeEmpty": "Aún no hay suficiente evidencia para señalar un tema débil.",
+    "offline": "Sin conexión · modo local"
   }
 }

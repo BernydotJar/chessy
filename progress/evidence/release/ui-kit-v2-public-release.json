@@ -1,0 +1,36 @@
+{
+  "release_sha": "6145963d1bb819cb53ffd29208c31beb0078e57c",
+  "public_url": "https://chessy.textilesdemedellin.com/",
+  "github_pr": 4,
+  "github_main_ci_run": 34020222513,
+  "github_main_ci": "SUCCESS",
+  "public_health": "HTTP 200 EXACT_SHA",
+  "public_root": "HTTP 200",
+  "blocked_internal_routes": "PASS_404",
+  "production_browser_smoke": {
+    "forest_theme": "PASS",
+    "ivory_theme": "PASS",
+    "night_theme": "PASS",
+    "theme_persistence": "PASS",
+    "theme_board_sync": "PASS",
+    "mouse_drag": "PASS",
+    "touch_drag": "PASS",
+    "board_safe_mobile_navigation": "PASS",
+    "page_errors": 0
+  },
+  "release_verification": {
+    "unit_tests": "163/163 PASS",
+    "independent_chess": "112/112 PASS",
+    "browser": "29/29 PASS",
+    "wcag_2_1_aa": "9/9 routes PASS",
+    "npm_audit": "0 vulnerabilities"
+  },
+  "deployment": {
+    "evidence": "/shared-auth/deployment/evidence/chessy-ui-kit-v2-20260906.json",
+    "bundle": "/shared-auth/deployment/releases/chessy/6145963d1bb819cb53ffd29208c31beb0078e57c/chessy-6145963d1bb819cb53ffd29208c31beb0078e57c.tar.gz",
+    "bundle_sha256": "f018086bd59593323952c118e68cdb0d3c602120877ea63d33ed770b5335e321",
+    "registry_state": "active/converged",
+    "new_application_containers": 0
+  },
+  "terminal_state": "COMPLETED"
+}

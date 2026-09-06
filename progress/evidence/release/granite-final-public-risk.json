@@ -1,0 +1,8 @@
+{
+  "model": "ibm/granite3.3:2b",
+  "reviewed_sha": "6145963d1bb819cb53ffd29208c31beb0078e57c",
+  "verdict": "PASS",
+  "finding": "NONE",
+  "authority": "independent-final-public-release-risk-critic",
+  "raw_response": "/shared-auth/critic/raw/chessy/6145963d1bb819cb53ffd29208c31beb0078e57c/final-release-risk-raw.json"
+}

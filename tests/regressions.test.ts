@@ -51,3 +51,25 @@ it('undo as Black removes the last human/engine pair but preserves the opening',
  useGameStore.getState().undoMove();
  expect(useGameStore.getState().history).toEqual(['e4']);
 });
+
+describe('Icon System v3 and mobile delivery contracts', () => {
+ it('renders every primary icon at the four optical sizes plus selected state', async () => {
+  const { renderToStaticMarkup } = await import('react-dom/server');
+  const { IconGallery } = await import('../src/design/IconGallery');
+  const markup = renderToStaticMarkup(IconGallery());
+  expect(markup).toContain('Chessy Icon System v3');
+  for (const name of ['home','play','challenges','academy','progress','library','games','analysis','review']) expect(markup).toContain(`data-icon="${name}"`);
+  expect((markup.match(/aria-label="play /g)||[]).length).toBe(5);
+ });
+ it('ships an installable manifest and versioned offline worker contract', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const manifest = JSON.parse(await readFile(new URL('../public/manifest.webmanifest', import.meta.url), 'utf8'));
+  expect(manifest.display).toBe('standalone');
+  expect(manifest.icons.some((icon:{sizes:string,type:string,purpose:string})=>icon.sizes==='any'&&icon.type==='image/svg+xml'&&icon.purpose==='any')).toBe(true);
+  expect(manifest.icons.some((icon:{sizes:string,type:string,purpose:string})=>icon.sizes==='any'&&icon.type==='image/svg+xml'&&icon.purpose==='maskable')).toBe(true);
+  const worker = await readFile(new URL('../public/sw.js', import.meta.url), 'utf8');
+  expect(worker).toContain("const CACHE='chessy-mobile-v1-20260906'");
+  expect(worker).toContain("'/stockfish.js'");
+  expect(worker).toContain("request.mode==='navigate'");
+ });
+});

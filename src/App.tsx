@@ -23,6 +23,8 @@ import { useGameStore } from './store/gameStore';
 import { useLearningStore } from './learning/store';
 import { locale } from './learning/types';
 import { ChessyIcon, type ChessyIconName } from './design/icons';
+import { ChessyMark } from './design/ChessyMark';
+import { OfflineStatus } from './components/OfflineStatus';
 import './styles/glassmorphism.css';
 import './styles/studio.css';
 import './styles/design-system.css';
@@ -60,20 +62,21 @@ function App() {
   window.addEventListener('keydown',handler);return()=>window.removeEventListener('keydown',handler);
  },[view,setupMode,game]);
  const navigate=(id:typeof NAV[number]['id'])=>{setView(id);window.location.hash=`/${id}`;};
+ const boardFocused=view==='play'||view==='training';
  const renderPlay=()=> <div className="view-enter"><SectionHeading eyebrow={t('studio.play')} title={t('studio.playTitle')} subtitle={t('studio.playSubtitle')}/><div className={`play-layout ${setupMode?'setup-layout':''}`}>
   <div className="play-board-area"><div className="play-board-frame"><ChessBoard/></div>{!setupMode&&<><MoveEntry disabled={game.isGameOver||game.isAIThinking} onMove={move=>game.makeMove(move.slice(0,2),move.slice(2,4),move[4])}/><GameFiles/></>}</div>
   <div className="play-controls">{setupMode?<BoardSetupPanel/>:<><AIOpponent onStartGame={game.startAIGame} isPlaying={game.isAIGame} soundEnabled={game.soundEnabled} onToggleSound={game.toggleSound}/><GameControls/></>}</div>
   {!setupMode&&<div className="play-details"><MoveHistory/><details className="panel"><summary>{t('studio.analysis')}</summary><CoachInsights/><ChessGlossary/></details><details className="panel"><summary>{t('theme.title')}</summary><ThemeCustomizer/></details></div>}
  </div></div>;
- return <div className="studio-app"><a className="skip-link" href="#main-content">{t('studio.skip')}</a>
+ return <div className={`studio-app ${boardFocused?'board-focus':''}`}><a className="skip-link" href="#main-content">{t('studio.skip')}</a>
   {mobileMenu&&<button className="nav-scrim" aria-label={t('studio.close')} onClick={()=>setMobileMenu(false)}/>}
-  <aside ref={sidebar} id="chessy-navigation" className={`sidebar ${mobileMenu?'is-open':''}`}><a className="brand" href="#/home" onClick={()=>navigate('home')} aria-label="Chessy"><span className="brand-symbol"><ChessyIcon name="achievement" size={30}/></span><span>chessy<span className="brand-period">.</span></span></a><p className="sidebar-caption">{t('studio.workspace')}</p>
+  <aside ref={sidebar} id="chessy-navigation" className={`sidebar ${mobileMenu?'is-open':''}`}><a className="brand" href="#/home" onClick={()=>navigate('home')} aria-label="Chessy"><span className="brand-symbol"><ChessyMark size={30}/></span><span>chessy<span className="brand-period">.</span></span></a><p className="sidebar-caption">{t('studio.workspace')}</p>
    <nav aria-label={t('studio.navLabel')}>{NAV.map((item,index)=> <div key={item.id}>{index===6&&<p className="sidebar-caption secondary-caption">{t('studio.tools')}</p>}<a href={`#/${item.id}`} onClick={()=>navigate(item.id)} className={`nav-link ${view===item.id?'active':''}`} aria-current={view===item.id?'page':undefined}><ChessyIcon name={item.icon} size={20} filled={view===item.id}/><span>{t(`studio.${item.id}`)}</span>{view===item.id&&<span className="nav-indicator"/>}</a></div>)}</nav>
    <div className="sidebar-bottom"><ChessyIcon name="shield" size={20}/><p>{t('studio.local')}</p><a href="https://github.com/BernydotJar/chessy" target="_blank" rel="noreferrer">GitHub <ChessyIcon className="external-arrow" name="arrow" size={14}/></a></div>
   </aside>
-  <div className="main-shell"><header className="topbar"><div className="topbar-left"><button className="mobile-menu icon-button" onClick={()=>setMobileMenu(m=>!m)} aria-label={t(mobileMenu?'studio.close':'studio.menu')} aria-controls="chessy-navigation" aria-expanded={mobileMenu}><ChessyIcon name={mobileMenu?'close':'menu'} size={22}/></button><span className="breadcrumb">Chessy <span>/</span> {t(`studio.${view}`)}</span></div><div className="topbar-actions"><ThemeCustomizer compact/><LanguageSwitcher/></div></header>
+  <div className="main-shell"><header className="topbar"><div className="topbar-left"><button className="mobile-menu icon-button" onClick={()=>setMobileMenu(m=>!m)} aria-label={t(mobileMenu?'studio.close':'studio.menu')} aria-controls="chessy-navigation" aria-expanded={mobileMenu}><ChessyIcon name={mobileMenu?'close':'menu'} size={22}/></button>{boardFocused&&<a className="mobile-focus-home icon-button" href="#/home" onClick={()=>navigate('home')} aria-label={t('studio.home')}><ChessyIcon name="home" size={20}/></a>}<span className="breadcrumb">Chessy <span>/</span> {t(`studio.${view}`)}</span></div><OfflineStatus/><div className="topbar-actions"><ThemeCustomizer compact/><LanguageSwitcher/></div></header>
    <main id="main-content" ref={main} tabIndex={-1} className="main-content">{storageWarning&&<div className="storage-warning" role="status">{t('studio.storageWarning')} <button className="text-button" onClick={()=>navigate('progress')}>{t('studio.backup')}</button></div>}<ErrorBoundary key={view}>{view==='home'&&<HomeView/>}{view==='academy'&&<AcademyView/>}{view==='training'&&<ChallengeView/>}{view==='progress'&&<ProgressView/>}{view==='library'&&<LibraryView/>}{view==='play'&&renderPlay()}{view==='games'&&<GamesHub/>}{view==='review'&&<ReviewView/>}{view==='analysis'&&<AnalysisView/>}</ErrorBoundary></main>
-   <footer className="studio-footer"><span><ChessyIcon name="achievement" size={16}/> Chessy</span><p>{t('studio.footer')}</p><span>ES / EN / PT</span></footer>
+   <footer className="studio-footer"><span><ChessyMark size={16}/> Chessy</span><p>{t('studio.footer')}</p><span>ES / EN / PT</span></footer>
   </div>
   <nav className={`mobile-bottom-nav ${view==='play'||view==='training'?'mobile-bottom-nav--board':''}`} aria-label={t('studio.navLabel')}>{MOBILE_NAV.map(item=><a key={item.id} href={`#/${item.id}`} onClick={()=>navigate(item.id)} className={view===item.id?'active':''} aria-current={view===item.id?'page':undefined}><ChessyIcon name={item.icon} size={21} filled={view===item.id}/><span>{t(`studio.${item.id}`)}</span></a>)}</nav>
  </div>;

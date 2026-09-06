@@ -13,3 +13,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <ThemeManager><App /></ThemeManager>
   </React.StrictMode>,
 )
+
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    void navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(error => console.warn('Chessy offline worker unavailable', error));
+  });
+}
