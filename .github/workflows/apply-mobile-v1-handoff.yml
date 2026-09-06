@@ -19,11 +19,10 @@ jobs:
         run: |
           curl -fsSL https://chessy.textilesdemedellin.com/chessy-mobile-v1-handoff.patch -o /tmp/chessy-mobile-v1.patch
           echo '1c7066f0e4280e8fb38eac887e269aa5cdd2fe8dc6001719072fb7efcc03e0a3  /tmp/chessy-mobile-v1.patch' | sha256sum -c -
-      - name: Apply exact candidate tree
+      - name: Apply exact candidate product tree
         run: |
           git apply --binary /tmp/chessy-mobile-v1.patch
-          rm -f .github/workflows/apply-mobile-v1-handoff.yml
-          git add -A
+          git add -A ':!.github/workflows/apply-mobile-v1-handoff.yml'
           git diff --cached --check
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
