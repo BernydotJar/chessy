@@ -18,7 +18,7 @@ export const GameControls: React.FC = () => {
     playerColor,
     showLegalMoves,
     setShowLegalMoves,
-    setupMode, isAIThinking, engineError, makeAIMove, resignGame, endReason,
+    setupMode, isAIThinking, engineError, makeAIMove, resignGame, endReason, setView,
   } = useGameStore();
   const { t } = useTranslation();
   const [confirmResign, setConfirmResign] = useState(false);
@@ -120,12 +120,20 @@ export const GameControls: React.FC = () => {
           <p className="text-white/80 text-sm mb-3">
             {t('controls.gameOver')}
           </p>
-          <button
-            onClick={resetGame}
-            className="w-full glass-button glass-button--subtle px-4 py-3 rounded-lg text-white font-semibold"
-          >
-            {t('controls.playAgain')}
-          </button>
+          <div className="game-over-actions">
+            <button
+              onClick={() => { setView('analysis'); window.location.hash='/analysis'; }}
+              className="w-full btn primary"
+            >
+              <ChessyIcon name="analysis" size={19}/>{t('games.actions.analyze')}
+            </button>
+            <button
+              onClick={resetGame}
+              className="w-full glass-button glass-button--subtle px-4 py-3 rounded-lg text-white font-semibold"
+            >
+              {t('controls.playAgain')}
+            </button>
+          </div>
         </div>
       )}
     </div>

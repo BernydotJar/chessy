@@ -395,6 +395,234 @@
           "release"
         ]
       }
+    },
+    {
+      "id": "CH-011",
+      "title": "Competitive benchmark and product delta",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CH-010"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**",
+        "specs/**",
+        "public/**",
+        "docs/**",
+        "*.json",
+        "*.ts",
+        "*.tsx",
+        "*.css",
+        "*.md",
+        ".github/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "CH-012",
+      "title": "Icon System v3 and Chessy brand mark",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CH-011"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**",
+        "specs/**",
+        "public/**",
+        "docs/**",
+        "*.json",
+        "*.ts",
+        "*.tsx",
+        "*.css",
+        "*.md",
+        ".github/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "CH-013",
+      "title": "Mobile information architecture and focus UX",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CH-012"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**",
+        "specs/**",
+        "public/**",
+        "docs/**",
+        "*.json",
+        "*.ts",
+        "*.tsx",
+        "*.css",
+        "*.md",
+        ".github/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "CH-014",
+      "title": "Learning review loop and weakness targeting",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CH-013"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**",
+        "specs/**",
+        "public/**",
+        "docs/**",
+        "*.json",
+        "*.ts",
+        "*.tsx",
+        "*.css",
+        "*.md",
+        ".github/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "CH-015",
+      "title": "Installable offline mobile delivery and interaction polish",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CH-014"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**",
+        "specs/**",
+        "public/**",
+        "docs/**",
+        "*.json",
+        "*.ts",
+        "*.tsx",
+        "*.css",
+        "*.md",
+        ".github/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "CH-016",
+      "title": "Independent mobile verification, critic and publication",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CH-015"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**",
+        "specs/**",
+        "public/**",
+        "docs/**",
+        "*.json",
+        "*.ts",
+        "*.tsx",
+        "*.css",
+        "*.md",
+        ".github/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
     }
   ]
 }

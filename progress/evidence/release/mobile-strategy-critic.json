@@ -1,0 +1,10 @@
+{
+  "phase": "Chessy Mobile Product v1",
+  "critic": "ibm/granite3.3:2b",
+  "scope": "competitive product strategy and Graph-node containment",
+  "first_verdict": {"v":"R","f":"bounded"},
+  "repair": "Added explicit per-node execution boundaries, forbidden capabilities and architecture change budget.",
+  "final_verdict": {"v":"P","f":"NONE"},
+  "strategy_sha256": "7e235d6ae0f1a0a942b08ee4bf1335dc99d38116841303195b4afe6b2d61745b",
+  "requirements_sha256": "d2acf867d9256778643f266d67d20b7894ba765b58611a194140aa37d97ff4be"
+}

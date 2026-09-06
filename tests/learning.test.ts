@@ -3,7 +3,7 @@ import { Chess } from 'chess.js';
 import { PUZZLES,dailyPuzzle } from '../src/learning/puzzles';
 import { LESSONS,TRACKS } from '../src/learning/curriculum';
 import { attempt,startSession,solutionSan } from '../src/learning/session';
-import { emptyProgress,parseProgress,recordCompletion,streak,xp } from '../src/learning/progress';
+import { emptyProgress,parseProgress,recordCompletion,recordPuzzleMistake,reviewQueueIds,streak,weakThemes,xp } from '../src/learning/progress';
 describe('Every shipped puzzle is playable',()=>{
  it('has unique ids and diverse difficulty',()=>{expect(new Set(PUZZLES.map(p=>p.id)).size).toBe(PUZZLES.length);expect(PUZZLES.length).toBeGreaterThan(100);expect(PUZZLES.some(p=>p.fen.split(' ')[1]==='b')).toBe(true);});
  for(const p of PUZZLES)it(p.id,()=>{
@@ -27,7 +27,10 @@ describe('Original academy',()=>{
 describe('Safe local learning progress',()=>{
  it('never farms XP from replaying a completed puzzle or lesson',()=>{let p=recordCompletion(emptyProgress(),'puzzle',PUZZLES[0].id,'2026-09-04');p=recordCompletion(p,'puzzle',PUZZLES[0].id,'2026-09-04');expect(xp(p)).toBe(20);p=recordCompletion(p,'lesson',LESSONS[0].id,'2026-09-04');p=recordCompletion(p,'lesson',LESSONS[0].id,'2026-09-04');expect(xp(p)).toBe(50);});
  it('roundtrips a valid backup',()=>{const p=recordCompletion(emptyProgress(),'puzzle',PUZZLES[0].id,'2026-09-04');expect(parseProgress(JSON.stringify(p),'2026-09-04')).toEqual(p);});
- it.each(['null','[]','{}','invalid',JSON.stringify({...emptyProgress(),version:2}),JSON.stringify({...emptyProgress(),solved:['fake']}),JSON.stringify({...emptyProgress(),days:['2026-02-30']}),JSON.stringify({...emptyProgress(),days:['9999-01-01']}),JSON.stringify({...emptyProgress(),mistakes:-1})])('rejects malformed backup: %s',raw=>{expect(()=>parseProgress(raw,'2026-09-04')).toThrow();});
+ it('migrates a valid version 1 backup without inventing review history',()=>{const legacy={version:1,solved:[PUZZLES[0].id],lessons:[],days:['2026-09-04'],mistakes:3};const migrated=parseProgress(JSON.stringify(legacy),'2026-09-04');expect(migrated.version).toBe(2);expect(migrated.review).toEqual([]);expect(xp(migrated)).toBe(20);});
+ it('turns real mistakes into a deterministic review queue and clean solves reduce debt',()=>{let p=emptyProgress();p=recordPuzzleMistake(p,PUZZLES[0].id,'2026-09-03');p=recordPuzzleMistake(p,PUZZLES[1].id,'2026-09-04');p=recordPuzzleMistake(p,PUZZLES[1].id,'2026-09-04');expect(reviewQueueIds(p)).toEqual([PUZZLES[1].id,PUZZLES[0].id]);const before=xp(p);p=recordCompletion(p,'puzzle',PUZZLES[1].id,'2026-09-04');expect(reviewQueueIds(p)).toEqual([PUZZLES[1].id,PUZZLES[0].id]);p=recordCompletion(p,'puzzle',PUZZLES[1].id,'2026-09-04');expect(xp(p)).toBe(before+20);expect(reviewQueueIds(p)).toEqual([PUZZLES[0].id]);});
+ it('reports a weak theme only from repeated unresolved observed mistakes',()=>{let p=emptyProgress();p=recordPuzzleMistake(p,PUZZLES[0].id,'2026-09-04');expect(weakThemes(p)).toEqual([]);p=recordPuzzleMistake(p,PUZZLES[1].id,'2026-09-04');expect(weakThemes(p)[0]).toMatchObject({category:'basics',mistakes:2,outstanding:2});});
+ it.each(['null','[]','{}','invalid',JSON.stringify({...emptyProgress(),version:3}),JSON.stringify({...emptyProgress(),solved:['fake']}),JSON.stringify({...emptyProgress(),days:['2026-02-30']}),JSON.stringify({...emptyProgress(),days:['9999-01-01']}),JSON.stringify({...emptyProgress(),mistakes:-1})])('rejects malformed backup: %s',raw=>{expect(()=>parseProgress(raw,'2026-09-04')).toThrow();});
  it('rejects oversized backup',()=>expect(()=>parseProgress(' '.repeat(100001))).toThrow());
  it('computes consecutive calendar days',()=>{const p={...emptyProgress(),days:['2026-09-02','2026-09-03']};expect(streak(p,'2026-09-04')).toBe(2);expect(streak(p,'2026-09-05')).toBe(0);});
  it('rejects unknown completion ids',()=>expect(()=>recordCompletion(emptyProgress(),'puzzle','fake')).toThrow());

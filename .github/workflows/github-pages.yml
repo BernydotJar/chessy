@@ -42,6 +42,8 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Browser workflows and accessibility checks
         run: npm run test:e2e
+      - name: Installable offline PWA checks
+        run: npm run test:pwa
       - name: Preserve verification evidence
         if: always()
         uses: actions/upload-artifact@v4

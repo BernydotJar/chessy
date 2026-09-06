@@ -722,6 +722,15 @@
     "reviewReal": "Replay the moves from your game. We do not display accuracy or estimated blunders without a complete engine analysis.",
     "firstPosition": "First position",
     "nextPosition": "Next position",
-    "lastPosition": "Last position"
+    "lastPosition": "Last position",
+    "reviewMistakes": "Review mistakes",
+    "reviewEmpty": "You have no pending mistakes. When an idea gives you trouble, it will appear here for another try.",
+    "reviewAgain": "Refresh review",
+    "reviewLabel": "Evidence-based review",
+    "reviewSummaryTitle": "What deserves another look",
+    "reviewCount": "{{count}} to review",
+    "weakThemeEvidence": "{{mistakes}} observed mistakes · {{outstanding}} outstanding",
+    "weakThemeEmpty": "There is not enough evidence yet to call out a weak theme.",
+    "offline": "Offline · local mode"
   }
 }

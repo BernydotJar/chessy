@@ -14,7 +14,8 @@
     "test": "vitest",
     "typecheck": "tsc --noEmit",
     "test:e2e": "node scripts/browser-verify.cjs",
-    "verify": "npm run lint && npm test -- --run && npm run build"
+    "verify": "npm run lint && npm test -- --run && npm run build",
+    "test:pwa": "node scripts/pwa-verify.cjs"
   },
   "dependencies": {
     "chess.js": "^1.0.0-beta.6",

@@ -17,7 +17,7 @@ const deploymentClass = process.env.CHESSY_DEPLOYMENT_CLASS || 'public-web';
 const blocked = new Set(['/internal', '/metrics', '/meta', '/ready', '/debug', '/admin']);
 const mime = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
-  '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8',
+  '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8', '.webmanifest': 'application/manifest+json; charset=utf-8',
   '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
   '.ico': 'image/x-icon', '.wasm': 'application/wasm', '.txt': 'text/plain; charset=utf-8',
   '.gz': 'application/gzip'

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LockKeyhole } from 'lucide-react';
 import { useLearningStore } from '../../learning/store';
-import { localDay, longestStreak, parseProgress, streak, xp } from '../../learning/progress';
+import { localDay, longestStreak, parseProgress, reviewQueueIds, streak, weakThemes, xp } from '../../learning/progress';
 import { LESSONS, TRACKS } from '../../learning/curriculum';
 import { downloadText } from '../../utils/download';
 import { SectionHeading } from './Shared';
@@ -10,7 +10,7 @@ import { ChessyIcon, type ChessyIconName } from '../../design/icons';
 
 export function ProgressView() {
  const {t}=useTranslation();const {progress,importProgress}=useLearningStore();const [pending,setPending]=useState<string|null>(null),[message,setMessage]=useState('');
- const streakBest=longestStreak(progress);
+ const streakBest=longestStreak(progress);const reviewCount=reviewQueueIds(progress).length;const weak=weakThemes(progress);
  const badges:{id:string;icon:ChessyIconName;unlocked:boolean}[]=[
   {id:'first',icon:'spark',unlocked:progress.solved.length>0},
   {id:'ten',icon:'target',unlocked:progress.solved.length>=10},
@@ -20,6 +20,7 @@ export function ProgressView() {
  return <div className="view-enter"><SectionHeading eyebrow={t('studio.progress')} title={t('studio.progressTitle')} subtitle={t('studio.progressSubtitle')}/>
   <div className="stat-grid four"><div className="stat-card"><ChessyIcon name="xp" size={25}/><div><strong>{xp(progress)}</strong><span>{t('studio.xp')}</span></div></div><div className="stat-card"><ChessyIcon name="streak" size={25}/><div><strong>{streak(progress)}</strong><span>{t('studio.streak')}</span></div></div><div className="stat-card"><ChessyIcon name="target" size={25}/><div><strong>{progress.solved.length}</strong><span>{t('studio.solved')}</span></div></div><div className="stat-card"><ChessyIcon name="academy" size={25}/><div><strong>{progress.lessons.length}</strong><span>{t('studio.completed')}</span></div></div></div>
   <p className="fine-print">{t('studio.noElo')}</p>
+  <section className="learning-review-summary" aria-labelledby="review-summary-title"><div className="home-section-title"><div><p className="eyebrow">{t('studio.reviewLabel')}</p><h2 id="review-summary-title">{t('studio.reviewSummaryTitle')}</h2></div><span className="tag">{t('studio.reviewCount',{count:reviewCount})}</span></div>{weak.length>0?<div className="weak-theme-grid">{weak.map(item=><div className="panel weak-theme" key={item.category}><ChessyIcon name="target" size={20}/><div><strong>{t(`studio.category.${item.category}`)}</strong><span>{t('studio.weakThemeEvidence',{mistakes:item.mistakes,outstanding:item.outstanding})}</span></div></div>)}</div>:<p className="muted">{t('studio.weakThemeEmpty')}</p>}</section>
   <section className="progress-section"><h2>{t('studio.achievements')}</h2><div className="badge-grid">{badges.map(b=><div key={b.id} className={`panel achievement ${b.unlocked?'earned':'locked'}`}><div className="achievement-icon"><ChessyIcon name={b.icon} size={34}/></div><h3>{t(`studio.badge.${b.id}`)}</h3><span>{b.unlocked?<ChessyIcon name="check" size={14}/>:<LockKeyhole size={14}/>} {t(b.unlocked?'studio.unlocked':'studio.locked')}</span></div>)}</div></section>
   <div className="progress-bottom"><section className="panel"><h2>{t('studio.academy')}</h2>{TRACKS.map(track=>{const items=LESSONS.filter(l=>l.track===track),done=items.filter(l=>progress.lessons.includes(l.id)).length;return <div className="track-completion" key={track}><div><span>{t(`studio.track.${track}`)}</span><span>{done}/{items.length}</span></div><progress max={items.length} value={done} aria-label={t(`studio.track.${track}`)}/></div>;})}</section><section className="panel backup-panel"><div className="icon-tile"><ChessyIcon name="shield" size={26}/></div><h2>{t('studio.backup')}</h2><p>{t('studio.progressSubtitle')}</p><div className="button-row"><button className="btn secondary" onClick={()=>downloadText(`chessy-progress-${localDay()}.json`,JSON.stringify(progress,null,2))}><ChessyIcon name="export" size={17}/>{t('studio.export')}</button><label className="btn secondary file-button"><ChessyIcon name="import" size={17}/>{t('studio.import')}<input type="file" accept="application/json,.json" aria-label={t('studio.import')} onChange={async e=>{const file=e.target.files?.[0];e.target.value='';if(!file)return;try{if(file.size>100000)throw new Error('size');const raw=await file.text();parseProgress(raw);setPending(raw);setMessage('');}catch{setPending(null);setMessage('studio.importError');}}}/></label></div>
     {pending&&<div className="confirm-panel"><p>{t('studio.importConfirm')}</p><div className="button-row"><button className="btn primary" onClick={()=>{try{importProgress(pending);setMessage('studio.importSuccess');}catch{setMessage('studio.importError');}setPending(null);}}>{t('studio.replace')}</button><button className="btn quiet" onClick={()=>setPending(null)}>{t('studio.cancel')}</button></div></div>}{message&&<p className="feedback" role="status">{t(message)}</p>}
