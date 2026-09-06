@@ -21,15 +21,16 @@ jobs:
           echo '1c7066f0e4280e8fb38eac887e269aa5cdd2fe8dc6001719072fb7efcc03e0a3  /tmp/chessy-mobile-v1.patch' | sha256sum -c -
       - name: Apply candidate patch
         run: git apply --binary /tmp/chessy-mobile-v1.patch
-      - name: Stage and validate candidate
+      - name: Stage exact candidate tree
         run: |
-          git add -A ':!.github/workflows/apply-mobile-v1-handoff.yml'
+          rm -f .github/workflows/apply-mobile-v1-handoff.yml
+          git add -A
           git diff --cached --check
           test "$(git write-tree)" = '03c496e48fcdb58b0d1bf1c9a83e5964e92b2e1b'
-      - name: Commit candidate
+      - name: Commit exact candidate
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git commit -m 'feat: ship Chessy mobile product v1 and icon system v3'
-      - name: Push candidate
+      - name: Push exact candidate
         run: git push origin HEAD:feat/mobile-product-v1-icons-v3
