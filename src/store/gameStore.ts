@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { Chess, Move, Square } from 'chess.js';
-import { BoardTheme, GameState, ThemePreset } from '../types/chess.types';
+import { BoardTheme, GameState } from '../types/chess.types';
 import { stockfishService, DifficultyLevel, AIMove } from '../utils/stockfishService';
 import { soundManager } from '../utils/soundManager';
 
@@ -52,59 +52,11 @@ interface GameStore extends GameState {
 }
 
 const defaultTheme: BoardTheme = {
-  lightSquare: '#ece6d9',
-  darkSquare: '#51766b',
-  glassOpacity: 0.16,
-  glassBlur: 11,
+  lightSquare: '#eee6d6',
+  darkSquare: '#5e8273',
+  glassOpacity: 0.08,
+  glassBlur: 4,
 };
-
-export const themePresets: ThemePreset[] = [
-  {
-    name: 'Guatemala',
-    theme: {
-      lightSquare: '#bfe7ff',
-      darkSquare: '#2f6fb8',
-      glassOpacity: 0.16,
-      glassBlur: 11,
-    },
-  },
-  {
-    name: 'Colombia',
-    theme: {
-      lightSquare: '#f6d369',
-      darkSquare: '#1f4e9e',
-      glassOpacity: 0.17,
-      glassBlur: 11,
-    },
-  },
-  {
-    name: 'México',
-    theme: {
-      lightSquare: '#f4f4f4',
-      darkSquare: '#0f6b3e',
-      glassOpacity: 0.16,
-      glassBlur: 11,
-    },
-  },
-  {
-    name: 'Brasil',
-    theme: {
-      lightSquare: '#f7d14b',
-      darkSquare: '#1e7a3b',
-      glassOpacity: 0.17,
-      glassBlur: 11,
-    },
-  },
-  {
-    name: 'USA',
-    theme: {
-      lightSquare: '#f5f6fb',
-      darkSquare: '#294b9a',
-      glassOpacity: 0.16,
-      glassBlur: 11,
-    },
-  },
-];
 
 const getCapturedPieces = (chess: Chess) => {
   const captured: { white: string[]; black: string[] } = { white: [], black: [] };

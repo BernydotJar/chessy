@@ -205,6 +205,196 @@
           "release"
         ]
       }
+    },
+    {
+      "id": "CH-006",
+      "title": "Design-system foundations and tokens",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CH-005"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**",
+        "specs/**",
+        "public/**",
+        "docs/**",
+        "*.json",
+        "*.ts",
+        "*.tsx",
+        "*.css",
+        "*.md",
+        ".github/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "CH-007",
+      "title": "Chessy iconography and visual themes",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CH-006"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**",
+        "specs/**",
+        "public/**",
+        "docs/**",
+        "*.json",
+        "*.ts",
+        "*.tsx",
+        "*.css",
+        "*.md",
+        ".github/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "CH-008",
+      "title": "Navigation and home workspace redesign",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CH-007"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**",
+        "specs/**",
+        "public/**",
+        "docs/**",
+        "*.json",
+        "*.ts",
+        "*.tsx",
+        "*.css",
+        "*.md",
+        ".github/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "CH-009",
+      "title": "Cross-view UI-kit migration and responsive polish",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CH-008"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**",
+        "specs/**",
+        "public/**",
+        "docs/**",
+        "*.json",
+        "*.ts",
+        "*.tsx",
+        "*.css",
+        "*.md",
+        ".github/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "CH-010",
+      "title": "Independent verification, critic and publication",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CH-009"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**",
+        "specs/**",
+        "public/**",
+        "docs/**",
+        "*.json",
+        "*.ts",
+        "*.tsx",
+        "*.css",
+        "*.md",
+        ".github/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
     }
   ]
 }

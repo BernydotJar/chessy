@@ -1,14 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Search, Filter, CheckCircle2 } from 'lucide-react';
+import { Search, Filter } from 'lucide-react';
+import { ChessyIcon } from '../design/icons';
 import { useTranslation } from 'react-i18next';
 import { GameRecord, getAllGames } from '../utils/gamesDb';
 import { useGameStore } from '../store/gameStore';
 
-const resultColor = (result: GameRecord['result']) => {
-  if (result === 'win') return 'text-emerald-300';
-  if (result === 'loss') return 'text-red-300';
-  return 'text-blue-200';
-};
+const resultColor = (result: GameRecord['result']) => `game-result game-result--${result}`;
 
 export const GamesHub: React.FC = () => {
   const { t } = useTranslation();
@@ -111,7 +108,7 @@ export const GamesHub: React.FC = () => {
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <span className="text-white font-semibold">{game.opponent}</span>
-                {game.reviewed && <CheckCircle2 size={14} className="text-emerald-300" />}
+                {game.reviewed && <ChessyIcon name="check" size={14} className="accent"/>}
               </div>
               <div className="text-white/60 text-xs">
                 {game.date} · {game.timeControl} · {t(`games.color.${game.color}`)}
@@ -124,19 +121,19 @@ export const GamesHub: React.FC = () => {
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => openGame(game, 'review')}
-                className="glass-button glass-button--subtle px-4 py-2 rounded-full text-white text-xs font-semibold"
+                className="glass-button glass-button--subtle px-4 py-2 rounded-lg text-white text-xs font-semibold"
               >
                 {t('games.actions.review')}
               </button>
               <button
                 onClick={() => openGame(game, 'analysis')}
-                className="glass-button glass-button--subtle px-4 py-2 rounded-full text-white text-xs font-semibold"
+                className="glass-button glass-button--subtle px-4 py-2 rounded-lg text-white text-xs font-semibold"
               >
                 {t('games.actions.analyze')}
               </button>
               <button
                 onClick={() => openGame(game, 'play')}
-                className="glass-button glass-button--subtle px-4 py-2 rounded-full text-white text-xs font-semibold"
+                className="glass-button glass-button--subtle px-4 py-2 rounded-lg text-white text-xs font-semibold"
               >
                 {t('games.actions.continue')}
               </button>

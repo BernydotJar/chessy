@@ -4,9 +4,11 @@ import { Chess, Square } from 'chess.js';
 import { useTranslation } from 'react-i18next';
 import { PromotionDialog } from '../PromotionDialog';
 import { createAccessibleChessPieces } from '../accessibleChessPieces';
+import { useGameStore } from '../../store/gameStore';
 
 export function PositionBoard({fen,onMove,readOnly=false,hintSquare}:{fen:string;onMove?:(move:string)=>boolean;readOnly?:boolean;hintSquare?:string}) {
  const {t}=useTranslation();
+ const boardTheme=useGameStore(state=>state.theme);
  const accessiblePieces=useMemo(()=>createAccessibleChessPieces(t),[t]);
  const ref=useRef<HTMLDivElement>(null),[selected,setSelected]=useState<Square|null>(null),[promotion,setPromotion]=useState<{from:Square;to:Square}|null>(null);
  const game=new Chess(fen);
@@ -22,8 +24,8 @@ export function PositionBoard({fen,onMove,readOnly=false,hintSquare}:{fen:string
   setSelected(null);return onMove(from+to);
  }
  const styles:Record<string,CSSProperties>={};
- if(selected){styles[selected]={backgroundColor:'rgba(232,193,111,.65)'};for(const m of game.moves({square:selected,verbose:true}))styles[m.to]={backgroundImage:'radial-gradient(circle, rgba(14,30,25,.35) 20%, transparent 23%)'};}
- if(hintSquare)styles[hintSquare]={boxShadow:'inset 0 0 0 4px #f3bf60'};
+ if(selected){styles[selected]={boxShadow:'inset 0 0 0 4px var(--board-selected)'};for(const m of game.moves({square:selected,verbose:true}))styles[m.to]={backgroundImage:'radial-gradient(circle, var(--board-legal) 19%, transparent 22%)'};}
+ if(hintSquare)styles[hintSquare]={boxShadow:'inset 0 0 0 4px var(--board-hint)'};
  const options:ChessboardOptions={
   id:readOnly?'daily-preview':'challenge-board',
   position:fen,
@@ -37,8 +39,8 @@ export function PositionBoard({fen,onMove,readOnly=false,hintSquare}:{fen:string
   draggingPieceGhostStyle:{opacity:0},
   draggingPieceStyle:{transform:'scale(1.04)',filter:'drop-shadow(0 8px 8px rgba(0, 0, 0, 0.34))'},
   allowDrawingArrows:!readOnly,
-  lightSquareStyle:{backgroundColor:'#eee6d6'},
-  darkSquareStyle:{backgroundColor:'#5e8273'},
+  lightSquareStyle:{backgroundColor:boardTheme.lightSquare},
+  darkSquareStyle:{backgroundColor:boardTheme.darkSquare},
   boardStyle:{borderRadius:'8px',width:'100%',height:'100%'},
   squareStyles:styles,
   onPieceDrop:({sourceSquare,targetSquare})=>!!targetSquare&&play(sourceSquare as Square,targetSquare as Square),

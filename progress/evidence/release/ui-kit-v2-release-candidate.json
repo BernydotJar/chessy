@@ -1,0 +1,9 @@
+{
+  "candidate_sha": "fe61cad54a9b9fc9ab584d08c7fbd2c128a987fe",
+  "scope": "UI Kit v2, visual themes, icon system, navigation and cross-view polish",
+  "source_committed": true,
+  "verification": "progress/evidence/release/ui-kit-v2-verification.json",
+  "critic": "progress/evidence/release/granite-ui-kit-risk.json",
+  "public_deployment": "pending CH-010",
+  "new_application_containers": 0
+}

@@ -251,7 +251,18 @@
     "glassBlur": "Glass Blur: {{value}}px",
     "preview": "Preview",
     "open": "Open theme customizer",
-    "close": "Close theme customizer"
+    "close": "Close theme customizer",
+    "subtitle": "Board and interface as one preference.",
+    "advanced": "Advanced board settings",
+    "advancedHint": "Adjust only the squares if you want your own combination.",
+    "forest": "Forest Classic",
+    "forestDescription": "Deep green and ivory. Natural focus.",
+    "ivory": "Ivory Sage",
+    "ivoryDescription": "Light, calm and softly contrasted.",
+    "night": "Tournament Night",
+    "nightDescription": "Deep blue for long sessions.",
+    "choose": "Choose how Chessy looks",
+    "persistHint": "Saved on this device."
   },
   "promotion": {
     "title": "Choose Promotion Piece",

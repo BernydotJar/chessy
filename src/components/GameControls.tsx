@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../store/gameStore';
-import { RotateCcw, Undo2, Flag, Trophy } from 'lucide-react';
+import { RotateCcw, Undo2, Flag } from 'lucide-react';
+import { ChessyIcon } from '../design/icons';
 import { useTranslation } from 'react-i18next';
 import { BoardSetupButton } from './BoardSetupButton';
 
@@ -48,7 +49,7 @@ export const GameControls: React.FC = () => {
       <div className="text-center">
         <div className="glass-container rounded-lg p-4 mb-4">
           <p className="text-white text-base font-semibold flex items-center justify-center gap-2">
-            {isGameOver && winner !== 'draw' && <Trophy size={24} className="text-yellow-400" />}
+            {isGameOver && winner !== 'draw' && <ChessyIcon name="achievement" size={24} className="achievement-color"/>}
             {getGameStatus()}
           </p>
           <p className="text-white/70 text-sm mt-1">
@@ -103,7 +104,7 @@ export const GameControls: React.FC = () => {
       {!isGameOver && history.length > 0 && (
         <button
           onClick={() => setConfirmResign(true)}
-          className="w-full glass-button glass-button--subtle px-4 py-3 rounded-lg text-red-300 font-medium flex items-center justify-center gap-2 hover:bg-red-500/20 transition-colors"
+          className="w-full glass-button glass-button--subtle px-4 py-3 rounded-lg danger-action font-medium flex items-center justify-center gap-2"
           aria-label={t('controls.resign')}
         >
           <Flag size={20} />
@@ -121,7 +122,7 @@ export const GameControls: React.FC = () => {
           </p>
           <button
             onClick={resetGame}
-            className="w-full glass-button glass-button--subtle px-4 py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-blue-500/20 to-purple-500/20"
+            className="w-full glass-button glass-button--subtle px-4 py-3 rounded-lg text-white font-semibold"
           >
             {t('controls.playAgain')}
           </button>

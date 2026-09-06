@@ -1,155 +1,192 @@
 {
-  "createdAt": "2026-09-06T07:14:25.420Z",
+  "createdAt": "2026-09-06T07:40:14.076Z",
   "browser": "145.0.7632.0",
   "checks": [
     {
       "name": "All nine routes load without untranslated UI keys",
       "result": "PASS",
-      "ms": 687
+      "ms": 762
     },
     {
       "name": "Incorrect quiz does not award completion; correct answer does",
       "result": "PASS",
-      "ms": 110
+      "ms": 98
     },
     {
       "name": "Wrong challenge preserves position; correct solution persists once",
       "result": "PASS",
-      "ms": 673
+      "ms": 709
     },
     {
       "name": "Hint-assisted play does not award XP",
       "result": "PASS",
-      "ms": 95
+      "ms": 94
     },
     {
       "name": "Mouse drag follows cursor without a source ghost and completes the move",
       "result": "PASS",
-      "ms": 443
+      "ms": 458
     },
     {
       "name": "Touch drag works on mobile play and challenge boards",
       "result": "PASS",
-      "ms": 837
+      "ms": 843
     },
     {
       "name": "Native promotion dialog supports rook underpromotion and focus",
       "result": "PASS",
-      "ms": 155
+      "ms": 137
     },
     {
       "name": "Multi-ply puzzle plays legal opponent reply and accepts final mate",
       "result": "PASS",
-      "ms": 82
+      "ms": 78
     },
     {
       "name": "Black-side Lichess line solves through the same input contract",
       "result": "PASS",
-      "ms": 101
+      "ms": 102
     },
     {
       "name": "Language switches and survives reload in English and Portuguese",
       "result": "PASS",
-      "ms": 1675
+      "ms": 1867
+    },
+    {
+      "name": "Visual themes update chrome and board palette and persist locally",
+      "result": "PASS",
+      "ms": 1614
+    },
+    {
+      "name": "Mobile bottom navigation exposes the five primary destinations",
+      "result": "PASS",
+      "ms": 87
     },
     {
       "name": "Local play survives training navigation and saves a real PGN game",
       "result": "PASS",
-      "ms": 424
+      "ms": 308
     },
     {
       "name": "Invalid progress backup is rejected without overwriting progress",
       "result": "PASS",
-      "ms": 24
+      "ms": 12
     },
     {
       "name": "Progress restore requires explicit confirmation",
       "result": "PASS",
-      "ms": 47
+      "ms": 42
     },
     {
       "name": "Actual Stockfish responds after a legal opening move",
       "result": "PASS",
-      "ms": 1872
+      "ms": 1450
     },
     {
       "name": "Mobile drawer hides inactive links and closes with Escape",
       "result": "PASS",
-      "ms": 92
+      "ms": 68
     },
     {
       "name": "Reduced motion has no running interface animations",
       "result": "PASS",
-      "ms": 3
+      "ms": 2
     },
     {
       "name": "No horizontal overflow on mobile, tablet and desktop routes",
       "result": "PASS",
-      "ms": 312
+      "ms": 231
     },
     {
       "name": "WCAG 2.1 AA automated scan: home",
       "result": "PASS",
-      "ms": 730
+      "ms": 487
     },
     {
       "name": "WCAG 2.1 AA automated scan: play",
       "result": "PASS",
-      "ms": 631
+      "ms": 524
     },
     {
       "name": "WCAG 2.1 AA automated scan: training",
       "result": "PASS",
-      "ms": 457
+      "ms": 424
     },
     {
       "name": "WCAG 2.1 AA automated scan: academy",
       "result": "PASS",
-      "ms": 328
+      "ms": 303
     },
     {
       "name": "WCAG 2.1 AA automated scan: progress",
       "result": "PASS",
-      "ms": 306
+      "ms": 288
     },
     {
       "name": "WCAG 2.1 AA automated scan: library",
       "result": "PASS",
-      "ms": 333
+      "ms": 277
     },
     {
       "name": "WCAG 2.1 AA automated scan: games",
       "result": "PASS",
-      "ms": 282
+      "ms": 265
     },
     {
       "name": "WCAG 2.1 AA automated scan: analysis",
       "result": "PASS",
-      "ms": 272
+      "ms": 261
     },
     {
       "name": "WCAG 2.1 AA automated scan: review",
       "result": "PASS",
-      "ms": 506
+      "ms": 525
     },
     {
       "name": "No uncaught JavaScript errors",
       "result": "PASS",
-      "ms": 1
+      "ms": 0
     }
   ],
   "pageErrors": [],
   "accessibility": [
-    { "view": "home", "violations": [] },
-    { "view": "play", "violations": [] },
-    { "view": "training", "violations": [] },
-    { "view": "academy", "violations": [] },
-    { "view": "progress", "violations": [] },
-    { "view": "library", "violations": [] },
-    { "view": "games", "violations": [] },
-    { "view": "analysis", "violations": [] },
-    { "view": "review", "violations": [] }
+    {
+      "view": "home",
+      "violations": []
+    },
+    {
+      "view": "play",
+      "violations": []
+    },
+    {
+      "view": "training",
+      "violations": []
+    },
+    {
+      "view": "academy",
+      "violations": []
+    },
+    {
+      "view": "progress",
+      "violations": []
+    },
+    {
+      "view": "library",
+      "violations": []
+    },
+    {
+      "view": "games",
+      "violations": []
+    },
+    {
+      "view": "analysis",
+      "violations": []
+    },
+    {
+      "view": "review",
+      "violations": []
+    }
   ],
-  "passed": 27,
+  "passed": 29,
   "failed": 0
 }

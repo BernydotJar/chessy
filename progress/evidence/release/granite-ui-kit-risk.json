@@ -1,0 +1,9 @@
+{
+  "model": "ibm/granite3.3:2b",
+  "reviewed_sha": "fe61cad54a9b9fc9ab584d08c7fbd2c128a987fe",
+  "verdict": "PASS",
+  "finding": "NONE",
+  "authority": "independent-release-risk-critic",
+  "raw_response": "/shared-auth/critic/raw/chessy/fe61cad54a9b9fc9ab584d08c7fbd2c128a987fe/ui-kit-risk-raw.json",
+  "note": "A prior long-schema attempt was rejected as non-authoritative because the model did not follow the requested critic schema. This compact SHA-bound chat response did."
+}

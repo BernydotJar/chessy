@@ -1,0 +1,27 @@
+{
+  "scope": "Chessy UI Kit v2 and visual themes",
+  "verified_at": "2026-09-06T07:40:30Z",
+  "base_release": "9895043f920eb3de52be1020687b330dff226188",
+  "checks": {
+    "lint": "PASS",
+    "unit_tests": "163/163 PASS",
+    "typescript_build": "PASS",
+    "independent_python_chess": "112/112 PASS",
+    "browser_workflows": "29/29 PASS",
+    "mouse_drag_mid_gesture": "PASS",
+    "touch_drag_play_and_challenges": "PASS",
+    "theme_chrome_and_board_sync": "PASS",
+    "theme_persistence": "PASS",
+    "mobile_bottom_navigation": "PASS",
+    "responsive_overflow_390_768_1440": "PASS",
+    "wcag_2_1_aa_nine_routes": "PASS",
+    "uncaught_javascript_errors": 0,
+    "npm_audit_low": "0 vulnerabilities"
+  },
+  "themes": ["forest", "ivory", "night"],
+  "deployment_contract": {
+    "runtime": "existing workspace supervised runtime",
+    "new_application_containers": 0,
+    "public_hostname": "chessy.textilesdemedellin.com"
+  }
+}
