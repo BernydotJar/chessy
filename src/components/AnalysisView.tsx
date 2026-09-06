@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGameStore } from '../store/gameStore';
-import { Activity } from 'lucide-react';
+import { ChessyIcon } from '../design/icons';
 import { StockfishService, MultiPVLine } from '../utils/stockfishService';
 import { getExplorerLines } from '../utils/openingsExplorer';
 import { Chess } from 'chess.js';
@@ -59,7 +59,7 @@ export const AnalysisView: React.FC = () => {
       </div>
 
       <div className="glass-container rounded-lg p-4 flex items-center gap-3">
-        <Activity size={18} className="text-emerald-300" />
+        <ChessyIcon name="analysis" size={18} className="accent"/>
         <div>
           <p className="text-white/70 text-xs">{t('analysis.eval')}</p>
           <p className="text-white font-semibold">

@@ -90,7 +90,7 @@ export const BoardSetupPanel: React.FC = () => {
                   event.dataTransfer.setData('text/plain', piece.code);
                 }}
                 className={`glass-button glass-button--subtle px-2 py-2 rounded-lg text-lg ${
-                  setupSelectedPiece === piece.code ? 'ring-2 ring-white/50' : ''
+                  setupSelectedPiece === piece.code ? 'setup-choice-selected' : ''
                 }`}
               >
                 {piece.symbol}
@@ -103,7 +103,7 @@ export const BoardSetupPanel: React.FC = () => {
                 event.dataTransfer.setData('text/plain', 'erase');
               }}
               className={`glass-button glass-button--subtle px-2 py-2 rounded-lg text-xs text-white ${
-                setupSelectedPiece === null ? 'ring-2 ring-white/50' : ''
+                setupSelectedPiece === null ? 'setup-choice-selected' : ''
               }`}
             >
               <span className="flex items-center justify-center gap-1">
@@ -147,7 +147,7 @@ export const BoardSetupPanel: React.FC = () => {
         </div>
 
         {errorKey && (
-          <p className="text-red-300 text-sm">
+          <p className="setup-error text-sm">
             {t(`setup.errors.${errorKey}`)}
           </p>
         )}
@@ -155,7 +155,7 @@ export const BoardSetupPanel: React.FC = () => {
         <div className="flex flex-col gap-2">
           <button
             onClick={handleApply}
-            className="glass-button w-full px-4 py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-blue-500/20 to-purple-500/20"
+            className="glass-button w-full px-4 py-3 rounded-lg text-white font-semibold"
           >
             {t('setup.apply')}
           </button>

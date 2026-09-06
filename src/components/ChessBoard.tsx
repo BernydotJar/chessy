@@ -92,8 +92,7 @@ export const ChessBoard: React.FC = () => {
   const customBoardStyle = useMemo(() => ({
     borderRadius: '12px',
     boxShadow: `
-      0 8px 32px 0 rgba(0, 0, 0, 0.4),
-      inset 0 1px 0 rgba(255, 255, 255, 0.1)
+      0 12px 30px rgba(0, 0, 0, 0.22)
     `,
   }), []);
 
@@ -148,7 +147,7 @@ export const ChessBoard: React.FC = () => {
             {
               ...baseSquareStyles[square],
               backgroundColor: `${baseSquareStyles[square].backgroundColor}dd`,
-              boxShadow: 'inset 0 0 0 3px rgba(255, 255, 0, 0.5)',
+              boxShadow: 'inset 0 0 0 3px var(--board-legal)',
             },
           ])
         ),
@@ -156,7 +155,7 @@ export const ChessBoard: React.FC = () => {
         ...(selectedSquare ? {
           [selectedSquare]: {
             ...baseSquareStyles[selectedSquare],
-            boxShadow: 'inset 0 0 0 3px rgba(100, 200, 255, 0.7)',
+            boxShadow: 'inset 0 0 0 3px var(--board-selected)',
           },
         } : {}),
       }, [baseSquareStyles, highlightedSquares, selectedSquare, setupMode]);

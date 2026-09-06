@@ -251,7 +251,18 @@
     "glassBlur": "Desfoque do vidro: {{value}}px",
     "preview": "Prévia",
     "open": "Abrir personalizador de tema",
-    "close": "Fechar personalizador de tema"
+    "close": "Fechar personalizador de tema",
+    "subtitle": "Tabuleiro e interface em uma única preferência.",
+    "advanced": "Ajustes avançados do tabuleiro",
+    "advancedHint": "Ajuste apenas as casas se quiser uma combinação própria.",
+    "forest": "Bosque clássico",
+    "forestDescription": "Verde profundo e marfim. Foco natural.",
+    "ivory": "Marfim sálvia",
+    "ivoryDescription": "Claro, sereno e com contraste suave.",
+    "night": "Noturno torneio",
+    "nightDescription": "Azul profundo para sessões longas.",
+    "choose": "Escolha como você quer ver o Chessy",
+    "persistHint": "Salvo neste dispositivo."
   },
   "promotion": {
     "title": "Escolha a peça de promoção",

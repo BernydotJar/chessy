@@ -163,7 +163,7 @@ export const ExerciseView: React.FC = () => {
         </button>
         <button
           onClick={handleNext}
-          className="glass-button px-4 py-2 rounded-lg text-white text-sm bg-gradient-to-r from-blue-500/20 to-purple-500/20"
+          className="glass-button px-4 py-2 rounded-lg text-white text-sm"
         >
           {t('exercise.next')}
         </button>
