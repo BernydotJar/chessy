@@ -1,0 +1,31 @@
+name: Apply Chessy Mobile v1 handoff
+
+on:
+  push:
+    branches: ['feat/mobile-product-v1-icons-v3']
+    paths: ['.github/workflows/apply-mobile-v1-handoff.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch SHA-bound verified patch
+        run: |
+          curl -fsSL https://chessy.textilesdemedellin.com/chessy-mobile-v1-handoff.patch -o /tmp/chessy-mobile-v1.patch
+          echo '1c7066f0e4280e8fb38eac887e269aa5cdd2fe8dc6001719072fb7efcc03e0a3  /tmp/chessy-mobile-v1.patch' | sha256sum -c -
+      - name: Apply exact candidate tree
+        run: |
+          git apply --binary /tmp/chessy-mobile-v1.patch
+          rm -f .github/workflows/apply-mobile-v1-handoff.yml
+          git add -A
+          git diff --cached --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'feat: ship Chessy mobile product v1 and icon system v3'
+          git push origin HEAD:feat/mobile-product-v1-icons-v3
