@@ -1,0 +1,32 @@
+name: Refresh drag fix lockfile
+
+on:
+  push:
+    branches:
+      - fix/board-drag-touch-20260906
+
+permissions:
+  contents: write
+
+jobs:
+  refresh-lock:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/board-drag-touch-20260906
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Regenerate dependency lock
+        run: npm install --package-lock-only --ignore-scripts
+      - name: Commit lockfile
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package-lock.json
+          git diff --cached --quiet && exit 0
+          git commit -m "chore: refresh drag fix lockfile"
+          git push origin HEAD:fix/board-drag-touch-20260906
