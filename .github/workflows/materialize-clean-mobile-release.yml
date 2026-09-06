@@ -1,0 +1,76 @@
+name: Materialize exact Chessy Mobile release branch
+
+on:
+  push:
+    branches: ['feat/mobile-product-v1-icons-v3']
+    paths: ['.github/workflows/materialize-clean-mobile-release.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Reconstruct exact verified candidate
+        env:
+          BASE: 6145963d1bb819cb53ffd29208c31beb0078e57c
+        run: |
+          git reset --hard "$BASE"
+          curl -fsSL https://chessy.textilesdemedellin.com/chessy-mobile-vector-final.patch -o /tmp/candidate.patch
+          curl -fsSL https://chessy.textilesdemedellin.com/chessy-mobile-vector-identity.json -o /tmp/candidate.json
+          git apply /tmp/candidate.patch
+          git add -A
+          ACTUAL_TREE="$(git write-tree)"
+          EXPECTED_TREE="$(python3 -c 'import json; print(json.load(open("/tmp/candidate.json"))["tree"])')"
+          test "$ACTUAL_TREE" = "$EXPECTED_TREE"
+          echo "Verified source tree: $ACTUAL_TREE"
+      - name: Write candidate to clean release branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET: feat/mobile-product-v1-release
+          BASE: 6145963d1bb819cb53ffd29208c31beb0078e57c
+        run: |
+          python3 - <<'PY'
+          import base64, json, os, pathlib, subprocess, urllib.error, urllib.parse, urllib.request
+          owner='BernydotJar'; repo='chessy'; target=os.environ['TARGET']; base=os.environ['BASE']; token=os.environ['GH_TOKEN']
+          headers={'Authorization':f'Bearer {token}','Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json'}
+          def req(method,path,body=None):
+              url=f'https://api.github.com/repos/{owner}/{repo}/{path}'
+              data=None if body is None else json.dumps(body).encode()
+              r=urllib.request.Request(url,data=data,method=method,headers=headers)
+              try:
+                  with urllib.request.urlopen(r) as resp: return resp.status, json.load(resp)
+              except urllib.error.HTTPError as e:
+                  if e.code==404: return 404, None
+                  print(e.read().decode(), flush=True); raise
+          changed=[]
+          for line in subprocess.check_output(['git','diff','--name-status',base],text=True).splitlines():
+              parts=line.split('\t'); changed.append((parts[0],parts[-1]))
+          print(f'Writing {len(changed)} exact candidate paths to {target}',flush=True)
+          for index,(status,path) in enumerate(changed,1):
+              encoded=urllib.parse.quote(path,safe='/')
+              _, current=req('GET',f'contents/{encoded}?ref={urllib.parse.quote(target,safe="")}')
+              if status=='D':
+                  if current:
+                      req('DELETE',f'contents/{encoded}',{'message':f'chore: remove superseded {path}','sha':current['sha'],'branch':target})
+                  print(f'{index}/{len(changed)} D {path}',flush=True); continue
+              raw=pathlib.Path(path).read_bytes(); raw.decode('utf-8')
+              body={'message':f'feat: mobile v1 sync {path}','content':base64.b64encode(raw).decode(),'branch':target}
+              if current: body['sha']=current['sha']
+              req('PUT',f'contents/{encoded}',body)
+              print(f'{index}/{len(changed)} {status} {path}',flush=True)
+          PY
+      - name: Verify remote clean branch tree exactly
+        env:
+          TARGET: feat/mobile-product-v1-release
+        run: |
+          EXPECTED_TREE="$(python3 -c 'import json; print(json.load(open("/tmp/candidate.json"))["tree"])')"
+          git fetch --force origin "$TARGET"
+          REMOTE_TREE="$(git rev-parse FETCH_HEAD^{tree})"
+          echo "Expected: $EXPECTED_TREE"
+          echo "Remote:   $REMOTE_TREE"
+          test "$REMOTE_TREE" = "$EXPECTED_TREE"
