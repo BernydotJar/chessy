@@ -179,7 +179,14 @@ export const ChessBoard: React.FC = () => {
     allowDragging: !isGameOver && !isAIThinking && !setupMode,
     allowDragOffBoard: false,
     allowAutoScroll: false,
-    dragActivationDistance: 2,
+    dragActivationDistance: 4,
+    draggingPieceGhostStyle: {
+      opacity: 0,
+    },
+    draggingPieceStyle: {
+      transform: 'scale(1.04)',
+      filter: 'drop-shadow(0 8px 8px rgba(0, 0, 0, 0.34))',
+    },
     allowDrawingArrows: true,
     showNotation: false,
   }), [accessiblePieces, customBoardStyle, customSquareStyles, fen, isAIGame, isAIThinking, isGameOver, onDrop, onSquareClick, playerColor, setupFen, setupMode]);
