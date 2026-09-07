@@ -731,6 +731,62 @@
     "reviewCount": "{{count}} to review",
     "weakThemeEvidence": "{{mistakes}} observed mistakes · {{outstanding}} outstanding",
     "weakThemeEmpty": "There is not enough evidence yet to call out a weak theme.",
-    "offline": "Offline · local mode"
+    "offline": "Offline · local mode",
+    "account": "Account"
+  },
+  "auth": {
+    "title": "Your Chessy account",
+    "subtitle": "Sign in to establish an identity across devices. Your chess progress stays local in this phase.",
+    "loading": "Preparing your account…",
+    "notConnectedTitle": "Cloud sign-in is not connected yet",
+    "notConnectedBody": "Chessy already has the account boundary in place, but this deployment does not yet have a Firebase web app configured. We will not simulate a session that does not exist.",
+    "localStillWorks": "You can keep playing, learning and using local progress, including offline.",
+    "signedInSubtitle": "Your identity is connected; chess progress still remains on this device.",
+    "signedInAs": "Signed in as",
+    "player": "Chessy player",
+    "providerLabel": "Provider",
+    "accountActions": "Account controls",
+    "progressLocal": "Signing out or deleting the account does not erase local progress on this device in this phase.",
+    "signOut": "Sign out",
+    "deleteTitle": "Delete account",
+    "deleteBody": "Delete the authenticated identity. If the provider requires recent authentication, Chessy will tell you; that protection is never bypassed.",
+    "deleteAccount": "Delete my account",
+    "confirmDelete": "Yes, delete account",
+    "cancel": "Cancel",
+    "modeLabel": "Access mode",
+    "signIn": "Sign in",
+    "create": "Create account",
+    "displayName": "Display name",
+    "email": "Email",
+    "password": "Password",
+    "working": "Working…",
+    "or": "or continue with",
+    "google": "Continue with Google",
+    "resetPassword": "Send password reset link",
+    "localFirstTitle": "Local first, account second",
+    "localFirstBody": "The account adds identity; it does not take ownership of your local games or learning data.",
+    "localPoint1": "Play, Academy, Challenges and Stockfish remain available as a guest.",
+    "localPoint2": "This phase does not upload or merge your progress.",
+    "localPoint3": "The same identity boundary can use native SDKs on Android/iOS.",
+    "provider": {
+      "password": "Email and password",
+      "google": "Google",
+      "unknown": "Other provider"
+    },
+    "errors": {
+      "invalid-credentials": "The email or password is not valid.",
+      "email-in-use": "That email is already associated with an account.",
+      "weak-password": "Use a stronger password.",
+      "invalid-email": "The email address is not valid.",
+      "network": "We could not reach the sign-in service. Check your connection.",
+      "recent-login-required": "For security, sign in again before deleting the account.",
+      "popup-blocked": "The browser blocked the sign-in window. Allow it and try again.",
+      "cancelled": "Sign-in was cancelled.",
+      "unknown": "We could not complete the account operation."
+    },
+    "notices": {
+      "password-reset-sent": "If an account exists for that email, the provider will send recovery instructions.",
+      "account-deleted": "The authenticated account was deleted. Your local progress remains on this device."
+    }
   }
 }

@@ -1,0 +1,42 @@
+{
+  "candidate_sha": "e43a8259481ad7ba0c43faf4d233858433194198",
+  "candidate_tree": "73da91b84dc9b2e7e21d49d56732508663288d02",
+  "scope": "Chessy Mobile Product v1 + Icon System v3 vector-first final",
+  "verified_at": "2026-09-06T19:29:16Z",
+  "checks": {
+    "lint": "PASS",
+    "unit_tests": "168/168 PASS",
+    "typescript_vite_build": "PASS",
+    "independent_python_chess": "112/112 PASS",
+    "browser_workflows": "32/32 PASS",
+    "mobile_widths": "320/360/390/430/768 PASS without horizontal overflow",
+    "mobile_focus_shell": "PASS",
+    "mouse_drag": "PASS",
+    "touch_drag": "PASS",
+    "review_mistakes_queue": "PASS",
+    "weak_theme_evidence_contract": "PASS",
+    "wcag_2_1_aa_desktop": "9/9 routes PASS",
+    "wcag_2_1_aa_mobile_primary_routes": "PASS",
+    "uncaught_javascript_errors": 0,
+    "pwa_install_contract": "PASS",
+    "offline_reload": "PASS",
+    "offline_academy": "PASS",
+    "offline_challenges": "PASS",
+    "offline_stockfish_uci": "PASS",
+    "npm_audit_low": "0 vulnerabilities"
+  },
+  "packaging": {
+    "install_assets": "SVG/vector-first",
+    "maskable_svg": "public/chess-icon-maskable.svg",
+    "legacy_pwa_png_additions": "removed"
+  },
+  "architecture": {
+    "backend_added": false,
+    "authentication_added": false,
+    "remote_ai_added": false,
+    "analytics_sdk_added": false,
+    "native_wrapper_added": false,
+    "new_application_containers": 0,
+    "deployment_path": "existing supervised Chessy runtime + shared Caddy + cloud-sandbox-mac tunnel"
+  }
+}

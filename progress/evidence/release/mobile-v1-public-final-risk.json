@@ -1,0 +1,10 @@
+{
+  "model": "ibm/granite3.3:2b",
+  "reviewed_sha": "4ed964387a520092baef8323513a227e69687ea1",
+  "reviewed_tree": "73da91b84dc9b2e7e21d49d56732508663288d02",
+  "verdict": "PASS",
+  "finding": "NONE",
+  "authority": "final-public-release-risk-critic",
+  "raw_response": "/shared-auth/critic/raw/chessy/4ed964387a520092baef8323513a227e69687ea1/mobile-v1-public-final-risk-raw.json",
+  "verified_at": "2026-09-06T19:40:05Z"
+}

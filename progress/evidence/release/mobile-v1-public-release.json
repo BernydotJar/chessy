@@ -1,0 +1,17 @@
+{
+  "terminal_candidate": "COMPLETED",
+  "release_sha": "4ed964387a520092baef8323513a227e69687ea1",
+  "release_tree": "73da91b84dc9b2e7e21d49d56732508663288d02",
+  "public_url": "https://chessy.textilesdemedellin.com/",
+  "deployed_at": "2026-09-06T19:40:05Z",
+  "product": "Chessy Mobile Product v1",
+  "icon_system": "v3",
+  "github_pr": 5,
+  "github_pr_ci_run": 34055258167,
+  "github_main_ci_run": 34055357260,
+  "public_acceptance": "PASS",
+  "final_critic": "PASS_P_NONE",
+  "new_application_containers": 0,
+  "verification_artifact": "progress/evidence/release/mobile-v1-public-verification.json",
+  "critic_artifact": "progress/evidence/release/mobile-v1-public-final-risk.json"
+}

@@ -25,12 +25,14 @@ import { locale } from './learning/types';
 import { ChessyIcon, type ChessyIconName } from './design/icons';
 import { ChessyMark } from './design/ChessyMark';
 import { OfflineStatus } from './components/OfflineStatus';
+import { AccountView } from './components/studio/AccountView';
+import { useAuthStore } from './auth/store';
 import './styles/glassmorphism.css';
 import './styles/studio.css';
 import './styles/design-system.css';
 
-const NAV: readonly {id:'home'|'play'|'training'|'academy'|'progress'|'library'|'games'|'analysis'|'review';icon:ChessyIconName}[]=[
- {id:'home',icon:'home'}, {id:'play',icon:'play'}, {id:'training',icon:'challenges'}, {id:'academy',icon:'academy'}, {id:'progress',icon:'progress'}, {id:'library',icon:'library'}, {id:'games',icon:'games'}, {id:'analysis',icon:'analysis'}, {id:'review',icon:'review'}
+const NAV: readonly {id:'home'|'play'|'training'|'academy'|'progress'|'library'|'games'|'analysis'|'review'|'account';icon:ChessyIconName}[]=[
+ {id:'home',icon:'home'}, {id:'play',icon:'play'}, {id:'training',icon:'challenges'}, {id:'academy',icon:'academy'}, {id:'progress',icon:'progress'}, {id:'library',icon:'library'}, {id:'games',icon:'games'}, {id:'analysis',icon:'analysis'}, {id:'review',icon:'review'}, {id:'account',icon:'profile'}
 ];
 const MOBILE_NAV = NAV.slice(0,5);
 
@@ -42,8 +44,9 @@ class ErrorBoundary extends Component<{children:ReactNode},{failed:boolean}> {
 
 function App() {
  const {t,i18n}=useTranslation();const game=useGameStore();const {view,setView,setupMode}=game;
- const storageWarning=useLearningStore(s=>s.storageWarning);const [mobileMenu,setMobileMenu]=useState(false);const main=useRef<HTMLElement>(null);const sidebar=useRef<HTMLElement>(null);
+ const storageWarning=useLearningStore(s=>s.storageWarning);const authStatus=useAuthStore(s=>s.status);const initializeAuth=useAuthStore(s=>s.initialize);const [mobileMenu,setMobileMenu]=useState(false);const main=useRef<HTMLElement>(null);const sidebar=useRef<HTMLElement>(null);
  const lang=locale(i18n.resolvedLanguage);
+ useEffect(()=>{void initializeAuth();},[initializeAuth]);
  useEffect(()=>{
   const media=window.matchMedia('(max-width: 760px)');
   const sync=()=>{if(sidebar.current)sidebar.current.inert=media.matches&&!mobileMenu;};
@@ -74,8 +77,8 @@ function App() {
    <nav aria-label={t('studio.navLabel')}>{NAV.map((item,index)=> <div key={item.id}>{index===6&&<p className="sidebar-caption secondary-caption">{t('studio.tools')}</p>}<a href={`#/${item.id}`} onClick={()=>navigate(item.id)} className={`nav-link ${view===item.id?'active':''}`} aria-current={view===item.id?'page':undefined}><ChessyIcon name={item.icon} size={20} filled={view===item.id}/><span>{t(`studio.${item.id}`)}</span>{view===item.id&&<span className="nav-indicator"/>}</a></div>)}</nav>
    <div className="sidebar-bottom"><ChessyIcon name="shield" size={20}/><p>{t('studio.local')}</p><a href="https://github.com/BernydotJar/chessy" target="_blank" rel="noreferrer">GitHub <ChessyIcon className="external-arrow" name="arrow" size={14}/></a></div>
   </aside>
-  <div className="main-shell"><header className="topbar"><div className="topbar-left"><button className="mobile-menu icon-button" onClick={()=>setMobileMenu(m=>!m)} aria-label={t(mobileMenu?'studio.close':'studio.menu')} aria-controls="chessy-navigation" aria-expanded={mobileMenu}><ChessyIcon name={mobileMenu?'close':'menu'} size={22}/></button>{boardFocused&&<a className="mobile-focus-home icon-button" href="#/home" onClick={()=>navigate('home')} aria-label={t('studio.home')}><ChessyIcon name="home" size={20}/></a>}<span className="breadcrumb">Chessy <span>/</span> {t(`studio.${view}`)}</span></div><OfflineStatus/><div className="topbar-actions"><ThemeCustomizer compact/><LanguageSwitcher/></div></header>
-   <main id="main-content" ref={main} tabIndex={-1} className="main-content">{storageWarning&&<div className="storage-warning" role="status">{t('studio.storageWarning')} <button className="text-button" onClick={()=>navigate('progress')}>{t('studio.backup')}</button></div>}<ErrorBoundary key={view}>{view==='home'&&<HomeView/>}{view==='academy'&&<AcademyView/>}{view==='training'&&<ChallengeView/>}{view==='progress'&&<ProgressView/>}{view==='library'&&<LibraryView/>}{view==='play'&&renderPlay()}{view==='games'&&<GamesHub/>}{view==='review'&&<ReviewView/>}{view==='analysis'&&<AnalysisView/>}</ErrorBoundary></main>
+  <div className="main-shell"><header className="topbar"><div className="topbar-left"><button className="mobile-menu icon-button" onClick={()=>setMobileMenu(m=>!m)} aria-label={t(mobileMenu?'studio.close':'studio.menu')} aria-controls="chessy-navigation" aria-expanded={mobileMenu}><ChessyIcon name={mobileMenu?'close':'menu'} size={22}/></button>{boardFocused&&<a className="mobile-focus-home icon-button" href="#/home" onClick={()=>navigate('home')} aria-label={t('studio.home')}><ChessyIcon name="home" size={20}/></a>}<span className="breadcrumb">Chessy <span>/</span> {t(`studio.${view}`)}</span></div><OfflineStatus/><div className="topbar-actions"><a className={`account-launch icon-button ${view==='account'?'active':''}`} href="#/account" onClick={()=>navigate('account')} aria-label={t('studio.account')} title={t('studio.account')}><ChessyIcon name="profile" size={20} filled={authStatus==='signed-in'}/><span className={`account-status-dot ${authStatus}`}/></a><ThemeCustomizer compact/><LanguageSwitcher/></div></header>
+   <main id="main-content" ref={main} tabIndex={-1} className="main-content">{storageWarning&&<div className="storage-warning" role="status">{t('studio.storageWarning')} <button className="text-button" onClick={()=>navigate('progress')}>{t('studio.backup')}</button></div>}<ErrorBoundary key={view}>{view==='home'&&<HomeView/>}{view==='academy'&&<AcademyView/>}{view==='training'&&<ChallengeView/>}{view==='progress'&&<ProgressView/>}{view==='library'&&<LibraryView/>}{view==='play'&&renderPlay()}{view==='games'&&<GamesHub/>}{view==='review'&&<ReviewView/>}{view==='analysis'&&<AnalysisView/>}{view==='account'&&<AccountView/>}</ErrorBoundary></main>
    <footer className="studio-footer"><span><ChessyMark size={16}/> Chessy</span><p>{t('studio.footer')}</p><span>ES / EN / PT</span></footer>
   </div>
   <nav className={`mobile-bottom-nav ${view==='play'||view==='training'?'mobile-bottom-nav--board':''}`} aria-label={t('studio.navLabel')}>{MOBILE_NAV.map(item=><a key={item.id} href={`#/${item.id}`} onClick={()=>navigate(item.id)} className={view===item.id?'active':''} aria-current={view===item.id?'page':undefined}><ChessyIcon name={item.icon} size={21} filled={view===item.id}/><span>{t(`studio.${item.id}`)}</span></a>)}</nav>

@@ -1,0 +1,37 @@
+{
+  "scope": "PWA Auth + Native Readiness v1",
+  "verified_at": "2026-09-07T15:19:05Z",
+  "checks": {
+    "lint": "PASS",
+    "unit_tests": "180/180 PASS",
+    "production_build": "PASS",
+    "independent_python_chess": "112/112 PASS",
+    "npm_audit": "0 vulnerabilities",
+    "git_diff_check": "PASS",
+    "browser_workflows": "34/34 PASS",
+    "browser_page_errors": 0,
+    "responsive": "320/360/390/430/768/1440 PASS without horizontal overflow",
+    "wcag_desktop": "10/10 routes PASS automated WCAG 2.1 AA",
+    "wcag_mobile": "primary routes + account PASS automated WCAG 2.1 AA",
+    "pwa_offline": "PASS: reload, Academy, Challenges, Stockfish UCI",
+    "firebase_email_password_cloud": "PASS: create, sign-in, delete, deleted credential rejected",
+    "firebase_google_provider": "PASS: google.com authUri issued for production origin",
+    "firebase_ui_live": "PASS: create, sign-out, sign-in, delete at 390px",
+    "local_progress_preserved_across_auth": "PASS",
+    "secret_value_scan": "PASS"
+  },
+  "architecture": {
+    "backend_sync_added": false,
+    "progress_sync_added": false,
+    "native_wrapper_added": false,
+    "analytics_sdk_added": false,
+    "new_application_containers": 0,
+    "firebase_purpose": "identity only"
+  },
+  "evidence": [
+    "progress/evidence/browser/verification.json",
+    "progress/evidence/browser/pwa-verification.json",
+    "progress/evidence/release/auth-cloud-verification.json",
+    "progress/evidence/release/auth-ui-live-verification.json"
+  ]
+}

@@ -15,11 +15,14 @@
     "typecheck": "tsc --noEmit",
     "test:e2e": "node scripts/browser-verify.cjs",
     "verify": "npm run lint && npm test -- --run && npm run build",
-    "test:pwa": "node scripts/pwa-verify.cjs"
+    "test:pwa": "node scripts/pwa-verify.cjs",
+    "test:auth:cloud": "node scripts/auth-cloud-verify.cjs",
+    "test:auth:ui-live": "node scripts/auth-ui-live-verify.cjs"
   },
   "dependencies": {
     "chess.js": "^1.0.0-beta.6",
     "clsx": "^2.0.0",
+    "firebase": "12.18.0",
     "i18next": "^25.8.0",
     "i18next-browser-languagedetector": "^8.2.0",
     "lucide-react": "1.41.0",

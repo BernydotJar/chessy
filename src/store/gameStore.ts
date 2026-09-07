@@ -20,7 +20,7 @@ interface GameStore extends GameState {
   setupSideToMove: 'w' | 'b';
   setupSelectedPiece: SetupPiece;
   setupFen: string;
-  view: 'home' | 'academy' | 'progress' | 'library' | 'play' | 'games' | 'review' | 'analysis' | 'training';
+  view: 'home' | 'academy' | 'progress' | 'library' | 'play' | 'games' | 'review' | 'analysis' | 'training' | 'account';
   activeGameId: string | null;
   trainingMode: boolean;
   engineError: boolean;

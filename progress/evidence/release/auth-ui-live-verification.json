@@ -1,0 +1,10 @@
+{
+  "project": "chessy-pwa-2026",
+  "viewport": 390,
+  "createUi": "PASS",
+  "signOutUi": "PASS",
+  "signInUi": "PASS",
+  "deleteUi": "PASS",
+  "localProgressPreserved": "PASS",
+  "pageErrors": []
+}

@@ -1,0 +1,10 @@
+{
+  "model": "ibm/granite3.3:2b",
+  "reviewed_sha": "e43a8259481ad7ba0c43faf4d233858433194198",
+  "reviewed_tree": "73da91b84dc9b2e7e21d49d56732508663288d02",
+  "verdict": "PASS",
+  "finding": "NONE",
+  "authority": "independent-release-risk-critic",
+  "raw_response": "/shared-auth/critic/raw/chessy/e43a8259481ad7ba0c43faf4d233858433194198/mobile-vector-final-risk-raw.json",
+  "verified_at": "2026-09-06T19:29:16Z"
+}

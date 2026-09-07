@@ -1,0 +1,16 @@
+{
+  "candidate_sha": "e43a8259481ad7ba0c43faf4d233858433194198",
+  "candidate_tree": "73da91b84dc9b2e7e21d49d56732508663288d02",
+  "baseline_sha": "6145963d1bb819cb53ffd29208c31beb0078e57c",
+  "scope": [
+    "Icon System v3",
+    "mobile focus IA",
+    "local mistake review and weak-theme evidence",
+    "installable offline PWA",
+    "vector-first install assets"
+  ],
+  "verification": "progress/evidence/release/mobile-v1-verification.json",
+  "critic": "progress/evidence/release/mobile-v1-granite-risk.json",
+  "publication": "pending CH-016",
+  "new_application_containers": 0
+}
