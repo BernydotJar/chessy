@@ -1,0 +1,119 @@
+{
+  "program": "chessy-country-themes-v1",
+  "baseline_sha": "5801622c49924c3e6deeb21b160263bd6bd8c16f",
+  "result": "PASS",
+  "static": {
+    "lint": "PASS",
+    "unit_tests": "190/190 PASS",
+    "typescript_build": "PASS",
+    "npm_audit": "0 vulnerabilities",
+    "diff_check": "PASS"
+  },
+  "independent_chess": "112/112 PASS",
+  "browser": {
+    "checks": "37/37 PASS",
+    "routes": 12,
+    "wcag": "PASS",
+    "page_errors": []
+  },
+  "themes": {
+    "total": 11,
+    "classics": 3,
+    "country": 8,
+    "all_atlas_and_play_wcag": "PASS",
+    "mobile390": "PASS",
+    "details": [
+      {
+        "id": "forest",
+        "accent": "#b9e88f",
+        "boardA1": "rgb(94, 130, 115)",
+        "themesWcag": "PASS",
+        "playWcag": "PASS"
+      },
+      {
+        "id": "ivory",
+        "accent": "#345c45",
+        "boardA1": "rgb(154, 173, 147)",
+        "themesWcag": "PASS",
+        "playWcag": "PASS"
+      },
+      {
+        "id": "night",
+        "accent": "#b7d7ff",
+        "boardA1": "rgb(52, 75, 104)",
+        "themesWcag": "PASS",
+        "playWcag": "PASS"
+      },
+      {
+        "id": "guatemala",
+        "accent": "#81c8b4",
+        "boardA1": "rgb(91, 143, 163)",
+        "themesWcag": "PASS",
+        "playWcag": "PASS"
+      },
+      {
+        "id": "colombia",
+        "accent": "#f2c94c",
+        "boardA1": "rgb(66, 101, 143)",
+        "themesWcag": "PASS",
+        "playWcag": "PASS"
+      },
+      {
+        "id": "mexico",
+        "accent": "#78c6a0",
+        "boardA1": "rgb(79, 129, 107)",
+        "themesWcag": "PASS",
+        "playWcag": "PASS"
+      },
+      {
+        "id": "brasil",
+        "accent": "#e7c95b",
+        "boardA1": "rgb(52, 114, 79)",
+        "themesWcag": "PASS",
+        "playWcag": "PASS"
+      },
+      {
+        "id": "usa",
+        "accent": "#a8c7e7",
+        "boardA1": "rgb(76, 98, 128)",
+        "themesWcag": "PASS",
+        "playWcag": "PASS"
+      },
+      {
+        "id": "argentina",
+        "accent": "#245b75",
+        "boardA1": "rgb(123, 176, 198)",
+        "themesWcag": "PASS",
+        "playWcag": "PASS"
+      },
+      {
+        "id": "espana",
+        "accent": "#d7b15a",
+        "boardA1": "rgb(139, 90, 83)",
+        "themesWcag": "PASS",
+        "playWcag": "PASS"
+      },
+      {
+        "id": "chile",
+        "accent": "#7fbad4",
+        "boardA1": "rgb(84, 123, 141)",
+        "themesWcag": "PASS",
+        "playWcag": "PASS"
+      }
+    ]
+  },
+  "services": {
+    "pwa_offline": "PASS",
+    "stockfish_offline": "PASS",
+    "popup_security": "PASS",
+    "analytics_consent_boundary": "PASS",
+    "firebase_auth": "PASS",
+    "firestore_rules": "PASS",
+    "two_device_progress_sync": "PASS"
+  },
+  "visual_evidence": [
+    "progress/evidence/browser/themes-desktop.png",
+    "progress/evidence/browser/themes-mobile.png"
+  ],
+  "known_non_blocking": "Vite reports one >500kB vendor chunk; no new 3D, remote image, font, or icon runtime dependency was added."
+}

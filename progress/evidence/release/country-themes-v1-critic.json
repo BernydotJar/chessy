@@ -1,0 +1,38 @@
+{
+  "program": "chessy-country-themes-v1",
+  "result": "PASS",
+  "open_material_findings": [],
+  "closed_findings": [
+    {
+      "id": "CT-UX-001",
+      "finding": "New 8-9px Atlas labels initially used subtle text at borderline 4.46:1.",
+      "fix": "Raised microcopy to muted semantic token.",
+      "verification": "WCAG PASS."
+    },
+    {
+      "id": "CT-UX-002",
+      "finding": "Argentina light palette initially failed contrast in Atlas and the active Play nav.",
+      "fix": "Darkened accent and secondary tokens while preserving celeste identity.",
+      "verification": "Argentina Atlas + Play WCAG PASS."
+    },
+    {
+      "id": "CT-UX-003",
+      "finding": "Spain subtle sidebar token measured 4.47:1.",
+      "fix": "Raised subtle token to a 5.01:1 candidate.",
+      "verification": "Spain Atlas + Play WCAG PASS."
+    },
+    {
+      "id": "CT-TEST-001",
+      "finding": "First route assertion raced React after hash navigation.",
+      "fix": "Harness waits for first Atlas card; production router diagnostic confirmed 11 cards from CTA and deep-link.",
+      "verification": "37/37 browser PASS."
+    }
+  ],
+  "design_rejections": [
+    "literal full-screen flag skins",
+    "3D/WebGL decoration",
+    "primary sidebar Themes item",
+    "remote runtime icon/image dependency"
+  ],
+  "design_acceptance": "Settings-owned Chessy Atlas route; code-native SVG landscape studies; semantic chrome plus board palettes; board-first interaction."
+}

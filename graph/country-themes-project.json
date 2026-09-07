@@ -1,0 +1,18 @@
+{
+  "schema_version": "graph-harness.project.v1",
+  "project_id": "chessy-country-themes-v1",
+  "mode": "SHIP",
+  "gate_definitions": [
+    {"id":"spec","required_evidence_kinds":["spec"],"blocking":true},
+    {"id":"verification","required_evidence_kinds":["verification"],"blocking":true},
+    {"id":"critic","required_evidence_kinds":["critic"],"blocking":true},
+    {"id":"release","required_evidence_kinds":["release"],"blocking":true}
+  ],
+  "nodes": [
+    {"id":"CH-033","title":"Recover historic country themes and define premium visual contract","kind":"feature","status":"spec_ready","depends_on":[],"capability":"engineering","allowed_paths":["specs/**","docs/**","graph/**","progress/**"],"gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}},
+    {"id":"CH-034","title":"Build premium country theme tokens and identity metadata","kind":"feature","status":"spec_ready","depends_on":["CH-033"],"capability":"engineering","allowed_paths":["src/design/**","src/styles/**","src/locales/**","tests/**","scripts/**","specs/**","docs/**","graph/**","progress/**"],"gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}},
+    {"id":"CH-035","title":"Create dedicated theme collection route and Settings entry","kind":"feature","status":"spec_ready","depends_on":["CH-034"],"capability":"engineering","allowed_paths":["src/**","tests/**","scripts/**","specs/**","docs/**","graph/**","progress/**"],"gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}},
+    {"id":"CH-036","title":"Polish country themes across chrome board and responsive play surfaces","kind":"feature","status":"spec_ready","depends_on":["CH-035"],"capability":"engineering","allowed_paths":["src/**","tests/**","scripts/**","specs/**","docs/**","graph/**","progress/**"],"gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}},
+    {"id":"CH-037","title":"Independent premium theme verification and public release","kind":"feature","status":"spec_ready","depends_on":["CH-036"],"capability":"engineering","allowed_paths":["src/**","tests/**","scripts/**","specs/**","docs/**","graph/**","progress/**",".github/**","package.json","package-lock.json"],"gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}}
+  ]
+}

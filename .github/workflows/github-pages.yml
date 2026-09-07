@@ -44,6 +44,8 @@ jobs:
         run: npm run test:popup-opener
       - name: Browser workflows and accessibility checks
         run: npm run test:e2e
+      - name: All visual themes accessibility and layout
+        run: npm run test:themes
       - name: Installable offline PWA checks
         run: npm run test:pwa
       - name: Firebase Auth cloud lifecycle

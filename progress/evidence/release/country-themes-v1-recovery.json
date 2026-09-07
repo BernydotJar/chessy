@@ -1,0 +1,20 @@
+{
+  "program": "chessy-country-themes-v1",
+  "baseline_sha": "5801622c49924c3e6deeb21b160263bd6bd8c16f",
+  "historical_source_commit": "9895043",
+  "ui_kit_transition_commit": "6145963",
+  "recovered_country_names": [
+    "Guatemala",
+    "Colombia",
+    "México",
+    "Brasil",
+    "USA"
+  ],
+  "historical_presets_found": true,
+  "decision": "restore-as-premium-full-visual-collection-not-board-only-presets",
+  "primary_navigation_change": "none",
+  "route": "#/themes",
+  "settings_entry": true,
+  "runtime_3d_dependency": false,
+  "remote_asset_dependency": false
+}

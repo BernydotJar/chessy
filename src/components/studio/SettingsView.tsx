@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { ChessyIcon } from '../../design/icons';
-import { ThemeGallery } from '../../design/ThemeGallery';
+import { CurrentThemeSummary } from '../../design/ThemeGallery';
 import { ThemeCustomizer } from '../ThemeCustomizer';
 import { LanguageSwitcher } from '../LanguageSwitcher';
 import { useGameStore } from '../../store/gameStore';
@@ -32,7 +32,7 @@ export function SettingsView() {
     <div className="settings-grid">
       <section className="panel settings-section settings-appearance" aria-labelledby="settings-appearance-title">
         <div className="settings-section-heading"><span className="icon-tile small"><ChessyIcon name="theme" size={19}/></span><div><h2 id="settings-appearance-title">{t('settings.appearance')}</h2><p>{t('settings.appearanceHint')}</p></div></div>
-        <ThemeGallery onSelect={(theme) => track('settings_changed', { setting: 'theme', value: theme })}/>
+        <CurrentThemeSummary/>
         <div className="setting-row setting-row--action"><div><strong>{t('settings.boardAdvanced')}</strong><span>{t('settings.boardAdvancedHint')}</span></div><ThemeCustomizer includePresets={false}/></div>
       </section>
 

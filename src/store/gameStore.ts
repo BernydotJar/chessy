@@ -4,6 +4,8 @@ import { BoardTheme, GameState } from '../types/chess.types';
 import { stockfishService, DifficultyLevel, AIMove } from '../utils/stockfishService';
 import { soundManager } from '../utils/soundManager';
 
+export type GameView = 'home' | 'academy' | 'progress' | 'library' | 'play' | 'games' | 'review' | 'analysis' | 'training' | 'account' | 'settings' | 'themes';
+
 interface GameStore extends GameState {
   chess: Chess;
   theme: BoardTheme;
@@ -20,7 +22,7 @@ interface GameStore extends GameState {
   setupSideToMove: 'w' | 'b';
   setupSelectedPiece: SetupPiece;
   setupFen: string;
-  view: 'home' | 'academy' | 'progress' | 'library' | 'play' | 'games' | 'review' | 'analysis' | 'training' | 'account' | 'settings';
+  view: GameView;
   activeGameId: string | null;
   trainingMode: boolean;
   engineError: boolean;
