@@ -130,3 +130,7 @@ Decorative vector studies live in `public/art/`. Functional UI icons remain SVG 
 3. Use `ChessyIcon` for a branded/product concept.
 4. Verify the component in all three visual themes and at 390, 768 and desktop widths.
 5. Add an automated browser assertion for any stateful interaction.
+
+## Chessy Atlas
+
+Country Themes v1 extends the three base UI Kit themes with a dedicated `#/themes` collection launched from Settings. The full catalog and art-direction contract live in `docs/COUNTRY_THEMES.md`. Atlas must not move into the primary Play/Home navigation; personalization remains subordinate to chess tasks.

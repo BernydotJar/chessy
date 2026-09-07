@@ -266,7 +266,34 @@
     "night": "Nocturno torneo",
     "nightDescription": "Azul profundo para sesiones largas.",
     "choose": "Elige cómo quieres ver Chessy",
-    "persistHint": "Se guarda en este dispositivo."
+    "persistHint": "Se guarda en este dispositivo.",
+    "forestMood": "Bosque sereno · enfoque largo",
+    "ivoryMood": "Marfil editorial · luz calma",
+    "nightMood": "Azul torneo · concentración nocturna",
+    "guatemala": "Guatemala · Jade & Lago",
+    "guatemalaDescription": "Azul de lago, jade y piedra cálida. Inspirado en altiplano y agua volcánica.",
+    "guatemalaMood": "Lago volcánico · jade · piedra",
+    "colombia": "Colombia · Oro & Caribe",
+    "colombiaDescription": "Azul profundo y oro cálido con un tablero de contraste tranquilo.",
+    "colombiaMood": "Caribe profundo · oro mate",
+    "mexico": "México · Agave & Obsidiana",
+    "mexicoDescription": "Verde agave, mineral oscuro y crema cálida para juego concentrado.",
+    "mexicoMood": "Agave · obsidiana · tierra",
+    "brasil": "Brasil · Canopia & Sol",
+    "brasilDescription": "Verde de selva y oro solar con acentos de río, sin saturar el tablero.",
+    "brasilMood": "Canopia · sol · río",
+    "usa": "USA · Navy & Clay",
+    "usaDescription": "Azul torneo, blanco papel y arcilla cálida en una lectura clásica.",
+    "usaMood": "Navy · papel · arcilla",
+    "argentina": "Argentina · Celeste & Plata",
+    "argentinaDescription": "Una interfaz clara de celeste, plata y azul tinta inspirada en aire de montaña.",
+    "argentinaMood": "Celeste · plata · Andes",
+    "espana": "España · Granate & Oro",
+    "espanaDescription": "Granate profundo, oro envejecido y piedra crema con carácter editorial.",
+    "espanaMood": "Granate · oro viejo · piedra",
+    "chile": "Chile · Pacífico & Cobre",
+    "chileDescription": "Azul Pacífico, cobre y nieve de altura en una composición sobria.",
+    "chileMood": "Pacífico · cobre · cordillera"
   },
   "promotion": {
     "title": "Elige pieza de promoción",
@@ -741,7 +768,8 @@
     "playTools": "Herramientas de juego",
     "moveHistory": "Historial de movimientos",
     "gameTools": "Herramientas de partida",
-    "coachTools": "Mentor y análisis"
+    "coachTools": "Mentor y análisis",
+    "themes": "Temas"
   },
   "auth": {
     "title": "Tu cuenta Chessy",
@@ -846,6 +874,29 @@
       "initializing": "Conectando analítica…",
       "ready": "Analítica activa con consentimiento",
       "unavailable": "Analítica no disponible; Chessy sigue funcionando normalmente"
-    }
+    },
+    "currentTheme": "Tema actual",
+    "exploreThemes": "Explorar colección"
+  },
+  "themes": {
+    "eyebrow": "Colección visual",
+    "title": "Chessy Atlas",
+    "subtitle": "Once ambientes, un mismo tablero. Identidad de lugar sin sacrificar lectura, accesibilidad ni concentración.",
+    "backToSettings": "Volver a Ajustes",
+    "principlesLabel": "Principios de la colección",
+    "boardFirst": "Tablero primero",
+    "offline": "Funciona sin conexión",
+    "noNovelty": "Identidad sin ruido",
+    "current": "Tema actual",
+    "classicsTitle": "Clásicos Chessy",
+    "classicsHint": "Los tres ambientes base del sistema visual: sobrios, familiares y hechos para sesiones largas.",
+    "atlasTitle": "Colección de países",
+    "atlasHint": "Paletas de paisaje y material inspiradas en ocho países. No son banderas; son atmósferas para jugar.",
+    "classicLabel": "Clásico",
+    "atlasLabel": "Atlas",
+    "apply": "Aplicar tema",
+    "applied": "Aplicado",
+    "noteTitle": "Hecho para jugar, no sólo para verse bien",
+    "note": "Cada tema conserva jerarquía, contraste del tablero, estados legales y controles. La identidad vive en los bordes; la posición sigue siendo protagonista."
   }
 }

@@ -266,7 +266,34 @@
     "night": "Tournament Night",
     "nightDescription": "Deep blue for long sessions.",
     "choose": "Choose how Chessy looks",
-    "persistHint": "Saved on this device."
+    "persistHint": "Saved on this device.",
+    "forestMood": "Quiet forest · long focus",
+    "ivoryMood": "Editorial ivory · calm light",
+    "nightMood": "Tournament blue · night focus",
+    "guatemala": "Guatemala · Jade & Lake",
+    "guatemalaDescription": "Lake blue, jade, and warm stone inspired by volcanic highlands and water.",
+    "guatemalaMood": "Volcanic lake · jade · stone",
+    "colombia": "Colombia · Gold & Caribbean",
+    "colombiaDescription": "Deep blue and warm gold with a calm, high-contrast chessboard.",
+    "colombiaMood": "Deep Caribbean · matte gold",
+    "mexico": "Mexico · Agave & Obsidian",
+    "mexicoDescription": "Agave green, dark mineral tones, and warm cream for focused play.",
+    "mexicoMood": "Agave · obsidian · earth",
+    "brasil": "Brazil · Canopy & Sun",
+    "brasilDescription": "Rainforest green and sun-gold with a river accent, restrained around the board.",
+    "brasilMood": "Canopy · sun · river",
+    "usa": "USA · Navy & Clay",
+    "usaDescription": "Tournament navy, paper white, and warm clay in a familiar classic reading.",
+    "usaMood": "Navy · paper · clay",
+    "argentina": "Argentina · Sky & Silver",
+    "argentinaDescription": "A light interface of sky blue, silver mist, and ink inspired by mountain air.",
+    "argentinaMood": "Sky · silver · Andes",
+    "espana": "Spain · Garnet & Gold",
+    "espanaDescription": "Deep garnet, aged gold, and cream stone with an editorial character.",
+    "espanaMood": "Garnet · old gold · stone",
+    "chile": "Chile · Pacific & Copper",
+    "chileDescription": "Pacific blue, copper, and high-altitude snow in a restrained composition.",
+    "chileMood": "Pacific · copper · cordillera"
   },
   "promotion": {
     "title": "Choose Promotion Piece",
@@ -741,7 +768,8 @@
     "playTools": "Game tools",
     "moveHistory": "Move history",
     "gameTools": "Game tools",
-    "coachTools": "Coach and analysis"
+    "coachTools": "Coach and analysis",
+    "themes": "Themes"
   },
   "auth": {
     "title": "Your Chessy account",
@@ -846,6 +874,29 @@
       "initializing": "Connecting analytics...",
       "ready": "Analytics active with consent",
       "unavailable": "Analytics unavailable; Chessy continues to work normally"
-    }
+    },
+    "currentTheme": "Current theme",
+    "exploreThemes": "Explore collection"
+  },
+  "themes": {
+    "eyebrow": "Visual collection",
+    "title": "Chessy Atlas",
+    "subtitle": "Eleven atmospheres, one board. A sense of place without sacrificing readability, accessibility, or focus.",
+    "backToSettings": "Back to Settings",
+    "principlesLabel": "Collection principles",
+    "boardFirst": "Board first",
+    "offline": "Works offline",
+    "noNovelty": "Identity without noise",
+    "current": "Current theme",
+    "classicsTitle": "Chessy Classics",
+    "classicsHint": "The three foundation environments of the visual system: restrained, familiar, and made for long sessions.",
+    "atlasTitle": "Country Collection",
+    "atlasHint": "Landscape and material palettes inspired by eight countries. They are not flags; they are atmospheres for play.",
+    "classicLabel": "Classic",
+    "atlasLabel": "Atlas",
+    "apply": "Apply theme",
+    "applied": "Applied",
+    "noteTitle": "Made to play, not just to look good",
+    "note": "Every theme preserves hierarchy, board contrast, legal states, and controls. Identity lives at the edges; the position remains the protagonist."
   }
 }
