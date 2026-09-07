@@ -52,6 +52,8 @@ jobs:
         run: npm run test:auth:ui-live
       - name: Firestore owner-only rules live
         run: npm run test:firestore:rules-live
+      - name: Consent-aware Firebase Analytics lifecycle
+        run: npm run test:analytics
       - name: Progress sync two-device and offline lifecycle
         run: npm run test:progress:ui-live
       - name: Preserve verification evidence

@@ -1,0 +1,19 @@
+{
+  "schema_version": "graph-harness.project.v1",
+  "project_id": "chessy-analytics-game-ux-v1",
+  "mode": "SHIP",
+  "gate_definitions": [
+    {"id":"spec","required_evidence_kinds":["spec"],"blocking":true},
+    {"id":"verification","required_evidence_kinds":["verification"],"blocking":true},
+    {"id":"critic","required_evidence_kinds":["critic"],"blocking":true},
+    {"id":"release","required_evidence_kinds":["release"],"blocking":true}
+  ],
+  "nodes": [
+    {"id":"CH-027","title":"UX audit and bounded product decisions","kind":"feature","status":"spec_ready","depends_on":[],"capability":"engineering","allowed_paths":["specs/**","docs/**","graph/**","progress/**"],"gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}},
+    {"id":"CH-028","title":"Create Settings IA and consolidate preferences","kind":"feature","status":"spec_ready","depends_on":["CH-027"],"capability":"engineering","allowed_paths":["src/**","tests/**","scripts/**","graph/**","progress/**","specs/**","docs/**"],"gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}},
+    {"id":"CH-029","title":"Simplify Play into board-first progressive disclosure","kind":"feature","status":"spec_ready","depends_on":["CH-028"],"capability":"engineering","allowed_paths":["src/**","tests/**","scripts/**","graph/**","progress/**","specs/**","docs/**"],"gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}},
+    {"id":"CH-030","title":"Implement consent-aware product analytics adapter","kind":"feature","status":"spec_ready","depends_on":["CH-029"],"capability":"engineering","allowed_paths":["src/**","tests/**","scripts/**","graph/**","progress/**","specs/**","docs/**","package.json","package-lock.json",".env.example",".env.production",".github/**"],"gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}},
+    {"id":"CH-031","title":"Provision and verify analytics reporting integration","kind":"feature","status":"spec_ready","depends_on":["CH-030"],"capability":"engineering","allowed_paths":["src/**","tests/**","scripts/**","graph/**","progress/**","specs/**","docs/**","package.json","package-lock.json",".env.example",".env.production",".github/**"],"gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}},
+    {"id":"CH-032","title":"Independent UX analytics verification and public release","kind":"feature","status":"spec_ready","depends_on":["CH-031"],"capability":"engineering","allowed_paths":["src/**","tests/**","scripts/**","graph/**","progress/**","specs/**","docs/**","package.json","package-lock.json",".env.example",".env.production",".github/**"],"gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}}
+  ]
+}

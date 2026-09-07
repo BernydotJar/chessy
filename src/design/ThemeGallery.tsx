@@ -3,7 +3,7 @@ import { ChessyIcon } from './icons';
 import { useVisualTheme } from './theme-context';
 import { VISUAL_THEMES } from './themes';
 
-export function ThemeGallery({ compact = false }: { compact?: boolean }) {
+export function ThemeGallery({ compact = false, onSelect }: { compact?: boolean; onSelect?: (theme: import('./themes').VisualThemeId) => void }) {
   const { t } = useTranslation();
   const { themeId, setThemeId } = useVisualTheme();
   return <div className={`theme-gallery ${compact ? 'theme-gallery--compact' : ''}`}>
@@ -14,7 +14,7 @@ export function ThemeGallery({ compact = false }: { compact?: boolean }) {
         key={theme.id}
         className={`theme-card ${selected ? 'is-selected' : ''}`}
         aria-pressed={selected}
-        onClick={() => setThemeId(theme.id)}
+        onClick={() => { setThemeId(theme.id); onSelect?.(theme.id); }}
       >
         <span className="theme-preview" style={{ background: theme.preview.bg }}>
           <span className="theme-preview__chrome" style={{ background: theme.preview.surface }} />

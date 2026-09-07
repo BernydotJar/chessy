@@ -1,0 +1,11 @@
+{
+  "analytics": "PASS",
+  "measurementId": "G-LWQED9BJG6",
+  "defaultOff": "PASS",
+  "explicitOptIn": "PASS",
+  "screenView": "PASS",
+  "sensitivePayloadBoundary": "PASS",
+  "firebaseUserIdNotLinked": "PASS",
+  "withdrawalStopsCollection": "PASS",
+  "pageErrors": []
+}

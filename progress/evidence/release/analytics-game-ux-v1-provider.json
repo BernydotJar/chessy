@@ -1,0 +1,22 @@
+{
+  "firebase_project_id": "chessy-pwa-2026",
+  "analytics_account_id": "276565753",
+  "ga4_property_id": "553107088",
+  "measurement_id": "G-LWQED9BJG6",
+  "web_app_id": "1:699660302993:web:27074bf277367cd24e5d30",
+  "provisioning": "PASS",
+  "separate_chessy_property": true,
+  "hosting_unchanged": "Cloudflare/Caddy existing edge",
+  "paid_analytics_product_added": false,
+  "consent_contract": {
+    "default_collection": "OFF",
+    "explicit_opt_in": true,
+    "withdrawal_supported": true,
+    "ad_storage": "denied",
+    "ad_user_data": "denied",
+    "ad_personalization": "denied",
+    "personalization_storage": "denied",
+    "firebase_auth_uid_as_ga_user_id": false
+  },
+  "recorded_at": "2026-09-07T17:59:33Z"
+}
