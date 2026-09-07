@@ -9,12 +9,12 @@ const normalizeLanguage = (language: string | undefined) => {
   return 'en';
 };
 
-export const LanguageSwitcher: React.FC = () => {
+export const LanguageSwitcher: React.FC<{ onLanguageChange?: (language: 'en' | 'es' | 'pt') => void }> = ({ onLanguageChange }) => {
   const { i18n, t } = useTranslation();
   const current = normalizeLanguage(i18n.resolvedLanguage || i18n.language);
   return <div className="glass-container rounded-lg px-3 py-2 inline-flex items-center gap-2 language-switcher">
     <ChessyIcon name="language" size={16}/><span className="text-white/70 text-xs">{t('language.label')}</span>
-    <select value={current} onChange={e => i18n.changeLanguage(e.target.value)} className="glass-button text-white text-xs px-2 py-1 rounded-md bg-transparent" aria-label={t('language.label')}>
+    <select value={current} onChange={e => { const language=e.target.value as 'en'|'es'|'pt'; void i18n.changeLanguage(language); onLanguageChange?.(language); }} className="glass-button text-white text-xs px-2 py-1 rounded-md bg-transparent" aria-label={t('language.label')}>
       <option value="en">{t('language.en')}</option><option value="es">{t('language.es')}</option><option value="pt">{t('language.pt')}</option>
     </select>
   </div>;

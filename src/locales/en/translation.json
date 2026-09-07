@@ -100,7 +100,8 @@
     "moveNumber": "Move {{count}}",
     "showLegalMoves": "Show Legal Moves",
     "hideLegalMoves": "Hide Legal Moves",
-    "aiInfo": "AI: {{level}} · You are {{color}}"
+    "aiInfo": "AI: {{level}} · You are {{color}}",
+    "gameStatus": "Game status"
   },
   "setup": {
     "button": "Setup Board",
@@ -238,7 +239,10 @@
         "label": "Master",
         "description": "Maximum difficulty"
       }
-    }
+    },
+    "opponentLabel": "Opponent",
+    "inProgress": "Game in progress",
+    "globalSettingsHint": "Sound, themes, and visual aids are managed in Settings."
   },
   "theme": {
     "customize": "Customize",
@@ -732,7 +736,12 @@
     "weakThemeEvidence": "{{mistakes}} observed mistakes · {{outstanding}} outstanding",
     "weakThemeEmpty": "There is not enough evidence yet to call out a weak theme.",
     "offline": "Offline · local mode",
-    "account": "Account"
+    "account": "Account",
+    "settings": "Settings",
+    "playTools": "Game tools",
+    "moveHistory": "Move history",
+    "gameTools": "Game tools",
+    "coachTools": "Coach and analysis"
   },
   "auth": {
     "title": "Your Chessy account",
@@ -809,5 +818,34 @@
     "last": "Last sync: {{time}}",
     "retry": "Sync now",
     "cloudDeleteError": "We could not delete your cloud progress. To protect your data, Chessy did not delete the account."
+  },
+  "settings": {
+    "eyebrow": "Preferences",
+    "title": "Settings",
+    "subtitle": "Personalize Chessy without filling the screens where you play and learn with extra controls.",
+    "appearance": "Appearance",
+    "appearanceHint": "Choose one theme for the interface and board. The preference stays on this device.",
+    "boardAdvanced": "Advanced board customization",
+    "boardAdvancedHint": "Adjust square colors manually when you want to go beyond the presets.",
+    "game": "Game and accessibility",
+    "gameHint": "Global preferences kept outside the main play flow.",
+    "language": "Language",
+    "languageHint": "Switch the interface between English, Spanish, and Portuguese.",
+    "sound": "Sound effects",
+    "soundHint": "Play subtle cues for moves, captures, check, and game end.",
+    "legalMoves": "Show legal moves",
+    "legalMovesHint": "Show available destinations when a piece is selected.",
+    "privacy": "Privacy and analytics",
+    "privacyHint": "Your chess progress and product measurement remain separate systems.",
+    "analytics": "Help improve Chessy",
+    "analyticsHint": "Share product-use events and technical data without linking them to your Chessy account, so we can understand what works and where friction exists.",
+    "analyticsNever": "We never send FEN, PGN, moves, answers, email, display name, or typed text.",
+    "analyticsPrivacy": "Analytics is off by default. You can enable it or withdraw consent at any time. We do not use these signals for advertising or ad personalization.",
+    "analyticsStatus": {
+      "disabled": "Analytics is off on this device",
+      "initializing": "Connecting analytics...",
+      "ready": "Analytics active with consent",
+      "unavailable": "Analytics unavailable; Chessy continues to work normally"
+    }
   }
 }

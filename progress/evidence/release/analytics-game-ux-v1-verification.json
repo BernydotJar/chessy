@@ -1,0 +1,61 @@
+{
+  "scope": "Product Analytics v1 + Game UX v2",
+  "verified_at": "2026-09-07T17:59:33Z",
+  "baseline_release_sha": "489708ae9514c778edc2069f6365279179f0e5f7",
+  "checks": {
+    "lint": "PASS",
+    "unit_tests": "187/187 PASS",
+    "typescript_vite_build": "PASS",
+    "independent_python_chess": "112/112 PASS",
+    "npm_audit": "0 vulnerabilities",
+    "git_diff_check": "PASS",
+    "browser_workflows": "36/36 PASS",
+    "routes": "11/11 PASS",
+    "wcag": "PASS desktop all routes + primary mobile routes",
+    "responsive": "320/360/390/430/768/1440 PASS no overflow",
+    "mouse_drag": "PASS",
+    "touch_drag": "PASS",
+    "stockfish": "PASS",
+    "pwa_offline": "PASS reload + Academy + Challenges + Stockfish",
+    "popup_opener": "PASS same-origin-allow-popups",
+    "firebase_auth_cloud": "PASS",
+    "firebase_auth_ui": "PASS",
+    "firestore_owner_rules": "PASS",
+    "two_device_progress_sync": "PASS",
+    "analytics_network_boundary": "PASS"
+  },
+  "ux_contract": {
+    "theme_on_home": false,
+    "theme_on_play": false,
+    "settings_first_class_route": true,
+    "theme_language_sound_legal_moves_in_settings": true,
+    "play_progressive_disclosure": true,
+    "ai_defaults": "medium + white",
+    "advanced_play_tool_groups": 3
+  },
+  "analytics_contract": {
+    "default_off": true,
+    "measurement_id": "G-LWQED9BJG6",
+    "ga4_property_id": "553107088",
+    "screen_view_live": "PASS",
+    "sensitive_payload_boundary": "PASS",
+    "firebase_user_id_not_linked": "PASS",
+    "withdrawal_stops_collection": "PASS",
+    "forbidden": [
+      "FEN",
+      "PGN",
+      "move notation",
+      "puzzle answer/id",
+      "email",
+      "display name",
+      "free text",
+      "Firebase UID"
+    ]
+  },
+  "architecture": {
+    "new_backend": false,
+    "new_application_containers": 0,
+    "existing_pwa_runtime_preserved": true,
+    "native_event_taxonomy_ready": true
+  }
+}

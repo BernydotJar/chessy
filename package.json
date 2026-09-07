@@ -20,7 +20,8 @@
     "test:auth:ui-live": "node scripts/auth-ui-live-verify.cjs",
     "test:popup-opener": "node scripts/popup-opener-verify.cjs",
     "test:firestore:rules-live": "node scripts/firestore-rules-live-verify.cjs",
-    "test:progress:ui-live": "node scripts/progress-ui-live-verify.cjs"
+    "test:progress:ui-live": "node scripts/progress-ui-live-verify.cjs",
+    "test:analytics": "node scripts/analytics-verify.cjs"
   },
   "dependencies": {
     "chess.js": "^1.0.0-beta.6",

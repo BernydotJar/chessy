@@ -100,7 +100,8 @@
     "moveNumber": "Lance {{count}}",
     "showLegalMoves": "Mostrar movimentos legais",
     "hideLegalMoves": "Ocultar movimentos legais",
-    "aiInfo": "IA: {{level}} · Você joga com {{color}}"
+    "aiInfo": "IA: {{level}} · Você joga com {{color}}",
+    "gameStatus": "Estado da partida"
   },
   "setup": {
     "button": "Preparar tabuleiro",
@@ -238,7 +239,10 @@
         "label": "Mestre",
         "description": "Dificuldade máxima"
       }
-    }
+    },
+    "opponentLabel": "Adversário",
+    "inProgress": "Partida em andamento",
+    "globalSettingsHint": "Som, temas e ajudas visuais são gerenciados em Ajustes."
   },
   "theme": {
     "customize": "Personalizar",
@@ -732,7 +736,12 @@
     "weakThemeEvidence": "{{mistakes}} erros observados · {{outstanding}} pendentes",
     "weakThemeEmpty": "Ainda não há evidência suficiente para apontar um tema fraco.",
     "offline": "Sem conexão · modo local",
-    "account": "Conta"
+    "account": "Conta",
+    "settings": "Ajustes",
+    "playTools": "Ferramentas de jogo",
+    "moveHistory": "Histórico de movimentos",
+    "gameTools": "Ferramentas da partida",
+    "coachTools": "Mentor e análise"
   },
   "auth": {
     "title": "Sua conta Chessy",
@@ -809,5 +818,34 @@
     "last": "Última sincronização: {{time}}",
     "retry": "Sincronizar agora",
     "cloudDeleteError": "Não foi possível apagar seu progresso na nuvem. Para proteger seus dados, o Chessy não excluiu a conta."
+  },
+  "settings": {
+    "eyebrow": "Preferencias",
+    "title": "Ajustes",
+    "subtitle": "Personalize o Chessy sem encher de controles as telas onde você joga e aprende.",
+    "appearance": "Aparência",
+    "appearanceHint": "Escolha um tema para a interface e o tabuleiro. A preferência fica neste dispositivo.",
+    "boardAdvanced": "Personalização avançada do tabuleiro",
+    "boardAdvancedHint": "Ajuste manualmente as cores das casas quando quiser sair dos presets.",
+    "game": "Jogo e acessibilidade",
+    "gameHint": "Preferências globais mantidas fora do fluxo principal da partida.",
+    "language": "Idioma",
+    "languageHint": "Alterne a interface entre português, espanhol e inglês.",
+    "sound": "Efeitos sonoros",
+    "soundHint": "Reproduz sinais sutis para movimentos, capturas, xeque e fim de partida.",
+    "legalMoves": "Mostrar movimentos legais",
+    "legalMovesHint": "Mostra os destinos disponíveis ao selecionar uma peça.",
+    "privacy": "Privacidade e analítica",
+    "privacyHint": "Seu progresso de xadrez e a medição do produto permanecem sistemas separados.",
+    "analytics": "Ajudar a melhorar o Chessy",
+    "analyticsHint": "Compartilhe eventos de uso e dados técnicos sem vinculá-los à sua conta Chessy, para entendermos o que funciona e onde existe fricção.",
+    "analyticsNever": "Nunca enviamos FEN, PGN, movimentos, respostas, e-mail, nome ou texto digitado.",
+    "analyticsPrivacy": "A analítica fica desligada por padrão. Você pode ativar ou retirar o consentimento a qualquer momento. Não usamos estes sinais para publicidade ou personalização de anúncios.",
+    "analyticsStatus": {
+      "disabled": "Analítica desligada neste dispositivo",
+      "initializing": "Conectando analítica…",
+      "ready": "Analítica ativa com consentimento",
+      "unavailable": "Analítica indisponível; o Chessy continua funcionando normalmente"
+    }
   }
 }

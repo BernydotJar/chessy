@@ -5,7 +5,7 @@ import type { BoardTheme } from '../types/chess.types';
 import { ChessyIcon } from '../design/icons';
 import { ThemeGallery } from '../design/ThemeGallery';
 
-export function ThemeCustomizer({ compact = false }: { compact?: boolean }) {
+export function ThemeCustomizer({ compact = false, includePresets = true }: { compact?: boolean; includePresets?: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
   const { theme, setTheme } = useGameStore();
   const [customTheme, setCustomTheme] = useState<BoardTheme>(theme);
@@ -27,7 +27,7 @@ export function ThemeCustomizer({ compact = false }: { compact?: boolean }) {
     {isOpen && <div className="theme-modal" role="presentation" onMouseDown={event => { if (event.target === event.currentTarget) setIsOpen(false); }}>
       <section className="theme-panel" role="dialog" aria-modal="true" aria-labelledby="theme-title">
         <header className="theme-panel__header"><div><p className="eyebrow">Chessy UI Kit</p><h2 id="theme-title">{t('theme.title')}</h2><p>{t('theme.subtitle')}</p></div><button ref={closeRef} type="button" className="icon-button" onClick={() => setIsOpen(false)} aria-label={t('theme.close')}><ChessyIcon name="close" size={20}/></button></header>
-        <ThemeGallery/>
+        {includePresets && <ThemeGallery/>}
         <details className="theme-advanced">
           <summary>{t('theme.advanced')}</summary>
           <p>{t('theme.advancedHint')}</p>

@@ -7,12 +7,13 @@ import { useLearningStore } from '../../learning/store';
 import { useGameStore } from '../../store/gameStore';
 import { SectionHeading } from './Shared';
 import { ChessyIcon, type ChessyIconName } from '../../design/icons';
+import { useAnalyticsStore } from '../../analytics/store';
 
 const icons:Record<(typeof TRACKS)[number],ChessyIconName>={fundamentals:'academy',tactics:'target',strategy:'hint',openings:'shield',endgames:'achievement',calculation:'analysis'};
 
 function LessonReader({lesson,onBack}:{lesson:Lesson;onBack:()=>void}) {
  const {t,i18n}=useTranslation(),lang=locale(i18n.resolvedLanguage);const [answer,setAnswer]=useState<number|null>(null);
- const {progress,complete,configure}=useLearningStore();const setView=useGameStore(s=>s.setView);const heading=useRef<HTMLHeadingElement>(null);
+ const {progress,complete,configure}=useLearningStore();const setView=useGameStore(s=>s.setView);const track=useAnalyticsStore(s=>s.track);const heading=useRef<HTMLHeadingElement>(null);
  const correct=answer===lesson.answer,done=progress.lessons.includes(lesson.id);
  useEffect(()=>{heading.current?.focus();},[]);
  return <article className="lesson-reader view-enter">
@@ -21,7 +22,7 @@ function LessonReader({lesson,onBack}:{lesson:Lesson;onBack:()=>void}) {
   <h1 ref={heading} tabIndex={-1}>{lesson.title[lang]}</h1>
   <div className="lesson-body">{lesson.body.map((p,index)=><p key={index}>{p[lang]}</p>)}</div>
   <aside className="takeaway"><ChessyIcon name="hint" size={24}/><div><h2>{t('studio.keyIdea')}</h2><p>{lesson.takeaway[lang]}</p></div></aside>
-  <section className="panel quiz" aria-labelledby="quiz-heading"><p className="eyebrow">{t('studio.checkUnderstanding')}</p><h2 id="quiz-heading">{lesson.question[lang]}</h2><div className="quiz-options">{lesson.options.map((option,index)=><button key={index} aria-pressed={answer===index} className={`quiz-option ${answer===index?(correct?'correct':'incorrect'):''}`} disabled={correct} onClick={()=>{setAnswer(index);if(index===lesson.answer)complete('lesson',lesson.id);}}><span className="option-letter">{String.fromCharCode(65+index)}</span>{option[lang]}{answer===index&&correct&&<ChessyIcon name="check" size={20}/>}</button>)}</div>
+  <section className="panel quiz" aria-labelledby="quiz-heading"><p className="eyebrow">{t('studio.checkUnderstanding')}</p><h2 id="quiz-heading">{lesson.question[lang]}</h2><div className="quiz-options">{lesson.options.map((option,index)=><button key={index} aria-pressed={answer===index} className={`quiz-option ${answer===index?(correct?'correct':'incorrect'):''}`} disabled={correct} onClick={()=>{setAnswer(index);if(index===lesson.answer){if(!done)track('lesson_complete',{track:lesson.track,level:lesson.level});complete('lesson',lesson.id);}}}><span className="option-letter">{String.fromCharCode(65+index)}</span>{option[lang]}{answer===index&&correct&&<ChessyIcon name="check" size={20}/>}</button>)}</div>
    {answer!==null&&<div className={`feedback ${correct?'success':'wrong'}`} role="status"><div><strong>{t(correct?'studio.answerCorrect':'studio.answerWrong')}</strong>{correct&&<p>{lesson.explanation[lang]}</p>}</div></div>}
   </section>
   <div className="button-row"><button className="btn primary" onClick={()=>{configure('practice',lesson.practice);setView('training');}}>{t('studio.practiceIdea')}<ChessyIcon name="arrow" size={18}/></button><button className="btn secondary" onClick={onBack}>{t('studio.backAcademy')}</button></div>

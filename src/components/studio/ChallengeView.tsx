@@ -1,26 +1,29 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RotateCcw } from 'lucide-react';
 import { PUZZLES, CATEGORIES, dailyPuzzle } from '../../learning/puzzles';
 import { Category, Level, Puzzle, locale } from '../../learning/types';
 import { attempt, startSession, solutionSan } from '../../learning/session';
 import { localDay, reviewQueueIds } from '../../learning/progress';
-import { useLearningStore } from '../../learning/store';
+import { useLearningStore, type TrainingMode } from '../../learning/store';
+import { useAnalyticsStore } from '../../analytics/store';
 import { MoveEntry, PositionBoard, SectionHeading } from './Shared';
 import { ChessyIcon } from '../../design/icons';
 
-function PuzzlePlayer({puzzle,onNext,hasNext}:{puzzle:Puzzle;onNext:()=>void;hasNext:boolean}) {
+function PuzzlePlayer({puzzle,onNext,hasNext,mode}:{puzzle:Puzzle;onNext:()=>void;hasNext:boolean;mode:TrainingMode}) {
  const {t,i18n}=useTranslation(),lang=locale(i18n.resolvedLanguage);
  const [session,setSession]=useState(()=>startSession(puzzle));
  const [hints,setHints]=useState(0),[revealed,setRevealed]=useState(false),[assisted,setAssisted]=useState(false);
  const [previouslySolved]=useState(()=>useLearningStore.getState().progress.solved.includes(puzzle.id));
  const {complete,mistake}=useLearningStore();
+ const track=useAnalyticsStore(state=>state.track);
  const san=useMemo(()=>solutionSan(puzzle),[puzzle]);
  const white=puzzle.fen.split(' ')[1]==='w';
+ useEffect(()=>{track('puzzle_start',{mode,category:puzzle.category,level:puzzle.level});},[mode,puzzle.category,puzzle.level,track]);
  const onMove=(move:string)=>{
   const next=attempt(puzzle,session,move);
   if(next.mistakes>session.mistakes)mistake(puzzle.id);
-  if(next.solved&&!session.solved&&!assisted)complete('puzzle',puzzle.id);
+  if(next.solved&&!session.solved){track('puzzle_complete',{mode,category:puzzle.category,level:puzzle.level,assisted,mistake_count:next.mistakes});if(!assisted)complete('puzzle',puzzle.id);}
   setSession(next);
   return next.ply>session.ply;
  };
@@ -79,7 +82,7 @@ export function ChallengeView() {
   </div>
   {pool.length===0?<div className="panel empty-state"><ChessyIcon name={mode==='review'?'review':'target'} size={36}/><p>{t(mode==='review'?'studio.reviewEmpty':'studio.noPuzzles')}</p></div>:finished?<div className="panel session-complete"><ChessyIcon name="achievement" size={64}/><h2>{t('studio.sessionDone')}</h2><p>{t('studio.sessionSummary')}</p><button className="btn primary" onClick={()=>{if(mode==='review')setReviewIds(reviewQueueIds(useLearningStore.getState().progress));setSessionId(s=>s+1);reset();}}>{t(mode==='review'?'studio.reviewAgain':'studio.newSession')}</button></div>:<>
    <div className="challenge-counter"><span>{Math.min(index+1,pool.length)} / {pool.length}</span>{mode==='practice'&&<label className="puzzle-select"><span className="sr-only">{t('studio.selectPuzzle')}</span><select aria-label={t('studio.selectPuzzle')} value={current.id} onChange={e=>setIndex(pool.findIndex(p=>p.id===e.target.value))}>{pool.map((p,i)=><option key={p.id} value={p.id}>{i+1}. {p.title?.[lang]||`${t(`studio.category.${p.category}`)} · ${p.rating}`}</option>)}</select></label>}</div>
-   <PuzzlePlayer key={`${mode}-${current.id}-${sessionId}`} puzzle={current} hasNext={mode!=='daily'} onNext={()=>{if((mode==='sprint'||mode==='review')&&index+1>=pool.length)setFinished(true);else setIndex(i=>(i+1)%pool.length);}}/>
+   <PuzzlePlayer key={`${mode}-${current.id}-${sessionId}`} puzzle={current} mode={mode} hasNext={mode!=='daily'} onNext={()=>{if((mode==='sprint'||mode==='review')&&index+1>=pool.length)setFinished(true);else setIndex(i=>(i+1)%pool.length);}}/>
   </>}
  </div>;
 }

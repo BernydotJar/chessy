@@ -20,7 +20,7 @@ interface GameStore extends GameState {
   setupSideToMove: 'w' | 'b';
   setupSelectedPiece: SetupPiece;
   setupFen: string;
-  view: 'home' | 'academy' | 'progress' | 'library' | 'play' | 'games' | 'review' | 'analysis' | 'training' | 'account';
+  view: 'home' | 'academy' | 'progress' | 'library' | 'play' | 'games' | 'review' | 'analysis' | 'training' | 'account' | 'settings';
   activeGameId: string | null;
   trainingMode: boolean;
   engineError: boolean;
@@ -36,6 +36,7 @@ interface GameStore extends GameState {
   loadPgn: (pgn: string) => void;
   startAIGame: (difficulty: DifficultyLevel, playerColor: 'white' | 'black' | 'random') => void;
   toggleSound: () => void;
+  setSoundEnabled: (enabled: boolean) => void;
   setShowLegalMoves: (show: boolean) => void;
   getLegalMovesForSquare: (square: string) => string[];
   setPendingPromotion: (promotion: { from: string; to: string } | null) => void;
@@ -50,6 +51,24 @@ interface GameStore extends GameState {
   setActiveGameId: (id: string | null) => void;
   setTrainingMode: (mode: boolean) => void;
 }
+
+
+const readBooleanPreference = (key: string, fallback: boolean) => {
+  try {
+    const value = localStorage.getItem(key);
+    return value === null ? fallback : value === 'true';
+  } catch {
+    return fallback;
+  }
+};
+const writeBooleanPreference = (key: string, value: boolean) => {
+  try { localStorage.setItem(key, String(value)); } catch { /* preference persistence is best effort */ }
+};
+const SOUND_PREFERENCE_KEY = 'chessy-sound-enabled-v1';
+const LEGAL_MOVES_PREFERENCE_KEY = 'chessy-legal-moves-v1';
+const initialSoundEnabled = readBooleanPreference(SOUND_PREFERENCE_KEY, true);
+const initialLegalMoves = readBooleanPreference(LEGAL_MOVES_PREFERENCE_KEY, true);
+soundManager.setEnabled(initialSoundEnabled);
 
 const defaultTheme: BoardTheme = {
   lightSquare: '#eee6d6',
@@ -174,8 +193,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   isAIGame: false,
   isAIThinking: false,
   playerColor: 'white',
-  soundEnabled: true,
-  showLegalMoves: true,
+  soundEnabled: initialSoundEnabled,
+  showLegalMoves: initialLegalMoves,
   legalMoves: [],
   pendingPromotion: null,
   setupMode: false,
@@ -423,10 +442,18 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const enabled = !get().soundEnabled;
     set({ soundEnabled: enabled });
     soundManager.setEnabled(enabled);
+    writeBooleanPreference(SOUND_PREFERENCE_KEY, enabled);
+  },
+
+  setSoundEnabled: (enabled: boolean) => {
+    set({ soundEnabled: enabled });
+    soundManager.setEnabled(enabled);
+    writeBooleanPreference(SOUND_PREFERENCE_KEY, enabled);
   },
 
   setShowLegalMoves: (show: boolean) => {
     set({ showLegalMoves: show });
+    writeBooleanPreference(LEGAL_MOVES_PREFERENCE_KEY, show);
   },
 
   getLegalMovesForSquare: (square: string) => {

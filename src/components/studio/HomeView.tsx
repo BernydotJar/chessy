@@ -8,7 +8,6 @@ import { localDay, streak, xp } from '../../learning/progress';
 import { locale } from '../../learning/types';
 import { PositionBoard } from './Shared';
 import { ChessyIcon } from '../../design/icons';
-import { ThemeGallery } from '../../design/ThemeGallery';
 
 export function HomeView() {
  const {t,i18n}=useTranslation(),lang=locale(i18n.resolvedLanguage);const {progress,configure}=useLearningStore();const setView=useGameStore(s=>s.setView);
@@ -22,6 +21,5 @@ export function HomeView() {
   <div className="home-section-title"><div><p className="eyebrow">{t('studio.yourPath')}</p><h2>{t('studio.choosePath')}</h2></div><button className="text-button" onClick={()=>setView('progress')}>{t('studio.progress')}<ArrowRight size={17}/></button></div>
   <div className="path-grid"><button className="panel path-card" onClick={()=>setView('academy')}><span className="icon-tile"><ChessyIcon name="academy" size={25}/></span><span className="path-eyebrow">{t('studio.continueLearning')}</span><h3>{next.title[lang]}</h3><p>{t(`studio.track.${next.track}`)} · {t('studio.minutes',{count:next.minutes})}</p><span className="card-action">{t('studio.readLesson')}<ChessyIcon name="arrow" size={18}/></span></button><button className="panel path-card" onClick={()=>setView('play')}><span className="icon-tile"><ChessyIcon name="play" size={25}/></span><span className="path-eyebrow">Stockfish · 5</span><h3>{t('studio.playTitle')}</h3><p>{t('studio.local')}</p><span className="card-action">{t('studio.play')}<ChessyIcon name="arrow" size={18}/></span></button><button className="panel path-card" onClick={()=>start('sprint')}><span className="icon-tile achievement-tone"><ChessyIcon name="xp" size={25}/></span><span className="path-eyebrow">{t('studio.training')}</span><h3>{t('studio.sprint')}</h3><p>{t('studio.challengeSubtitle')}</p><span className="card-action">{t('studio.startPractice')}<ChessyIcon name="arrow" size={18}/></span></button></div>
   <div className="stat-grid home-metrics"><div className="stat-card"><div className="icon-tile"><ChessyIcon name="xp" size={21}/></div><div><strong>{xp(progress)}</strong><span>{t('studio.xp')}</span></div></div><div className="stat-card"><div className="icon-tile achievement-tone"><ChessyIcon name="streak" size={21}/></div><div><strong>{streak(progress)}</strong><span>{t('studio.streak')}</span></div></div><div className="stat-card"><div className="icon-tile"><ChessyIcon name="target" size={21}/></div><div><strong>{progress.solved.length}<small> / {PUZZLES.length}</small></strong><span>{t('studio.solved')}</span></div></div></div>
-  <section className="home-theme-section" aria-labelledby="home-themes"><div className="home-section-title"><div><p className="eyebrow">UI Kit</p><h2 id="home-themes">{t('theme.choose')}</h2></div><span className="fine-print">{t('theme.persistHint')}</span></div><ThemeGallery compact/></section>
  </div>;
 }

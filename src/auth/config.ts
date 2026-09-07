@@ -5,6 +5,7 @@ export interface FirebaseClientConfig {
   appId: string;
   messagingSenderId?: string;
   storageBucket?: string;
+  measurementId?: string;
 }
 
 export interface AuthRuntimeConfig {
@@ -38,8 +39,10 @@ export function readFirebaseClientConfig(env: ClientEnv): FirebaseClientConfig |
   };
   const messagingSenderId = text(env.VITE_FIREBASE_MESSAGING_SENDER_ID);
   const storageBucket = text(env.VITE_FIREBASE_STORAGE_BUCKET);
+  const measurementId = text(env.VITE_FIREBASE_MEASUREMENT_ID);
   if (messagingSenderId) config.messagingSenderId = messagingSenderId;
   if (storageBucket) config.storageBucket = storageBucket;
+  if (measurementId) config.measurementId = measurementId;
   return config;
 }
 
