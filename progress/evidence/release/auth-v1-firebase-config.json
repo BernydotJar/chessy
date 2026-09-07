@@ -1,0 +1,25 @@
+{
+  "firebase_project_id": "chessy-pwa-2026",
+  "firebase_web_app_id": "1:699660302993:web:27074bf277367cd24e5d30",
+  "auth_domain": "chessy-pwa-2026.firebaseapp.com",
+  "plan": "Spark",
+  "identity_platform_upgrade": false,
+  "hosting": "existing Chessy Cloudflare/Caddy edge",
+  "providers": {
+    "email_password": "ENABLED",
+    "google": "ENABLED"
+  },
+  "authorized_domains": [
+    "localhost",
+    "chessy-pwa-2026.firebaseapp.com",
+    "chessy-pwa-2026.web.app",
+    "chessy.textilesdemedellin.com"
+  ],
+  "google_transport": "signInWithPopup",
+  "session_persistence": "indexedDBLocalPersistence",
+  "progress_sync": "NOT_IN_SCOPE",
+  "guest_offline_mode": "PRESERVED",
+  "native_boundary": "AuthAdapter provider-neutral boundary; future Android/iOS transport may replace Firebase Web transport",
+  "private_credentials_in_repo": false,
+  "verified_at": "2026-09-07T15:19:05Z"
+}

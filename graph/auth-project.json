@@ -1,0 +1,235 @@
+{
+  "schema_version": "graph-harness.project.v1",
+  "project_id": "chessy-auth-native-v1",
+  "mode": "SHIP",
+  "gate_definitions": [
+    {
+      "id": "spec",
+      "required_evidence_kinds": [
+        "spec"
+      ],
+      "blocking": true
+    },
+    {
+      "id": "verification",
+      "required_evidence_kinds": [
+        "verification"
+      ],
+      "blocking": true
+    },
+    {
+      "id": "critic",
+      "required_evidence_kinds": [
+        "critic"
+      ],
+      "blocking": true
+    },
+    {
+      "id": "release",
+      "required_evidence_kinds": [
+        "release"
+      ],
+      "blocking": true
+    }
+  ],
+  "nodes": [
+    {
+      "id": "CH-017",
+      "title": "Auth architecture and local-first identity contract",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**",
+        "specs/**",
+        "public/**",
+        "docs/**",
+        "package.json",
+        "package-lock.json",
+        "*.json",
+        "*.ts",
+        "*.tsx",
+        "*.css",
+        "*.md",
+        ".github/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "CH-018",
+      "title": "Firebase-ready PWA authentication adapter",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CH-017"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**",
+        "specs/**",
+        "public/**",
+        "docs/**",
+        "package.json",
+        "package-lock.json",
+        "*.json",
+        "*.ts",
+        "*.tsx",
+        "*.css",
+        "*.md",
+        ".github/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "CH-019",
+      "title": "Account, sign-in and account-deletion UX",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CH-018"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**",
+        "specs/**",
+        "public/**",
+        "docs/**",
+        "package.json",
+        "package-lock.json",
+        "*.json",
+        "*.ts",
+        "*.tsx",
+        "*.css",
+        "*.md",
+        ".github/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "CH-020",
+      "title": "Native readiness boundary and app handoff contract",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CH-019"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**",
+        "specs/**",
+        "public/**",
+        "docs/**",
+        "package.json",
+        "package-lock.json",
+        "*.json",
+        "*.ts",
+        "*.tsx",
+        "*.css",
+        "*.md",
+        ".github/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "CH-021",
+      "title": "Independent auth verification and release candidate",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CH-020"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**",
+        "specs/**",
+        "public/**",
+        "docs/**",
+        "package.json",
+        "package-lock.json",
+        "*.json",
+        "*.ts",
+        "*.tsx",
+        "*.css",
+        "*.md",
+        ".github/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    }
+  ]
+}

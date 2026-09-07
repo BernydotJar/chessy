@@ -1,0 +1,64 @@
+{
+  "release_sha": "4ed964387a520092baef8323513a227e69687ea1",
+  "release_tree": "73da91b84dc9b2e7e21d49d56732508663288d02",
+  "verified_at": "2026-09-06T19:40:05Z",
+  "public_url": "https://chessy.textilesdemedellin.com/",
+  "github": {
+    "pr": 5,
+    "pr_head_sha": "73d242991fc40abf9a61c2d57a5883fe90127e2f",
+    "pr_ci_run": 34055258167,
+    "pr_ci": "PASS",
+    "main_ci_run": 34055357260,
+    "main_ci": "PASS"
+  },
+  "runtime": {
+    "type": "workspace-supervised-static-gateway",
+    "port": 14176,
+    "supervisor": "supervisord-4.2.5",
+    "autostart": "PASS",
+    "new_application_containers": 0
+  },
+  "http": {
+    "local_health": "PASS_HTTP_200_EXACT_SHA",
+    "public_health": "PASS_HTTP_200_EXACT_SHA",
+    "root": 200,
+    "manifest": 200,
+    "icon_svg": 200,
+    "maskable_svg": 200,
+    "service_worker": 200,
+    "blocked_paths": {
+      "/internal": 404,
+      "/metrics": 404,
+      "/meta": 404,
+      "/ready": 404,
+      "/debug": 404,
+      "/admin": 404
+    }
+  },
+  "security_headers": {
+    "x-content-type-options": "nosniff",
+    "referrer-policy": "strict-origin-when-cross-origin",
+    "permissions-policy": "camera=(), microphone=(), geolocation=()",
+    "cross-origin-opener-policy": "same-origin",
+    "x-frame-options": "DENY"
+  },
+  "public_mobile_smoke": {
+    "viewport_width": 390,
+    "no_horizontal_overflow": "PASS",
+    "service_worker": "PASS",
+    "offline_home": "PASS",
+    "offline_academy": "PASS",
+    "offline_challenges": "PASS",
+    "offline_stockfish_uci": "PASS",
+    "page_errors": []
+  },
+  "pre_release_verification": {
+    "lint": "PASS",
+    "unit_tests": "168/168 PASS",
+    "independent_python_chess": "112/112 PASS",
+    "build": "PASS",
+    "npm_audit": "0 vulnerabilities",
+    "browser_workflows": "32/32 PASS",
+    "pwa_offline": "PASS"
+  }
+}

@@ -731,6 +731,62 @@
     "reviewCount": "{{count}} por repasar",
     "weakThemeEvidence": "{{mistakes}} errores observados · {{outstanding}} pendientes",
     "weakThemeEmpty": "Aún no hay suficiente evidencia para señalar un tema débil.",
-    "offline": "Sin conexión · modo local"
+    "offline": "Sin conexión · modo local",
+    "account": "Cuenta"
+  },
+  "auth": {
+    "title": "Tu cuenta Chessy",
+    "subtitle": "Inicia sesión para preparar tu identidad entre dispositivos. Tu progreso de ajedrez sigue local en esta fase.",
+    "loading": "Preparando tu cuenta…",
+    "notConnectedTitle": "Inicio de sesión cloud aún no conectado",
+    "notConnectedBody": "Chessy ya tiene la capa de cuenta preparada, pero este despliegue todavía no tiene una aplicación Firebase configurada. No simularemos una sesión que no existe.",
+    "localStillWorks": "Puedes seguir jugando, aprendiendo y usando tu progreso local, incluso sin conexión.",
+    "signedInSubtitle": "Tu identidad está conectada; el progreso de ajedrez todavía permanece en este dispositivo.",
+    "signedInAs": "Sesión iniciada como",
+    "player": "Jugador Chessy",
+    "providerLabel": "Proveedor",
+    "accountActions": "Controles de cuenta",
+    "progressLocal": "Cerrar sesión o eliminar la cuenta no borra el progreso local de este dispositivo en esta fase.",
+    "signOut": "Cerrar sesión",
+    "deleteTitle": "Eliminar cuenta",
+    "deleteBody": "Elimina la identidad autenticada. Si el proveedor exige una autenticación reciente, Chessy te lo indicará; no se omite esa protección.",
+    "deleteAccount": "Eliminar mi cuenta",
+    "confirmDelete": "Sí, eliminar cuenta",
+    "cancel": "Cancelar",
+    "modeLabel": "Modo de acceso",
+    "signIn": "Iniciar sesión",
+    "create": "Crear cuenta",
+    "displayName": "Nombre visible",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "working": "Procesando…",
+    "or": "o continúa con",
+    "google": "Continuar con Google",
+    "resetPassword": "Enviar enlace para restablecer contraseña",
+    "localFirstTitle": "Local primero, cuenta después",
+    "localFirstBody": "La cuenta añade identidad; no toma control de tus partidas ni de tu aprendizaje local.",
+    "localPoint1": "Jugar, Academia, Retos y Stockfish siguen disponibles como invitado.",
+    "localPoint2": "En esta fase no subimos ni fusionamos tu progreso.",
+    "localPoint3": "La misma frontera de identidad podrá usar SDK nativo en Android/iOS.",
+    "provider": {
+      "password": "Correo y contraseña",
+      "google": "Google",
+      "unknown": "Otro proveedor"
+    },
+    "errors": {
+      "invalid-credentials": "El correo o la contraseña no son válidos.",
+      "email-in-use": "Ese correo ya está asociado a una cuenta.",
+      "weak-password": "Usa una contraseña más segura.",
+      "invalid-email": "El correo electrónico no tiene un formato válido.",
+      "network": "No pudimos contactar al servicio de acceso. Revisa tu conexión.",
+      "recent-login-required": "Por seguridad, vuelve a iniciar sesión antes de eliminar la cuenta.",
+      "popup-blocked": "El navegador bloqueó la ventana de acceso. Habilítala e inténtalo de nuevo.",
+      "cancelled": "El acceso fue cancelado.",
+      "unknown": "No pudimos completar la operación de cuenta."
+    },
+    "notices": {
+      "password-reset-sent": "Si existe una cuenta para ese correo, el proveedor enviará las instrucciones de recuperación.",
+      "account-deleted": "La cuenta autenticada fue eliminada. Tu progreso local permanece en este dispositivo."
+    }
   }
 }

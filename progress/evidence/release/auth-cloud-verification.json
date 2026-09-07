@@ -1,0 +1,9 @@
+{
+  "project": "chessy-pwa-2026",
+  "emailPasswordProvider": "PASS",
+  "googleProvider": "PASS",
+  "create": "PASS",
+  "signIn": "PASS",
+  "delete": "PASS",
+  "deletedCredentialRejected": "PASS"
+}
