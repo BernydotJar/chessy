@@ -1,0 +1,10 @@
+{
+  "model": "ibm/granite3.3:2b",
+  "reviewed_sha": "e0103b83f4faea79fb2bfab8a9a27f7c1b4a7413",
+  "reviewed_tree": "82a180d60b02c4cd8d7adddb323c88e3110eaf9b",
+  "verdict": "PASS",
+  "finding": "NONE",
+  "authority": "independent-release-risk-critic",
+  "raw_response": "/shared-auth/critic/raw/chessy/e0103b83f4faea79fb2bfab8a9a27f7c1b4a7413/auth-v1-risk-raw.json",
+  "verified_at": "2026-09-07T15:20:09Z"
+}

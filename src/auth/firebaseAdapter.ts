@@ -1,5 +1,6 @@
 import type { AuthAdapter, AuthProviderName, AuthUser } from './types';
 import type { FirebaseClientConfig } from './config';
+import { getChessyFirebaseApp } from '../firebase/client';
 
 const providerName = (providerId: string | undefined): AuthProviderName => {
   if (providerId === 'google.com') return 'google';
@@ -11,10 +12,8 @@ export async function createFirebaseAuthAdapter(
   config: FirebaseClientConfig,
   emulatorUrl: string | null,
 ): Promise<AuthAdapter> {
-  const appModule = await import('firebase/app');
   const authModule = await import('firebase/auth');
-  const existing = appModule.getApps().find((app) => app.name === 'chessy-auth');
-  const app = existing ?? appModule.initializeApp(config, 'chessy-auth');
+  const app = await getChessyFirebaseApp(config);
   const auth = authModule.getAuth(app);
 
   await authModule.setPersistence(auth, authModule.indexedDBLocalPersistence);

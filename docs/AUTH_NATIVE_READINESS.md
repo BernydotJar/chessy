@@ -33,13 +33,17 @@ Native work should also add:
 - account deletion and privacy disclosures before store submission;
 - real-device lifecycle tests for background/foreground and expired sessions.
 
-## Progress synchronization is a separate phase
+## Cloud Progress Sync v1
 
-Signing in does not automatically upload local progress. A later sync phase must define stable records, conflict resolution, first-login migration, device merge semantics, deletion semantics, retry/idempotency and privacy controls before any on-device progress is sent to a backend.
+Authenticated PWA users now receive account-scoped learning-progress synchronization through Cloud Firestore while Chessy remains local-first. The immediate write target is still `localStorage`; the cloud layer synchronizes only the validated learning `Progress` model (solved challenges, completed lessons, activity days/streak data, and review/mistake state). Saved games, PGNs, themes, language and engine preferences remain device-local in this phase.
+
+The cloud record lives at `users/{uid}/progress/current`. First login and later device joins use an idempotent merge: completion/day sets are unioned, review counters use monotonic maxima, and every merged payload is revalidated through the same `parseProgress` boundary used for imports. XP stays derived from trusted identifiers rather than becoming a writable cloud counter.
+
+Account deletion removes the cloud progress document before deleting the Firebase Authentication identity. If that cleanup cannot complete, Chessy does not proceed with identity deletion.
 
 
 ## PWA Google sign-in transport
 
 Chessy is hosted behind the existing Cloudflare/Caddy edge rather than Firebase Hosting. The PWA therefore uses `signInWithPopup()` for Google instead of `signInWithRedirect()`. This avoids the third-party storage dependency in redirect auth on modern browsers while keeping the provider behind `AuthAdapter`. Android/iOS may replace this transport with their native Google/Firebase SDKs without changing game or learning domains.
 
-Production Firebase project: `chessy-pwa-2026`. Firebase is identity-only in this phase; hosting remains on the existing Chessy edge and progress remains local-only until a separately specified sync contract exists.
+Production Firebase project: `chessy-pwa-2026`. Firebase Authentication provides identity and Cloud Firestore stores only the bounded learning-progress document described above. Hosting remains on the existing Chessy Cloudflare/Caddy edge. The PWA server uses `Cross-Origin-Opener-Policy: same-origin-allow-popups` so the Google popup can return control to Chessy without weakening the existing frame, referrer, content-type or blocked-route protections.

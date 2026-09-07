@@ -7,6 +7,7 @@ import { LESSONS, TRACKS } from '../../learning/curriculum';
 import { downloadText } from '../../utils/download';
 import { SectionHeading } from './Shared';
 import { ChessyIcon, type ChessyIconName } from '../../design/icons';
+import { ProgressSyncStatus } from './ProgressSyncStatus';
 
 export function ProgressView() {
  const {t}=useTranslation();const {progress,importProgress}=useLearningStore();const [pending,setPending]=useState<string|null>(null),[message,setMessage]=useState('');
@@ -18,6 +19,7 @@ export function ProgressView() {
   {id:'streak',icon:'streak',unlocked:streakBest>=3},
  ];
  return <div className="view-enter"><SectionHeading eyebrow={t('studio.progress')} title={t('studio.progressTitle')} subtitle={t('studio.progressSubtitle')}/>
+  <ProgressSyncStatus/>
   <div className="stat-grid four"><div className="stat-card"><ChessyIcon name="xp" size={25}/><div><strong>{xp(progress)}</strong><span>{t('studio.xp')}</span></div></div><div className="stat-card"><ChessyIcon name="streak" size={25}/><div><strong>{streak(progress)}</strong><span>{t('studio.streak')}</span></div></div><div className="stat-card"><ChessyIcon name="target" size={25}/><div><strong>{progress.solved.length}</strong><span>{t('studio.solved')}</span></div></div><div className="stat-card"><ChessyIcon name="academy" size={25}/><div><strong>{progress.lessons.length}</strong><span>{t('studio.completed')}</span></div></div></div>
   <p className="fine-print">{t('studio.noElo')}</p>
   <section className="learning-review-summary" aria-labelledby="review-summary-title"><div className="home-section-title"><div><p className="eyebrow">{t('studio.reviewLabel')}</p><h2 id="review-summary-title">{t('studio.reviewSummaryTitle')}</h2></div><span className="tag">{t('studio.reviewCount',{count:reviewCount})}</span></div>{weak.length>0?<div className="weak-theme-grid">{weak.map(item=><div className="panel weak-theme" key={item.category}><ChessyIcon name="target" size={20}/><div><strong>{t(`studio.category.${item.category}`)}</strong><span>{t('studio.weakThemeEvidence',{mistakes:item.mistakes,outstanding:item.outstanding})}</span></div></div>)}</div>:<p className="muted">{t('studio.weakThemeEmpty')}</p>}</section>

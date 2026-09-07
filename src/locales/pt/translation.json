@@ -672,7 +672,7 @@
     "answerWrong": "Reveja a ideia e tente novamente.",
     "practiceIdea": "Praticar esta ideia",
     "progressTitle": "O que você aprende fica com você.",
-    "progressSubtitle": "Seu progresso é salvo neste navegador. Não sincroniza com outros dispositivos. Exporte uma cópia para preservá-lo.",
+    "progressSubtitle": "Seu progresso é salvo localmente e, quando você entra, o Chessy sincroniza com sua conta. Você pode continuar aprendendo offline.",
     "noElo": "Os pontos reconhecem prática e aprendizado; não são classificação Elo nem certificação.",
     "achievements": "Pequenas grandes vitórias",
     "badge": {
@@ -736,20 +736,20 @@
   },
   "auth": {
     "title": "Sua conta Chessy",
-    "subtitle": "Entre para preparar uma identidade entre dispositivos. Seu progresso de xadrez continua local nesta fase.",
+    "subtitle": "Entre para sincronizar o progresso entre dispositivos sem perder o modo offline.",
     "loading": "Preparando sua conta…",
     "notConnectedTitle": "O login na nuvem ainda não está conectado",
     "notConnectedBody": "O Chessy já possui a camada de conta preparada, mas esta implantação ainda não tem um aplicativo Firebase configurado. Não vamos simular uma sessão que não existe.",
     "localStillWorks": "Você pode continuar jogando, aprendendo e usando seu progresso local, inclusive offline.",
-    "signedInSubtitle": "Sua identidade está conectada; o progresso de xadrez ainda permanece neste dispositivo.",
+    "signedInSubtitle": "Sua identidade está conectada e o progresso de aprendizado é sincronizado com sua conta.",
     "signedInAs": "Sessão iniciada como",
     "player": "Jogador Chessy",
     "providerLabel": "Provedor",
     "accountActions": "Controles da conta",
-    "progressLocal": "Sair ou excluir a conta não apaga o progresso local deste dispositivo nesta fase.",
+    "progressLocal": "Sair mantém a cópia local. Ao excluir a conta, o Chessy apaga primeiro o progresso na nuvem; este dispositivo mantém a cópia local.",
     "signOut": "Sair",
     "deleteTitle": "Excluir conta",
-    "deleteBody": "Exclui a identidade autenticada. Se o provedor exigir autenticação recente, o Chessy informará; essa proteção não será ignorada.",
+    "deleteBody": "Exclui primeiro o progresso na nuvem e depois a identidade autenticada. Se o provedor exigir autenticação recente, o Chessy mantém essa proteção.",
     "deleteAccount": "Excluir minha conta",
     "confirmDelete": "Sim, excluir conta",
     "cancel": "Cancelar",
@@ -763,10 +763,10 @@
     "or": "ou continue com",
     "google": "Continuar com Google",
     "resetPassword": "Enviar link para redefinir senha",
-    "localFirstTitle": "Local primeiro, conta depois",
-    "localFirstBody": "A conta adiciona identidade; ela não assume o controle das suas partidas nem do aprendizado local.",
+    "localFirstTitle": "Local primeiro, sincronização segura",
+    "localFirstBody": "O Chessy salva imediatamente neste dispositivo e adiciona uma cópia na nuvem vinculada à conta quando você entra.",
     "localPoint1": "Jogar, Academia, Desafios e Stockfish continuam disponíveis como convidado.",
-    "localPoint2": "Nesta fase não enviamos nem mesclamos seu progresso.",
+    "localPoint2": "Ao entrar, desafios, lições, sequência e revisão são mesclados com sua conta.",
     "localPoint3": "A mesma fronteira de identidade poderá usar SDK nativo no Android/iOS.",
     "provider": {
       "password": "E-mail e senha",
@@ -786,7 +786,28 @@
     },
     "notices": {
       "password-reset-sent": "Se existir uma conta para esse e-mail, o provedor enviará as instruções de recuperação.",
-      "account-deleted": "A conta autenticada foi excluída. Seu progresso local permanece neste dispositivo."
+      "account-deleted": "A conta e o progresso na nuvem foram excluídos. A cópia local permanece neste dispositivo."
     }
+  },
+  "sync": {
+    "label": "Sincronização de progresso",
+    "status": {
+      "local-only": "Somente neste dispositivo",
+      "syncing": "Sincronizando…",
+      "synced": "Sincronizado",
+      "pending": "Aguardando sincronização",
+      "error": "Não foi possível sincronizar"
+    },
+    "detail": {
+      "local-only": "Entre para salvar este progresso na sua conta.",
+      "syncing": "Estamos mesclando a cópia local com sua conta.",
+      "synced": "Seu progresso está salvo na conta e continua disponível localmente.",
+      "pending": "As alterações estão salvas aqui e serão enviadas quando a conexão voltar.",
+      "error": "Seu progresso local está seguro. Você pode tentar sincronizar novamente.",
+      "cloud-delete": "Não foi possível apagar o progresso na nuvem; a identidade não será excluída."
+    },
+    "last": "Última sincronização: {{time}}",
+    "retry": "Sincronizar agora",
+    "cloudDeleteError": "Não foi possível apagar seu progresso na nuvem. Para proteger seus dados, o Chessy não excluiu a conta."
   }
 }

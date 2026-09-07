@@ -17,7 +17,10 @@
     "verify": "npm run lint && npm test -- --run && npm run build",
     "test:pwa": "node scripts/pwa-verify.cjs",
     "test:auth:cloud": "node scripts/auth-cloud-verify.cjs",
-    "test:auth:ui-live": "node scripts/auth-ui-live-verify.cjs"
+    "test:auth:ui-live": "node scripts/auth-ui-live-verify.cjs",
+    "test:popup-opener": "node scripts/popup-opener-verify.cjs",
+    "test:firestore:rules-live": "node scripts/firestore-rules-live-verify.cjs",
+    "test:progress:ui-live": "node scripts/progress-ui-live-verify.cjs"
   },
   "dependencies": {
     "chess.js": "^1.0.0-beta.6",

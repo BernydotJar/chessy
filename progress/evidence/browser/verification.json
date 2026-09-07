@@ -1,16 +1,16 @@
 {
-  "createdAt": "2026-09-07T15:16:37.540Z",
+  "createdAt": "2026-09-07T16:18:49.437Z",
   "browser": "145.0.7632.0",
   "checks": [
     {
       "name": "All ten routes load without untranslated UI keys",
       "result": "PASS",
-      "ms": 807
+      "ms": 794
     },
     {
       "name": "Incorrect quiz does not award completion; correct answer does",
       "result": "PASS",
-      "ms": 103
+      "ms": 107
     },
     {
       "name": "Wrong challenge preserves position; correct solution persists once",
@@ -20,67 +20,67 @@
     {
       "name": "Hint-assisted play does not award XP",
       "result": "PASS",
-      "ms": 94
+      "ms": 92
     },
     {
       "name": "Mouse drag follows cursor without a source ghost and completes the move",
       "result": "PASS",
-      "ms": 464
+      "ms": 451
     },
     {
       "name": "Touch drag works on mobile play and challenge boards",
       "result": "PASS",
-      "ms": 804
+      "ms": 763
     },
     {
       "name": "Native promotion dialog supports rook underpromotion and focus",
       "result": "PASS",
-      "ms": 135
+      "ms": 141
     },
     {
       "name": "Multi-ply puzzle plays legal opponent reply and accepts final mate",
       "result": "PASS",
-      "ms": 97
+      "ms": 81
     },
     {
       "name": "Black-side Lichess line solves through the same input contract",
       "result": "PASS",
-      "ms": 102
+      "ms": 101
     },
     {
       "name": "Configured account route exposes email and Google auth without touching local progress",
       "result": "PASS",
-      "ms": 36
+      "ms": 46
     },
     {
       "name": "Language switches and survives reload in English and Portuguese",
       "result": "PASS",
-      "ms": 1897
+      "ms": 1859
     },
     {
       "name": "Visual themes update chrome and board palette and persist locally",
       "result": "PASS",
-      "ms": 1694
+      "ms": 1571
     },
     {
       "name": "Mobile bottom navigation exposes the five primary destinations",
       "result": "PASS",
-      "ms": 94
+      "ms": 90
     },
     {
       "name": "Board routes use compact mobile focus chrome with explicit Home access",
       "result": "PASS",
-      "ms": 220
+      "ms": 206
     },
     {
       "name": "Pending mistakes create a deterministic review flow and clean review resolves debt",
       "result": "PASS",
-      "ms": 211
+      "ms": 192
     },
     {
       "name": "Local play survives training navigation and saves a real PGN game",
       "result": "PASS",
-      "ms": 290
+      "ms": 292
     },
     {
       "name": "Invalid progress backup is rejected without overwriting progress",
@@ -90,82 +90,82 @@
     {
       "name": "Progress restore requires explicit confirmation",
       "result": "PASS",
-      "ms": 40
+      "ms": 42
     },
     {
       "name": "Actual Stockfish responds after a legal opening move",
       "result": "PASS",
-      "ms": 1499
+      "ms": 1414
     },
     {
       "name": "Mobile drawer hides inactive links and closes with Escape",
       "result": "PASS",
-      "ms": 67
+      "ms": 70
     },
     {
       "name": "Reduced motion has no running interface animations",
       "result": "PASS",
-      "ms": 3
+      "ms": 2
     },
     {
       "name": "No horizontal overflow on mobile, tablet and desktop routes",
       "result": "PASS",
-      "ms": 424
+      "ms": 365
     },
     {
       "name": "WCAG 2.1 AA mobile scan on primary learning routes",
       "result": "PASS",
-      "ms": 2085
+      "ms": 2034
     },
     {
       "name": "WCAG 2.1 AA automated scan: home",
       "result": "PASS",
-      "ms": 441
+      "ms": 463
     },
     {
       "name": "WCAG 2.1 AA automated scan: play",
       "result": "PASS",
-      "ms": 542
+      "ms": 504
     },
     {
       "name": "WCAG 2.1 AA automated scan: training",
       "result": "PASS",
-      "ms": 252
+      "ms": 259
     },
     {
       "name": "WCAG 2.1 AA automated scan: academy",
       "result": "PASS",
-      "ms": 299
+      "ms": 289
     },
     {
       "name": "WCAG 2.1 AA automated scan: progress",
       "result": "PASS",
-      "ms": 318
+      "ms": 301
     },
     {
       "name": "WCAG 2.1 AA automated scan: library",
       "result": "PASS",
-      "ms": 301
+      "ms": 277
     },
     {
       "name": "WCAG 2.1 AA automated scan: games",
       "result": "PASS",
-      "ms": 260
+      "ms": 261
     },
     {
       "name": "WCAG 2.1 AA automated scan: analysis",
       "result": "PASS",
-      "ms": 248
+      "ms": 242
     },
     {
       "name": "WCAG 2.1 AA automated scan: review",
       "result": "PASS",
-      "ms": 502
+      "ms": 478
     },
     {
       "name": "WCAG 2.1 AA automated scan: account",
       "result": "PASS",
-      "ms": 270
+      "ms": 261
     },
     {
       "name": "No uncaught JavaScript errors",

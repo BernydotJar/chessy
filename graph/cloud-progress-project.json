@@ -1,0 +1,38 @@
+{
+  "schema_version": "graph-harness.project.v1",
+  "project_id": "chessy-cloud-progress-v1",
+  "mode": "SHIP",
+  "gate_definitions": [
+    {"id":"spec","required_evidence_kinds":["spec"],"blocking":true},
+    {"id":"verification","required_evidence_kinds":["verification"],"blocking":true},
+    {"id":"critic","required_evidence_kinds":["critic"],"blocking":true},
+    {"id":"release","required_evidence_kinds":["release"],"blocking":true}
+  ],
+  "nodes": [
+    {
+      "id":"CH-022","title":"Repair Google popup opener contract","kind":"feature","status":"spec_ready","depends_on":[],"capability":"engineering",
+      "allowed_paths":["src/**","tests/**","scripts/**","graph/**","progress/**","specs/**","docs/**","package.json","package-lock.json","*.json","*.ts","*.tsx","*.css","*.md",".github/**","firebase.json","firestore.rules","firestore.indexes.json"],
+      "gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}
+    },
+    {
+      "id":"CH-023","title":"Define deterministic local-cloud progress merge","kind":"feature","status":"spec_ready","depends_on":["CH-022"],"capability":"engineering",
+      "allowed_paths":["src/**","tests/**","scripts/**","graph/**","progress/**","specs/**","docs/**","package.json","package-lock.json","*.json","*.ts","*.tsx","*.css","*.md",".github/**","firebase.json","firestore.rules","firestore.indexes.json"],
+      "gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}
+    },
+    {
+      "id":"CH-024","title":"Provision Firestore progress datastore and owner-only rules","kind":"feature","status":"spec_ready","depends_on":["CH-023"],"capability":"engineering",
+      "allowed_paths":["src/**","tests/**","scripts/**","graph/**","progress/**","specs/**","docs/**","package.json","package-lock.json","*.json","*.ts","*.tsx","*.css","*.md",".github/**","firebase.json","firestore.rules","firestore.indexes.json"],
+      "gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}
+    },
+    {
+      "id":"CH-025","title":"Integrate automatic progress sync and account cleanup UX","kind":"feature","status":"spec_ready","depends_on":["CH-024"],"capability":"engineering",
+      "allowed_paths":["src/**","tests/**","scripts/**","graph/**","progress/**","specs/**","docs/**","package.json","package-lock.json","*.json","*.ts","*.tsx","*.css","*.md",".github/**","firebase.json","firestore.rules","firestore.indexes.json"],
+      "gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}
+    },
+    {
+      "id":"CH-026","title":"Independent cloud progress verification and public release","kind":"feature","status":"spec_ready","depends_on":["CH-025"],"capability":"engineering",
+      "allowed_paths":["src/**","tests/**","scripts/**","graph/**","progress/**","specs/**","docs/**","package.json","package-lock.json","*.json","*.ts","*.tsx","*.css","*.md",".github/**","firebase.json","firestore.rules","firestore.indexes.json"],
+      "gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}
+    }
+  ]
+}
