@@ -1,0 +1,9 @@
+{
+  "project": "chessy-pwa-2026",
+  "ownWrite": "PASS",
+  "ownRead": "PASS",
+  "crossUserReadDenied": "PASS",
+  "unauthenticatedDenied": "PASS",
+  "invalidSchemaDenied": "PASS",
+  "ownDelete": "PASS"
+}

@@ -1,0 +1,17 @@
+{
+  "candidate_sha": "e0103b83f4faea79fb2bfab8a9a27f7c1b4a7413",
+  "candidate_tree": "82a180d60b02c4cd8d7adddb323c88e3110eaf9b",
+  "scope": "PWA Auth + Native Readiness v1",
+  "integration_status": "VERIFIED_RELEASE_CANDIDATE",
+  "public_deployment": "PENDING_CH-021",
+  "firebase_project_id": "chessy-pwa-2026",
+  "providers": [
+    "email_password",
+    "google"
+  ],
+  "verification": "progress/evidence/release/auth-v1-verification.json",
+  "critic": "progress/evidence/release/auth-v1-granite-risk.json",
+  "no_progress_sync": true,
+  "new_application_containers": 0,
+  "created_at": "2026-09-07T15:20:09Z"
+}

@@ -672,7 +672,7 @@
     "answerWrong": "Review the idea and try again.",
     "practiceIdea": "Practice this idea",
     "progressTitle": "What you learn stays with you.",
-    "progressSubtitle": "Your progress is stored in this browser. It does not sync across devices. Export a backup to keep it safe.",
+    "progressSubtitle": "Your progress is stored locally and, when you sign in, Chessy syncs it to your account. You can keep learning offline.",
     "noElo": "Points recognize practice and learning; they are not an Elo rating or a certification.",
     "achievements": "Small, meaningful wins",
     "badge": {
@@ -736,20 +736,20 @@
   },
   "auth": {
     "title": "Your Chessy account",
-    "subtitle": "Sign in to establish an identity across devices. Your chess progress stays local in this phase.",
+    "subtitle": "Sign in to sync progress across devices without losing offline mode.",
     "loading": "Preparing your account…",
     "notConnectedTitle": "Cloud sign-in is not connected yet",
     "notConnectedBody": "Chessy already has the account boundary in place, but this deployment does not yet have a Firebase web app configured. We will not simulate a session that does not exist.",
     "localStillWorks": "You can keep playing, learning and using local progress, including offline.",
-    "signedInSubtitle": "Your identity is connected; chess progress still remains on this device.",
+    "signedInSubtitle": "Your identity is connected and your learning progress syncs to your account.",
     "signedInAs": "Signed in as",
     "player": "Chessy player",
     "providerLabel": "Provider",
     "accountActions": "Account controls",
-    "progressLocal": "Signing out or deleting the account does not erase local progress on this device in this phase.",
+    "progressLocal": "Signing out keeps the local copy. When you delete the account, Chessy deletes cloud progress first; this device keeps its local copy.",
     "signOut": "Sign out",
     "deleteTitle": "Delete account",
-    "deleteBody": "Delete the authenticated identity. If the provider requires recent authentication, Chessy will tell you; that protection is never bypassed.",
+    "deleteBody": "Delete cloud progress first, then the authenticated identity. If the provider requires recent authentication, Chessy keeps that protection in place.",
     "deleteAccount": "Delete my account",
     "confirmDelete": "Yes, delete account",
     "cancel": "Cancel",
@@ -763,10 +763,10 @@
     "or": "or continue with",
     "google": "Continue with Google",
     "resetPassword": "Send password reset link",
-    "localFirstTitle": "Local first, account second",
-    "localFirstBody": "The account adds identity; it does not take ownership of your local games or learning data.",
+    "localFirstTitle": "Local first, secure sync",
+    "localFirstBody": "Chessy saves immediately on this device and adds an account-scoped cloud copy when you sign in.",
     "localPoint1": "Play, Academy, Challenges and Stockfish remain available as a guest.",
-    "localPoint2": "This phase does not upload or merge your progress.",
+    "localPoint2": "When signed in, challenges, lessons, streak activity and review state merge into your account.",
     "localPoint3": "The same identity boundary can use native SDKs on Android/iOS.",
     "provider": {
       "password": "Email and password",
@@ -786,7 +786,28 @@
     },
     "notices": {
       "password-reset-sent": "If an account exists for that email, the provider will send recovery instructions.",
-      "account-deleted": "The authenticated account was deleted. Your local progress remains on this device."
+      "account-deleted": "The account and its cloud progress were deleted. The local copy remains on this device."
     }
+  },
+  "sync": {
+    "label": "Progress sync",
+    "status": {
+      "local-only": "This device only",
+      "syncing": "Syncing…",
+      "synced": "Synced",
+      "pending": "Waiting to sync",
+      "error": "Could not sync"
+    },
+    "detail": {
+      "local-only": "Sign in to save this progress to your account.",
+      "syncing": "We are merging the local copy with your account.",
+      "synced": "Your progress is stored in your account and remains available locally.",
+      "pending": "Changes are saved here and will upload when the connection returns.",
+      "error": "Your local progress is safe. You can retry the sync.",
+      "cloud-delete": "Cloud progress could not be deleted, so the identity will not be deleted."
+    },
+    "last": "Last sync: {{time}}",
+    "retry": "Sync now",
+    "cloudDeleteError": "We could not delete your cloud progress. To protect your data, Chessy did not delete the account."
   }
 }

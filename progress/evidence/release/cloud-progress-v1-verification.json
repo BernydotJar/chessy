@@ -1,0 +1,39 @@
+{
+  "scope": "Cloud Progress Sync v1 + Google popup repair",
+  "verified_at": "2026-09-07T16:20:45Z",
+  "firebase_project_id": "chessy-pwa-2026",
+  "firestore": {
+    "database": "(default)",
+    "location": "nam5",
+    "edition": "STANDARD",
+    "free_tier": true,
+    "point_in_time_recovery": false
+  },
+  "checks": {
+    "lint": "PASS",
+    "unit_tests": "183/183 PASS",
+    "production_build": "PASS",
+    "independent_python_chess": "112/112 PASS",
+    "npm_audit": "0 vulnerabilities",
+    "git_diff_check": "PASS",
+    "browser_workflows": "34/34 PASS",
+    "browser_page_errors": 0,
+    "wcag": "PASS desktop routes + primary mobile routes",
+    "pwa_offline": "PASS reload + Academy + Challenges + Stockfish",
+    "popup_opener": "PASS with same-origin-allow-popups",
+    "firebase_auth_cloud": "PASS Email/Password + Google authUri + deletion lifecycle",
+    "firebase_auth_ui": "PASS create/sign-out/sign-in/delete at 390px",
+    "firestore_owner_rules": "PASS own write/read/delete; cross-user/anonymous/invalid-schema denied",
+    "two_device_progress": "PASS first upload + second-device download + offline local update + reconnect upload + merge",
+    "cloud_cleanup_before_identity_delete": "PASS",
+    "secret_value_scan": "PASS"
+  },
+  "sync_contract": {
+    "local_first": true,
+    "cloud_path": "users/{uid}/progress/current",
+    "synced": ["solved_challenges", "completed_lessons", "activity_days", "mistakes", "review_state"],
+    "not_synced": ["saved_games", "pgn", "theme", "language", "engine_preferences", "analytics"],
+    "xp_authoritative_field": false,
+    "new_application_containers": 0
+  }
+}

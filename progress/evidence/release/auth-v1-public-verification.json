@@ -1,0 +1,89 @@
+{
+  "release_sha": "d6ffdfe79e8b9ce83217a95c1cf7ef6a5795c5d3",
+  "release_tree": "82a180d60b02c4cd8d7adddb323c88e3110eaf9b",
+  "verified_at": "2026-09-07T15:33:21Z",
+  "public_url": "https://chessy.textilesdemedellin.com/",
+  "github": {
+    "pr": 6,
+    "pr_head_sha": "0f4dde379360d085ac065fcb952e1a92a52d4b84",
+    "pr_ci_run": 34138187176,
+    "pr_ci": "PASS",
+    "main_ci_run": 34138374478,
+    "main_ci": "PASS"
+  },
+  "firebase": {
+    "project_id": "chessy-pwa-2026",
+    "plan": "Spark",
+    "identity_platform_upgrade": false,
+    "providers": [
+      "email_password",
+      "google"
+    ],
+    "production_domain_authorized": true,
+    "purpose": "identity only",
+    "progress_sync": "NOT_IN_SCOPE"
+  },
+  "runtime": {
+    "type": "workspace-supervised-static-gateway",
+    "port": 14176,
+    "supervisor": "supervisord-4.2.5",
+    "autostart": "PASS",
+    "new_application_containers": 0
+  },
+  "http": {
+    "local_health": "PASS_HTTP_200_EXACT_SHA",
+    "public_health": "PASS_HTTP_200_EXACT_SHA",
+    "root": 200,
+    "manifest": 200,
+    "icon_svg": 200,
+    "maskable_svg": 200,
+    "service_worker": 200,
+    "blocked_paths": {
+      "/internal": 404,
+      "/metrics": 404,
+      "/meta": 404,
+      "/ready": 404,
+      "/debug": 404,
+      "/admin": 404
+    }
+  },
+  "security_headers": {
+    "x-content-type-options": "nosniff",
+    "referrer-policy": "strict-origin-when-cross-origin",
+    "permissions-policy": "camera=(), microphone=(), geolocation=()",
+    "cross-origin-opener-policy": "same-origin",
+    "x-frame-options": "DENY"
+  },
+  "public_auth_smoke": {
+    "viewport_width": 390,
+    "no_horizontal_overflow": "PASS",
+    "google_popup": "PASS",
+    "google_popup_host": "accounts.google.com",
+    "email_create": "PASS",
+    "sign_out": "PASS",
+    "email_sign_in": "PASS",
+    "delete_account": "PASS",
+    "local_progress_preserved": "PASS",
+    "page_errors": []
+  },
+  "public_pwa_smoke": {
+    "service_worker": "PASS",
+    "offline_home": "PASS",
+    "offline_academy": "PASS",
+    "offline_challenges": "PASS",
+    "offline_stockfish_uci": "PASS"
+  },
+  "pre_release_verification": {
+    "lint": "PASS",
+    "unit_tests": "180/180 PASS",
+    "independent_python_chess": "112/112 PASS",
+    "build": "PASS",
+    "npm_audit": "0 vulnerabilities",
+    "browser_workflows": "34/34 PASS",
+    "responsive": "320-1440 PASS",
+    "wcag": "desktop + mobile PASS",
+    "firebase_cloud_lifecycle": "PASS",
+    "firebase_ui_lifecycle": "PASS",
+    "secret_value_scan": "PASS"
+  }
+}

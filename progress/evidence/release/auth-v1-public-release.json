@@ -1,0 +1,25 @@
+{
+  "terminal_candidate": "COMPLETED",
+  "product": "Chessy PWA Auth + Native Readiness v1",
+  "release_sha": "d6ffdfe79e8b9ce83217a95c1cf7ef6a5795c5d3",
+  "release_tree": "82a180d60b02c4cd8d7adddb323c88e3110eaf9b",
+  "public_url": "https://chessy.textilesdemedellin.com/",
+  "deployed_at": "2026-09-07T15:33:21Z",
+  "github_pr": 6,
+  "github_pr_ci_run": 34138187176,
+  "github_main_ci_run": 34138374478,
+  "firebase_project_id": "chessy-pwa-2026",
+  "auth_providers": [
+    "email_password",
+    "google"
+  ],
+  "public_auth_acceptance": "PASS",
+  "public_pwa_acceptance": "PASS",
+  "final_critic": "PASS_P_NONE",
+  "progress_sync": "NOT_IN_SCOPE",
+  "new_application_containers": 0,
+  "bundle_path": "/shared-auth/deployment/releases/chessy/d6ffdfe79e8b9ce83217a95c1cf7ef6a5795c5d3/chessy-d6ffdfe79e8b9ce83217a95c1cf7ef6a5795c5d3.tar.gz",
+  "bundle_sha256": "1ba7ec889d9c8e2e9c177141d0c247fea80ca2a25a4ed03ac7dfcb9050c0dd62",
+  "verification_artifact": "progress/evidence/release/auth-v1-public-verification.json",
+  "critic_artifact": "progress/evidence/release/auth-v1-public-final-risk.json"
+}

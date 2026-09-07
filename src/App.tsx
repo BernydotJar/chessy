@@ -27,6 +27,7 @@ import { ChessyMark } from './design/ChessyMark';
 import { OfflineStatus } from './components/OfflineStatus';
 import { AccountView } from './components/studio/AccountView';
 import { useAuthStore } from './auth/store';
+import { useProgressSyncStore } from './sync/store';
 import './styles/glassmorphism.css';
 import './styles/studio.css';
 import './styles/design-system.css';
@@ -44,9 +45,9 @@ class ErrorBoundary extends Component<{children:ReactNode},{failed:boolean}> {
 
 function App() {
  const {t,i18n}=useTranslation();const game=useGameStore();const {view,setView,setupMode}=game;
- const storageWarning=useLearningStore(s=>s.storageWarning);const authStatus=useAuthStore(s=>s.status);const initializeAuth=useAuthStore(s=>s.initialize);const [mobileMenu,setMobileMenu]=useState(false);const main=useRef<HTMLElement>(null);const sidebar=useRef<HTMLElement>(null);
+ const storageWarning=useLearningStore(s=>s.storageWarning);const authStatus=useAuthStore(s=>s.status);const initializeAuth=useAuthStore(s=>s.initialize);const initializeProgressSync=useProgressSyncStore(s=>s.initialize);const [mobileMenu,setMobileMenu]=useState(false);const main=useRef<HTMLElement>(null);const sidebar=useRef<HTMLElement>(null);
  const lang=locale(i18n.resolvedLanguage);
- useEffect(()=>{void initializeAuth();},[initializeAuth]);
+ useEffect(()=>{void initializeProgressSync();void initializeAuth();},[initializeAuth,initializeProgressSync]);
  useEffect(()=>{
   const media=window.matchMedia('(max-width: 760px)');
   const sync=()=>{if(sidebar.current)sidebar.current.inert=media.matches&&!mobileMenu;};

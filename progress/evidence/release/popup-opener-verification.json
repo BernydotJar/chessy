@@ -1,0 +1,5 @@
+{
+  "coop": "same-origin-allow-popups",
+  "xFrameOptions": "DENY",
+  "crossOriginPopupOpener": "PASS"
+}
