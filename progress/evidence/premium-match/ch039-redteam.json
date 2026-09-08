@@ -1,0 +1,13 @@
+{
+  "node": "CH-039",
+  "role": "critic-red-team",
+  "result": "PASS",
+  "reviewed_without_runtime_tests": true,
+  "findings": [
+    {"risk":"instrumentation competes with board","resolution":"player rails are compact and outside the board; board remains largest surface"},
+    {"risk":"AI setup crowds an active local game","resolution":"AI setup disappears after the first local move"},
+    {"risk":"theme-specific CSS fragments","resolution":"match surfaces use semantic Atlas tokens only"},
+    {"risk":"mobile controls obscure board","resolution":"player rails collapse captured material and match rail stacks below the board"}
+  ],
+  "material_open_findings": []
+}

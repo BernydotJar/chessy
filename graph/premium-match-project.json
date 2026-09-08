@@ -1,0 +1,18 @@
+{
+  "schema_version": "graph-harness.project.v1",
+  "project_id": "chessy-premium-match-v1",
+  "mode": "SHIP",
+  "gate_definitions": [
+    {"id":"spec","required_evidence_kinds":["spec"],"blocking":true},
+    {"id":"verification","required_evidence_kinds":["verification"],"blocking":true},
+    {"id":"critic","required_evidence_kinds":["critic"],"blocking":true},
+    {"id":"release","required_evidence_kinds":["release"],"blocking":true}
+  ],
+  "nodes": [
+    {"id":"CH-038","title":"Define premium match UX and clock contract","kind":"feature","status":"spec_ready","depends_on":[],"capability":"engineering","allowed_paths":["specs/**","docs/**","graph/**","progress/**"],"gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}},
+    {"id":"CH-039","title":"Build premium board-first match cockpit and player rails","kind":"feature","status":"spec_ready","depends_on":["CH-038"],"capability":"engineering","allowed_paths":["src/**","specs/**","docs/**","graph/**","progress/**"],"gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}},
+    {"id":"CH-040","title":"Add functional time controls and precise board feedback","kind":"feature","status":"spec_ready","depends_on":["CH-039"],"capability":"engineering","allowed_paths":["src/**","tests/**","scripts/**","specs/**","docs/**","graph/**","progress/**"],"gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}},
+    {"id":"CH-041","title":"Create continuous post-game Review and Analysis experience","kind":"feature","status":"spec_ready","depends_on":["CH-040"],"capability":"engineering","allowed_paths":["src/**","tests/**","scripts/**","specs/**","docs/**","graph/**","progress/**"],"gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}},
+    {"id":"CH-042","title":"Independent premium match verification and public release","kind":"feature","status":"spec_ready","depends_on":["CH-041"],"capability":"engineering","allowed_paths":["src/**","tests/**","scripts/**","specs/**","docs/**","graph/**","progress/**",".github/**","package.json","package-lock.json"],"gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}}
+  ]
+}

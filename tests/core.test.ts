@@ -10,7 +10,7 @@ class FakeWorker {
  send(data:string){this.onmessage?.({data});}
 }
 beforeEach(()=>{vi.stubGlobal('Worker',FakeWorker);FakeWorker.workers=[];});
-afterEach(()=>{vi.useRealTimers();vi.unstubAllGlobals();});
+afterEach(()=>{vi.useRealTimers();vi.unstubAllGlobals();vi.restoreAllMocks();});
 const tick=()=>new Promise(r=>setTimeout(r,0));
 describe('Isolated UCI requests',()=>{
  it('waits for ready and returns an underpromotion',async()=>{const e=new StockfishService();const result=e.getBestMove('fen');await tick();const w=FakeWorker.workers[0];expect(w.commands).toContain('isready');w.send('bestmove c7c8n');expect(await result).toEqual({from:'c7',to:'c8',promotion:'n'});e.terminate();});
@@ -20,10 +20,30 @@ describe('Isolated UCI requests',()=>{
  it('returns multipv lines in order with mate scores',async()=>{const e=new StockfishService();const p=e.evaluatePositionMultiPV('fen',10,2);await tick();const w=FakeWorker.workers[0];w.send('info depth 8 multipv 2 score cp 25 pv a2a4');w.send('info depth 8 multipv 1 score mate 2 pv e2e4');w.send('bestmove e2e4');const lines=await p;expect(lines[0].mate).toBe(2);expect(lines[1].score).toBe(25);e.terminate();});
 });
 describe('Core legal game state',()=>{
- beforeEach(()=>useGameStore.getState().resetGame());
+ beforeEach(()=>{useGameStore.getState().resetGame();useGameStore.getState().setTimeControl('untimed');});
  it('rejects illegal moves',()=>{const s=useGameStore.getState();expect(s.makeMove('e2','e5')).toBe(false);expect(useGameStore.getState().history).toHaveLength(0);});
  it('resignation ends the game without erasing history',()=>{useGameStore.getState().makeMove('e2','e4');useGameStore.getState().resignGame();expect(useGameStore.getState().history).toEqual(['e4']);expect(useGameStore.getState().winner).toBe('white');expect(useGameStore.getState().makeMove('e7','e5')).toBe(false);});
  it('keeps an explicit underpromotion',()=>{useGameStore.getState().loadGame('8/k1P5/2K5/8/8/8/8/8 w - - 0 1');expect(useGameStore.getState().makeMove('c7','c8','r')).toBe(true);expect(useGameStore.getState().chess.get('c8').type).toBe('r');});
  it('loading a position cancels AI state',()=>{useGameStore.setState({isAIGame:true,isAIThinking:true});useGameStore.getState().loadGame('4k3/8/8/8/8/8/4P3/4K3 w - - 0 1');expect(useGameStore.getState().isAIGame).toBe(false);expect(useGameStore.getState().isAIThinking).toBe(false);});
  it('undo is blocked during AI thinking',()=>{useGameStore.getState().makeMove('e2','e4');useGameStore.setState({isAIThinking:true});useGameStore.getState().undoMove();expect(useGameStore.getState().history).toHaveLength(1);});
+ it('timed games start after the first move, apply increment and restore clocks on undo',()=>{
+  const now=vi.spyOn(Date,'now').mockReturnValue(1_000);
+  const game=useGameStore.getState();game.setTimeControl('blitz3');
+  expect(useGameStore.getState().whiteTimeMs).toBe(180_000);expect(useGameStore.getState().blackTimeMs).toBe(180_000);expect(useGameStore.getState().clockStarted).toBe(false);
+  expect(game.makeMove('e2','e4')).toBe(true);
+  expect(useGameStore.getState().whiteTimeMs).toBe(182_000);expect(useGameStore.getState().clockStarted).toBe(true);
+  now.mockReturnValue(4_000);useGameStore.getState().tickClock();
+  expect(useGameStore.getState().blackTimeMs).toBe(177_000);
+  expect(useGameStore.getState().makeMove('e7','e5')).toBe(true);
+  expect(useGameStore.getState().blackTimeMs).toBe(179_000);
+  useGameStore.getState().undoMove();
+  expect(useGameStore.getState().history).toEqual(['e4']);
+  expect(useGameStore.getState().whiteTimeMs).toBe(182_000);expect(useGameStore.getState().blackTimeMs).toBe(180_000);
+ });
+ it('timeout ends a live session using elapsed wall-clock time',()=>{
+  const now=vi.spyOn(Date,'now').mockReturnValue(1_000);
+  const game=useGameStore.getState();game.setTimeControl('rapid10');game.makeMove('e2','e4');
+  now.mockReturnValue(601_001);useGameStore.getState().tickClock();
+  expect(useGameStore.getState().blackTimeMs).toBe(0);expect(useGameStore.getState().isGameOver).toBe(true);expect(useGameStore.getState().winner).toBe('white');expect(useGameStore.getState().endReason).toBe('timeout');
+ });
 });

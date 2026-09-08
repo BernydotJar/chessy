@@ -134,3 +134,7 @@ Decorative vector studies live in `public/art/`. Functional UI icons remain SVG 
 ## Chessy Atlas
 
 Country Themes v1 extends the three base UI Kit themes with a dedicated `#/themes` collection launched from Settings. The full catalog and art-direction contract live in `docs/COUNTRY_THEMES.md`. Atlas must not move into the primary Play/Home navigation; personalization remains subordinate to chess tasks.
+
+## Premium Match Experience
+
+Play, Review and Analysis use the same UI Kit rule as Atlas: **the chess position is the dominant object**. Player bars, clocks, move history and evaluation are instrumentation and must use semantic tokens rather than theme-specific colors. Timed states may use `--accent`, `--gold` and `--danger`; they may not obscure pieces, coordinates or legal destinations. The complete interaction contract is documented in `docs/PREMIUM_MATCH.md`.

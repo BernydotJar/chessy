@@ -61,7 +61,14 @@
     "critical": "Critical moments",
     "moment": "Critical idea after {{move}}.",
     "noMoments": "No critical moments yet.",
-    "nextStep": "Jump into Analysis to explore deeper lines."
+    "nextStep": "Jump into Analysis to explore deeper lines.",
+    "boardLabel": "Review board",
+    "moveEyebrow": "Move {{move}}",
+    "initialPosition": "Initial position",
+    "startingBoard": "Start",
+    "navigation": "Game navigation",
+    "scoreSheet": "Game journey",
+    "deepAnalyze": "Analyze this position"
   },
   "analysis": {
     "title": "Analysis",
@@ -74,7 +81,16 @@
     "explorer": "Opening Explorer",
     "noExplorer": "No explorer data for this position.",
     "commentary": "Your notes",
-    "addNote": "Add a note or plan..."
+    "addNote": "Add a note or plan...",
+    "positionLabel": "Analyzed position",
+    "balanced": "Balanced position",
+    "whiteBetter": "White is better",
+    "blackBetter": "Black is better",
+    "openingIdeas": "Opening ideas",
+    "yourPlan": "Your plan",
+    "reviewPosition": "Position selected in Review · move {{move}}",
+    "initialReviewPosition": "Initial position selected in Review",
+    "backReview": "Back to Review"
   },
   "exercise": {
     "progress": "Exercise {{value}}",
@@ -134,7 +150,8 @@
     "errors": {
       "kings": "Both kings are required.",
       "invalid": "That position is not valid."
-    }
+    },
+    "onlyBeforeGame": "Available before the game starts."
   },
   "status": {
     "turn": "{{color}} to move",
@@ -144,7 +161,8 @@
     "drawStalemate": "Draw by stalemate",
     "drawThreefold": "Draw by threefold repetition",
     "drawInsufficient": "Draw by insufficient material",
-    "winsResignation": "{{color}} wins by resignation"
+    "winsResignation": "{{color}} wins by resignation",
+    "winsTimeout": "{{color}} win on time"
   },
   "colors": {
     "white": "White",
@@ -898,5 +916,30 @@
     "applied": "Applied",
     "noteTitle": "Made to play, not just to look good",
     "note": "Every theme preserves hierarchy, board contrast, legal states, and controls. Identity lives at the edges; the position remains the protagonist."
+  },
+  "match": {
+    "boardStage": "Match board",
+    "matchRail": "Match panel",
+    "you": "You",
+    "stockfish": "Stockfish · {{level}}",
+    "engine": "Local engine",
+    "youPlay": "You play {{color}}",
+    "localWhite": "White player",
+    "localBlack": "Black player",
+    "toMove": "To move",
+    "thinking": "Thinking",
+    "capturedCount": "{{count}} captured pieces",
+    "clockFor": "{{player}} clock: {{time}}",
+    "timeControlLabel": "Time control",
+    "clockStartsAfterFirst": "The clock starts after the first move.",
+    "resultLabel": "Result",
+    "scoreSheet": "Scoresheet",
+    "keepGame": "Keep this game",
+    "timeControls": {
+      "untimed": "Untimed",
+      "rapid10": "10 + 0",
+      "blitz5": "5 + 3",
+      "blitz3": "3 + 2"
+    }
   }
 }

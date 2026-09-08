@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { Chessboard, type ChessboardOptions } from 'react-chessboard';
 import { useGameStore } from '../store/gameStore';
 import { Square } from 'chess.js';
@@ -30,6 +30,17 @@ export const ChessBoard: React.FC = () => {
   const boardRef = useRef<HTMLDivElement | null>(null);
   const { t } = useTranslation();
   const accessiblePieces = useMemo(() => createAccessibleChessPieces(t), [t]);
+  const verboseMoves = chess.history({ verbose: true });
+  const lastMove = verboseMoves.length ? verboseMoves[verboseMoves.length - 1] : null;
+  let checkedKingSquare: string | null = null;
+  if (chess.isCheck()) {
+    const side = chess.turn();
+    for (const row of chess.board()) {
+      for (const piece of row) {
+        if (piece?.type === 'k' && piece.color === side) checkedKingSquare = piece.square;
+      }
+    }
+  }
 
   const onDrop = useCallback((sourceSquare: Square, targetSquare: Square) => {
     if (setupMode || isAIThinking || isGameOver) return false;
@@ -99,7 +110,7 @@ export const ChessBoard: React.FC = () => {
   useEffect(() => {
     const node = boardRef.current;
     if (!node) return;
-    const updateSize = () => setBoardWidth(Math.min(node.clientWidth, 560));
+    const updateSize = () => setBoardWidth(Math.min(node.clientWidth, 620));
     updateSize();
     const observer = new ResizeObserver(updateSize);
     observer.observe(node);
@@ -136,29 +147,33 @@ export const ChessBoard: React.FC = () => {
     })
   ), [theme.darkSquare, theme.lightSquare]);
 
-  // Add highlighted squares for legal moves
-  const customSquareStyles = useMemo(() => setupMode
-    ? baseSquareStyles
-    : {
-        ...baseSquareStyles,
-        ...Object.fromEntries(
-          highlightedSquares.map(square => [
-            square,
-            {
-              ...baseSquareStyles[square],
-              backgroundColor: `${baseSquareStyles[square].backgroundColor}dd`,
-              boxShadow: 'inset 0 0 0 3px var(--board-legal)',
-            },
-          ])
-        ),
-        // Highlight selected square
-        ...(selectedSquare ? {
-          [selectedSquare]: {
-            ...baseSquareStyles[selectedSquare],
-            boxShadow: 'inset 0 0 0 3px var(--board-selected)',
-          },
-        } : {}),
-      }, [baseSquareStyles, highlightedSquares, selectedSquare, setupMode]);
+  // Calm, semantic board feedback: last move, legal destinations, selection and check.
+  const customSquareStyles = useMemo(() => {
+    if (setupMode) return baseSquareStyles;
+    const styles: Record<string, CSSProperties> = Object.fromEntries(
+      Object.entries(baseSquareStyles).map(([square, style]) => [square, { ...style }])
+    );
+    if (lastMove) {
+      for (const square of [lastMove.from, lastMove.to]) styles[square] = {
+        ...styles[square],
+        boxShadow: 'inset 0 0 0 999px color-mix(in srgb,var(--gold) 13%,transparent)',
+      };
+    }
+    for (const square of highlightedSquares) styles[square] = {
+      ...styles[square],
+      backgroundImage: 'radial-gradient(circle, var(--board-legal) 0 18%, transparent 20%)',
+    };
+    if (selectedSquare) styles[selectedSquare] = {
+      ...styles[selectedSquare],
+      boxShadow: 'inset 0 0 0 4px var(--board-selected)',
+    };
+    if (checkedKingSquare) styles[checkedKingSquare] = {
+      ...styles[checkedKingSquare],
+      boxShadow: 'inset 0 0 0 4px var(--danger), inset 0 0 0 999px color-mix(in srgb,var(--danger) 13%,transparent)',
+    };
+    return styles;
+  }, [baseSquareStyles, checkedKingSquare, highlightedSquares, lastMove, selectedSquare, setupMode]);
+
 
   const boardOptions = useMemo<ChessboardOptions>(() => ({
     id: 'play-board',
@@ -200,17 +215,7 @@ export const ChessBoard: React.FC = () => {
       )}
 
       <div className={`relative board-shell ${setupMode ? 'board-shell--setup' : ''}`} ref={boardRef} style={{ height: boardWidth }}>
-        {/* AI Thinking Overlay */}
-        {isAIThinking && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 backdrop-blur-sm rounded-xl">
-            <div className="glass-card px-6 py-4 rounded-lg">
-              <div className="flex items-center gap-3">
-                <div className="spinner" />
-                <span className="text-white font-semibold">{t('ai.thinking')}</span>
-              </div>
-            </div>
-          </div>
-        )}
+        {isAIThinking && <div className="board-thinking-chip" role="status"><span className="spinner"/><span>{t('ai.thinking')}</span></div>}
 
         <div className="board-notation board-notation--left">
           {ranks.map((rank) => (

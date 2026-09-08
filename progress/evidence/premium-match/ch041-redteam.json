@@ -1,0 +1,13 @@
+{
+  "node": "CH-041",
+  "role": "critic-red-team",
+  "result": "PASS",
+  "reviewed_without_runtime_tests": true,
+  "findings": [
+    {"risk":"post-game accuracy theater without an evaluation pipeline","resolution":"no synthetic accuracy, blunder count or rating is displayed"},
+    {"risk":"Analyze CTA ignores the selected review move","resolution":"Review stores exact selected FEN and ply as the analysis target"},
+    {"risk":"opening explorer leaks future moves when analyzing an earlier ply","resolution":"analysis history is sliced to the selected ply"},
+    {"risk":"review loses the selected location when returning from analysis","resolution":"review initializes cursor from the in-memory analysis target"}
+  ],
+  "material_open_findings": []
+}

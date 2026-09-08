@@ -1,0 +1,15 @@
+{
+  "node": "CH-040",
+  "role": "critic-red-team",
+  "result": "PASS",
+  "reviewed_without_runtime_tests": true,
+  "findings": [
+    {"risk":"decorative clocks diverge from game state","resolution":"clocks are Zustand game state driven by wall-clock deltas"},
+    {"risk":"background timer throttling loses time","resolution":"elapsed time uses Date.now deltas rather than interval counts"},
+    {"risk":"Stockfish receives free thinking time","resolution":"live clock continues while engine promise runs"},
+    {"risk":"undo corrupts remaining time","resolution":"per-ply clock snapshots restore remaining time and running state"},
+    {"risk":"board setup mutates an active timed match","resolution":"setup entry is disabled once play or AI session begins"},
+    {"risk":"engine thinking blocks board visibility","resolution":"full-board overlay replaced by compact non-interactive status chip"}
+  ],
+  "material_open_findings": []
+}
