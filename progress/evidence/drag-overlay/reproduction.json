@@ -1,0 +1,25 @@
+{
+  "program": "chessy-drag-overlay-regression-v1",
+  "baseline_sha": "46bcfb4b33d5b8172db69168864f3e1d2aafbfa4",
+  "viewport": {"width": 1202, "height": 750},
+  "baseline": {
+    "reduced_motion": "reduce",
+    "source_opacity": 0,
+    "overlay_opacity": 1,
+    "cursor": {"x": 540, "y": 319.59375},
+    "overlay_center": {"x": 540, "y": 319.59375},
+    "delta": {"x": 0, "y": 0},
+    "view_transform": "none"
+  },
+  "production_defect": {
+    "reduced_motion": "no-preference",
+    "source_opacity": 0,
+    "overlay_opacity": 1,
+    "cursor": {"x": 540, "y": 319.59375},
+    "overlay_center": {"x": 540, "y": 185.59375},
+    "delta": {"x": 0, "y": -134},
+    "view_transform": "matrix(1, 0, 0, 1, 0, 0)"
+  },
+  "root_cause": "The completed .view-enter transform remained active because of animation fill-mode both. react-chessboard's fixed-position DnD overlay therefore used the transformed view as its containing block. The existing E2E context forced reduced motion and disabled the transform, masking the defect.",
+  "reproduced": true
+}

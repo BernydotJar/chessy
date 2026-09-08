@@ -1,0 +1,53 @@
+=== INDEPENDENT 112 ===
+  DEPRECATION: chess is being installed using the legacy 'setup.py install' method, because it does not have a 'pyproject.toml' and the 'wheel' package is not installed. pip 23.1 will enforce this behaviour change. A possible replacement is to enable the '--use-pep517' option. Discussion can be found at https://github.com/pypa/pip/issues/8559
+python-chess 1.11.2: 112 puzzles verified
+=== THEMES ===
+
+> chessy@1.0.0 test:themes
+> node scripts/theme-verify.cjs
+
+{"result":"PASS","count":11,"themes":[{"id":"forest","accent":"#b9e88f","boardA1":"rgb(94, 130, 115)","themesWcag":"PASS","playWcag":"PASS"},{"id":"ivory","accent":"#345c45","boardA1":"rgb(154, 173, 147)","themesWcag":"PASS","playWcag":"PASS"},{"id":"night","accent":"#b7d7ff","boardA1":"rgb(52, 75, 104)","themesWcag":"PASS","playWcag":"PASS"},{"id":"guatemala","accent":"#81c8b4","boardA1":"rgb(91, 143, 163)","themesWcag":"PASS","playWcag":"PASS"},{"id":"colombia","accent":"#f2c94c","boardA1":"rgb(66, 101, 143)","themesWcag":"PASS","playWcag":"PASS"},{"id":"mexico","accent":"#78c6a0","boardA1":"rgb(79, 129, 107)","themesWcag":"PASS","playWcag":"PASS"},{"id":"brasil","accent":"#e7c95b","boardA1":"rgb(52, 114, 79)","themesWcag":"PASS","playWcag":"PASS"},{"id":"usa","accent":"#a8c7e7","boardA1":"rgb(76, 98, 128)","themesWcag":"PASS","playWcag":"PASS"},{"id":"argentina","accent":"#245b75","boardA1":"rgb(123, 176, 198)","themesWcag":"PASS","playWcag":"PASS"},{"id":"espana","accent":"#d7b15a","boardA1":"rgb(139, 90, 83)","themesWcag":"PASS","playWcag":"PASS"},{"id":"chile","accent":"#7fbad4","boardA1":"rgb(84, 123, 141)","themesWcag":"PASS","playWcag":"PASS"}],"mobile390":"PASS","pageErrors":[]}
+=== PWA ===
+
+> chessy@1.0.0 test:pwa
+> node scripts/pwa-verify.cjs
+
+{"pwa":"PASS","offlineReload":"PASS","offlineAcademy":"PASS","offlineChallenges":"PASS","offlineStockfish":"PASS"}
+=== POPUP ===
+
+> chessy@1.0.0 test:popup-opener
+> node scripts/popup-opener-verify.cjs
+
+{"coop":"same-origin-allow-popups","xFrameOptions":"DENY","crossOriginPopupOpener":"PASS"}
+=== ANALYTICS ===
+
+> chessy@1.0.0 test:analytics
+> node scripts/analytics-verify.cjs
+
+{"analytics":"PASS","measurementId":"G-LWQED9BJG6","defaultOff":"PASS","explicitOptIn":"PASS","screenView":"PASS","sensitivePayloadBoundary":"PASS","firebaseUserIdNotLinked":"PASS","withdrawalStopsCollection":"PASS","pageErrors":[]}
+=== AUTH CLOUD ===
+
+> chessy@1.0.0 test:auth:cloud
+> node scripts/auth-cloud-verify.cjs
+
+{"project":"chessy-pwa-2026","emailPasswordProvider":"PASS","googleProvider":"PASS","create":"PASS","signIn":"PASS","delete":"PASS","deletedCredentialRejected":"PASS"}
+=== AUTH UI ===
+
+> chessy@1.0.0 test:auth:ui-live
+> node scripts/auth-ui-live-verify.cjs
+
+{"project":"chessy-pwa-2026","viewport":390,"createUi":"PASS","signOutUi":"PASS","signInUi":"PASS","deleteUi":"PASS","localProgressPreserved":"PASS","pageErrors":[]}
+=== FIRESTORE ===
+
+> chessy@1.0.0 test:firestore:rules-live
+> node scripts/firestore-rules-live-verify.cjs
+
+{"project":"chessy-pwa-2026","ownWrite":"PASS","ownRead":"PASS","crossUserReadDenied":"PASS","unauthenticatedDenied":"PASS","invalidSchemaDenied":"PASS","ownDelete":"PASS"}
+=== PROGRESS ===
+
+> chessy@1.0.0 test:progress:ui-live
+> node scripts/progress-ui-live-verify.cjs
+
+{"project":"chessy-pwa-2026","deviceAFirstUpload":"PASS","deviceBDownload":"PASS","offlineLocalUpdate":"PASS","reconnectUpload":"PASS","deviceAMergeAfterReload":"PASS","cloudDeleteBeforeAccountDelete":"PASS","pageErrors":[]}
+=== AUDIT ===
+found 0 vulnerabilities
