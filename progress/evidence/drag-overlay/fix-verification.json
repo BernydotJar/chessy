@@ -1,0 +1,32 @@
+{
+  "program": "chessy-drag-overlay-regression-v1",
+  "fix": "Remove transform from studio-enter keyframes; keep opacity-only entrance animation.",
+  "regression_gate": "Dedicated Playwright context with reducedMotion=no-preference at 1202x750.",
+  "after_fix": {
+    "source_opacity": 0,
+    "overlay_opacity": 1,
+    "delta": {
+      "x": 0,
+      "y": 0
+    },
+    "view_transform": "none"
+  },
+  "static_gate": "192/192 PASS; lint PASS; build PASS",
+  "browser_gate": "40/40 PASS; pageErrors=[]",
+  "new_dependencies": 0,
+  "new_application_containers": 0,
+  "full_gate": {
+    "independent_chess": "112/112 PASS (python-chess 1.11.2)",
+    "themes": "11/11 PASS including WCAG/play/mobile390",
+    "pwa": "PASS offline reload/academy/challenges/Stockfish",
+    "popup_opener": "PASS same-origin-allow-popups",
+    "analytics": "PASS default-off/opt-in/withdrawal/privacy boundary",
+    "auth_cloud": "PASS email+Google create/sign-in/delete",
+    "auth_ui_live": "PASS mobile create/sign-out/sign-in/delete",
+    "firestore_rules_live": "PASS own access/cross-user+unauth denied/schema/delete",
+    "progress_ui_live": "PASS two-device/offline/reconnect/delete",
+    "npm_audit": "0 vulnerabilities"
+  },
+  "full_gate_log": "progress/evidence/drag-overlay/full-gate.txt",
+  "full_gate_log_sha256": "72b0ed2f1f625800eaeb2d8303432c6df8db4f266956af72085ffda410f79c58"
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": "graph-harness.project.v1",
+  "project_id": "chessy-drag-overlay-regression-v1",
+  "mode": "SHIP",
+  "gate_definitions": [
+    {"id":"spec","required_evidence_kinds":["spec"],"blocking":true},
+    {"id":"verification","required_evidence_kinds":["verification"],"blocking":true},
+    {"id":"critic","required_evidence_kinds":["critic"],"blocking":true},
+    {"id":"release","required_evidence_kinds":["release"],"blocking":true}
+  ],
+  "nodes": [
+    {"id":"CH-043","title":"Reproduce and isolate normal-motion drag overlay regression","kind":"bugfix","status":"spec_ready","depends_on":[],"capability":"engineering","allowed_paths":["specs/**","graph/**","progress/**"],"gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}},
+    {"id":"CH-044","title":"Repair drag coordinate containment and add regression coverage","kind":"bugfix","status":"spec_ready","depends_on":["CH-043"],"capability":"engineering","allowed_paths":["src/**","scripts/**","specs/**","graph/**","progress/**"],"gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}},
+    {"id":"CH-045","title":"Independent verification and public hotfix release","kind":"bugfix","status":"spec_ready","depends_on":["CH-044"],"capability":"engineering","allowed_paths":["src/**","scripts/**","specs/**","graph/**","progress/**",".github/**","package.json","package-lock.json"],"gates":{"approved":["spec"],"review":["verification"],"done":["critic","release"]}}
+  ]
+}
