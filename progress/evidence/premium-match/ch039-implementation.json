@@ -1,0 +1,49 @@
+{
+  "node": "CH-039",
+  "status": "IMPLEMENTED_PENDING_FINAL_RUNTIME_GATE",
+  "claims": [
+    "board-first match cockpit with attached player rails",
+    "turn/engine/captured/clock instrumentation adjacent to board",
+    "compact score sheet promoted into match rail",
+    "mobile match shell uses semantic Atlas tokens",
+    "AI setup is removed from the rail once a local game starts"
+  ],
+  "files": [
+    {
+      "file": "src/components/studio/PlayView.tsx",
+      "sha256": "d206db0690f320bdc10d20a063d88ca30192ba3fc90bc50385654f6673344f1f"
+    },
+    {
+      "file": "src/components/MatchPlayerBar.tsx",
+      "sha256": "123968630c50cf1907a6616bb4beae41353d8e2dcd253fdb075c14b6772d7305"
+    },
+    {
+      "file": "src/components/AIOpponent.tsx",
+      "sha256": "64f2fdea2381cea1f3f3149e471ef11de5bdd8c7f962092524f2ce8b0b30d2a9"
+    },
+    {
+      "file": "src/components/GameControls.tsx",
+      "sha256": "0a18bbf4307c177dc7285b1b0da56ee718ce96abde4eae972657912aa41a78e4"
+    },
+    {
+      "file": "src/components/MoveHistory.tsx",
+      "sha256": "327b393809d8c7c55fdbc15ade97cc864bea2b766df180369ef1f92945321c63"
+    },
+    {
+      "file": "src/styles/design-system.css",
+      "sha256": "2ac67cf347ee6b9361885db3d64715fde190d1df98131178b6f1b58457d94d86"
+    },
+    {
+      "file": "src/locales/es/translation.json",
+      "sha256": "913b16b925ec533093fe66aa896ad22847e0fb52251d4a845eba9dbea229f332"
+    },
+    {
+      "file": "src/locales/en/translation.json",
+      "sha256": "d86180fa2bfea8a53dad2a03513a348cf05e2201695b65e65828364b1d81ff4e"
+    },
+    {
+      "file": "src/locales/pt/translation.json",
+      "sha256": "a2d84d2d7ced6308c6b8221e90a4914e71037b88d25194924c1b4b7307e154c3"
+    }
+  ]
+}

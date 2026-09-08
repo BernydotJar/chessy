@@ -1,0 +1,48 @@
+{
+  "node": "CH-040",
+  "status": "IMPLEMENTED_PENDING_FINAL_RUNTIME_GATE",
+  "runtime_tests_deferred": true,
+  "clock_contract": {
+    "presets": [
+      "untimed",
+      "10+0",
+      "5+3",
+      "3+2"
+    ],
+    "starts": "after first completed legal move",
+    "elapsed_time": "Date.now delta",
+    "increment": "after mover completes move",
+    "ai_time": "counts once clock is live",
+    "timeout": "ends session with opposite side winner",
+    "undo": "restores per-ply clock snapshot"
+  },
+  "board_feedback": [
+    "last move semantic wash",
+    "legal destination dot",
+    "selected square outline",
+    "checked king danger inset",
+    "non-blocking engine-thinking chip"
+  ],
+  "files": [
+    {
+      "file": "src/game/timeControls.ts",
+      "sha256": "531e275eda2a84da8ea6199b740c3211817945cafcfc7edb30ca3d09bc212148"
+    },
+    {
+      "file": "src/store/gameStore.ts",
+      "sha256": "4b07020b147d19d91d615bca04cdb05e307bed252950b3b1202d3fb683727f89"
+    },
+    {
+      "file": "src/components/ChessBoard.tsx",
+      "sha256": "4c699b1ea5f39027803aa7854d1a1c5340c03ec9f305b66fbfbac7b4a7f4313c"
+    },
+    {
+      "file": "src/components/MatchPlayerBar.tsx",
+      "sha256": "123968630c50cf1907a6616bb4beae41353d8e2dcd253fdb075c14b6772d7305"
+    },
+    {
+      "file": "src/components/BoardSetupButton.tsx",
+      "sha256": "f78386862c6960cde79b67a58ac384d9e4d11d1b754cbbab37048b5b009bb541"
+    }
+  ]
+}

@@ -61,7 +61,14 @@
     "critical": "Momentos críticos",
     "moment": "Ideia crítica após {{move}}.",
     "noMoments": "Ainda não há momentos críticos.",
-    "nextStep": "Vá para Análise para aprofundar."
+    "nextStep": "Vá para Análise para aprofundar.",
+    "boardLabel": "Tabuleiro de revisão",
+    "moveEyebrow": "Lance {{move}}",
+    "initialPosition": "Posição inicial",
+    "startingBoard": "Início",
+    "navigation": "Navegação da partida",
+    "scoreSheet": "Percurso da partida",
+    "deepAnalyze": "Analisar esta posição"
   },
   "analysis": {
     "title": "Análise",
@@ -74,7 +81,16 @@
     "explorer": "Explorador de aberturas",
     "noExplorer": "Sem dados do explorador para esta posição.",
     "commentary": "Suas notas",
-    "addNote": "Adicione uma nota ou plano..."
+    "addNote": "Adicione uma nota ou plano...",
+    "positionLabel": "Posição analisada",
+    "balanced": "Posição equilibrada",
+    "whiteBetter": "Vantagem das brancas",
+    "blackBetter": "Vantagem das pretas",
+    "openingIdeas": "Ideias de abertura",
+    "yourPlan": "Seu plano",
+    "reviewPosition": "Posição escolhida na Revisão · lance {{move}}",
+    "initialReviewPosition": "Posição inicial escolhida na Revisão",
+    "backReview": "Voltar à Revisão"
   },
   "exercise": {
     "progress": "Exercício {{value}}",
@@ -134,7 +150,8 @@
     "errors": {
       "kings": "Os dois reis são necessários.",
       "invalid": "Essa posição não é válida."
-    }
+    },
+    "onlyBeforeGame": "Disponível antes do início da partida."
   },
   "status": {
     "turn": "Vez de {{color}}",
@@ -144,7 +161,8 @@
     "drawStalemate": "Empate por afogamento",
     "drawThreefold": "Empate por repetição tripla",
     "drawInsufficient": "Empate por material insuficiente",
-    "winsResignation": "{{color}} vence por abandono"
+    "winsResignation": "{{color}} vence por abandono",
+    "winsTimeout": "{{color}} vencem por tempo"
   },
   "colors": {
     "white": "Brancas",
@@ -898,5 +916,30 @@
     "applied": "Aplicado",
     "noteTitle": "Feito para jogar, não apenas para parecer bonito",
     "note": "Cada tema preserva hierarquia, contraste do tabuleiro, estados legais e controles. A identidade vive nas bordas; a posição continua protagonista."
+  },
+  "match": {
+    "boardStage": "Tabuleiro da partida",
+    "matchRail": "Painel da partida",
+    "you": "Você",
+    "stockfish": "Stockfish · {{level}}",
+    "engine": "Motor local",
+    "youPlay": "Você joga de {{color}}",
+    "localWhite": "Jogador de brancas",
+    "localBlack": "Jogador de pretas",
+    "toMove": "Vez",
+    "thinking": "Pensando",
+    "capturedCount": "{{count}} peças capturadas",
+    "clockFor": "Relógio de {{player}}: {{time}}",
+    "timeControlLabel": "Ritmo",
+    "clockStartsAfterFirst": "O relógio começa após o primeiro lance.",
+    "resultLabel": "Resultado",
+    "scoreSheet": "Planilha",
+    "keepGame": "Guardar partida",
+    "timeControls": {
+      "untimed": "Sem relógio",
+      "rapid10": "10 + 0",
+      "blitz5": "5 + 3",
+      "blitz3": "3 + 2"
+    }
   }
 }

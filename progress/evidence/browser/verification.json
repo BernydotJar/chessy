@@ -1,5 +1,5 @@
 {
-  "createdAt": "2026-09-07T18:55:16.854Z",
+  "createdAt": "2026-09-08T04:37:10.455Z",
   "browser": "145.0.7632.0",
   "checks": [
     {
@@ -10,22 +10,22 @@
     {
       "name": "Incorrect quiz does not award completion; correct answer does",
       "result": "PASS",
-      "ms": 106
+      "ms": 103
     },
     {
       "name": "Wrong challenge preserves position; correct solution persists once",
       "result": "PASS",
-      "ms": 739
+      "ms": 744
     },
     {
       "name": "Hint-assisted play does not award XP",
       "result": "PASS",
-      "ms": 114
+      "ms": 94
     },
     {
       "name": "Mouse drag follows cursor without a source ghost and completes the move",
       "result": "PASS",
-      "ms": 538
+      "ms": 490
     },
     {
       "name": "Touch drag works on mobile play and challenge boards",
@@ -35,152 +35,162 @@
     {
       "name": "Native promotion dialog supports rook underpromotion and focus",
       "result": "PASS",
-      "ms": 168
+      "ms": 139
     },
     {
       "name": "Multi-ply puzzle plays legal opponent reply and accepts final mate",
       "result": "PASS",
-      "ms": 104
+      "ms": 80
     },
     {
       "name": "Black-side Lichess line solves through the same input contract",
       "result": "PASS",
-      "ms": 117
+      "ms": 85
     },
     {
       "name": "Configured account route exposes email and Google auth without touching local progress",
       "result": "PASS",
-      "ms": 43
+      "ms": 33
     },
     {
       "name": "Language switches and survives reload in English and Portuguese",
       "result": "PASS",
-      "ms": 1821
+      "ms": 1807
     },
     {
       "name": "Themes stay under Settings, Atlas persists, and country palettes reach the board",
       "result": "PASS",
-      "ms": 2399
+      "ms": 2385
     },
     {
       "name": "Play applies progressive disclosure and keeps preferences out of the game loop",
       "result": "PASS",
-      "ms": 79
+      "ms": 109
+    },
+    {
+      "name": "Premium match cockpit has real clocks, player rails and clock-safe undo",
+      "result": "PASS",
+      "ms": 1254
     },
     {
       "name": "Mobile bottom navigation exposes the five primary destinations",
       "result": "PASS",
-      "ms": 119
+      "ms": 78
     },
     {
       "name": "Board routes use compact mobile focus chrome with explicit Home access",
       "result": "PASS",
-      "ms": 272
+      "ms": 219
     },
     {
       "name": "Pending mistakes create a deterministic review flow and clean review resolves debt",
       "result": "PASS",
-      "ms": 216
+      "ms": 179
     },
     {
       "name": "Local play survives training navigation and saves a real PGN game",
       "result": "PASS",
-      "ms": 365
+      "ms": 361
     },
     {
       "name": "Invalid progress backup is rejected without overwriting progress",
       "result": "PASS",
-      "ms": 22
+      "ms": 19
     },
     {
       "name": "Progress restore requires explicit confirmation",
       "result": "PASS",
-      "ms": 63
+      "ms": 35
     },
     {
       "name": "Actual Stockfish responds after a legal opening move",
       "result": "PASS",
-      "ms": 1695
+      "ms": 1484
+    },
+    {
+      "name": "Game conclusion flows through exact Review into selected-position Analysis",
+      "result": "PASS",
+      "ms": 353
     },
     {
       "name": "Mobile drawer hides inactive links and closes with Escape",
       "result": "PASS",
-      "ms": 103
+      "ms": 79
     },
     {
       "name": "Reduced motion has no running interface animations",
       "result": "PASS",
-      "ms": 4
+      "ms": 6
     },
     {
       "name": "No horizontal overflow on mobile, tablet and desktop routes",
       "result": "PASS",
-      "ms": 534
+      "ms": 704
     },
     {
       "name": "WCAG 2.1 AA mobile scan on primary learning routes",
       "result": "PASS",
-      "ms": 3118
+      "ms": 3556
     },
     {
       "name": "WCAG 2.1 AA automated scan: home",
       "result": "PASS",
-      "ms": 526
+      "ms": 402
     },
     {
       "name": "WCAG 2.1 AA automated scan: play",
       "result": "PASS",
-      "ms": 546
+      "ms": 519
     },
     {
       "name": "WCAG 2.1 AA automated scan: training",
       "result": "PASS",
-      "ms": 293
+      "ms": 240
     },
     {
       "name": "WCAG 2.1 AA automated scan: academy",
       "result": "PASS",
-      "ms": 322
+      "ms": 275
     },
     {
       "name": "WCAG 2.1 AA automated scan: progress",
       "result": "PASS",
-      "ms": 303
+      "ms": 274
     },
     {
       "name": "WCAG 2.1 AA automated scan: library",
       "result": "PASS",
-      "ms": 294
+      "ms": 270
     },
     {
       "name": "WCAG 2.1 AA automated scan: games",
       "result": "PASS",
-      "ms": 276
+      "ms": 287
     },
     {
       "name": "WCAG 2.1 AA automated scan: analysis",
       "result": "PASS",
-      "ms": 263
+      "ms": 491
     },
     {
       "name": "WCAG 2.1 AA automated scan: review",
       "result": "PASS",
-      "ms": 509
+      "ms": 491
     },
     {
       "name": "WCAG 2.1 AA automated scan: account",
       "result": "PASS",
-      "ms": 264
+      "ms": 249
     },
     {
       "name": "WCAG 2.1 AA automated scan: settings",
       "result": "PASS",
-      "ms": 309
+      "ms": 277
     },
     {
       "name": "WCAG 2.1 AA automated scan: themes",
       "result": "PASS",
-      "ms": 402
+      "ms": 359
     },
     {
       "name": "No uncaught JavaScript errors",
@@ -239,6 +249,6 @@
       "violations": []
     }
   ],
-  "passed": 37,
+  "passed": 39,
   "failed": 0
 }

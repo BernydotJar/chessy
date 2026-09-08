@@ -4,7 +4,7 @@ import { StockfishService } from '../src/utils/stockfishService';
 import { getCoachInsightWithEval } from '../src/utils/coach';
 vi.mock('../src/utils/soundManager', () => ({ soundManager: { play: vi.fn(), setEnabled: vi.fn() } }));
 import { useGameStore } from '../src/store/gameStore';
-afterEach(() => { vi.restoreAllMocks(); useGameStore.getState().resetGame(); });
+afterEach(() => { vi.restoreAllMocks(); useGameStore.getState().resetGame(); useGameStore.getState().setTimeControl('untimed'); });
 describe('Coach score perspective', () => {
  for (const moves of [['e4'], ['e4', 'e5']]) it(`preserves equal evaluation after ${moves.join(' ')}`, async () => {
   const board = new Chess(); moves.forEach(move => board.move(move));

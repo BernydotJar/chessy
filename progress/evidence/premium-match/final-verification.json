@@ -1,0 +1,53 @@
+{
+  "program": "chessy-premium-match-v1",
+  "node": "CH-042",
+  "stage": "PRE_COMMIT_FULL_GATE",
+  "result": "PASS",
+  "base_release_sha": "99a78f63776545cadf09542819b5d00bd73efaa5",
+  "verification": {
+    "lint": "PASS",
+    "unit": "192/192 PASS",
+    "build": "PASS",
+    "independent_chess": "112/112 PASS",
+    "browser": "39/39 PASS",
+    "browser_page_errors": [],
+    "themes": "11/11 PASS Atlas+Play WCAG/board/mobile390",
+    "pwa_offline_stockfish": "PASS",
+    "popup_opener": "PASS",
+    "analytics_consent_privacy": "PASS",
+    "auth_cloud_ui": "PASS",
+    "firestore_owner_rules": "PASS",
+    "progress_two_device_offline_reconnect": "PASS",
+    "npm_audit": "0 vulnerabilities",
+    "diff_check": "PASS"
+  },
+  "premium_guarantees": {
+    "time_controls": [
+      "untimed",
+      "10+0",
+      "5+3",
+      "3+2"
+    ],
+    "real_clock_state": true,
+    "increment_and_timeout": true,
+    "undo_clock_restore": true,
+    "player_rails": true,
+    "non_blocking_engine_thinking": true,
+    "exact_review_replay": true,
+    "selected_ply_to_analysis_fen": true,
+    "synthetic_accuracy_claims": false,
+    "new_runtime_dependencies": false,
+    "new_application_containers": 0
+  },
+  "evidence": {
+    "full_gate": "progress/evidence/premium-match/final-full-gate.log",
+    "browser": "progress/evidence/browser/verification.json",
+    "themes": "progress/evidence/browser/theme-verification.json"
+  },
+  "sha256": {
+    "full_gate": "c0baa5c696c1b753b77a21647084a2ad6c3647859e8e6cddc87e34879ba0c369",
+    "browser": "f108779ea64cee840654cf3e41f4fdb00876bbc20e99b10c51ace5f5b5acb2bd",
+    "themes": "d6b5e788892a6b424e46c1408ddaec79589839cdf19fb450f33f620022297549"
+  },
+  "created_at": "2026-09-08T04:39:52.590237+00:00"
+}

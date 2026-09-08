@@ -4,8 +4,8 @@ export const ANALYTICS_CONSENT_STORAGE_KEY = 'chessy-analytics-consent-v1';
 
 const ALLOWED_PARAMS: Record<AnalyticsEventName, readonly string[]> = {
   screen_view: ['screen_name'],
-  game_start: ['opponent', 'difficulty', 'player_color'],
-  game_complete: ['opponent', 'difficulty', 'result', 'move_count', 'end_reason'],
+  game_start: ['opponent', 'difficulty', 'player_color', 'time_control'],
+  game_complete: ['opponent', 'difficulty', 'result', 'move_count', 'end_reason', 'time_control'],
   puzzle_start: ['mode', 'category', 'level'],
   puzzle_complete: ['mode', 'category', 'level', 'assisted', 'mistake_count'],
   lesson_complete: ['track', 'level'],

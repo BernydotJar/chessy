@@ -61,8 +61,8 @@ function App() {
   const handler=(event:KeyboardEvent)=>{if(view!=='play'||event.ctrlKey||event.metaKey||event.altKey)return;const target=event.target as HTMLElement|null;if(target?.isContentEditable||target?.closest('input,textarea,select,[role="dialog"]'))return;if(event.key==='Escape'&&setupMode)game.setSetupMode(false);};
   window.addEventListener('keydown',handler);return()=>window.removeEventListener('keydown',handler);
  },[view,setupMode,game]);
- const navigate=(id:GameView)=>{setView(id);window.location.hash=`/${id}`;};
- const boardFocused=view==='play'||view==='training';
+ const navigate=(id:GameView)=>{if(id==='analysis')game.setAnalysisTarget(null);setView(id);window.location.hash=`/${id}`;};
+ const boardFocused=view==='play'||view==='training'||view==='review'||view==='analysis';
  return <div className={`studio-app ${boardFocused?'board-focus':''}`}><a className="skip-link" href="#main-content">{t('studio.skip')}</a>
   {mobileMenu&&<button className="nav-scrim" aria-label={t('studio.close')} onClick={()=>setMobileMenu(false)}/>}
   <aside ref={sidebar} id="chessy-navigation" className={`sidebar ${mobileMenu?'is-open':''}`}><a className="brand" href="#/home" onClick={()=>navigate('home')} aria-label="Chessy"><span className="brand-symbol"><ChessyMark size={30}/></span><span>chessy<span className="brand-period">.</span></span></a><p className="sidebar-caption">{t('studio.workspace')}</p>
@@ -73,7 +73,7 @@ function App() {
    <main id="main-content" ref={main} tabIndex={-1} className="main-content">{storageWarning&&<div className="storage-warning" role="status">{t('studio.storageWarning')} <button className="text-button" onClick={()=>navigate('progress')}>{t('studio.backup')}</button></div>}<ErrorBoundary key={view}>{view==='home'&&<HomeView/>}{view==='academy'&&<AcademyView/>}{view==='training'&&<ChallengeView/>}{view==='progress'&&<ProgressView/>}{view==='library'&&<LibraryView/>}{view==='play'&&<PlayView/>}{view==='games'&&<GamesHub/>}{view==='review'&&<ReviewView/>}{view==='analysis'&&<AnalysisView/>}{view==='account'&&<AccountView/>}{view==='settings'&&<SettingsView/>}{view==='themes'&&<ThemesView/>}</ErrorBoundary></main>
    <footer className="studio-footer"><span><ChessyMark size={16}/> Chessy</span><p>{t('studio.footer')}</p><span>ES / EN / PT</span></footer>
   </div>
-  <nav className={`mobile-bottom-nav ${view==='play'||view==='training'?'mobile-bottom-nav--board':''}`} aria-label={t('studio.navLabel')}>{MOBILE_NAV.map(item=><a key={item.id} href={`#/${item.id}`} onClick={()=>navigate(item.id)} className={view===item.id?'active':''} aria-current={view===item.id?'page':undefined}><ChessyIcon name={item.icon} size={21} filled={view===item.id}/><span>{t(`studio.${item.id}`)}</span></a>)}</nav>
+  <nav className={`mobile-bottom-nav ${boardFocused?'mobile-bottom-nav--board':''}`} aria-label={t('studio.navLabel')}>{MOBILE_NAV.map(item=><a key={item.id} href={`#/${item.id}`} onClick={()=>navigate(item.id)} className={view===item.id?'active':''} aria-current={view===item.id?'page':undefined}><ChessyIcon name={item.icon} size={21} filled={view===item.id}/><span>{t(`studio.${item.id}`)}</span></a>)}</nav>
  </div>;
 }
 export default App;

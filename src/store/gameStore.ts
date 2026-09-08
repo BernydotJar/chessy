@@ -3,6 +3,7 @@ import { Chess, Move, Square } from 'chess.js';
 import { BoardTheme, GameState } from '../types/chess.types';
 import { stockfishService, DifficultyLevel, AIMove } from '../utils/stockfishService';
 import { soundManager } from '../utils/soundManager';
+import { DEFAULT_TIME_CONTROL, getTimeControl, isTimeControlId, TIME_CONTROL_STORAGE_KEY, type TimeControlId } from '../game/timeControls';
 
 export type GameView = 'home' | 'academy' | 'progress' | 'library' | 'play' | 'games' | 'review' | 'analysis' | 'training' | 'account' | 'settings' | 'themes';
 
@@ -26,8 +27,18 @@ interface GameStore extends GameState {
   activeGameId: string | null;
   trainingMode: boolean;
   engineError: boolean;
-  endReason: 'resignation' | null;
+  endReason: 'resignation' | 'timeout' | null;
+  timeControlId: TimeControlId;
+  whiteTimeMs: number | null;
+  blackTimeMs: number | null;
+  clockStarted: boolean;
+  clockLastTickAt: number | null;
+  clockHistory: ClockSnapshot[];
+  analysisTarget: { fen: string; ply: number } | null;
   resignGame: () => void;
+  setTimeControl: (id: TimeControlId) => void;
+  tickClock: (now?: number) => void;
+  setAnalysisTarget: (target: { fen: string; ply: number } | null) => void;
 
   makeMove: (from: string, to: string, promotion?: string, isAIMove?: boolean) => boolean;
   makeAIMove: () => Promise<void>;
@@ -70,6 +81,14 @@ const SOUND_PREFERENCE_KEY = 'chessy-sound-enabled-v1';
 const LEGAL_MOVES_PREFERENCE_KEY = 'chessy-legal-moves-v1';
 const initialSoundEnabled = readBooleanPreference(SOUND_PREFERENCE_KEY, true);
 const initialLegalMoves = readBooleanPreference(LEGAL_MOVES_PREFERENCE_KEY, true);
+const initialTimeControlId = (() => {
+  try {
+    const saved = localStorage.getItem(TIME_CONTROL_STORAGE_KEY);
+    return isTimeControlId(saved) ? saved : DEFAULT_TIME_CONTROL;
+  } catch {
+    return DEFAULT_TIME_CONTROL;
+  }
+})();
 soundManager.setEnabled(initialSoundEnabled);
 
 const defaultTheme: BoardTheme = {
@@ -99,6 +118,24 @@ const playMoveSound = (chess: Chess, moveObj: Move) => {
   } else {
     soundManager.play('move');
   }
+};
+
+
+interface ClockSnapshot {
+  whiteTimeMs: number | null;
+  blackTimeMs: number | null;
+  clockStarted: boolean;
+}
+
+const clockStateFor = (id: TimeControlId) => {
+  const control = getTimeControl(id);
+  return {
+    whiteTimeMs: control.initialMs,
+    blackTimeMs: control.initialMs,
+    clockStarted: false,
+    clockLastTickAt: null as number | null,
+    clockHistory: [{ whiteTimeMs: control.initialMs, blackTimeMs: control.initialMs, clockStarted: false }] as ClockSnapshot[],
+  };
 };
 
 type SetupPiece =
@@ -208,20 +245,29 @@ export const useGameStore = create<GameStore>((set, get) => ({
   activeGameId: null,
   trainingMode: false,
   engineError: false, endReason: null,
+  timeControlId: initialTimeControlId,
+  ...clockStateFor(initialTimeControlId),
+  analysisTarget: null,
 
   makeMove: (from: string, to: string, promotion?: string, isAIMove: boolean = false) => {
-    const { chess, isAIGame, playerColor, isAIThinking, trainingMode } = get();
-    
-    // Prevent moves during AI thinking
-    if (get().isGameOver || (isAIThinking && !isAIMove)) return false;
-    
-    // In AI game, prevent moves when it's not player's turn
+    let state = get();
+    const { chess, isAIGame, playerColor, isAIThinking, trainingMode } = state;
+
+    // Prevent moves during AI thinking and settle any live clock before accepting a move.
+    if (state.isGameOver || (isAIThinking && !isAIMove)) return false;
+    if (state.clockStarted) {
+      state.tickClock(Date.now());
+      state = get();
+      if (state.isGameOver) return false;
+    }
+
+    // In AI game, prevent moves when it's not player's turn.
     if (isAIGame && !isAIMove) {
       const currentTurn = chess.turn();
       const playerTurn = playerColor === 'white' ? 'w' : 'b';
       if (currentTurn !== playerTurn) return false;
     }
-    
+
     try {
       const moveObj = chess.move({
         from,
@@ -230,12 +276,22 @@ export const useGameStore = create<GameStore>((set, get) => ({
       });
 
       if (moveObj) {
+        const now = Date.now();
+        const control = getTimeControl(state.timeControlId);
         const newHistory = chess.history();
         const capturedPieces = getCapturedPieces(chess);
-        
-        // Play sound
+        const mover = moveObj.color === 'w' ? 'white' : 'black';
+        let whiteTimeMs = state.whiteTimeMs;
+        let blackTimeMs = state.blackTimeMs;
+        const clockStarted = control.initialMs !== null;
+        if (clockStarted && control.incrementMs > 0) {
+          if (mover === 'white' && whiteTimeMs !== null) whiteTimeMs += control.incrementMs;
+          if (mover === 'black' && blackTimeMs !== null) blackTimeMs += control.incrementMs;
+        }
+        const snapshot: ClockSnapshot = { whiteTimeMs, blackTimeMs, clockStarted };
+
         playMoveSound(chess, moveObj);
-        
+
         set({
           fen: chess.fen(),
           history: newHistory,
@@ -250,16 +306,21 @@ export const useGameStore = create<GameStore>((set, get) => ({
             : null,
           capturedPieces,
           legalMoves: [],
+          whiteTimeMs,
+          blackTimeMs,
+          clockStarted,
+          clockLastTickAt: clockStarted ? now : null,
+          clockHistory: [...state.clockHistory.slice(0, newHistory.length), snapshot],
+          analysisTarget: null,
         });
-        
-        // If AI game and it's now AI's turn, trigger AI move
+
         const aiTurn = playerColor === 'white' ? 'b' : 'w';
         if (isAIGame && !trainingMode && !chess.isGameOver() && chess.turn() === aiTurn) {
           setTimeout(() => {
             if (get().chess === chess) void get().makeAIMove();
           }, 500);
         }
-        
+
         return true;
       }
       return false;
@@ -302,6 +363,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     
     const newChess = new Chess();
     
+    const clock = clockStateFor(get().timeControlId);
     set({
       chess: newChess,
       fen: newChess.fen(),
@@ -316,6 +378,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       trainingMode: false, setupMode: false, pendingPromotion: null, view: 'play',
       playerColor: actualColor,
       isAIThinking: false,
+      analysisTarget: null,
+      ...clock,
     });
     
     soundManager.play('gameStart');
@@ -328,6 +392,41 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
   },
 
+  setTimeControl: (id: TimeControlId) => {
+    const state = get();
+    if (state.history.length > 0 || state.clockStarted || state.isAIThinking) return;
+    try { localStorage.setItem(TIME_CONTROL_STORAGE_KEY, id); } catch { /* best effort */ }
+    set({ timeControlId: id, ...clockStateFor(id) });
+  },
+
+  tickClock: (now: number = Date.now()) => {
+    const state = get();
+    if (state.isGameOver || !state.clockStarted || state.clockLastTickAt === null) return;
+    const control = getTimeControl(state.timeControlId);
+    if (control.initialMs === null) return;
+    const elapsed = Math.max(0, now - state.clockLastTickAt);
+    if (elapsed <= 0) return;
+    const whiteTurn = state.chess.turn() === 'w';
+    const current = whiteTurn ? state.whiteTimeMs : state.blackTimeMs;
+    if (current === null) return;
+    const next = Math.max(0, current - elapsed);
+    if (next <= 0) {
+      stockfishService.terminate();
+      set({
+        ...(whiteTurn ? { whiteTimeMs: 0 } : { blackTimeMs: 0 }),
+        isGameOver: true,
+        winner: whiteTurn ? 'black' : 'white',
+        endReason: 'timeout',
+        isAIThinking: false,
+        clockLastTickAt: null,
+      });
+      return;
+    }
+    set({ ...(whiteTurn ? { whiteTimeMs: next } : { blackTimeMs: next }), clockLastTickAt: now });
+  },
+
+  setAnalysisTarget: (target) => set({ analysisTarget: target }),
+
   resignGame: () => {
     const state = get();
     stockfishService.terminate();
@@ -336,6 +435,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   resetGame: () => {
     stockfishService.terminate();
     const newChess = new Chess();
+    const clock = clockStateFor(get().timeControlId);
     set({
       chess: newChess,
       fen: newChess.fen(),
@@ -350,6 +450,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       isAIThinking: false,
       legalMoves: [],
       pendingPromotion: null,
+      analysisTarget: null,
+      ...clock,
     });
     soundManager.play('gameStart');
   },
@@ -370,7 +472,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
     
     const newHistory = chess.history();
     const capturedPieces = getCapturedPieces(chess);
-    
+    const state = get();
+    const snapshot = state.clockHistory[newHistory.length] ?? clockStateFor(state.timeControlId).clockHistory[0];
+
     set({
       fen: chess.fen(),
       history: newHistory,
@@ -380,6 +484,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
       endReason: null, engineError: false, activeGameId: null,
       capturedPieces,
       legalMoves: [],
+      whiteTimeMs: snapshot.whiteTimeMs,
+      blackTimeMs: snapshot.blackTimeMs,
+      clockStarted: snapshot.clockStarted,
+      clockLastTickAt: snapshot.clockStarted ? Date.now() : null,
+      clockHistory: state.clockHistory.slice(0, newHistory.length + 1),
     });
   },
 
@@ -390,6 +499,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   loadGame: (fen: string) => {
     stockfishService.terminate();
     const newChess = new Chess(fen);
+    const clock = clockStateFor(get().timeControlId);
     const capturedPieces = getCapturedPieces(newChess);
     const isGameOver = newChess.isGameOver();
     const winner = newChess.isCheckmate()
@@ -410,12 +520,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
       isGameOver,
       winner,
       legalMoves: [],
+      analysisTarget: null,
+      ...clock,
     });
   },
 
   loadPgn: (pgn: string) => {
     stockfishService.terminate();
     const newChess = new Chess();
+    const clock = clockStateFor(get().timeControlId);
     newChess.loadPgn(pgn);
     const capturedPieces = getCapturedPieces(newChess);
     const isGameOver = newChess.isGameOver();
@@ -437,6 +550,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       isGameOver,
       winner,
       legalMoves: [],
+      analysisTarget: null,
+      ...clock,
     });
   },
 

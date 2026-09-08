@@ -1,0 +1,39 @@
+{
+  "node": "CH-041",
+  "status": "IMPLEMENTED_PENDING_FINAL_RUNTIME_GATE",
+  "runtime_tests_deferred": true,
+  "claims": [
+    "game conclusion exposes review/analysis/play-again plus save/export surface",
+    "Review replays exact SAN/FEN history",
+    "selected Review ply transfers exact FEN and ply into Analysis",
+    "Analysis evaluates selected/current FEN with Stockfish",
+    "opening explorer truncates history at selected ply",
+    "no synthetic accuracy, rating, blunder or best-move count claims"
+  ],
+  "files": [
+    {
+      "file": "src/components/ReviewView.tsx",
+      "sha256": "d55b3ddf7b1677f5da614da46732ef0f6e8d91b67f1be31d3c953fa03c077e12"
+    },
+    {
+      "file": "src/components/AnalysisView.tsx",
+      "sha256": "9b32b2908e76c8de190acdcd0461e6c0f1061dfe47f1557f186f5a548ce55ff8"
+    },
+    {
+      "file": "src/components/GameControls.tsx",
+      "sha256": "acb090262ac85776b8ea3c20f75dbdc49ca661b11ded8c9998c40ee06169794f"
+    },
+    {
+      "file": "src/store/gameStore.ts",
+      "sha256": "4b07020b147d19d91d615bca04cdb05e307bed252950b3b1202d3fb683727f89"
+    },
+    {
+      "file": "src/styles/design-system.css",
+      "sha256": "a27b28c45b4e9b4cb0bba3921dca2bb6209a265e53e822008c6d32fb288a3559"
+    },
+    {
+      "file": "docs/PREMIUM_MATCH.md",
+      "sha256": "699f667eb5280f388b3c0ebe43e24980a2cf19b608cfc19cd97c672cfc4c904f"
+    }
+  ]
+}

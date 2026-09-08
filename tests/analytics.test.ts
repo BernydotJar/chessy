@@ -24,9 +24,9 @@ describe('Chessy analytics privacy boundary', () => {
 
   it('drops chess content, identity fields, free text, and unknown parameters', () => {
     expect(sanitizeAnalyticsParams('game_start', {
-      opponent: 'stockfish', difficulty: 'medium', player_color: 'white',
+      opponent: 'stockfish', difficulty: 'medium', player_color: 'white', time_control: 'blitz3',
       fen: 'rnbqkbnr', pgn: '1. e4', move: 'e2e4', email: 'user@example.com', display_name: 'Player', note: 'free text',
-    })).toEqual({ opponent: 'stockfish', difficulty: 'medium', player_color: 'white' });
+    })).toEqual({ opponent: 'stockfish', difficulty: 'medium', player_color: 'white', time_control: 'blitz3' });
     expect(sanitizeAnalyticsParams('puzzle_complete', {
       mode: 'practice', category: 'fork', level: 'easy', assisted: false, mistake_count: 2, answer: 'g1g8', puzzle_id: 'private-id',
     })).toEqual({ mode: 'practice', category: 'fork', level: 'easy', assisted: false, mistake_count: 2 });
