@@ -1,0 +1,198 @@
+{
+  "schema_version": "graph-harness.project.v1",
+  "project_id": "chessy-learning-architecture-v2",
+  "mode": "SHIP",
+  "gate_definitions": [
+    {
+      "id": "spec",
+      "required_evidence_kinds": [
+        "spec"
+      ],
+      "blocking": true
+    },
+    {
+      "id": "verification",
+      "required_evidence_kinds": [
+        "verification"
+      ],
+      "blocking": true
+    },
+    {
+      "id": "critic",
+      "required_evidence_kinds": [
+        "critic"
+      ],
+      "blocking": true
+    },
+    {
+      "id": "release",
+      "required_evidence_kinds": [
+        "release"
+      ],
+      "blocking": true
+    }
+  ],
+  "nodes": [
+    {
+      "id": "CL-001",
+      "title": "Coach pedagogy and 624-exercise mapping contract",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [],
+      "capability": "engineering",
+      "allowed_paths": [
+        "specs/**",
+        "docs/**",
+        "graph/**",
+        "src/learning/**",
+        "src/data/**",
+        "src/utils/exercises/**",
+        "tests/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "CL-002",
+      "title": "Piece mastery path and semantic exercise model",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CL-001"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/learning/**",
+        "src/data/**",
+        "src/utils/exercises/**",
+        "tests/**",
+        "graph/**",
+        "progress/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "CL-003",
+      "title": "Constrained mini-game training presets",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CL-002"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/learning/**",
+        "src/components/**",
+        "src/store/**",
+        "src/locales/**",
+        "src/styles/**",
+        "tests/**",
+        "graph/**",
+        "progress/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "CL-004",
+      "title": "Academy mastery-path experience",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CL-003"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/components/**",
+        "src/learning/**",
+        "src/locales/**",
+        "src/styles/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    },
+    {
+      "id": "CL-005",
+      "title": "Independent curriculum verification and release candidate",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [
+        "CL-004"
+      ],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "tests/**",
+        "scripts/**",
+        "graph/**",
+        "progress/**",
+        "specs/**",
+        "docs/**",
+        "public/**",
+        ".github/**",
+        "*.json",
+        "*.ts",
+        "*.tsx",
+        "*.css",
+        "*.md"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "critic",
+          "release"
+        ]
+      }
+    }
+  ]
+}

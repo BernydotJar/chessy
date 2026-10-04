@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, ArrowRight, CheckCircle2, Clock } from 'lucide-react';
 import { LESSONS, TRACKS } from '../../learning/curriculum';
+import { MINI_GAME_PRESETS, type MiniGamePreset } from '../../learning/minigames';
+import { MASTERY_PATH } from '../../learning/masteryPath';
 import { Lesson, locale } from '../../learning/types';
 import { useLearningStore } from '../../learning/store';
 import { useGameStore } from '../../store/gameStore';
@@ -10,6 +12,7 @@ import { ChessyIcon, type ChessyIconName } from '../../design/icons';
 import { useAnalyticsStore } from '../../analytics/store';
 
 const icons:Record<(typeof TRACKS)[number],ChessyIconName>={fundamentals:'academy',tactics:'target',strategy:'hint',openings:'shield',endgames:'achievement',calculation:'analysis'};
+const miniGameIcons:Record<MiniGamePreset['family'],ChessyIconName>={pawns:'target',rooks:'analysis',bishops:'hint',knights:'challenges',queens:'achievement'};
 
 function LessonReader({lesson,onBack}:{lesson:Lesson;onBack:()=>void}) {
  const {t,i18n}=useTranslation(),lang=locale(i18n.resolvedLanguage);const [answer,setAnswer]=useState<number|null>(null);
@@ -28,11 +31,30 @@ function LessonReader({lesson,onBack}:{lesson:Lesson;onBack:()=>void}) {
   <div className="button-row"><button className="btn primary" onClick={()=>{configure('practice',lesson.practice);setView('training');}}>{t('studio.practiceIdea')}<ChessyIcon name="arrow" size={18}/></button><button className="btn secondary" onClick={onBack}>{t('studio.backAcademy')}</button></div>
  </article>;
 }
+
 export function AcademyView() {
  const {t,i18n}=useTranslation(),lang=locale(i18n.resolvedLanguage);const {progress}=useLearningStore();
+ const setView=useGameStore(s=>s.setView),loadGame=useGameStore(s=>s.loadGame),setTrainingMode=useGameStore(s=>s.setTrainingMode);
  const [selected,setSelected]=useState<Lesson|null>(null);
+ const launchMiniGame=(preset:MiniGamePreset)=>{loadGame(preset.fen);setTrainingMode(true);setView('play');};
  if(selected)return <LessonReader key={selected.id} lesson={selected} onBack={()=>setSelected(null)}/>;
- return <div className="view-enter"><SectionHeading eyebrow={t('studio.academyEyebrow')} title={t('studio.academyTitle')} subtitle={t('studio.academySubtitle')}/><div className="academy-summary"><ChessyIcon name="academy" size={18}/><span>{t('studio.lessonCount',{count:LESSONS.length})}</span><span className="divider-dot"/><span>{progress.lessons.length} / {LESSONS.length} · {t('studio.completed')}</span></div>
-  <div className="track-grid">{TRACKS.map((track,index)=>{const icon=icons[track];const lessons=LESSONS.filter(l=>l.track===track),count=lessons.filter(l=>progress.lessons.includes(l.id)).length;return <section className={`panel track-card track-${track}`} key={track}><div className="track-card-top"><div className="icon-tile"><ChessyIcon name={icon} size={26}/></div><span className="track-number">0{index+1}</span></div><h2>{t(`studio.track.${track}`)}</h2><div className="track-progress"><span style={{width:`${count/lessons.length*100}%`}}/></div><div className="lesson-list">{lessons.map(lesson=><button key={lesson.id} className="lesson-link" onClick={()=>setSelected(lesson)}><span>{progress.lessons.includes(lesson.id)?<ChessyIcon name="check" size={18} className="accent"/>:<ChessyIcon name="library" size={18}/>}</span><span><strong>{lesson.title[lang]}</strong><small>{t(`studio.level.${lesson.level}`)} · {t('studio.minutes',{count:lesson.minutes})}</small></span><ArrowRight size={17}/></button>)}</div></section>;})}</div>
+ return <div className="view-enter">
+  <SectionHeading eyebrow={t('studio.academyEyebrow')} title={t('studio.academyTitle')} subtitle={t('studio.academySubtitle')}/>
+  <div className="academy-summary"><ChessyIcon name="academy" size={18}/><span>{t('studio.lessonCount',{count:LESSONS.length})}</span><span className="divider-dot"/><span>{progress.lessons.length} / {LESSONS.length} · {t('studio.completed')}</span></div>
+
+  <section className="mastery-path-section" aria-labelledby="mastery-path-title">
+   <div className="home-section-title"><div><p className="eyebrow">{t('studio.masteryEyebrow')}</p><h2 id="mastery-path-title">{t('studio.masteryTitle')}</h2><p className="section-description">{t('studio.masterySubtitle')}</p></div></div>
+   <ol className="mastery-path-grid">{MASTERY_PATH.map(phase=><li className="panel mastery-phase-card" key={phase.id}><div className="mastery-phase-top"><span className="mastery-order">{String(phase.order).padStart(2,'0')}</span><span className="tag">{phase.marker[lang]}</span></div><h3>{phase.title[lang]}</h3><p>{phase.summary[lang]}</p></li>)}</ol>
+  </section>
+
+  <section className="mini-game-section" aria-labelledby="mini-games-title">
+   <div className="home-section-title"><div><p className="eyebrow">{t('studio.miniGamesEyebrow')}</p><h2 id="mini-games-title">{t('studio.miniGamesTitle')}</h2><p className="section-description">{t('studio.miniGamesSubtitle')}</p></div></div>
+   <div className="mini-game-grid">{MINI_GAME_PRESETS.map(preset=><article className="panel mini-game-card" key={preset.id}><span className="icon-tile small"><ChessyIcon name={miniGameIcons[preset.family]} size={20}/></span><div><h3>{preset.title[lang]}</h3><p>{preset.purpose[lang]}</p></div><button className="btn secondary" onClick={()=>launchMiniGame(preset)}>{t('studio.startMiniGame')}<ChessyIcon name="arrow" size={17}/></button></article>)}</div>
+  </section>
+
+  <section className="academy-lessons-section" aria-labelledby="academy-lessons-title">
+   <div className="home-section-title"><div><p className="eyebrow">{t('studio.lessonsEyebrow')}</p><h2 id="academy-lessons-title">{t('studio.lessonsTitle')}</h2></div></div>
+   <div className="track-grid">{TRACKS.map((track,index)=>{const icon=icons[track];const lessons=LESSONS.filter(l=>l.track===track),count=lessons.filter(l=>progress.lessons.includes(l.id)).length;return <section className={`panel track-card track-${track}`} key={track}><div className="track-card-top"><div className="icon-tile"><ChessyIcon name={icon} size={26}/></div><span className="track-number">0{index+1}</span></div><h2>{t(`studio.track.${track}`)}</h2><div className="track-progress"><span style={{width:`${count/lessons.length*100}%`}}/></div><div className="lesson-list">{lessons.map(lesson=><button key={lesson.id} className="lesson-link" onClick={()=>setSelected(lesson)}><span>{progress.lessons.includes(lesson.id)?<ChessyIcon name="check" size={18} className="accent"/>:<ChessyIcon name="library" size={18}/>}</span><span><strong>{lesson.title[lang]}</strong><small>{t(`studio.level.${lesson.level}`)} · {t('studio.minutes',{count:lesson.minutes})}</small></span><ArrowRight size={17}/></button>)}</div></section>;})}</div>
+  </section>
  </div>;
 }
