@@ -787,7 +787,16 @@
     "moveHistory": "Historial de movimientos",
     "gameTools": "Herramientas de partida",
     "coachTools": "Mentor y análisis",
-    "themes": "Temas"
+    "themes": "Temas",
+    "masteryEyebrow": "Ruta de dominio",
+    "masteryTitle": "Aprende a usar las piezas, no solo a moverlas",
+    "masterySubtitle": "Cada etapa reduce o aumenta la complejidad con intención. Primero dominas herramientas concretas; luego las coordinas y las llevas a partidas reales.",
+    "miniGamesEyebrow": "Laboratorio de tablero",
+    "miniGamesTitle": "Minipartidas que aíslan una habilidad",
+    "miniGamesSubtitle": "Menos piezas, decisiones más visibles. Practica una familia de ideas antes de volver a una posición completa.",
+    "startMiniGame": "Jugar minipartida",
+    "lessonsEyebrow": "Conceptos guiados",
+    "lessonsTitle": "Lecciones que alimentan la ruta"
   },
   "auth": {
     "title": "Tu cuenta Chessy",
