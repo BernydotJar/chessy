@@ -1,61 +1,101 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { CheckCircle2, Lightbulb, RotateCcw, XCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { MINI_GAME_PRESETS } from '../learning/minigames';
+import { locale } from '../learning/types';
 import { useGameStore } from '../store/gameStore';
-import { EXERCISES } from '../utils/exercises';
-import { CheckCircle2, XCircle, Lightbulb } from 'lucide-react';
+import { BLOCK1_ROOK } from '../utils/exercises/block1';
+import { ChessyIcon } from '../design/icons';
 
-export const ExerciseView: React.FC = () => {
-  const { t } = useTranslation();
-  const { chess, history, loadGame, setTrainingMode, setView } = useGameStore();
-  const [index, setIndex] = useState(0);
-  const [status, setStatus] = useState<'idle' | 'correct' | 'wrong'>('idle');
-  const [message, setMessage] = useState('');
-  const exercise = EXERCISES[index];
+const normalizeSan = (move: string) => move.replace(/[+#]$/u, '');
 
-  useEffect(() => {
-    setTrainingMode(true);
-    loadGame(exercise.initial_position.fen);
-    setStatus('idle');
-    setMessage('');
-    return () => setTrainingMode(false);
-  }, [exercise, loadGame, setTrainingMode]);
+export const ExerciseView = () => {
+  const { t, i18n } = useTranslation();
+  const lang = locale(i18n.resolvedLanguage);
+  const game = useGameStore();
+  const session = game.curriculumSession;
 
-  useEffect(() => {
-    if (history.length === 0) return;
-    const last = chess.history().slice(-1)[0];
-    if (!last) return;
-    if (last === exercise.solution.best_move) {
-      setStatus('correct');
-      setMessage(t('exercise.correct', { explanation: exercise.solution.explanation }));
-    } else {
-      setStatus('wrong');
-      setMessage(t('exercise.wrong'));
-    }
-  }, [history, chess, exercise, t]);
+  if (!session) return null;
 
-  const progress = useMemo(() => `${index + 1}/${EXERCISES.length}`, [index]);
-  const handleRetry = () => { loadGame(exercise.initial_position.fen); setStatus('idle'); setMessage(''); };
-  const handleNext = () => {
-    if (index + 1 >= EXERCISES.length) { setView('academy'); return; }
-    setIndex(index + 1);
+  const leavePractice = () => {
+    game.clearCurriculumSession();
+    game.setView('academy');
   };
 
-  return (
-    <div className="glass-card rounded-xl p-6 space-y-5">
-      <div className="flex items-center justify-between">
+  if (session.kind === 'mini-game') {
+    const preset = MINI_GAME_PRESETS.find((candidate) => candidate.id === session.id);
+    if (!preset) return null;
+    return <section className="panel curriculum-session-card" aria-labelledby="curriculum-session-title">
+      <header className="curriculum-session-header">
+        <span className="icon-tile small"><ChessyIcon name="academy" size={20}/></span>
         <div>
-          <p className="text-white/60 text-xs">{t('exercise.progress', { value: progress })}</p>
-          <h3 className="text-white font-semibold text-lg">{exercise.title}</h3>
+          <p className="eyebrow">{t('curriculum.miniGameSession')}</p>
+          <h2 id="curriculum-session-title">{preset.title[lang]}</h2>
         </div>
-        <span className="glass-container px-3 py-1 rounded-full text-white text-xs">{exercise.exercise_id}</span>
+      </header>
+      <p className="curriculum-session-purpose">{preset.purpose[lang]}</p>
+      <div className="curriculum-goal">
+        <Lightbulb size={18}/>
+        <div><strong>{t('curriculum.goal')}</strong><p>{preset.goal[lang]}</p></div>
       </div>
-      <div className="glass-container rounded-lg p-4 text-white/80 text-sm">{exercise.instruction}</div>
-      <div className="glass-container rounded-lg p-4 flex items-center gap-3 text-white/70 text-sm"><Lightbulb size={16}/><span>{t('exercise.tip')}</span></div>
-      {status !== 'idle' && <div className={`glass-container rounded-lg p-4 text-sm flex items-center gap-2 ${status === 'correct' ? 'text-emerald-300' : 'text-red-300'}`}>{status === 'correct' ? <CheckCircle2 size={16}/> : <XCircle size={16}/>}<span>{message}</span></div>}
-      <div className="flex gap-3">
-        <button onClick={handleRetry} className="glass-button glass-button--subtle px-4 py-2 rounded-lg text-white text-sm">{t('exercise.retry')}</button>
-        <button onClick={handleNext} className="glass-button px-4 py-2 rounded-lg text-white text-sm">{t('exercise.next')}</button>
+      <ul className="curriculum-focus-list" aria-label={t('curriculum.focus')}>
+        {preset.focus.map((item) => <li key={item[lang]}>{item[lang]}</li>)}
+      </ul>
+      {game.isGameOver && <div className="feedback success" role="status"><CheckCircle2 size={18}/><div><strong>{t('curriculum.miniGameFinished')}</strong><p>{t('curriculum.reviewTransfer')}</p></div></div>}
+      <div className="button-row curriculum-session-actions">
+        <button className="btn secondary" onClick={() => game.restartCurriculumPosition(preset.fen)}><RotateCcw size={17}/>{t('curriculum.restartPosition')}</button>
+        <button className="btn quiet" onClick={leavePractice}>{t('curriculum.backToPath')}</button>
       </div>
+    </section>;
+  }
+
+  const step = Math.min(Math.max(0, session.step), BLOCK1_ROOK.length - 1);
+  const exercise = BLOCK1_ROOK[step];
+  const moves = game.chess.history();
+  const lastMove = moves.length ? moves[moves.length - 1] : '';
+  const answered = game.history.length > 0;
+  const correct = answered && normalizeSan(lastMove) === normalizeSan(exercise.solution.best_move);
+  const distractor = exercise.distractors.find((item) => normalizeSan(item.move) === normalizeSan(lastMove));
+
+  const nextExercise = () => {
+    if (!correct) return;
+    const nextStep = step + 1;
+    if (nextStep >= BLOCK1_ROOK.length) {
+      leavePractice();
+      return;
+    }
+    const next = BLOCK1_ROOK[nextStep];
+    game.setCurriculumSession({ kind: 'piece-exercise', domain: 'rook', step: nextStep });
+    game.restartCurriculumPosition(next.initial_position.fen);
+  };
+
+  return <section className="panel curriculum-session-card" aria-labelledby="curriculum-session-title">
+    <header className="curriculum-session-header">
+      <span className="icon-tile small"><ChessyIcon name="analysis" size={20}/></span>
+      <div>
+        <p className="eyebrow">{t('curriculum.rookPilot')} · {t('exercise.progress', { value: `${step + 1}/${BLOCK1_ROOK.length}` })}</p>
+        <h2 id="curriculum-session-title">{exercise.title[lang]}</h2>
+      </div>
+      <span className="tag curriculum-exercise-id">{exercise.exercise_id}</span>
+    </header>
+    <p className="curriculum-session-purpose">{exercise.instruction[lang]}</p>
+    <div className="curriculum-goal">
+      <Lightbulb size={18}/>
+      <div><strong>{t('curriculum.thinkBeforeMove')}</strong><p>{t('curriculum.rookPrompt')}</p></div>
     </div>
-  );
+    <ul className="curriculum-focus-list" aria-label={t('curriculum.focus')}>
+      {exercise.concepts_trained.map((concept) => <li key={concept}>{t(`curriculum.concepts.${concept}`)}</li>)}
+    </ul>
+    {answered && <div className={`feedback ${correct ? 'success' : 'wrong'}`} role="status">
+      {correct ? <CheckCircle2 size={18}/> : <XCircle size={18}/>}
+      <div>
+        <strong>{t(correct ? 'curriculum.correctMove' : 'curriculum.tryAgain')}</strong>
+        <p>{correct ? exercise.solution.explanation[lang] : distractor?.why_wrong[lang] ?? t('curriculum.wrongMoveDetail')}</p>
+      </div>
+    </div>}
+    <div className="button-row curriculum-session-actions">
+      <button className="btn secondary" onClick={() => game.restartCurriculumPosition(exercise.initial_position.fen)}><RotateCcw size={17}/>{t('exercise.retry')}</button>
+      {correct && <button className="btn primary" onClick={nextExercise}>{step + 1 === BLOCK1_ROOK.length ? t('curriculum.finishPilot') : t('exercise.next')}<ChessyIcon name="arrow" size={17}/></button>}
+      <button className="btn quiet" onClick={leavePractice}>{t('curriculum.backToPath')}</button>
+    </div>
+  </section>;
 };

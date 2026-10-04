@@ -703,7 +703,7 @@
     "newSession": "Nova sessão",
     "academyEyebrow": "APRENDA. CONFIRA. PRATIQUE.",
     "academyTitle": "Entenda o porquê de cada jogada.",
-    "academySubtitle": "Seis trilhas, lições curtas e perguntas para transformar ideias em seu próprio critério. Conteúdo original criado para Chessy.",
+    "academySubtitle": "Uma rota de domínio: use cada peça como ferramenta, coordene funções, pratique minipartidas e transfira o critério para partidas reais.",
     "track": {
       "fundamentals": "Primeiros passos",
       "tactics": "Tática",
@@ -949,6 +949,42 @@
       "rapid10": "10 + 0",
       "blitz5": "5 + 3",
       "blitz3": "3 + 2"
+    }
+  },
+  "curriculum": {
+    "eyebrow": "TREINE UMA FERRAMENTA DE CADA VEZ",
+    "playTitle": "Prática com propósito.",
+    "playSubtitle": "Esta posição reduz a complexidade para que você reconheça e use uma ideia concreta.",
+    "miniGameSession": "Minipartida guiada",
+    "goal": "Objetivo de aprendizagem",
+    "focus": "No que prestar atenção",
+    "miniGameFinished": "Minipartida concluída",
+    "reviewTransfer": "Antes de sair, identifique qual decisão você pode repetir em uma partida completa.",
+    "restartPosition": "Reiniciar posição",
+    "backToPath": "Voltar para a rota",
+    "rookPilot": "Domínio da torre",
+    "thinkBeforeMove": "Pense antes de mover",
+    "rookPrompt": "Qual linha está aberta, o que a bloqueia e a captura é segura?",
+    "correctMove": "Ferramenta bem utilizada",
+    "tryAgain": "A ideia ainda não está completa",
+    "wrongMoveDetail": "Reinicie a posição e compare linhas, bloqueios e defesas antes de escolher.",
+    "finishPilot": "Concluir piloto",
+    "pieceDomainsEyebrow": "DOMÍNIO POR PEÇAS",
+    "pieceDomainsTitle": "Transforme cada peça em uma ferramenta",
+    "pieceDomainsSubtitle": "Comece com uma função concreta, prove que sabe usá-la e depois combine ferramentas.",
+    "openDomain": "Praticar domínio",
+    "ecoEyebrow": "REFERÊNCIA PARA MAIS TARDE",
+    "ecoTitle": "Índice ECO: mapa para uma etapa posterior",
+    "ecoSubtitle": "Quando o aluno já usa e coordena peças, o ECO ajuda a organizar o estudo de aberturas por famílias.",
+    "ecoDisclaimer": "É uma referência de navegação, não uma lista para memorizar nem um mapeamento dos 624 exercícios.",
+    "ecoExamples": "Exemplos",
+    "concepts": {
+      "capture": "Captura",
+      "line": "Linhas",
+      "vision": "Visão",
+      "block": "Bloqueios",
+      "decision": "Decisão",
+      "defense": "Defesa"
     }
   }
 }

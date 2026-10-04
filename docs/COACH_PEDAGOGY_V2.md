@@ -32,3 +32,11 @@ The existing five rook exercises are the correct shape for the mapping target be
 - concepts trained.
 
 They are a pilot pattern, not proof of source-book correspondence.
+
+## ECO reference supplied by the coach
+
+The ECO chart is retained as a late-stage opening taxonomy, after piece use, coordination and constrained play. It is not the first screen of the curriculum, not a memorization requirement, and not evidence that any of the 624 source exercises belongs to a specific opening family.
+
+## Executable product response
+
+Chessy now exposes one practice entry for every piece domain. The rook route uses the five verified original pilot exercises; the remaining domains launch constrained mini-games with explicit goals and observation cues. The same board surface carries the learning contract so the learner does not lose context between Academy and practice.

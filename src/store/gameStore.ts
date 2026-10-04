@@ -7,6 +7,10 @@ import { DEFAULT_TIME_CONTROL, getTimeControl, isTimeControlId, TIME_CONTROL_STO
 
 export type GameView = 'home' | 'academy' | 'progress' | 'library' | 'play' | 'games' | 'review' | 'analysis' | 'training' | 'account' | 'settings' | 'themes';
 
+export type CurriculumSession =
+  | { kind: 'mini-game'; id: string }
+  | { kind: 'piece-exercise'; domain: 'rook'; step: number };
+
 interface GameStore extends GameState {
   chess: Chess;
   theme: BoardTheme;
@@ -26,6 +30,7 @@ interface GameStore extends GameState {
   view: GameView;
   activeGameId: string | null;
   trainingMode: boolean;
+  curriculumSession: CurriculumSession | null;
   engineError: boolean;
   endReason: 'resignation' | 'timeout' | null;
   timeControlId: TimeControlId;
@@ -63,6 +68,10 @@ interface GameStore extends GameState {
   setView: (view: GameStore['view']) => void;
   setActiveGameId: (id: string | null) => void;
   setTrainingMode: (mode: boolean) => void;
+  startCurriculumSession: (session: CurriculumSession, fen: string) => void;
+  restartCurriculumPosition: (fen: string) => void;
+  setCurriculumSession: (session: CurriculumSession) => void;
+  clearCurriculumSession: () => void;
 }
 
 
@@ -244,6 +253,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   view: 'home',
   activeGameId: null,
   trainingMode: false,
+  curriculumSession: null,
   engineError: false, endReason: null,
   timeControlId: initialTimeControlId,
   ...clockStateFor(initialTimeControlId),
@@ -255,6 +265,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     // Prevent moves during AI thinking and settle any live clock before accepting a move.
     if (state.isGameOver || (isAIThinking && !isAIMove)) return false;
+    if (state.curriculumSession?.kind === 'piece-exercise' && state.history.length >= 1) return false;
     if (state.clockStarted) {
       state.tickClock(Date.now());
       state = get();
@@ -283,7 +294,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         const mover = moveObj.color === 'w' ? 'white' : 'black';
         let whiteTimeMs = state.whiteTimeMs;
         let blackTimeMs = state.blackTimeMs;
-        const clockStarted = control.initialMs !== null;
+        const clockStarted = !trainingMode && control.initialMs !== null;
         if (clockStarted && control.incrementMs > 0) {
           if (mover === 'white' && whiteTimeMs !== null) whiteTimeMs += control.incrementMs;
           if (mover === 'black' && blackTimeMs !== null) blackTimeMs += control.incrementMs;
@@ -375,7 +386,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       capturedPieces: { white: [], black: [] },
       aiDifficulty: difficulty,
       isAIGame: true,
-      trainingMode: false, setupMode: false, pendingPromotion: null, view: 'play',
+      trainingMode: false, curriculumSession: null, setupMode: false, pendingPromotion: null, view: 'play',
       playerColor: actualColor,
       isAIThinking: false,
       analysisTarget: null,
@@ -446,6 +457,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       endReason: null, engineError: false, activeGameId: null,
       capturedPieces: { white: [], black: [] },
       isAIGame: false,
+      trainingMode: false,
+      curriculumSession: null,
       playerColor: 'white',
       isAIThinking: false,
       legalMoves: [],
@@ -499,7 +512,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   loadGame: (fen: string) => {
     stockfishService.terminate();
     const newChess = new Chess(fen);
-    const clock = clockStateFor(get().timeControlId);
+    const clock = clockStateFor(get().trainingMode ? 'untimed' : get().timeControlId);
     const capturedPieces = getCapturedPieces(newChess);
     const isGameOver = newChess.isGameOver();
     const winner = newChess.isCheckmate()
@@ -545,7 +558,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       fen: newChess.fen(),
       history: newChess.history(),
       currentMove: newChess.history().length,
-      isAIGame: false, isAIThinking: false, pendingPromotion: null, endReason: null, engineError: false, activeGameId: null,
+      isAIGame: false, isAIThinking: false, trainingMode: false, curriculumSession: null, pendingPromotion: null, endReason: null, engineError: false, activeGameId: null,
       capturedPieces,
       isGameOver,
       winner,
@@ -667,5 +680,16 @@ export const useGameStore = create<GameStore>((set, get) => ({
     if (typeof window !== 'undefined' && window.location.hash !== '#/'+view) window.location.hash='/'+view;
   },
   setActiveGameId: (id) => set({ activeGameId: id }),
-  setTrainingMode: (mode) => set({ trainingMode: mode }),
+  setTrainingMode: (mode) => set({ trainingMode: mode, curriculumSession: mode ? get().curriculumSession : null }),
+  startCurriculumSession: (session, fen) => {
+    set({ trainingMode: true, curriculumSession: session });
+    get().loadGame(fen);
+    get().setView('play');
+  },
+  restartCurriculumPosition: (fen) => {
+    if (!get().curriculumSession) return;
+    get().loadGame(fen);
+  },
+  setCurriculumSession: (session) => set({ trainingMode: true, curriculumSession: session }),
+  clearCurriculumSession: () => set({ trainingMode: false, curriculumSession: null }),
 }));

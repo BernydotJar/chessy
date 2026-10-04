@@ -1,201 +1,206 @@
 {
-  "createdAt": "2026-09-08T05:43:26.719Z",
-  "browser": "145.0.7632.0",
+  "createdAt": "2026-10-04T17:46:12.159Z",
+  "browser": "154.0.8037.98",
   "checks": [
     {
       "name": "All twelve routes load without untranslated UI keys",
       "result": "PASS",
-      "ms": 930
+      "ms": 1045
     },
     {
       "name": "Incorrect quiz does not award completion; correct answer does",
       "result": "PASS",
-      "ms": 101
+      "ms": 130
     },
     {
       "name": "Wrong challenge preserves position; correct solution persists once",
       "result": "PASS",
-      "ms": 753
+      "ms": 785
     },
     {
       "name": "Hint-assisted play does not award XP",
       "result": "PASS",
-      "ms": 83
+      "ms": 85
     },
     {
       "name": "Mouse drag follows cursor without a source ghost and completes the move",
       "result": "PASS",
-      "ms": 496
+      "ms": 411
     },
     {
       "name": "Touch drag works on mobile play and challenge boards",
       "result": "PASS",
-      "ms": 809
+      "ms": 901
     },
     {
       "name": "Drag overlay stays cursor-locked when regular motion is enabled",
       "result": "PASS",
-      "ms": 1112
+      "ms": 1092
     },
     {
       "name": "Native promotion dialog supports rook underpromotion and focus",
       "result": "PASS",
-      "ms": 154
+      "ms": 200
     },
     {
       "name": "Multi-ply puzzle plays legal opponent reply and accepts final mate",
       "result": "PASS",
-      "ms": 98
+      "ms": 93
     },
     {
       "name": "Black-side Lichess line solves through the same input contract",
       "result": "PASS",
-      "ms": 101
+      "ms": 103
     },
     {
       "name": "Configured account route exposes email and Google auth without touching local progress",
       "result": "PASS",
-      "ms": 50
+      "ms": 90
+    },
+    {
+      "name": "Academy v2 shows mastery path and launches a constrained mini-game",
+      "result": "PASS",
+      "ms": 88
     },
     {
       "name": "Language switches and survives reload in English and Portuguese",
       "result": "PASS",
-      "ms": 1982
+      "ms": 1774
     },
     {
       "name": "Themes stay under Settings, Atlas persists, and country palettes reach the board",
       "result": "PASS",
-      "ms": 2598
+      "ms": 2399
     },
     {
       "name": "Play applies progressive disclosure and keeps preferences out of the game loop",
       "result": "PASS",
-      "ms": 136
+      "ms": 131
     },
     {
       "name": "Premium match cockpit has real clocks, player rails and clock-safe undo",
       "result": "PASS",
-      "ms": 1283
+      "ms": 1287
     },
     {
       "name": "Mobile bottom navigation exposes the five primary destinations",
       "result": "PASS",
-      "ms": 102
+      "ms": 103
     },
     {
       "name": "Board routes use compact mobile focus chrome with explicit Home access",
       "result": "PASS",
-      "ms": 238
+      "ms": 302
     },
     {
       "name": "Pending mistakes create a deterministic review flow and clean review resolves debt",
       "result": "PASS",
-      "ms": 204
+      "ms": 226
     },
     {
       "name": "Local play survives training navigation and saves a real PGN game",
       "result": "PASS",
-      "ms": 395
+      "ms": 418
     },
     {
       "name": "Invalid progress backup is rejected without overwriting progress",
       "result": "PASS",
-      "ms": 15
+      "ms": 16
     },
     {
       "name": "Progress restore requires explicit confirmation",
       "result": "PASS",
-      "ms": 39
+      "ms": 42
     },
     {
       "name": "Actual Stockfish responds after a legal opening move",
       "result": "PASS",
-      "ms": 1634
+      "ms": 1407
     },
     {
       "name": "Game conclusion flows through exact Review into selected-position Analysis",
       "result": "PASS",
-      "ms": 371
+      "ms": 384
     },
     {
       "name": "Mobile drawer hides inactive links and closes with Escape",
       "result": "PASS",
-      "ms": 77
+      "ms": 120
     },
     {
       "name": "Reduced motion has no running interface animations",
       "result": "PASS",
-      "ms": 4
+      "ms": 6
     },
     {
       "name": "No horizontal overflow on mobile, tablet and desktop routes",
       "result": "PASS",
-      "ms": 991
+      "ms": 770
     },
     {
       "name": "WCAG 2.1 AA mobile scan on primary learning routes",
       "result": "PASS",
-      "ms": 4653
+      "ms": 3792
     },
     {
       "name": "WCAG 2.1 AA automated scan: home",
       "result": "PASS",
-      "ms": 453
+      "ms": 452
     },
     {
       "name": "WCAG 2.1 AA automated scan: play",
       "result": "PASS",
-      "ms": 585
+      "ms": 516
     },
     {
       "name": "WCAG 2.1 AA automated scan: training",
       "result": "PASS",
-      "ms": 265
+      "ms": 258
     },
     {
       "name": "WCAG 2.1 AA automated scan: academy",
       "result": "PASS",
-      "ms": 295
+      "ms": 387
     },
     {
       "name": "WCAG 2.1 AA automated scan: progress",
       "result": "PASS",
-      "ms": 291
+      "ms": 298
     },
     {
       "name": "WCAG 2.1 AA automated scan: library",
       "result": "PASS",
-      "ms": 291
+      "ms": 282
     },
     {
       "name": "WCAG 2.1 AA automated scan: games",
       "result": "PASS",
-      "ms": 273
+      "ms": 269
     },
     {
       "name": "WCAG 2.1 AA automated scan: analysis",
       "result": "PASS",
-      "ms": 510
+      "ms": 564
     },
     {
       "name": "WCAG 2.1 AA automated scan: review",
       "result": "PASS",
-      "ms": 557
+      "ms": 537
     },
     {
       "name": "WCAG 2.1 AA automated scan: account",
       "result": "PASS",
-      "ms": 284
+      "ms": 288
     },
     {
       "name": "WCAG 2.1 AA automated scan: settings",
       "result": "PASS",
-      "ms": 297
+      "ms": 293
     },
     {
       "name": "WCAG 2.1 AA automated scan: themes",
       "result": "PASS",
-      "ms": 387
+      "ms": 385
     },
     {
       "name": "No uncaught JavaScript errors",
@@ -254,6 +259,6 @@
       "violations": []
     }
   ],
-  "passed": 40,
+  "passed": 41,
   "failed": 0
 }

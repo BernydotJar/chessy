@@ -301,3 +301,61 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
  .mastery-phase-card,.mini-game-card{padding:17px}
  .mastery-phase-card p,.mini-game-card p{max-width:none}
 }
+
+/* Piece-first curriculum routes and late-stage opening reference. */
+.piece-domain-section{margin-top:34px}
+.piece-domain-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.piece-domain-card{display:flex;flex-direction:column;gap:15px;min-width:0;padding:20px}
+.piece-domain-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.piece-domain-card-top .tag{max-width:70%;white-space:normal;text-align:right;line-height:1.35}
+.piece-domain-card>div:nth-child(2){flex:1}
+.piece-domain-card h3{font-size:17px;line-height:1.3;margin-bottom:8px}
+.piece-domain-card p{font-size:11px;line-height:1.65;color:var(--muted)}
+.piece-domain-card .btn{width:100%;justify-content:space-between}
+.eco-reference{margin-top:34px;padding:0;overflow:hidden}
+.eco-reference>summary{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:20px;cursor:pointer;list-style:none}
+.eco-reference>summary::-webkit-details-marker{display:none}
+.eco-reference>summary strong{display:block;margin-top:4px;font-size:18px}
+.eco-reference>summary>svg{flex:0 0 auto;transition:transform .18s ease}
+.eco-reference[open]>summary>svg{transform:rotate(90deg)}
+.eco-reference-content{padding:0 20px 20px;border-top:1px solid var(--line)}
+.eco-reference-content>.section-description{padding-top:18px}
+.eco-disclaimer{display:flex;align-items:flex-start;gap:9px;margin:16px 0;padding:12px;border:1px solid var(--line);border-radius:9px;background:var(--surface-2);color:var(--muted);font-size:11px;line-height:1.55}
+.eco-disclaimer svg{flex:0 0 auto;color:var(--accent)}
+.eco-band-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.eco-band-card{min-width:0;padding:14px;border:1px solid var(--line);border-radius:9px;background:var(--surface-1)}
+.eco-code{display:inline-block;margin-bottom:10px;color:var(--accent);font:700 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.08em}
+.eco-band-card h3{font-size:12px;line-height:1.4;margin-bottom:8px}
+.eco-band-card p{font-size:9px;line-height:1.55;color:var(--muted)}
+
+/* In-board curriculum session guidance. */
+.curriculum-session-card{grid-column:1/-1;padding:18px;display:grid;gap:14px}
+.curriculum-session-header{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:start;gap:11px}
+.curriculum-session-header h2{font-size:17px;line-height:1.3;margin-top:4px}
+.curriculum-exercise-id{align-self:start;white-space:nowrap}
+.curriculum-session-purpose{font-size:12px;line-height:1.65;color:var(--text)}
+.curriculum-goal{display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid var(--line);border-radius:9px;background:var(--surface-2)}
+.curriculum-goal>svg{flex:0 0 auto;color:var(--accent);margin-top:1px}
+.curriculum-goal strong{font-size:10px;letter-spacing:.04em;text-transform:uppercase}
+.curriculum-goal p{margin-top:5px;color:var(--muted);font-size:11px;line-height:1.55}
+.curriculum-focus-list{display:flex;flex-wrap:wrap;gap:7px;list-style:none;margin:0;padding:0}
+.curriculum-focus-list li{padding:6px 9px;border:1px solid var(--line);border-radius:999px;background:var(--surface-1);color:var(--muted);font-size:9px;line-height:1.2}
+.curriculum-session-card .feedback{margin:0}
+.curriculum-session-actions{margin:0;flex-wrap:wrap}
+.curriculum-session-actions .btn{min-width:0}
+@media(max-width:1100px){
+ .piece-domain-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .eco-band-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:700px){
+ .piece-domain-section,.eco-reference{margin-top:26px}
+ .piece-domain-grid,.eco-band-grid{grid-template-columns:1fr}
+ .piece-domain-card{padding:17px}
+ .eco-reference>summary,.eco-reference-content{padding-left:17px;padding-right:17px}
+ .curriculum-session-card{padding:15px;gap:12px}
+ .curriculum-session-header{grid-template-columns:auto minmax(0,1fr)}
+ .curriculum-exercise-id{grid-column:1/-1;justify-self:start}
+ .curriculum-session-actions{display:grid;grid-template-columns:1fr}
+ .curriculum-session-actions .btn{width:100%;justify-content:center}
+}
+@media(prefers-reduced-motion:reduce){.eco-reference>summary>svg{transition:none}}

@@ -703,7 +703,7 @@
     "newSession": "Nueva sesión",
     "academyEyebrow": "APRENDE. COMPRUEBA. PRACTICA.",
     "academyTitle": "Entiende el porqué de cada jugada.",
-    "academySubtitle": "Seis rutas, lecciones breves y preguntas para transformar ideas en criterio propio. Contenido original creado para Chessy.",
+    "academySubtitle": "Una ruta de dominio: usa cada pieza como herramienta, coordina funciones, practica minipartidas y transfiere el criterio a partidas reales.",
     "track": {
       "fundamentals": "Primeros pasos",
       "tactics": "Táctica",
@@ -949,6 +949,42 @@
       "rapid10": "10 + 0",
       "blitz5": "5 + 3",
       "blitz3": "3 + 2"
+    }
+  },
+  "curriculum": {
+    "eyebrow": "ENTRENA UNA HERRAMIENTA A LA VEZ",
+    "playTitle": "Práctica con propósito.",
+    "playSubtitle": "Esta posición reduce la complejidad para que puedas reconocer y usar una idea concreta.",
+    "miniGameSession": "Minipartida guiada",
+    "goal": "Objetivo de aprendizaje",
+    "focus": "En qué fijarte",
+    "miniGameFinished": "Minipartida completada",
+    "reviewTransfer": "Antes de salir, identifica qué decisión podrás repetir en una partida completa.",
+    "restartPosition": "Reiniciar posición",
+    "backToPath": "Volver a la ruta",
+    "rookPilot": "Dominio de la torre",
+    "thinkBeforeMove": "Piensa antes de mover",
+    "rookPrompt": "¿Qué línea está abierta, qué pieza bloquea y la captura es segura?",
+    "correctMove": "Herramienta bien utilizada",
+    "tryAgain": "La idea todavía no está completa",
+    "wrongMoveDetail": "Reinicia la posición y compara líneas, bloqueos y defensas antes de elegir.",
+    "finishPilot": "Terminar piloto",
+    "pieceDomainsEyebrow": "DOMINIO POR PIEZAS",
+    "pieceDomainsTitle": "Convierte cada pieza en una herramienta",
+    "pieceDomainsSubtitle": "Empieza con una función concreta, demuestra que puedes usarla y luego combina herramientas.",
+    "openDomain": "Practicar dominio",
+    "ecoEyebrow": "REFERENCIA PARA MÁS ADELANTE",
+    "ecoTitle": "Índice ECO: mapa para una etapa posterior",
+    "ecoSubtitle": "Cuando el alumno ya usa y coordina piezas, ECO ayuda a ordenar el estudio de aperturas por familias.",
+    "ecoDisclaimer": "Es una referencia de navegación, no una lista para memorizar ni un mapeo de los 624 ejercicios.",
+    "ecoExamples": "Ejemplos",
+    "concepts": {
+      "capture": "Captura",
+      "line": "Líneas",
+      "vision": "Visión",
+      "block": "Bloqueos",
+      "decision": "Decisión",
+      "defense": "Defensa"
     }
   }
 }

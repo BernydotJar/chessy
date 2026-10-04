@@ -38,6 +38,70 @@ export const PIECE_SKILLS: readonly PieceSkill[] = [
   { id:'piece-coordination', piece:'coordination', title:t('Coordina piezas con funciones distintas','Coordinate pieces with different roles','Coordene peças com funções diferentes'), evidence:['coordination','candidate-moves','threats'] },
 ] as const;
 
+export type PieceDomainActivity =
+  | { kind: 'piece-exercises'; id: 'rook-pilot' }
+  | { kind: 'mini-game'; id: string };
+
+export interface PieceDomainRoute {
+  piece: PieceDomain;
+  title: Text;
+  summary: Text;
+  evidenceLabel: Text;
+  activity: PieceDomainActivity;
+}
+
+export const PIECE_DOMAIN_ROUTES: readonly PieceDomainRoute[] = [
+  {
+    piece:'rook',
+    title:t('Torre','Rook','Torre'),
+    summary:t('L\u00edneas, bloqueos, capturas y actividad segura.','Lines, blockers, captures and safe activity.','Linhas, bloqueios, capturas e atividade segura.'),
+    evidenceLabel:t('Piloto: 5 ejercicios sem\u00e1nticos verificados','Pilot: 5 verified semantic exercises','Piloto: 5 exerc\u00edcios sem\u00e2nticos verificados'),
+    activity:{kind:'piece-exercises',id:'rook-pilot'},
+  },
+  {
+    piece:'bishop',
+    title:t('Alfil','Bishop','Bispo'),
+    summary:t('Diagonales, bloqueos y complejos de color.','Diagonals, blockers and color complexes.','Diagonais, bloqueios e complexos de cor.'),
+    evidenceLabel:t('Pr\u00e1ctica restringida disponible','Constrained practice available','Pr\u00e1tica restrita dispon\u00edvel'),
+    activity:{kind:'mini-game',id:'bishops'},
+  },
+  {
+    piece:'queen',
+    title:t('Dama','Queen','Dama'),
+    summary:t('Alcance combinado, jaques y uso seguro.','Combined reach, checks and safe use.','Alcance combinado, xeques e uso seguro.'),
+    evidenceLabel:t('Pr\u00e1ctica restringida disponible','Constrained practice available','Pr\u00e1tica restrita dispon\u00edvel'),
+    activity:{kind:'mini-game',id:'queens'},
+  },
+  {
+    piece:'knight',
+    title:t('Caballo','Knight','Cavalo'),
+    summary:t('Saltos, centro, casillas fuertes y ataques dobles.','Jumps, center, strong squares and double attacks.','Saltos, centro, casas fortes e ataques duplos.'),
+    evidenceLabel:t('Pr\u00e1ctica restringida disponible','Constrained practice available','Pr\u00e1tica restrita dispon\u00edvel'),
+    activity:{kind:'mini-game',id:'knights'},
+  },
+  {
+    piece:'pawn',
+    title:t('Peones','Pawns','Pe\u00f5es'),
+    summary:t('Cadenas, rupturas, pasados y promoci\u00f3n.','Chains, breaks, passed pawns and promotion.','Cadeias, rupturas, pe\u00f5es passados e promo\u00e7\u00e3o.'),
+    evidenceLabel:t('Pr\u00e1ctica restringida disponible','Constrained practice available','Pr\u00e1tica restrita dispon\u00edvel'),
+    activity:{kind:'mini-game',id:'pawns-kings'},
+  },
+  {
+    piece:'king',
+    title:t('Rey','King','Rei'),
+    summary:t('Legalidad, oposici\u00f3n y actividad por fase.','Legality, opposition and phase-aware activity.','Legalidade, oposi\u00e7\u00e3o e atividade por fase.'),
+    evidenceLabel:t('Pr\u00e1ctica de rey y peones disponible','King-and-pawn practice available','Pr\u00e1tica de rei e pe\u00f5es dispon\u00edvel'),
+    activity:{kind:'mini-game',id:'pawns-kings'},
+  },
+  {
+    piece:'coordination',
+    title:t('Coordinaci\u00f3n','Coordination','Coordena\u00e7\u00e3o'),
+    summary:t('Piezas distintas que cumplen una funci\u00f3n com\u00fan.','Different pieces working toward one purpose.','Pe\u00e7as diferentes trabalhando para um objetivo comum.'),
+    evidenceLabel:t('Laboratorio de torres y peones disponible','Rook-and-pawn lab available','Laborat\u00f3rio de torres e pe\u00f5es dispon\u00edvel'),
+    activity:{kind:'mini-game',id:'rooks-pawns'},
+  },
+] as const;
+
 export const MASTERY_PATH: readonly MasteryPhase[] = [
   {
     id:'piece-tools', order:1,

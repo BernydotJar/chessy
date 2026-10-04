@@ -703,7 +703,7 @@
     "newSession": "New session",
     "academyEyebrow": "LEARN. CHECK. PRACTICE.",
     "academyTitle": "Understand the why behind every move.",
-    "academySubtitle": "Six paths, short lessons, and questions that turn ideas into your own judgment. Original content created for Chessy.",
+    "academySubtitle": "A mastery path: use each piece as a tool, coordinate roles, practice mini-games and transfer the judgment to real games.",
     "track": {
       "fundamentals": "First steps",
       "tactics": "Tactics",
@@ -949,6 +949,42 @@
       "rapid10": "10 + 0",
       "blitz5": "5 + 3",
       "blitz3": "3 + 2"
+    }
+  },
+  "curriculum": {
+    "eyebrow": "TRAIN ONE TOOL AT A TIME",
+    "playTitle": "Practice with purpose.",
+    "playSubtitle": "This position reduces complexity so you can recognize and use one concrete idea.",
+    "miniGameSession": "Guided mini-game",
+    "goal": "Learning objective",
+    "focus": "What to notice",
+    "miniGameFinished": "Mini-game completed",
+    "reviewTransfer": "Before leaving, identify which decision you can repeat in a full game.",
+    "restartPosition": "Restart position",
+    "backToPath": "Back to the path",
+    "rookPilot": "Rook mastery",
+    "thinkBeforeMove": "Think before moving",
+    "rookPrompt": "Which line is open, what blocks it, and is the capture safe?",
+    "correctMove": "Tool used well",
+    "tryAgain": "The idea is not complete yet",
+    "wrongMoveDetail": "Restart the position and compare lines, blockers and defenders before choosing.",
+    "finishPilot": "Finish pilot",
+    "pieceDomainsEyebrow": "PIECE MASTERY",
+    "pieceDomainsTitle": "Turn every piece into a tool",
+    "pieceDomainsSubtitle": "Start with one concrete function, prove you can use it, and then combine tools.",
+    "openDomain": "Practice domain",
+    "ecoEyebrow": "REFERENCE FOR LATER",
+    "ecoTitle": "ECO index: a map for a later stage",
+    "ecoSubtitle": "Once the learner can use and coordinate pieces, ECO helps organize opening study by family.",
+    "ecoDisclaimer": "This is a navigation reference, not a memorization list or a mapping of the 624 exercises.",
+    "ecoExamples": "Examples",
+    "concepts": {
+      "capture": "Capture",
+      "line": "Lines",
+      "vision": "Vision",
+      "block": "Blockers",
+      "decision": "Decision",
+      "defense": "Defense"
     }
   }
 }
