@@ -787,7 +787,16 @@
     "moveHistory": "Move history",
     "gameTools": "Game tools",
     "coachTools": "Coach and analysis",
-    "themes": "Themes"
+    "themes": "Themes",
+    "masteryEyebrow": "Mastery path",
+    "masteryTitle": "Learn to use pieces, not only move them",
+    "masterySubtitle": "Each stage changes complexity on purpose. First master concrete tools, then coordinate them and transfer them into real games.",
+    "miniGamesEyebrow": "Board laboratory",
+    "miniGamesTitle": "Mini-games that isolate one skill",
+    "miniGamesSubtitle": "Fewer pieces make decisions easier to see. Practice one family of ideas before returning to a full position.",
+    "startMiniGame": "Play mini-game",
+    "lessonsEyebrow": "Guided concepts",
+    "lessonsTitle": "Lessons that feed the path"
   },
   "auth": {
     "title": "Your Chessy account",
