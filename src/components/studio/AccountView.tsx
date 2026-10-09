@@ -6,6 +6,7 @@ import { useProgressSyncStore } from '../../sync/store';
 import { SectionHeading } from './Shared';
 import { ProgressSyncStatus } from './ProgressSyncStatus';
 import { useAnalyticsStore } from '../../analytics/store';
+import { useLearningStore, guestProgressCanImport, forgetStoredProfile } from '../../learning/store';
 
 export function AccountView() {
   const { t } = useTranslation();
@@ -14,6 +15,9 @@ export function AccountView() {
   const syncError = useProgressSyncStore((state) => state.error);
   const deleteCloudProgress = useProgressSyncStore((state) => state.deleteCloudProgress);
   const track = useAnalyticsStore((state) => state.track);
+  const progress = useLearningStore((state) => state.progress);
+  const mergeGuestProgress = useLearningStore((state) => state.mergeGuestProgress);
+  const [guestImportMessage, setGuestImportMessage] = useState<'success' | 'error' | null>(null);
   const [mode, setMode] = useState<'signin' | 'create'>('signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -35,10 +39,25 @@ export function AccountView() {
   };
 
   const handleDelete = async () => {
+    if (!user) return;
     clearFeedback();
     const cloudDeleted = await deleteCloudProgress();
     if (!cloudDeleted) return;
-    await deleteCurrentAccount();
+    const deleted = await deleteCurrentAccount();
+    if (deleted) {
+      forgetStoredProfile(user.id);
+    } else {
+      // Firebase may require recent reauthentication. Restore cloud data if deletion failed.
+      await useProgressSyncStore.getState().syncNow();
+    }
+  };
+  const handleGuestImport = () => {
+    try {
+      mergeGuestProgress();
+      setGuestImportMessage('success');
+    } catch {
+      setGuestImportMessage('error');
+    }
   };
 
   if (status === 'booting') return <div className="view-enter"><SectionHeading eyebrow={t('studio.account')} title={t('auth.title')} subtitle={t('auth.loading')}/><div className="panel account-state"><ChessyIcon name="profile" size={32}/><p>{t('auth.loading')}</p></div></div>;
@@ -49,7 +68,7 @@ export function AccountView() {
     <SectionHeading eyebrow={t('studio.account')} title={t('auth.title')} subtitle={t('auth.signedInSubtitle')}/>
     <div className="account-grid">
       <section className="panel account-profile"><div className="account-avatar" aria-hidden="true">{user.photoUrl ? <img src={user.photoUrl} alt="" referrerPolicy="no-referrer"/> : <ChessyIcon name="profile" size={34}/>}</div><div><p className="eyebrow">{t('auth.signedInAs')}</p><h2>{user.displayName || user.email || t('auth.player')}</h2>{user.email && <p className="muted">{user.email}</p>}<p className="fine-print">{t('auth.providerLabel')}: {t(`auth.provider.${user.provider}`)}</p></div></section>
-      <section className="panel account-actions"><h2>{t('auth.accountActions')}</h2><ProgressSyncStatus compact/><p className="muted">{t('auth.progressLocal')}</p><button className="btn secondary" disabled={busy || syncStatus === 'syncing'} onClick={() => signOut()}>{t('auth.signOut')}</button><div className="account-danger"><h3>{t('auth.deleteTitle')}</h3><p className="fine-print">{t('auth.deleteBody')}</p>{!confirmDelete ? <button className="btn quiet" disabled={busy || syncStatus === 'syncing'} onClick={() => setConfirmDelete(true)}>{t('auth.deleteAccount')}</button> : <div className="button-row"><button className="btn danger" disabled={busy || syncStatus === 'syncing'} onClick={() => void handleDelete()}>{t('auth.confirmDelete')}</button><button className="btn quiet" disabled={busy || syncStatus === 'syncing'} onClick={() => setConfirmDelete(false)}>{t('auth.cancel')}</button></div>}</div></section>
+      <section className="panel account-actions"><h2>{t('auth.accountActions')}</h2><ProgressSyncStatus compact/><p className="muted">{t('auth.progressLocal')}</p>{guestProgressCanImport(progress) && <div className="account-guest-import"><h3>{t('auth.guestImportTitle')}</h3><p>{t('auth.guestImportBody')}</p><button className="btn secondary" disabled={busy || syncStatus === 'syncing'} onClick={handleGuestImport}>{t('auth.guestImportAction')}</button></div>}{guestImportMessage && <p className={`feedback ${guestImportMessage === 'success' ? 'success' : 'wrong'}`} role="status">{t(`auth.guestImport.${guestImportMessage}`)}</p>}<button className="btn secondary" disabled={busy || syncStatus === 'syncing'} onClick={() => signOut()}>{t('auth.signOut')}</button><div className="account-danger"><h3>{t('auth.deleteTitle')}</h3><p className="fine-print">{t('auth.deleteBody')}</p>{!confirmDelete ? <button className="btn quiet" disabled={busy || syncStatus === 'syncing'} onClick={() => setConfirmDelete(true)}>{t('auth.deleteAccount')}</button> : <div className="button-row"><button className="btn danger" disabled={busy || syncStatus === 'syncing'} onClick={() => void handleDelete()}>{t('auth.confirmDelete')}</button><button className="btn quiet" disabled={busy || syncStatus === 'syncing'} onClick={() => setConfirmDelete(false)}>{t('auth.cancel')}</button></div>}</div></section>
     </div>
     {syncError === 'cloud-delete' && <p className="feedback wrong" role="alert">{t('sync.cloudDeleteError')}</p>}
     {error && <p className="feedback wrong" role="alert">{t(`auth.errors.${error}`)}</p>}{notice && <p className="feedback success" role="status">{t(`auth.notices.${notice}`)}</p>}

@@ -4,6 +4,7 @@ import { useAuthStore } from '../auth/store';
 import { getChessyFirebaseApp } from '../firebase/client';
 import { useLearningStore } from '../learning/store';
 import { deleteCloudProgress as deleteCloudDocument, syncCloudProgress } from './progressCloud';
+import { mergeProgress, progressEqual } from './progressMerge';
 
 export type ProgressSyncStatus = 'local-only' | 'syncing' | 'synced' | 'pending' | 'error';
 
@@ -19,7 +20,7 @@ interface ProgressSyncStore {
 let initialized = false;
 let currentUid: string | null = null;
 let syncTimer: ReturnType<typeof setTimeout> | null = null;
-let syncInFlight: Promise<boolean> | null = null;
+let syncInFlight: { uid: string; generation: number; promise: Promise<boolean> } | null = null;
 let applyingCloud = false;
 let unsubscribeAuth: (() => void) | null = null;
 let unsubscribeLearning: (() => void) | null = null;
@@ -42,7 +43,7 @@ const isNetworkError = (error: unknown) => {
     (typeof value.message === 'string' && /network|offline|failed to fetch/i.test(value.message));
 };
 
-export const useProgressSyncStore = create<ProgressSyncStore>((set) => ({
+export const useProgressSyncStore = create<ProgressSyncStore>((set): ProgressSyncStore => ({
   status: 'local-only',
   lastSyncedAt: null,
   error: null,
@@ -54,10 +55,14 @@ export const useProgressSyncStore = create<ProgressSyncStore>((set) => ({
       if (state.user?.id === previous.user?.id && state.status === previous.status) return;
       authGeneration += 1;
       currentUid = state.status === 'signed-in' ? state.user?.id ?? null : null;
+      if (syncTimer) { clearTimeout(syncTimer); syncTimer = null; }
+      // Critical privacy boundary: switch namespaces before syncing the new account.
+      useLearningStore.getState().activateProfile(currentUid);
       if (!currentUid) {
-        set({ status: 'local-only', error: null });
+        set({ status: 'local-only', lastSyncedAt: null, error: null });
         return;
       }
+      set({ status: 'pending', lastSyncedAt: null, error: null });
       scheduleSync(0);
     });
 
@@ -78,13 +83,19 @@ export const useProgressSyncStore = create<ProgressSyncStore>((set) => ({
 
     const auth = useAuthStore.getState();
     currentUid = auth.status === 'signed-in' ? auth.user?.id ?? null : null;
+    useLearningStore.getState().activateProfile(currentUid);
     if (currentUid) scheduleSync(0);
   },
-  syncNow: async () => {
-    if (syncInFlight) return syncInFlight;
-    syncInFlight = (async () => {
-      const uid = currentUid;
-      const generation = authGeneration;
+  syncNow: async (): Promise<boolean> => {
+    const uid = currentUid;
+    const generation = authGeneration;
+    if (syncInFlight) {
+      if (syncInFlight.uid === uid && syncInFlight.generation === generation) return syncInFlight.promise;
+      // Account A cannot block the initial cloud pull for account B.
+      await syncInFlight.promise;
+      return useProgressSyncStore.getState().syncNow();
+    }
+    const promise = (async () => {
       if (!uid) {
         set({ status: 'local-only', error: null });
         return false;
@@ -103,24 +114,31 @@ export const useProgressSyncStore = create<ProgressSyncStore>((set) => ({
         const app = await getChessyFirebaseApp(runtime.firebase);
         const result = await syncCloudProgress(app, uid, useLearningStore.getState().progress);
         if (currentUid !== uid || authGeneration !== generation) return false;
+        // A learner can solve a puzzle while Firestore is in flight. Keep it.
+        const merged = mergeProgress(useLearningStore.getState().progress, result.progress);
+        const needsFollowUp = !progressEqual(merged, result.progress);
         applyingCloud = true;
         try {
-          useLearningStore.getState().replaceProgress(result.progress);
+          useLearningStore.getState().replaceProgress(merged);
         } finally {
           applyingCloud = false;
         }
-        set({ status: 'synced', lastSyncedAt: Date.now(), error: null });
+        set({ status: needsFollowUp ? 'pending' : 'synced', lastSyncedAt: Date.now(), error: null });
+        if (needsFollowUp) scheduleSync(0);
         return true;
       } catch (error) {
-        if (isNetworkError(error)) set({ status: 'pending', error: 'network' });
-        else set({ status: 'error', error: 'unknown' });
+        if (currentUid === uid && authGeneration === generation) {
+          if (isNetworkError(error)) set({ status: 'pending', error: 'network' });
+          else set({ status: 'error', error: 'unknown' });
+        }
         return false;
       }
     })();
+    if (uid) syncInFlight = { uid, generation, promise };
     try {
-      return await syncInFlight;
+      return await promise;
     } finally {
-      syncInFlight = null;
+      if (syncInFlight?.promise === promise) syncInFlight = null;
     }
   },
   deleteCloudProgress: async () => {
@@ -128,7 +146,7 @@ export const useProgressSyncStore = create<ProgressSyncStore>((set) => ({
     const generation = authGeneration;
     if (!uid) return true;
     if (syncTimer) { clearTimeout(syncTimer); syncTimer = null; }
-    if (syncInFlight) await syncInFlight;
+    if (syncInFlight) await syncInFlight.promise;
     if (currentUid !== uid || authGeneration !== generation) return false;
     const runtime = readAuthRuntimeConfig();
     if (!runtime.firebase) return true;
@@ -144,7 +162,7 @@ export const useProgressSyncStore = create<ProgressSyncStore>((set) => ({
       set({ status: 'local-only', lastSyncedAt: null, error: null });
       return true;
     } catch {
-      set({ status: 'error', error: 'cloud-delete' });
+      if (currentUid === uid && authGeneration === generation) set({ status: 'error', error: 'cloud-delete' });
       return false;
     }
   },

@@ -1,0 +1,11 @@
+{
+  "project": "chessy-pwa-2026",
+  "explicitGuestImport": "PASS",
+  "deviceAFirstUpload": "PASS",
+  "deviceBDownload": "PASS",
+  "offlineLocalUpdate": "PASS",
+  "reconnectUpload": "PASS",
+  "deviceAMergeAfterReload": "PASS",
+  "cloudDeleteBeforeAccountDelete": "PASS",
+  "pageErrors": []
+}

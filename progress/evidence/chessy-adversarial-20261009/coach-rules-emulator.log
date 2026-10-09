@@ -1,0 +1,39 @@
+i  emulators: Starting emulators: firestore, storage
+i  emulators: Detected demo project ID "demo-chessy", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
+✔  firestore: Firestore Emulator was started in standard edition.
+✔  firestore: Firestore Emulator UI websocket is running on 9150.
+i  Running script: node scripts/coach-rules-verify.mjs
+PASS Public catalog is readable without exposing draft listings
+[2026-10-09T09:44:24.407Z]  @firebase/firestore: Firestore (12.18.0): GrpcConnection RPC 'Write' stream 0x8194beaa error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L84, false for 'create' @ L94, false for 'update' @ L86, false for 'update' @ L94
+[2026-10-09T09:44:24.490Z]  @firebase/firestore: Firestore (12.18.0): GrpcConnection RPC 'Write' stream 0x8194beab error. Code: 7 Message: 7 PERMISSION_DENIED: 
+Property chessyRole is undefined on object. for 'create' @ L84, false for 'create' @ L94, Property chessyRole is undefined on object. for 'update' @ L86, false for 'update' @ L94, Property chessyRole is undefined on object. for 'create' @ L84, false for 'create' @ L94
+[2026-10-09T09:44:24.522Z]  @firebase/firestore: Firestore (12.18.0): GrpcConnection RPC 'Write' stream 0x8194beac error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L84, false for 'create' @ L94, false for 'update' @ L86, false for 'update' @ L94
+PASS Guest, learner and unverified coach cannot write instructor content
+PASS Owner coach can create drafts and list personal sessions
+[2026-10-09T09:44:24.593Z]  @firebase/firestore: Firestore (12.18.0): GrpcConnection RPC 'Write' stream 0x8194beb0 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L86:24 for 'update' @ L86, false for 'update' @ L94, false for 'update' @ L86, false for 'update' @ L94
+PASS Wrong owner cannot edit or read private drafts
+[2026-10-09T09:44:24.602Z]  @firebase/firestore: Firestore (12.18.0): GrpcConnection RPC 'Write' stream 0x8194bead error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L86:24 for 'update' @ L86, false for 'update' @ L94, false for 'update' @ L86, false for 'update' @ L94
+[2026-10-09T09:44:24.611Z]  @firebase/firestore: Firestore (12.18.0): GrpcConnection RPC 'Write' stream 0x8194beb1 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+evaluation error at L86:24 for 'update' @ L86, false for 'update' @ L94, false for 'update' @ L86, false for 'update' @ L94
+PASS Owner cannot publish an incomplete recorded class or spoof other owner
+PASS Coach can publish ready live classes and learner can read
+PASS Coach can upload a bounded MP4 into an owned draft
+PASS Guest and learner cannot upload to the coach path
+PASS Draft playback is denied to learners before publication
+PASS Published recording allows authenticated playback but never guest playback
+{
+  "totalRulesChecks": 10,
+  "firestoreChecks": 6,
+  "storageChecks": 4
+}
+✔  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+i  storage: Stopping Storage Emulator
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator

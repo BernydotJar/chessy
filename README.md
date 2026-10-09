@@ -14,9 +14,13 @@ A local-first chess learning studio: thoughtful design, original lessons, legal 
 
 ## Scope and privacy
 
-This release does not include accounts, cloud sync, payments, online matchmaking, live tournaments or a backend. Progress is stored in this browser's localStorage; saved games use IndexedDB. Clearing browser data removes it. Export a backup to transfer progress. No application analytics or third-party AI API is required. Book/source links open external websites only when selected.
+Chessy has optional Firebase Authentication (email/Google), account-scoped local progress and owner-only Firestore synchronization when the deployment is configured. Guests can still practice offline without signing in. Guest progress is imported into an account **only after an explicit action**; different accounts never automatically share a browser's progress. Signing out switches back to the guest profile; deleting an account attempts to delete its cloud progress and authenticated identity, then removes its account-specific learning copy on this device. Device storage is not encrypted, and other people with physical/browser-profile access can inspect it. Saved chess games remain in IndexedDB and are **not** synchronized to Firebase. Clearing browser data may remove offline-only progress; use the validated JSON backup. Optional consent-aware analytics never require a third-party AI API. Book/source links open external sites only when selected. No online matchmaking, payments, or tournaments are offered.
 
 Stockfish runs locally in a Web Worker. Its bundled version is retained from the original project; it is not claimed to be the latest engine. Engine failure is visible and retryable; it is never silently replaced with random moves.
+
+## Coach-led classes (pilot)
+
+The **Clases / Classes / Aulas** module provides a published class catalog and an instructor workspace. A server-assigned, verified-email `chessyRole=coach` or `admin` Firebase Auth claim is required to author or publish. Instructors can schedule live sessions with approved Google Meet, Teams or Zoom links, and upload MP4 recordings of at most 100 MB to Firebase Storage. All content begins in a draft state and is published explicitly. Published recordings are intended for authenticated users only, **but Firebase download-token links are shareable**. This feature must **not** be used for paid, confidential, licensed or minor-sensitive recordings until expiring playback and proper entitlement controls exist. The meeting provider remains responsible for its own waiting room and admission controls. Deploying new Firestore/Storage rules and provisioning the instructor claim are required before the features work against a live backend. There is no embedded real-time video studio, shared chessboard, video transcoding or billing in this pilot. See `docs/COACH_CLASSROOMS.md` for security and operations.
 
 ## Run and verify
 
