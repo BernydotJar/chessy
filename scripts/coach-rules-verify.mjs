@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { Chess } from 'chess.js';
 import assert from 'node:assert/strict';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
@@ -160,5 +161,87 @@ try {
     await rules.withSecurityRulesDisabled(async ctx=>ctx.firestore().doc(enrollment(recordingId)).delete());
     await assertFails(learner.storage().ref(recordingStoragePath).getDownloadURL());
   });
+  const boardPath='coachSessions/'+pubId+'/liveBoard/current';
+  const startFen=new Chess().fen();
+  const starter={schemaVersion:1,ownerUid:owner,fen:startFen,initialFen:startFen,moves:[],revision:0,locked:false,updatedAt:savedTime};
+  await check('Instructor can observe a not-yet-created room without a permission error',async()=>{
+    const missing=await assertSucceeds(ownerCoach.firestore().doc(boardPath).get());
+    assert.equal(missing.exists,false);
+    const member=await assertSucceeds(learner.firestore().doc(boardPath).get());
+    assert.equal(member.exists,false);
+    await assertFails(guest.firestore().doc(boardPath).get());
+  });
+  await check('Verified instructor may initialize exactly one room state for owned live class',async()=>{
+    await assertSucceeds(ownerCoach.firestore().doc(boardPath).set({...starter,updatedAt:stamp()}));
+    await assertFails(ownerCoach.firestore().doc('coachSessions/'+pubId+'/liveBoard/forged').set({
+      ...starter,updatedAt:stamp(),
+    }));
+  });
+  await check('Enrolled students may read but cannot enumerate live board state',async()=>{
+    const data=await assertSucceeds(learner.firestore().doc(boardPath).get());
+    assert.equal(data.data().fen,startFen);
+    await assertFails(learner.firestore().collection('coachSessions/'+pubId+'/liveBoard').get());
+    await assertFails(guest.firestore().doc(boardPath).get());
+    await assertFails(outsider.firestore().doc(boardPath).get());
+  });
+  await check('Student and foreign instructor cannot write or change classroom owner',async()=>{
+    for(const ctx of [learner,guest,coachOther]){
+      await assertFails(ctx.firestore().doc(boardPath).update({revision:1,updatedAt:stamp()}));
+    }
+    await assertFails(ownerCoach.firestore().doc(boardPath).update({
+      ownerUid:'other_987',revision:1,updatedAt:stamp(),
+    }));
+  });
+  await check('Authorized teacher publishes a move with monotonic revision',async()=>{
+    const chess=new Chess();
+    chess.move('e4');
+    await assertSucceeds(ownerCoach.firestore().doc(boardPath).update({
+      fen:chess.fen(),moves:['e4'],revision:1,updatedAt:stamp(),
+    }));
+    const document=await assertSucceeds(learner.firestore().doc(boardPath).get());
+    assert.deepEqual(document.data().moves,['e4']);
+    assert.equal(document.data().revision,1);
+  });
+  await check('Stale revision and oversized move histories are denied',async()=>{
+    await assertFails(ownerCoach.firestore().doc(boardPath).update({
+      revision:1,moves:['e4','e5'],updatedAt:stamp(),
+    }));
+    await assertFails(ownerCoach.firestore().doc(boardPath).update({
+      revision:2,moves:Array(501).fill('e4'),updatedAt:stamp(),
+    }));
+  });
+  await check('Teacher locks the board with an atomic revision increment',async()=>{
+    await assertSucceeds(ownerCoach.firestore().doc(boardPath).update({locked:true,revision:2,updatedAt:stamp()}));
+    const updated=await assertSucceeds(learner.firestore().doc(boardPath).get());
+    assert.equal(updated.data().locked,true);
+    assert.equal(updated.data().revision,2);
+    await assertFails(ownerCoach.firestore().doc(boardPath).delete());
+  });
+  await check('Enrolled learner receives instructor update through live onSnapshot',async()=>{
+    const doc=learner.firestore().doc(boardPath);
+    const received=await new Promise((resolve,reject)=>{
+      let started=false;
+      const timeout=setTimeout(()=>{ unsubscribe();reject(new Error('Realtime board event timed out')); },6000);
+      const unsubscribe=doc.onSnapshot(snapshot=>{
+        if(!snapshot.exists) return;
+        const revision=snapshot.data().revision;
+        if(revision===2 && !started){
+          started=true;
+          void ownerCoach.firestore().doc(boardPath).update({
+            locked:false,revision:3,updatedAt:stamp(),
+          }).catch(error=>{clearTimeout(timeout);unsubscribe();reject(error);});
+        }
+        if(revision===3){clearTimeout(timeout);unsubscribe();resolve(snapshot.data());}
+      },error=>{clearTimeout(timeout);unsubscribe();reject(error);});
+    });
+    assert.equal(received.locked,false);
+    assert.equal(received.revision,3);
+  });
+  await check('Revoked student enrollment terminates future board reads',async()=>{
+    await rules.withSecurityRulesDisabled(async ctx=>ctx.firestore().doc(enrollment(pubId)).delete());
+    await assertFails(learner.firestore().doc(boardPath).get());
+    await assertSucceeds(ownerCoach.firestore().doc(boardPath).get());
+  });
+
   console.log(JSON.stringify({totalRulesChecks:passed, scope:'firestore+storage+enrollment', privateTokensAreNotRevocable:true},null,2));
 } finally { await rules.cleanup(); }

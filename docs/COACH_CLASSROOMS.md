@@ -1,6 +1,6 @@
 # Chessy — Coach-led classrooms: product and architecture
 
-Status: **pilot implementation, not a production release**. Date: 2026-10-09. Owner: Chessy. Branch: `feat/chessy-adversarial-cx-20261009`.
+Status: **pilot implementation, not a production release**. Date: 2026-10-09. Owner: Chessy. The catalog, permissions and coach studio were merged into `main` via PR #13; the subsequent shared-board pilot is on `feat/chessy-live-board-v1`.
 
 ## Product problem and decision
 
@@ -8,13 +8,14 @@ Chessy already has legal chess puzzles, learning tracks, an in-browser chessboar
 
 The learner journey is: **choose a published live or recorded class → understand a concept → follow its linked lesson → practice on the chessboard → review mistakes → observe learning progress**. Lessons link to original curriculum IDs rather than duplicating copyrighted material. A recorded lecture is an input into practice, not a substitute for demonstrated chess ability.
 
-## Built in the feature branch
+## Implemented coach pilot
 
 - **Discover / Clases:** catalog with visible status, language and schedule; preserves the existing five-destination mobile navigation and adds a sidebar destination and home CTA.
 - **Coach Studio:** only users holding a **server-provisioned** Firebase Auth custom claim `chessyRole: "coach" | "admin"` **and** a verified email see the editor. A UI check improves UX but is **not** the authorization boundary: Firestore/Storage rules independently enforce permission.
 - **Live sessions:** title, short description, ISO time, lesson link and an HTTPS meeting URL for Google Meet, Zoom or Teams stored separately from public catalog metadata. Session initially saved as draft, published explicitly. Video/meeting platform is external; participants are subject to that provider's waiting room and access policies.
 - **Recorded sessions:** MP4 upload capped at 100 MiB, written under `coach-recordings/{ownerUid}/{sessionId}/video.mp4`. Upload occurs while the Firestore document is still in **draft**; only once Storage succeeds is the document updated with `videoPath`; publication is a separate action. Supports a retry from a saved draft after upload failure.
 - **Playback:** only explicitly enrolled learners and the verified owner can request Storage playback URLs for published lessons. The app never marks an incomplete recording as published through the editor.
+- **Shared instructor board (subsequent pilot branch):** host-controlled FEN/SAN board using the existing chess.js reducer, Firestore transactions and `onSnapshot` for enrolled read-only learners; teacher locks, resets, custom FEN and promotion. See `docs/INTERACTIVE_CLASSROOM.md` for its authorization and unverified real-account flows.
 - **Three languages:** Spanish, English and Portuguese surfaces.
 - **UX hardening:** anonymous-account progress import is opt-in, user data is namespaced locally, cloud sync merges events added while network calls are in flight, lesson URLs are deep-linkable and refresh-safe.
 
@@ -58,7 +59,7 @@ Storage Rules require a coach owner to upload a bounded `video/mp4` object to a 
 
 **P1 — premium paid classes:** Provisioning workflow for server-checked enrollments, session access audit, expiring signed playback, HLS transcoding, time-limited instructor uploads, abuse/revocation workflow, structured cancellation/rescheduling, student progress per coach lesson. A media service or Cloud Run transcoder will be needed before large videos and long classes.
 
-**P2 — interactive chess classroom:** provider adapter for live audio/video (for example Zoom/LiveKit), shared FEN/PGN board state with host-controlled moves, pause-and-solve moments, annotations/arrows, breakout exercises, attendance & teacher feedback, replay from the key chess position and a post-class personalized review queue. Live audio/video provider permission management and server timestamps are separate from the move-authoritative chess classroom event stream.
+**P2 — interactive chess classroom:** the real-time host-controlled FEN/SAN board exists on the next feature branch; remaining work includes the teacher/student browser pilot, trusted production enrollment, authoritative server chess legality for adversarial instructors, live audio/video provider adapter (for example Zoom/LiveKit), pause-and-solve moments, annotations/arrows, breakout exercises, attendance & teacher feedback, PGN export and personalized review queues. Live audio/video provider permission management and server timestamps are separate from the move-authoritative chess classroom event stream.
 
 ## Scope boundaries
 

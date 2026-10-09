@@ -113,6 +113,74 @@ service cloud.firestore {
       allow delete: if isCoach() && resource.data.ownerUid == request.auth.uid;
     }
 
+    function classroomCoach(sessionId) {
+      return isCoach()
+        && get(/databases/$(database)/documents/coachSessions/$(sessionId)).data.ownerUid == request.auth.uid
+        && get(/databases/$(database)/documents/coachSessions/$(sessionId)).data.kind == 'live';
+    }
+
+    function classroomLearner(sessionId) {
+      return isEnrolled(sessionId)
+        && get(/databases/$(database)/documents/coachSessions/$(sessionId)).data.status == 'published'
+        && get(/databases/$(database)/documents/coachSessions/$(sessionId)).data.kind == 'live';
+    }
+
+    function validClassroomBoard(uid) {
+      let d = request.resource.data;
+      return d.keys().hasOnly([
+          'schemaVersion', 'ownerUid', 'fen', 'initialFen', 'moves',
+          'revision', 'locked', 'updatedAt'
+        ])
+        && d.keys().hasAll([
+          'schemaVersion', 'ownerUid', 'fen', 'initialFen', 'moves',
+          'revision', 'locked', 'updatedAt'
+        ])
+        && d.schemaVersion == 1
+        && d.ownerUid == uid
+        && d.fen is string && d.fen.size() > 10 && d.fen.size() <= 100
+        && d.initialFen is string && d.initialFen.size() > 10 && d.initialFen.size() <= 100
+        && d.moves is list && d.moves.size() <= 500
+        && d.revision is int && d.revision >= 0 && d.revision <= 10000
+        && d.locked is bool && d.updatedAt == request.time;
+    }
+
+    // Instructor controls the board; enrolled students subscribe read-only.
+    // Chess move legality is replay-verified in the client, not evaluated in Firestore Rules.
+    match /coachSessions/{sessionId}/liveBoard/{boardId} {
+      // A missing board is readable as "not started" so the instructor can
+      // initialize the room from the UI. Existing boards must match the owner.
+      allow get: if boardId == 'current'
+        && (classroomCoach(sessionId) || classroomLearner(sessionId))
+        && (resource == null || resource.data.ownerUid == get(
+          /databases/$(database)/documents/coachSessions/$(sessionId)
+        ).data.ownerUid);
+      allow list: if false;
+      allow create: if boardId == 'current'
+        && classroomCoach(sessionId)
+        && validClassroomBoard(request.auth.uid)
+        && request.resource.data.revision == 0
+        && request.resource.data.moves.size() == 0
+        && request.resource.data.fen == request.resource.data.initialFen
+        && request.resource.data.locked == false;
+      allow update: if boardId == 'current'
+        && classroomCoach(sessionId)
+        && resource.data.ownerUid == request.auth.uid
+        && validClassroomBoard(request.auth.uid)
+        && request.resource.data.revision == resource.data.revision + 1
+        && (
+          (request.resource.data.initialFen == resource.data.initialFen
+           && request.resource.data.locked == resource.data.locked
+           && request.resource.data.moves.size() == resource.data.moves.size() + 1)
+          || (request.resource.data.initialFen == resource.data.initialFen
+              && request.resource.data.fen == resource.data.fen
+              && request.resource.data.moves == resource.data.moves)
+          || (request.resource.data.moves.size() == 0
+              && request.resource.data.fen == request.resource.data.initialFen
+              && request.resource.data.locked == false)
+        );
+      allow delete: if false;
+    }
+
     // Public metadata has no private meeting URLs. No collection enumeration.
     match /coachSessionSecrets/{sessionId} {
       allow get: if request.auth != null && (
