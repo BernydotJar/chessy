@@ -1,4 +1,4 @@
-import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { FormEvent, Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../../auth/store';
 import { useGameStore } from '../../store/gameStore';
@@ -14,6 +14,8 @@ import {
   type CoachSessionLanguage,
 } from '../../coach/model';
 import { SectionHeading } from './Shared';
+
+const CoachLiveBoard = lazy(() => import('./CoachLiveBoard').then(module => ({default: module.CoachLiveBoard})));
 
 const blank = (): CoachSessionInput => ({
   kind: 'live', title: '', description: '', language: 'es', startsAt: null,
@@ -41,6 +43,7 @@ export function CoachClassesView() {
   const [playback, setPlayback] = useState<{ id: string; url: string } | null>(null);
   const [joinLink, setJoinLink] = useState<{ id: string; url: string } | null>(null);
   const [opening, setOpening] = useState<string | null>(null);
+  const [openBoardId, setOpenBoardId] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
   const latestRequest = useRef(0);
 
@@ -76,6 +79,7 @@ export function CoachClassesView() {
     setPermission(false);
     setPlayback(null);
     setJoinLink(null);
+    setOpenBoardId(null);
     setItems(current => current.filter(item => item.status === 'published'));
     void reload();
     return () => { latestRequest.current += 1; };
@@ -185,7 +189,7 @@ export function CoachClassesView() {
         <button className="btn secondary" onClick={() => setView('academy')}>{t('classes.existingAcademy')}</button>
       </div>}
     {items.length > 0 && <div className="coach-class-list">
-      {items.map(item => <article className="panel coach-class-card" key={item.id}>
+      {items.map(item => <article className={`panel coach-class-card ${openBoardId === item.id ? 'coach-class-card--expanded' : ''}`} key={item.id}>
         <div className="coach-class-top">
           <span className="tag">{t(item.kind === 'live' ? 'classes.live' : 'classes.recorded')}</span>
           <span className="fine-print">{item.language.toUpperCase()}</span>
@@ -214,6 +218,15 @@ export function CoachClassesView() {
           </button>}
         {playback?.id === item.id && <video controls playsInline preload="metadata" className="coach-video"
           src={playback.url} aria-label={item.title}/>}
+        {item.kind === 'live' && (item.status === 'published' || (permission && item.ownerUid === user?.id)) &&
+          <button type="button" className="btn secondary" aria-expanded={openBoardId === item.id}
+            onClick={() => setOpenBoardId(current => current === item.id ? null : item.id)}>
+            {t(openBoardId === item.id ? 'classes.boardClose' : 'classes.boardButton')}
+          </button>}
+        {openBoardId === item.id && <Suspense fallback={<p role="status">{t('classes.loading')}</p>}>
+          <CoachLiveBoard key={item.id} session={item} userUid={signedIn ? user?.id || null : null}
+            canTeach={permission && item.ownerUid === user?.id}/>
+        </Suspense>}
         {permission && item.ownerUid === user?.id && <div className="button-row coach-author-actions">
           <button className="btn secondary" disabled={busy} onClick={() => edit(item)}>{t('classes.edit')}</button>
           {item.status === 'draft' && <button className="btn primary" disabled={busy} onClick={() => void publish(item)}>
