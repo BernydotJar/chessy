@@ -12,11 +12,13 @@ service firebase.storage {
     }
 
     match /coach-recordings/{ownerUid}/{sessionId}/video.mp4 {
-      // Pilot media: access for signed-in students when published. Firebase
-      // download-token URLs are shareable; NOT suitable for paid/DRM video.
+      // Enrollment controls issuing download URLs, NOT onward sharing of
+      // Firebase download tokens. Private/paid streaming needs signed backend playback.
       allow read: if request.auth != null &&
         sessionData(sessionId).ownerUid == ownerUid &&
-        (sessionData(sessionId).status == 'published' || isCoach(ownerUid));
+        (isCoach(ownerUid) ||
+          (sessionData(sessionId).status == 'published' &&
+           firestore.exists(/databases/(default)/documents/coachEnrollments/$(sessionId)/members/$(request.auth.uid))));
       allow create, update: if isCoach(ownerUid) &&
         sessionData(sessionId).ownerUid == ownerUid &&
         sessionData(sessionId).kind == 'recorded' &&

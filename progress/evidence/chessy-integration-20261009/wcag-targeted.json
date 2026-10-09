@@ -1,0 +1,128 @@
+{
+  "createdAt": "2026-10-09T18:30:09.166Z",
+  "browser": "145.0.7632.0",
+  "checks": [
+    {
+      "name": "WCAG 2.1 AA automated scan: home",
+      "result": "PASS",
+      "ms": 896
+    },
+    {
+      "name": "WCAG 2.1 AA automated scan: play",
+      "result": "PASS",
+      "ms": 640
+    },
+    {
+      "name": "WCAG 2.1 AA automated scan: training",
+      "result": "PASS",
+      "ms": 507
+    },
+    {
+      "name": "WCAG 2.1 AA automated scan: academy",
+      "result": "PASS",
+      "ms": 440
+    },
+    {
+      "name": "WCAG 2.1 AA automated scan: classes",
+      "result": "PASS",
+      "ms": 322
+    },
+    {
+      "name": "WCAG 2.1 AA automated scan: progress",
+      "result": "PASS",
+      "ms": 417
+    },
+    {
+      "name": "WCAG 2.1 AA automated scan: library",
+      "result": "PASS",
+      "ms": 334
+    },
+    {
+      "name": "WCAG 2.1 AA automated scan: games",
+      "result": "PASS",
+      "ms": 332
+    },
+    {
+      "name": "WCAG 2.1 AA automated scan: analysis",
+      "result": "PASS",
+      "ms": 752
+    },
+    {
+      "name": "WCAG 2.1 AA automated scan: review",
+      "result": "PASS",
+      "ms": 340
+    },
+    {
+      "name": "WCAG 2.1 AA automated scan: account",
+      "result": "PASS",
+      "ms": 360
+    },
+    {
+      "name": "WCAG 2.1 AA automated scan: settings",
+      "result": "PASS",
+      "ms": 524
+    },
+    {
+      "name": "WCAG 2.1 AA automated scan: themes",
+      "result": "PASS",
+      "ms": 422
+    }
+  ],
+  "pageErrors": [],
+  "accessibility": [
+    {
+      "view": "home",
+      "violations": []
+    },
+    {
+      "view": "play",
+      "violations": []
+    },
+    {
+      "view": "training",
+      "violations": []
+    },
+    {
+      "view": "academy",
+      "violations": []
+    },
+    {
+      "view": "classes",
+      "violations": []
+    },
+    {
+      "view": "progress",
+      "violations": []
+    },
+    {
+      "view": "library",
+      "violations": []
+    },
+    {
+      "view": "games",
+      "violations": []
+    },
+    {
+      "view": "analysis",
+      "violations": []
+    },
+    {
+      "view": "review",
+      "violations": []
+    },
+    {
+      "view": "account",
+      "violations": []
+    },
+    {
+      "view": "settings",
+      "violations": []
+    },
+    {
+      "view": "themes",
+      "violations": []
+    }
+  ],
+  "passed": 13,
+  "failed": 0
+}

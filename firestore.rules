@@ -34,6 +34,23 @@ service cloud.firestore {
           || url.matches('^https://([A-Za-z0-9-]+[.])?zoom[.]us/[A-Za-z0-9/_?=&%-]+$'));
     }
 
+    function isEnrolled(sessionId) {
+      return request.auth != null &&
+        exists(/databases/$(database)/documents/coachEnrollments/$(sessionId)/members/$(request.auth.uid));
+    }
+
+    function validMeetingSecret(uid, sessionId) {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['schemaVersion', 'ownerUid', 'meetingUrl', 'updatedAt'])
+        && d.keys().hasAll(['schemaVersion', 'ownerUid', 'meetingUrl', 'updatedAt'])
+        && d.schemaVersion == 1
+        && d.ownerUid == uid
+        && validLiveUrl(d.meetingUrl)
+        && d.updatedAt == request.time
+        && getAfter(/databases/$(database)/documents/coachSessions/$(sessionId)).data.ownerUid == uid
+        && getAfter(/databases/$(database)/documents/coachSessions/$(sessionId)).data.kind == 'live';
+    }
+
     function validCoachSession(uid, sessionId) {
       let d = request.resource.data;
       return d.keys().hasOnly([
@@ -61,9 +78,13 @@ service cloud.firestore {
           (d.videoPath == null
             && (d.startsAt == null ||
               (d.startsAt is string && d.startsAt.size() == 24))
-            && (d.meetingUrl == null || validLiveUrl(d.meetingUrl))
+            && d.meetingUrl == null
             && (d.status != 'published' ||
-              (d.startsAt is string && validLiveUrl(d.meetingUrl)))))
+              (d.startsAt is string
+                && existsAfter(/databases/$(database)/documents/coachSessionSecrets/$(sessionId))
+                && validLiveUrl(getAfter(
+                  /databases/$(database)/documents/coachSessionSecrets/$(sessionId)
+                ).data.meetingUrl)))))
         && (d.kind != 'recorded' ||
           (d.meetingUrl == null && d.startsAt == null &&
             (d.videoPath == null ||
@@ -79,6 +100,8 @@ service cloud.firestore {
 
     // A public published catalog, but a private writer workspace. No client grants coach roles.
     match /coachSessions/{sessionId} {
+      // Public queries constrain status==published. All new writes are checked
+      // to guarantee meetingUrl is null; verify legacy records before rollout.
       allow get, list: if resource.data.status == 'published' ||
         (isCoach() && resource.data.ownerUid == request.auth.uid);
       allow create: if isCoach() && validCoachSession(request.auth.uid, sessionId)
@@ -88,6 +111,28 @@ service cloud.firestore {
         && request.resource.data.createdAt == resource.data.createdAt
         && validCoachSession(request.auth.uid, sessionId);
       allow delete: if isCoach() && resource.data.ownerUid == request.auth.uid;
+    }
+
+    // Public metadata has no private meeting URLs. No collection enumeration.
+    match /coachSessionSecrets/{sessionId} {
+      allow get: if request.auth != null && (
+        (isCoach() && resource.data.ownerUid == request.auth.uid) ||
+        (get(/databases/$(database)/documents/coachSessions/$(sessionId)).data.status == 'published'
+         && get(/databases/$(database)/documents/coachSessions/$(sessionId)).data.kind == 'live'
+         && get(/databases/$(database)/documents/coachSessions/$(sessionId)).data.ownerUid == resource.data.ownerUid
+         && isEnrolled(sessionId)));
+      allow list: if false;
+      allow create: if isCoach() && validMeetingSecret(request.auth.uid, sessionId);
+      allow update: if isCoach() && resource.data.ownerUid == request.auth.uid
+        && validMeetingSecret(request.auth.uid, sessionId);
+      allow delete: if isCoach() && resource.data.ownerUid == request.auth.uid
+        && getAfter(/databases/$(database)/documents/coachSessions/$(sessionId)).data.kind != 'live';
+    }
+
+    // Only trusted backend code using Firebase Admin SDK provisions enrollments.
+    match /coachEnrollments/{sessionId}/members/{uid} {
+      allow get: if isOwner(uid);
+      allow list, create, update, delete: if false;
     }
 
     match /{document=**} {

@@ -1,7 +1,7 @@
 import { readAuthRuntimeConfig } from '../auth/config';
 import { getChessyFirebaseApp } from '../firebase/client';
 import {
-  normalizeCoachInput, parseCoachSession, recordingPath, validRecording,
+  normalizeCoachInput, parseCoachSession, recordingPath, safeMeetingUrl, validRecording,
   type CoachSession, type CoachSessionInput, type CoachSessionStatus,
 } from './model';
 
@@ -36,6 +36,18 @@ export async function listPublishedCoachSessions(): Promise<CoachSession[]> {
   );
 }
 
+/** The public catalog never carries live meeting credentials. */
+export async function getCoachMeetingUrl(sessionId: string): Promise<string> {
+  if (!/^[A-Za-z0-9]{5,64}$/.test(sessionId)) throw new Error('invalid-session');
+  const { firestore, database } = await db();
+  const snapshot = await firestore.getDoc(firestore.doc(database, 'coachSessionSecrets', sessionId));
+  const url = snapshot.exists() && typeof snapshot.data().meetingUrl === 'string'
+    ? safeMeetingUrl(snapshot.data().meetingUrl as string)
+    : null;
+  if (!url) throw new Error('join-unavailable');
+  return url;
+}
+
 export async function listOwnedCoachSessions(uid: string): Promise<CoachSession[]> {
   const { firestore, database } = await db();
   const results = await firestore.getDocs(firestore.query(
@@ -43,9 +55,14 @@ export async function listOwnedCoachSessions(uid: string): Promise<CoachSession[
     firestore.where('ownerUid', '==', uid),
     firestore.limit(50),
   ));
-  return results.docs.map(record => parseCoachSession(record.id, record.data())).filter(
+  const sessions = results.docs.map(record => parseCoachSession(record.id, record.data())).filter(
     (session): session is CoachSession => Boolean(session),
   );
+  return Promise.all(sessions.map(async session => {
+    if (session.kind !== 'live') return session;
+    try { return { ...session, meetingUrl: await getCoachMeetingUrl(session.id) }; }
+    catch { return session; }
+  }));
 }
 
 export async function saveCoachSession(
@@ -63,18 +80,31 @@ export async function saveCoachSession(
   if (safe.videoPath && safe.videoPath !== recordingPath(uid, doc.id)) {
     throw new Error('invalid-video-path');
   }
+  // Meeting URLs must NEVER be stored in a published catalog document.
+  // A single atomic batch ensures the private credential exists before publication.
+  const secret = firestore.doc(database, 'coachSessionSecrets', doc.id);
+  const batch = firestore.writeBatch(database);
+  const catalogData = { ...safe, meetingUrl: null, status, updatedAt: firestore.serverTimestamp() };
   if (existing) {
-    await firestore.updateDoc(doc, { ...safe, status, updatedAt: firestore.serverTimestamp() });
+    batch.update(doc, catalogData);
   } else {
-    await firestore.setDoc(doc, {
-      ...safe,
-      status,
+    batch.set(doc, {
+      ...catalogData,
       schemaVersion: 1,
       ownerUid: uid,
       createdAt: firestore.serverTimestamp(),
-      updatedAt: firestore.serverTimestamp(),
     });
   }
+  if (safe.kind === 'live' && safe.meetingUrl) {
+    batch.set(secret, {
+      schemaVersion: 1, ownerUid: uid,
+      meetingUrl: safe.meetingUrl,
+      updatedAt: firestore.serverTimestamp(),
+    });
+  } else if (existing?.kind === 'live') {
+    batch.delete(secret);
+  }
+  await batch.commit();
   return doc.id;
 }
 

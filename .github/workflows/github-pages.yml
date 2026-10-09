@@ -30,6 +30,13 @@ jobs:
         run: npm run lint
       - name: Unit tests and exact puzzle fixtures
         run: EXPORT_CHESS_FIXTURES=1 npm test -- --run
+      - name: Install Java for Firebase security emulators
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Firestore and Storage adversarial authorization checks
+        run: npx --yes firebase-tools@15.32.1 emulators:exec --project demo-chessy --config firebase.coach-emulators.json --only firestore,storage "node scripts/coach-rules-verify.mjs"
       - name: Independent chess rules implementation
         run: |
           python3 -m pip install python-chess==1.999

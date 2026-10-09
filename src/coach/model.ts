@@ -85,7 +85,8 @@ export function normalizeCoachInput(value: CoachSessionInput, publish = false): 
 export function parseCoachSession(id: string, data: Record<string, unknown>): CoachSession | null {
   if (!/^[A-Za-z0-9]{5,64}$/.test(id) || data.schemaVersion !== 1 ||
     typeof data.ownerUid !== 'string' || !/^[a-zA-Z0-9_-]{3,128}$/.test(data.ownerUid) ||
-    (data.status !== 'draft' && data.status !== 'published')) return null;
+    (data.status !== 'draft' && data.status !== 'published') ||
+    data.meetingUrl !== null) return null;
   try {
     const session = normalizeCoachInput({
       title: String(data.title ?? ''),
@@ -96,7 +97,8 @@ export function parseCoachSession(id: string, data: Record<string, unknown>): Co
       meetingUrl: typeof data.meetingUrl === 'string' ? data.meetingUrl : null,
       videoPath: typeof data.videoPath === 'string' ? data.videoPath : null,
       relatedLessonId: typeof data.relatedLessonId === 'string' ? data.relatedLessonId : null,
-    }, data.status === 'published');
+    }, data.status === 'published' && data.kind === 'recorded');
+    if (data.status === 'published' && data.kind === 'live' && !session.startsAt) return null;
     if (session.videoPath && session.videoPath !== recordingPath(data.ownerUid, id)) return null;
     return { ...session, id, ownerUid: data.ownerUid, status: data.status };
   } catch { return null; }

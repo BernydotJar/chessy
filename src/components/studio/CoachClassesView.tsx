@@ -5,11 +5,11 @@ import { useGameStore } from '../../store/gameStore';
 import { LESSONS } from '../../learning/curriculum';
 import { locale } from '../../learning/types';
 import {
-  getCoachPlaybackUrl, isApprovedCoach, listOwnedCoachSessions,
+  getCoachMeetingUrl, getCoachPlaybackUrl, isApprovedCoach, listOwnedCoachSessions,
   listPublishedCoachSessions, saveCoachSession, uploadCoachRecording,
 } from '../../coach/cloud';
 import {
-  safeMeetingUrl, validRecording,
+  validRecording,
   type CoachSession, type CoachSessionInput, type CoachSessionKind,
   type CoachSessionLanguage,
 } from '../../coach/model';
@@ -39,6 +39,7 @@ export function CoachClassesView() {
   const [progress, setProgress] = useState(0);
   const [busy, setBusy] = useState(false);
   const [playback, setPlayback] = useState<{ id: string; url: string } | null>(null);
+  const [joinLink, setJoinLink] = useState<{ id: string; url: string } | null>(null);
   const [opening, setOpening] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
   const latestRequest = useRef(0);
@@ -74,6 +75,7 @@ export function CoachClassesView() {
     // Signed-out UI must never retain a previous owner's draft or playback URL.
     setPermission(false);
     setPlayback(null);
+    setJoinLink(null);
     setItems(current => current.filter(item => item.status === 'published'));
     void reload();
     return () => { latestRequest.current += 1; };
@@ -139,16 +141,33 @@ export function CoachClassesView() {
     }
   };
 
+  const join = async (session: CoachSession) => {
+    if (!signedIn || !user) { setView('account'); return; }
+    const requesterUid = user.id;
+    setOpening(session.id);
+    setJoinLink(null);
+    setFeedback(null);
+    try {
+      const url = await getCoachMeetingUrl(session.id);
+      if (useAuthStore.getState().user?.id === requesterUid) {
+        setJoinLink({ id: session.id, url });
+      }
+    } catch {
+      if (useAuthStore.getState().user?.id === requesterUid) setFeedback('joinDenied');
+    } finally { setOpening(null); }
+  };
+
   const watch = async (session: CoachSession) => {
-    if (!signedIn) { setView('account'); return; }
+    if (!signedIn || !user) { setView('account'); return; }
+    const requesterUid = user.id;
     setOpening(session.id);
     setPlayback(null);
     setFeedback(null);
     try {
       const url = await getCoachPlaybackUrl(session);
-      setPlayback({ id: session.id, url });
+      if (useAuthStore.getState().user?.id === requesterUid) setPlayback({ id: session.id, url });
     } catch {
-      setFeedback('playbackError');
+      if (useAuthStore.getState().user?.id === requesterUid) setFeedback('playbackError');
     } finally { setOpening(null); }
   };
 
@@ -181,11 +200,14 @@ export function CoachClassesView() {
           onClick={() => { window.location.hash = '/academy/' + item.relatedLessonId; setView('academy'); }}>
           {t('classes.relatedLesson')}
         </button>}
-        {item.status === 'published' && item.kind === 'live' && item.meetingUrl &&
-          (signedIn
-            ? <a href={safeMeetingUrl(item.meetingUrl) || undefined} className="btn primary"
-                target="_blank" rel="noopener noreferrer">{t('classes.joinLive')}</a>
-            : <button className="btn secondary" onClick={() => setView('account')}>{t('classes.signInToJoin')}</button>)}
+        {item.status === 'published' && item.kind === 'live' &&
+          (joinLink?.id === item.id
+            ? <a href={joinLink.url} className="btn primary" target="_blank" rel="noopener noreferrer">
+                {t('classes.openLive')}</a>
+            : <button className="btn primary" type="button" disabled={opening === item.id}
+                onClick={() => void join(item)}>
+                {t(opening === item.id ? 'classes.loading' : signedIn ? 'classes.joinLive' : 'classes.signInToJoin')}
+              </button>)}
         {item.status === 'published' && item.kind === 'recorded' &&
           <button className="btn primary" disabled={opening === item.id} onClick={() => void watch(item)}>
             {t(opening === item.id ? 'classes.loading' : signedIn ? 'classes.watch' : 'classes.signInToWatch')}

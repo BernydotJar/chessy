@@ -60,6 +60,22 @@ describe('coach session creation and publishing integrity', () => {
       schemaVersion:1,ownerUid:'coach_123',status:'published',
     })).toBeNull();
   });
+  it('publishes catalog metadata without embedding the private live meeting link', () => {
+    const published = parseCoachSession('Session12345', {
+      ...base({ meetingUrl: null }),
+      schemaVersion: 1, ownerUid: 'coach_123', status: 'published',
+    });
+    expect(published).not.toBeNull();
+    expect(published?.meetingUrl).toBeNull();
+  });
+  it('refuses legacy public catalog documents that expose a live join link', () => {
+    const leaked = parseCoachSession('Session12345', {
+      ...base(),
+      schemaVersion: 1, ownerUid: 'coach_123', status: 'published',
+    });
+    expect(leaked).toBeNull();
+  });
+
   it('rejects forged curriculum IDs and malformed timestamps', () => {
     expect(() => normalizeCoachInput(base({ relatedLessonId: '../admin' }), true)).toThrow('invalid-lesson');
     expect(safeStartAt('2026-02-30T18:30:00.000Z')).toBeNull();
