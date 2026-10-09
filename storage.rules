@@ -1,0 +1,36 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isCoach(ownerUid) {
+      return request.auth != null &&
+        request.auth.uid == ownerUid &&
+        request.auth.token.email_verified == true &&
+        (request.auth.token.chessyRole == 'coach' || request.auth.token.chessyRole == 'admin');
+    }
+    function sessionData(sessionId) {
+      return firestore.get(/databases/(default)/documents/coachSessions/$(sessionId)).data;
+    }
+
+    match /coach-recordings/{ownerUid}/{sessionId}/video.mp4 {
+      // Pilot media: access for signed-in students when published. Firebase
+      // download-token URLs are shareable; NOT suitable for paid/DRM video.
+      allow read: if request.auth != null &&
+        sessionData(sessionId).ownerUid == ownerUid &&
+        (sessionData(sessionId).status == 'published' || isCoach(ownerUid));
+      allow create, update: if isCoach(ownerUid) &&
+        sessionData(sessionId).ownerUid == ownerUid &&
+        sessionData(sessionId).kind == 'recorded' &&
+        sessionData(sessionId).status == 'draft' &&
+        request.resource.size > 0 &&
+        request.resource.size <= 104857600 &&
+        request.resource.contentType == 'video/mp4';
+      allow delete: if isCoach(ownerUid) &&
+        sessionData(sessionId).ownerUid == ownerUid &&
+        sessionData(sessionId).status == 'draft';
+    }
+
+    match /{path=**} {
+      allow read, write: if false;
+    }
+  }
+}

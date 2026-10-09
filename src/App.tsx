@@ -1,4 +1,4 @@
-import { Component, ErrorInfo, ReactNode, useEffect, useRef, useState } from 'react';
+import { Component, ErrorInfo, ReactNode, Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GamesHub } from './components/GamesHub';
 import { ReviewView } from './components/ReviewView';
@@ -25,11 +25,13 @@ import './styles/glassmorphism.css';
 import './styles/studio.css';
 import './styles/design-system.css';
 
-const NAV: readonly {id:'home'|'play'|'training'|'academy'|'progress'|'library'|'games'|'analysis'|'review'|'account'|'settings';icon:ChessyIconName}[]=[
- {id:'home',icon:'home'}, {id:'play',icon:'play'}, {id:'training',icon:'challenges'}, {id:'academy',icon:'academy'}, {id:'progress',icon:'progress'}, {id:'library',icon:'library'}, {id:'games',icon:'games'}, {id:'analysis',icon:'analysis'}, {id:'review',icon:'review'}, {id:'account',icon:'profile'}, {id:'settings',icon:'settings'}
+const NAV: readonly {id:'home'|'play'|'training'|'academy'|'classes'|'progress'|'library'|'games'|'analysis'|'review'|'account'|'settings';icon:ChessyIconName}[]=[
+ {id:'home',icon:'home'}, {id:'play',icon:'play'}, {id:'training',icon:'challenges'}, {id:'academy',icon:'academy'}, {id:'classes',icon:'academy'}, {id:'progress',icon:'progress'}, {id:'library',icon:'library'}, {id:'games',icon:'games'}, {id:'analysis',icon:'analysis'}, {id:'review',icon:'review'}, {id:'account',icon:'profile'}, {id:'settings',icon:'settings'}
 ];
 const ROUTABLE_VIEWS = new Set<GameView>([...NAV.map(item => item.id), 'themes']);
-const MOBILE_NAV = NAV.slice(0,5);
+const MOBILE_NAV = NAV.filter(item => ['home','play','training','academy','progress'].includes(item.id));
+
+const CoachClassesView = lazy(() => import('./components/studio/CoachClassesView').then(module => ({ default: module.CoachClassesView })));
 
 class ErrorBoundary extends Component<{children:ReactNode},{failed:boolean}> {
  state={failed:false};static getDerivedStateFromError(){return {failed:true};}
@@ -70,7 +72,7 @@ function App() {
    <div className="sidebar-bottom"><ChessyIcon name="shield" size={20}/><p>{t('studio.local')}</p><a href="https://github.com/BernydotJar/chessy" target="_blank" rel="noreferrer">GitHub <ChessyIcon className="external-arrow" name="arrow" size={14}/></a></div>
   </aside>
   <div className="main-shell"><header className="topbar"><div className="topbar-left"><button className="mobile-menu icon-button" onClick={()=>setMobileMenu(m=>!m)} aria-label={t(mobileMenu?'studio.close':'studio.menu')} aria-controls="chessy-navigation" aria-expanded={mobileMenu}><ChessyIcon name={mobileMenu?'close':'menu'} size={22}/></button>{boardFocused&&<a className="mobile-focus-home icon-button" href="#/home" onClick={()=>navigate('home')} aria-label={t('studio.home')}><ChessyIcon name="home" size={20}/></a>}<span className="breadcrumb">Chessy <span>/</span> {t(`studio.${view}`)}</span></div><OfflineStatus/><div className="topbar-actions"><a className={`account-launch icon-button ${view==='account'?'active':''}`} href="#/account" onClick={()=>navigate('account')} aria-label={t('studio.account')} title={t('studio.account')}><ChessyIcon name="profile" size={20} filled={authStatus==='signed-in'}/><span className={`account-status-dot ${authStatus}`}/></a><a className={`settings-launch icon-button ${view==='settings'||view==='themes'?'active':''}`} href="#/settings" onClick={()=>navigate('settings')} aria-label={t('studio.settings')} title={t('studio.settings')}><ChessyIcon name="settings" size={20} filled={view==='settings'||view==='themes'}/></a></div></header>
-   <main id="main-content" ref={main} tabIndex={-1} className="main-content">{storageWarning&&<div className="storage-warning" role="status">{t('studio.storageWarning')} <button className="text-button" onClick={()=>navigate('progress')}>{t('studio.backup')}</button></div>}<ErrorBoundary key={view}>{view==='home'&&<HomeView/>}{view==='academy'&&<AcademyView/>}{view==='training'&&<ChallengeView/>}{view==='progress'&&<ProgressView/>}{view==='library'&&<LibraryView/>}{view==='play'&&<PlayView/>}{view==='games'&&<GamesHub/>}{view==='review'&&<ReviewView/>}{view==='analysis'&&<AnalysisView/>}{view==='account'&&<AccountView/>}{view==='settings'&&<SettingsView/>}{view==='themes'&&<ThemesView/>}</ErrorBoundary></main>
+   <main id="main-content" ref={main} tabIndex={-1} className="main-content">{storageWarning&&<div className="storage-warning" role="status">{t('studio.storageWarning')} <button className="text-button" onClick={()=>navigate('progress')}>{t('studio.backup')}</button></div>}<ErrorBoundary key={view}>{view==='home'&&<HomeView/>}{view==='academy'&&<AcademyView/>}{view==='classes'&&<Suspense fallback={<p role="status">{t('classes.loading')}</p>}><CoachClassesView/></Suspense>}{view==='training'&&<ChallengeView/>}{view==='progress'&&<ProgressView/>}{view==='library'&&<LibraryView/>}{view==='play'&&<PlayView/>}{view==='games'&&<GamesHub/>}{view==='review'&&<ReviewView/>}{view==='analysis'&&<AnalysisView/>}{view==='account'&&<AccountView/>}{view==='settings'&&<SettingsView/>}{view==='themes'&&<ThemesView/>}</ErrorBoundary></main>
    <footer className="studio-footer"><span><ChessyMark size={16}/> Chessy</span><p>{t('studio.footer')}</p><span>ES / EN / PT</span></footer>
   </div>
   <nav className={`mobile-bottom-nav ${boardFocused?'mobile-bottom-nav--board':''}`} aria-label={t('studio.navLabel')}>{MOBILE_NAV.map(item=><a key={item.id} href={`#/${item.id}`} onClick={()=>navigate(item.id)} className={view===item.id?'active':''} aria-current={view===item.id?'page':undefined}><ChessyIcon name={item.icon} size={21} filled={view===item.id}/><span>{t(`studio.${item.id}`)}</span></a>)}</nav>

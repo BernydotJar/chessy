@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, ArrowRight, CheckCircle2, Clock } from 'lucide-react';
 import { LESSONS, TRACKS } from '../../learning/curriculum';
+import { lessonFromHash } from '../../learning/lessonNavigation';
 import { Lesson, locale } from '../../learning/types';
 import { useLearningStore } from '../../learning/store';
 import { useGameStore } from '../../store/gameStore';
@@ -30,9 +31,16 @@ function LessonReader({lesson,onBack}:{lesson:Lesson;onBack:()=>void}) {
 }
 export function AcademyView() {
  const {t,i18n}=useTranslation(),lang=locale(i18n.resolvedLanguage);const {progress}=useLearningStore();
- const [selected,setSelected]=useState<Lesson|null>(null);
- if(selected)return <LessonReader key={selected.id} lesson={selected} onBack={()=>setSelected(null)}/>;
+ const [selected,setSelected]=useState<Lesson|null>(()=>lessonFromHash(window.location.hash));
+ useEffect(()=>{
+  const sync=()=>setSelected(lessonFromHash(window.location.hash));
+  window.addEventListener('hashchange',sync);
+  return ()=>window.removeEventListener('hashchange',sync);
+ },[]);
+ const openLesson=(lesson:Lesson)=>{setSelected(lesson);window.location.hash='/academy/'+lesson.id;};
+ const backToAcademy=()=>{setSelected(null);window.location.hash='/academy';};
+ if(selected)return <LessonReader key={selected.id} lesson={selected} onBack={backToAcademy}/>;
  return <div className="view-enter"><SectionHeading eyebrow={t('studio.academyEyebrow')} title={t('studio.academyTitle')} subtitle={t('studio.academySubtitle')}/><div className="academy-summary"><ChessyIcon name="academy" size={18}/><span>{t('studio.lessonCount',{count:LESSONS.length})}</span><span className="divider-dot"/><span>{progress.lessons.length} / {LESSONS.length} · {t('studio.completed')}</span></div>
-  <div className="track-grid">{TRACKS.map((track,index)=>{const icon=icons[track];const lessons=LESSONS.filter(l=>l.track===track),count=lessons.filter(l=>progress.lessons.includes(l.id)).length;return <section className={`panel track-card track-${track}`} key={track}><div className="track-card-top"><div className="icon-tile"><ChessyIcon name={icon} size={26}/></div><span className="track-number">0{index+1}</span></div><h2>{t(`studio.track.${track}`)}</h2><div className="track-progress"><span style={{width:`${count/lessons.length*100}%`}}/></div><div className="lesson-list">{lessons.map(lesson=><button key={lesson.id} className="lesson-link" onClick={()=>setSelected(lesson)}><span>{progress.lessons.includes(lesson.id)?<ChessyIcon name="check" size={18} className="accent"/>:<ChessyIcon name="library" size={18}/>}</span><span><strong>{lesson.title[lang]}</strong><small>{t(`studio.level.${lesson.level}`)} · {t('studio.minutes',{count:lesson.minutes})}</small></span><ArrowRight size={17}/></button>)}</div></section>;})}</div>
+  <div className="track-grid">{TRACKS.map((track,index)=>{const icon=icons[track];const lessons=LESSONS.filter(l=>l.track===track),count=lessons.filter(l=>progress.lessons.includes(l.id)).length;return <section className={`panel track-card track-${track}`} key={track}><div className="track-card-top"><div className="icon-tile"><ChessyIcon name={icon} size={26}/></div><span className="track-number">0{index+1}</span></div><h2>{t(`studio.track.${track}`)}</h2><div className="track-progress"><span style={{width:`${count/lessons.length*100}%`}}/></div><div className="lesson-list">{lessons.map(lesson=><button key={lesson.id} className="lesson-link" onClick={()=>openLesson(lesson)}><span>{progress.lessons.includes(lesson.id)?<ChessyIcon name="check" size={18} className="accent"/>:<ChessyIcon name="library" size={18}/>}</span><span><strong>{lesson.title[lang]}</strong><small>{t(`studio.level.${lesson.level}`)} · {t('studio.minutes',{count:lesson.minutes})}</small></span><ArrowRight size={17}/></button>)}</div></section>;})}</div>
  </div>;
 }
