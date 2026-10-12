@@ -62,4 +62,4 @@ Storage Rules require a coach owner to upload a bounded `video/mp4` object to a 
 
 ## Scope boundaries
 
-No embedded videoconference server, no video processing pipeline, no paywall, no DRM, no teacher payout, no automated class transcription, and no learner skill rating inferred from attendance are implemented by this pilot. Do not describe any of those as complete. Current 112 playable positions and original lessons remain the instructional core.
+No embedded videoconference server, no video processing pipeline, no paywall, no DRM, no teacher payout, no automated class transcription, and no learner skill rating inferred from attendance are implemented by this pilot. Do not describe any of those as complete. Current 200 playable positions (five blocks of 40) and original lessons remain the instructional core; see `docs/TRAINING_BLOCKS.md`.
