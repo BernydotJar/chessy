@@ -19,6 +19,19 @@ const report={createdAt:new Date().toISOString(),browser:null,checks:[],pageErro
  async function check(name,fn){if(process.env.CHESSY_E2E_FILTER && !name.includes(process.env.CHESSY_E2E_FILTER))return;const started=Date.now();try{await fn();report.checks.push({name,result:'PASS',ms:Date.now()-started});console.log('PASS',name);}catch(e){report.checks.push({name,result:'FAIL',error:String(e.message).slice(0,1800)});console.log('FAIL',name,String(e.message).slice(0,500));await page.screenshot({path:path.join(OUT,`failure-${report.checks.length}.png`),fullPage:true}).catch(()=>{});}}
  const goto=async view=>{await page.goto(`${ORIGIN}/#/${view}`,{waitUntil:'load'});await page.locator('#root .studio-app').waitFor();};
  const typeMove=async move=>{await page.locator('#typed-move').fill(move);await page.locator('.move-entry button').click();};
+ const selectPuzzle=async id=>{
+  // Each exercise selector is intentionally bounded to a 40-item block.
+  await page.locator('.filters select').first().selectOption('all');
+  await page.locator('.filters select').nth(1).selectOption('all');
+  const blocks=page.getByLabel('Elegir bloque'),puzzles=page.getByLabel('Elegir posición');
+  for(let i=0;i<await blocks.locator('option').count();i++){
+   await blocks.selectOption(String(i));
+   if(await puzzles.locator('option').evaluateAll((nodes,id)=>nodes.some(node=>node.value===id),id)){
+     await puzzles.selectOption(id);return;
+   }
+  }
+  throw new Error('Puzzle '+id+' not found in verified blocks');
+ };
  const openPlayTool=async index=>{const detail=page.locator('.play-tool').nth(index);if(!(await detail.evaluate(el=>el.open)))await detail.locator('summary').click();return detail;};
  const typePlayMove=async move=>{await openPlayTool(0);await typeMove(move);};
  const playHistoryText=async()=>page.locator('.match-moves-panel').innerText();
@@ -33,12 +46,64 @@ const report={createdAt:new Date().toISOString(),browser:null,checks:[],pageErro
   await check('Incorrect quiz does not award completion; correct answer does',async()=>{await goto('academy');await page.getByRole('button',{name:/Lee el tablero/}).click();await page.getByRole('button',{name:'A Alfil',exact:true}).click();assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('chessy-learning-v1')||'{"lessons":[]}').lessons.length),0);await page.getByRole('button',{name:'B Caballo',exact:true}).click();assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('chessy-learning-v1')).lessons.length),1);});
   await check('Wrong challenge preserves position; correct solution persists once',async()=>{await goto('training');await typeMove('e1e2');assert.match(await page.locator('.feedback[role="status"]').innerText(),/no es la idea/);await typeMove('a1a5');assert.match(await page.locator('.feedback[role="status"]').innerText(),/Idea encontrada/);await page.reload({waitUntil:'load'});await typeMove('a1a5');const p=await page.evaluate(()=>JSON.parse(localStorage.getItem('chessy-learning-v1')));assert.deepEqual(p.solved,['rook-file']);assert.equal(p.mistakes,1);});
   await check('Hint-assisted play does not award XP',async()=>{await goto('training');await page.getByLabel('Elegir posición').selectOption('rook-rank');await page.getByRole('button',{name:'Una pista',exact:true}).click();await typeMove('a1g1');assert.match(await page.locator('.success-explanation').innerText(),/no suma puntos/);assert.ok(!await page.evaluate(()=>JSON.parse(localStorage.getItem('chessy-learning-v1')).solved.includes('rook-rank')));});
+  await check('Practice offers five navigable blocks of forty verified exercises',async()=>{
+    await page.setViewportSize({width:1440,height:1000});
+    await goto('training');
+    await page.getByLabel('Tema').selectOption('all');
+    await page.locator('.filters select').nth(1).selectOption('all');
+    const selector=page.getByLabel('Elegir bloque');
+    assert.equal(await selector.locator('option').count(),5);
+    assert.equal(await page.getByLabel('Elegir posición').locator('option').count(),40);
+    await selector.selectOption('4');
+    assert.match(await page.locator('.challenge-counter').innerText(),/Ejercicio 1 de 40/);
+    assert.equal(await page.getByLabel('Elegir posición').locator('option').count(),40);
+    await selector.selectOption('0');
+    assert.equal(await page.getByLabel('Elegir posición').inputValue(),'rook-file');
+  });
+  await check('Second rook exercise rejects the former king shortcut and accepts rook capture',async()=>{
+    await page.setViewportSize({width:390,height:844});
+    await goto('training');
+    await page.getByLabel('Elegir posición').selectOption('rook-rank');
+    await typeMove('h1g1');
+    assert.match(await page.locator('.feedback[role="status"]').innerText(),/no es legal/);
+    await typeMove('a1g1');
+    assert.match(await page.locator('.feedback[role="status"]').innerText(),/Idea encontrada/);
+    await page.setViewportSize({width:1440,height:1000});
+  });
+  await check('Mobile double-attack next control stays visible after long scroll and 2 user moves',async()=>{
+    await page.setViewportSize({width:390,height:844});
+    await goto('training');
+    await page.getByLabel('Tema').selectOption('fork');
+    await page.getByLabel('Elegir posición').selectOption('knight-fork');
+    assert.match(await page.locator('.challenge-move-progress').innerText(),/Tu jugada 1 de 2/);
+    const next=page.locator('.mobile-training-dock button');
+    assert.equal(await next.count(),0,'Do not overlay the board while the puzzle is unsolved');
+    await typeMove('d5f6');
+    assert.match(await page.locator('.challenge-move-progress').innerText(),/Tu jugada 2 de 2/);
+    assert.equal(await next.count(),0);
+    await typeMove('f6d7');
+    assert.equal(await next.isEnabled(),true);
+    await page.locator('.board-card').scrollIntoViewIfNeeded();
+    await page.screenshot({path:path.join(OUT,'training-mobile-next.png')});
+    await page.evaluate(()=>window.scrollTo(0,document.body.scrollHeight));
+    const box=await next.boundingBox();
+    assert.ok(box&&box.y>=0&&box.y+box.height<=844, 'Next button not within mobile viewport');
+    await next.click();
+    assert.notEqual(await page.getByLabel('Elegir posición').inputValue(),'knight-fork');
+    await page.getByLabel('Tema').selectOption('all');
+    await page.setViewportSize({width:1440,height:1000});
+  });
   await check('Mouse drag follows cursor without a source ghost and completes the move',async()=>{await page.setViewportSize({width:1440,height:1000});await goto('play');await page.getByRole('button',{name:'Nueva partida',exact:true}).click();const state=await mouseDragWithVisualCheck('e2','e4');assert.ok(state,'Missing mid-drag state');assert.equal(state.sourceOpacity,'0');assert.equal(state.overlayOpacity,'1');assert.ok(Math.abs(state.overlayCenter.x-state.cursor.x)<2,`overlay x offset ${state.overlayCenter.x-state.cursor.x}`);assert.ok(Math.abs(state.overlayCenter.y-state.cursor.y)<2,`overlay y offset ${state.overlayCenter.y-state.cursor.y}`);await page.waitForFunction(()=>/e4/.test(document.querySelector('.match-moves-panel')?.textContent||''));assert.match(await playHistoryText(),/e4/);});
-  await check('Touch drag works on mobile play and challenge boards',async()=>{await page.setViewportSize({width:390,height:844});await goto('play');await page.getByRole('button',{name:'Nueva partida',exact:true}).click();await touchDrag('e2','e4');await page.waitForFunction(()=>/e4/.test(document.querySelector('.match-moves-panel')?.textContent||''));await goto('training');await page.getByLabel('Elegir posición').selectOption('rook-file');await page.locator('.position-wrap').scrollIntoViewIfNeeded();await touchDrag('a1','a5');await page.waitForFunction(()=>/Idea encontrada/.test(document.querySelector('.feedback[role="status"]')?.textContent||''));assert.match(await page.locator('.feedback[role="status"]').innerText(),/Idea encontrada/);await page.setViewportSize({width:1440,height:1000});});
+  await check('Touch drag works on mobile play and challenge boards',async()=>{await page.setViewportSize({width:390,height:844});await goto('play');await page.getByRole('button',{name:'Nueva partida',exact:true}).click();await touchDrag('e2','e4');await page.waitForFunction(()=>/e4/.test(document.querySelector('.match-moves-panel')?.textContent||''));await goto('training');await selectPuzzle('rook-file');await page.locator('.position-wrap').scrollIntoViewIfNeeded();const obscured=await page.evaluate(()=>{
+ const square=document.querySelector('[data-square="a1"]')?.getBoundingClientRect();
+ if(!square)return true;
+ const element=document.elementFromPoint(square.left+square.width/2,square.top+square.height/2);
+ return Boolean(element?.closest('.mobile-training-dock'));
+});assert.equal(obscured,false,'Mobile navigation obscures the active chess square');await touchDrag('a1','a5');await page.waitForFunction(()=>/Idea encontrada/.test(document.querySelector('.feedback[role="status"]')?.textContent||''));assert.match(await page.locator('.feedback[role="status"]').innerText(),/Idea encontrada/);await page.setViewportSize({width:1440,height:1000});});
   await check('Drag overlay stays cursor-locked when regular motion is enabled',async()=>{const motionContext=await browser.newContext({viewport:{width:1202,height:750},locale:'es-GT',timezoneId:'America/Guatemala',reducedMotion:'no-preference'});try{await motionContext.route(ORIGIN+'/**',async route=>{const pathname=decodeURIComponent(new URL(route.request().url()).pathname);const file=path.resolve(ROOT,'dist',pathname==='/'?'index.html':pathname.slice(1));if(!file.startsWith(path.join(ROOT,'dist')+path.sep)){await route.fulfill({status:403});return;}try{await route.fulfill({status:200,body:await fs.readFile(file),contentType:MIME[path.extname(file)]||'application/octet-stream'});}catch{await route.fulfill({status:404,body:'Not found'});}});const motionPage=await motionContext.newPage();await motionPage.goto(ORIGIN+'/#/play',{waitUntil:'load'});await motionPage.getByRole('button',{name:'Nueva partida',exact:true}).click();const source=motionPage.locator('[data-square="e2"]').first(),target=motionPage.locator('[data-square="e4"]').first();await source.scrollIntoViewIfNeeded();const a=await source.boundingBox(),b=await target.boundingBox();assert.ok(a&&b,'Missing regular-motion drag squares');const x1=a.x+a.width/2,y1=a.y+a.height/2,x2=b.x+b.width/2,y2=b.y+b.height/2,mx=(x1+x2)/2,my=(y1+y2)/2;await motionPage.mouse.move(x1,y1);await motionPage.mouse.down();await motionPage.mouse.move(mx,my,{steps:8});const pieceId='play-board-piece-wP-e2';await motionPage.waitForFunction(id=>document.querySelectorAll(`[id="${id}"]`).length===2,pieceId,{timeout:2500});const state=await motionPage.evaluate(({pieceId,mx,my})=>{const pieces=[...document.querySelectorAll(`[id="${pieceId}"]`)];const source=pieces.find(el=>el.closest('[data-square="e2"]'));const overlay=pieces.find(el=>!el.closest('[data-square="e2"]'));if(!source||!overlay)return null;const r=overlay.getBoundingClientRect();return {sourceOpacity:getComputedStyle(source).opacity,overlayOpacity:getComputedStyle(overlay).opacity,overlayCenter:{x:r.x+r.width/2,y:r.y+r.height/2},cursor:{x:mx,y:my},viewTransform:getComputedStyle(document.querySelector('.view-enter')).transform};},{pieceId,mx,my});await motionPage.mouse.up();assert.ok(state,'Missing regular-motion drag state');assert.equal(state.sourceOpacity,'0');assert.equal(state.overlayOpacity,'1');assert.ok(Math.abs(state.overlayCenter.x-state.cursor.x)<2,`regular-motion overlay x offset ${state.overlayCenter.x-state.cursor.x}`);assert.ok(Math.abs(state.overlayCenter.y-state.cursor.y)<2,`regular-motion overlay y offset ${state.overlayCenter.y-state.cursor.y}`);assert.equal(state.viewTransform,'none');}finally{await motionContext.close();}});
-  await check('Native promotion dialog supports rook underpromotion and focus',async()=>{await goto('training');await page.getByLabel('Elegir posición').selectOption('underpromotion');await page.locator('[data-square="c7"]').first().click();await page.locator('[data-square="c8"]').first().click();const dialog=page.getByRole('dialog');await dialog.waitFor();assert.ok(await dialog.evaluate(el=>el.contains(document.activeElement)));await dialog.getByRole('button',{name:'Torre',exact:true}).click();assert.match(await page.locator('.feedback[role="status"]').innerText(),/Idea encontrada/);assert.equal(await page.getByRole('dialog').count(),0);});
-  await check('Multi-ply puzzle plays legal opponent reply and accepts final mate',async()=>{await goto('training');await page.getByLabel('Elegir posición').selectOption('rook-two');await typeMove('a2a7');assert.match(await page.locator('.feedback[role="status"]').innerText(),/rival ha respondido/);await typeMove('b1b8');assert.match(await page.locator('.feedback[role="status"]').innerText(),/Idea encontrada/);});
-  await check('Black-side Lichess line solves through the same input contract',async()=>{const {Chess}=require('chess.js');const rows=require('../src/data/lichess-sample.json');const row=rows.find(r=>{const b=new Chess(r.FEN),m=r.Moves.split(' ')[0];b.move({from:m.slice(0,2),to:m.slice(2,4),promotion:m[4]});return b.turn()==='b';});await goto('training');await page.getByLabel('Elegir posición').selectOption('lichess-'+row.PuzzleId);assert.match(await page.locator('.board-topline').innerText(),/Juegan negras/);const moves=row.Moves.split(' ').slice(1);for(let i=0;i<moves.length;i+=2)await typeMove(moves[i]);assert.match(await page.locator('.feedback[role="status"]').innerText(),/Idea encontrada/);});
+  await check('Native promotion dialog supports rook underpromotion and focus',async()=>{await goto('training');await selectPuzzle('underpromotion');await page.locator('[data-square="c7"]').first().click();await page.locator('[data-square="c8"]').first().click();const dialog=page.getByRole('dialog');await dialog.waitFor();assert.ok(await dialog.evaluate(el=>el.contains(document.activeElement)));await dialog.getByRole('button',{name:'Torre',exact:true}).click();assert.match(await page.locator('.feedback[role="status"]').innerText(),/Idea encontrada/);assert.equal(await page.getByRole('dialog').count(),0);});
+  await check('Multi-ply puzzle plays legal opponent reply and accepts final mate',async()=>{await goto('training');await selectPuzzle('rook-two');await typeMove('a2a7');assert.match(await page.locator('.feedback[role="status"]').innerText(),/rival ha respondido/);await typeMove('b1b8');assert.match(await page.locator('.feedback[role="status"]').innerText(),/Idea encontrada/);});
+  await check('Black-side Lichess line solves through the same input contract',async()=>{const {Chess}=require('chess.js');const rows=require('../src/data/lichess-sample.json');const row=rows.find(r=>{const b=new Chess(r.FEN),m=r.Moves.split(' ')[0];b.move({from:m.slice(0,2),to:m.slice(2,4),promotion:m[4]});return b.turn()==='b';});await goto('training');await selectPuzzle('lichess-'+row.PuzzleId);assert.match(await page.locator('.board-topline').innerText(),/Juegan negras/);const moves=row.Moves.split(' ').slice(1);for(let i=0;i<moves.length;i+=2)await typeMove(moves[i]);assert.match(await page.locator('.feedback[role="status"]').innerText(),/Idea encontrada/);});
   await check('Configured account route exposes email and Google auth without touching local progress',async()=>{await page.setViewportSize({width:390,height:844});await goto('account');await page.locator('.account-form').waitFor({timeout:10000});assert.equal(await page.locator('.account-unconfigured').count(),0);assert.equal(await page.locator('input[type="email"]').count(),1);assert.equal(await page.locator('input[type="password"]').count(),1);assert.equal(await page.getByRole('button',{name:/Continuar con Google/}).count(),1);const localBefore=await page.evaluate(()=>localStorage.getItem('chessy-learning-v1'));await goto('training');await page.locator('.challenge-layout').waitFor();assert.equal(await page.evaluate(()=>localStorage.getItem('chessy-learning-v1')),localBefore);await page.setViewportSize({width:1440,height:1000});});
   await check('Academy v2 shows mastery path and launches a constrained mini-game',async()=>{await page.setViewportSize({width:390,height:844});await goto('academy');assert.equal(await page.locator('.mastery-phase-card').count(),8);assert.equal(await page.locator('.mini-game-card').count(),5);const card=page.locator('.mini-game-card').filter({hasText:'8 peones + rey'});await card.getByRole('button',{name:'Jugar minipartida',exact:true}).click();await page.waitForURL(/#\/play$/);await page.locator('.play-view-v3').waitFor();assert.equal(await page.locator('[id="play-board-piece-wP-a2"]').count(),1);assert.equal(await page.locator('[id="play-board-piece-wR-a1"]').count(),0);await page.setViewportSize({width:1440,height:1000});});
   await check('Language switches and survives reload in English and Portuguese',async()=>{for(const lang of ['en','pt','es']){await goto('settings');await page.locator('.language-switcher select').selectOption(lang);await page.reload({waitUntil:'load'});assert.equal(await page.locator('html').getAttribute('lang'),lang);assert.ok(!(await page.locator('main').innerText()).includes('studio.'));}});
