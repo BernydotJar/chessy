@@ -12,7 +12,7 @@ it('all three languages have exactly the same translation contract', () => {
  expect(keys(es)).toEqual(keys(en)); expect(keys(pt)).toEqual(keys(en));
 });
 it('exports the exact shipped puzzle contract for a second implementation', () => {
- expect(PUZZLES).toHaveLength(112);
+ expect(PUZZLES).toHaveLength(200);
  if (process.env.EXPORT_CHESS_FIXTURES === '1') {
   mkdirSync('progress/evidence/release', { recursive: true });
   writeFileSync('progress/evidence/release/puzzle-fixtures.json', JSON.stringify(PUZZLES, null, 2) + '\n');

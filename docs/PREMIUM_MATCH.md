@@ -46,7 +46,7 @@ Existing consent-aware `game_start` and `game_complete` events may include only 
 Premium Match v1 must preserve:
 
 - mouse/click/touch play and Stockfish;
-- all 112 independently verified challenge positions;
+- all independently verified challenge positions (112 in the original Premium Match v1 release, now expanded to 200 in `docs/TRAINING_BLOCKS.md`);
 - all 11 Chessy Atlas themes;
 - ES/EN/PT;
 - WCAG 2.1 AA and reduced motion;

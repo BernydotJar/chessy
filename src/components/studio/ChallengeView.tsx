@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RotateCcw } from 'lucide-react';
 import { PUZZLES, CATEGORIES, dailyPuzzle } from '../../learning/puzzles';
 import { Category, Level, Puzzle, locale } from '../../learning/types';
 import { attempt, startSession, solutionSan } from '../../learning/session';
+import { learnerMoveNumber, learnerMovesRequired, splitPracticeBlocks, TRAINING_BLOCK_SIZE } from '../../learning/trainingBlocks';
 import { localDay, reviewQueueIds } from '../../learning/progress';
 import { useLearningStore, type TrainingMode } from '../../learning/store';
 import { useAnalyticsStore } from '../../analytics/store';
@@ -18,6 +19,8 @@ function PuzzlePlayer({puzzle,onNext,hasNext,mode}:{puzzle:Puzzle;onNext:()=>voi
  const {complete,mistake}=useLearningStore();
  const track=useAnalyticsStore(state=>state.track);
  const san=useMemo(()=>solutionSan(puzzle),[puzzle]);
+ const required=learnerMovesRequired(puzzle);
+ const currentMove=session.solved?required:learnerMoveNumber(session.ply,puzzle);
  const white=puzzle.fen.split(' ')[1]==='w';
  useEffect(()=>{track('puzzle_start',{mode,category:puzzle.category,level:puzzle.level});},[mode,puzzle.category,puzzle.level,track]);
  const onMove=(move:string)=>{
@@ -30,6 +33,7 @@ function PuzzlePlayer({puzzle,onNext,hasNext,mode}:{puzzle:Puzzle;onNext:()=>voi
  return <div className="challenge-layout">
   <div className={`board-card ${session.solved?'board-success':''}`}>
    <div className="board-topline"><span className={`side-dot ${white?'white':'black'}`}/><strong>{t(white?'studio.whiteToMove':'studio.blackToMove')}</strong><span className="tag">{t(`studio.level.${puzzle.level}`)}</span></div>
+   <p className="challenge-move-progress" role="status" aria-live="polite">{t('studio.moveProgress',{current:currentMove,total:required})}{required>1&&<small>{t('studio.autoReplyNote')}</small>}</p>
    <PositionBoard fen={session.fen} onMove={onMove} readOnly={session.solved} hintSquare={hints>0&&!session.solved?puzzle.solution[session.ply]?.slice(0,2):undefined}/>
    <div className="board-bottomline"><span>{puzzle.id}</span><span>{t(`studio.category.${puzzle.category}`)}</span></div>
   </div>
@@ -52,14 +56,19 @@ function PuzzlePlayer({puzzle,onNext,hasNext,mode}:{puzzle:Puzzle;onNext:()=>voi
    </div>
    {!revealed&&!session.solved&&<button className="text-button" onClick={()=>{setRevealed(true);setAssisted(true);}}>{t('studio.reveal')}</button>}
    {assisted&&!session.solved&&<small className="muted">{t('studio.assisted')}</small>}
-   {hasNext&&<button className="btn primary full" onClick={onNext} disabled={!session.solved&&!revealed}>{t('studio.next')}<ChessyIcon name="arrow" size={18}/></button>}
+   {hasNext&&<button className="btn primary full challenge-next-desktop" onClick={onNext} disabled={!session.solved&&!revealed}>{t('studio.next')}<ChessyIcon name="arrow" size={18}/></button>}
   </section>
+  {hasNext&&(session.solved||revealed)&&<nav className="mobile-training-dock" aria-label={t('studio.mobileTrainingNavigation')}>
+    <div className="mobile-training-dock-status"><span>{t('studio.moveProgress',{current:currentMove,total:required})}</span><strong>{t(session.solved?'studio.doneStatus':revealed?'studio.readyStatus':'studio.pendingStatus')}</strong></div>
+    <button className="btn primary" type="button" onClick={onNext} disabled={!session.solved&&!revealed}>{t('studio.next')}<ChessyIcon name="arrow" size={16}/></button>
+  </nav>}
  </div>;
 }
 export function ChallengeView() {
  const {t,i18n}=useTranslation(),lang=locale(i18n.resolvedLanguage);
  const {mode,category,configure,progress}=useLearningStore();
- const [level,setLevel]=useState<Level|'all'>('all');const [index,setIndex]=useState(0);const [finished,setFinished]=useState(false);const [sessionId,setSessionId]=useState(0);const [reviewIds,setReviewIds]=useState<string[]>([]);
+ const [level,setLevel]=useState<Level|'all'>('all');const [index,setIndex]=useState(0);const [blockIndex,setBlockIndex]=useState(0);const [finished,setFinished]=useState(false);const [sessionId,setSessionId]=useState(0);const [reviewIds,setReviewIds]=useState<string[]>([]);
+ const anchor=useRef<HTMLDivElement>(null);
  const pool=useMemo(()=>{
   if(mode==='daily')return [dailyPuzzle(localDay())];
   if(mode==='review')return reviewIds.map(id=>PUZZLES.find(p=>p.id===id)).filter((p):p is Puzzle=>Boolean(p));
@@ -71,18 +80,41 @@ export function ChallengeView() {
   }
   return selected;
  },[mode,category,level,sessionId,reviewIds]);
- const current=pool[Math.min(index,Math.max(0,pool.length-1))];
- const reset=()=>{setIndex(0);setFinished(false);};
+ const blocks=useMemo(()=>mode==='practice'?splitPracticeBlocks(pool):[],[mode,pool]);
+ const activeBlock=Math.min(blockIndex,Math.max(0,blocks.length-1));
+ const visiblePool=mode==='practice'?(blocks[activeBlock]||[]):pool;
+ const current=visiblePool[Math.min(index,Math.max(0,visiblePool.length-1))];
+ const reset=()=>{setIndex(0);setBlockIndex(0);setFinished(false);};
+ const next=()=>{
+  if(mode==='practice'){
+   if(index+1<visiblePool.length)setIndex(i=>i+1);
+   else if(activeBlock+1<blocks.length){setBlockIndex(activeBlock+1);setIndex(0);}
+   else setFinished(true);
+  } else if(index+1>=visiblePool.length)setFinished(true);
+  else setIndex(i=>i+1);
+  anchor.current?.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});
+ };
  const startReview=()=>{setReviewIds(reviewQueueIds(progress));configure('review','all');setLevel('all');reset();setSessionId(s=>s+1);};
- return <div className="view-enter">
+ return <div className="view-enter training-puzzle-view">
   <SectionHeading eyebrow={t('studio.training')} title={t('studio.challengeTitle')} subtitle={t('studio.challengeSubtitle')}/>
   <div className="challenge-toolbar">
    <div className="segmented" aria-label={t('studio.training')}>{(['practice','daily','sprint','review'] as const).map(m=><button key={m} aria-pressed={mode===m} className={mode===m?'active':''} onClick={()=>{if(m==='review')startReview();else{configure(m,category);reset();}}}>{t(m==='review'?'studio.reviewMistakes':`studio.${m==='daily'?'dailyMode':m}`)}</button>)}</div>
    {mode!=='daily'&&mode!=='review'&&<div className="filters"><label>{t('studio.themeLabel')}<select value={category} onChange={e=>{configure(mode,e.target.value as Category|'all');reset();}}><option value="all">{t('studio.all')}</option>{CATEGORIES.map(c=><option key={c} value={c}>{t(`studio.category.${c}`)}</option>)}</select></label><label>{t('studio.difficulty')}<select value={level} onChange={e=>{setLevel(e.target.value as Level|'all');reset();}}><option value="all">{t('studio.all')}</option>{(['beginner','easy','intermediate','advanced'] as const).map(l=><option key={l} value={l}>{t(`studio.level.${l}`)}</option>)}</select></label></div>}
   </div>
   {pool.length===0?<div className="panel empty-state"><ChessyIcon name={mode==='review'?'review':'target'} size={36}/><p>{t(mode==='review'?'studio.reviewEmpty':'studio.noPuzzles')}</p></div>:finished?<div className="panel session-complete"><ChessyIcon name="achievement" size={64}/><h2>{t('studio.sessionDone')}</h2><p>{t('studio.sessionSummary')}</p><button className="btn primary" onClick={()=>{if(mode==='review')setReviewIds(reviewQueueIds(useLearningStore.getState().progress));setSessionId(s=>s+1);reset();}}>{t(mode==='review'?'studio.reviewAgain':'studio.newSession')}</button></div>:<>
-   <div className="challenge-counter"><span>{Math.min(index+1,pool.length)} / {pool.length}</span>{mode==='practice'&&<label className="puzzle-select"><span className="sr-only">{t('studio.selectPuzzle')}</span><select aria-label={t('studio.selectPuzzle')} value={current.id} onChange={e=>setIndex(pool.findIndex(p=>p.id===e.target.value))}>{pool.map((p,i)=><option key={p.id} value={p.id}>{i+1}. {p.title?.[lang]||`${t(`studio.category.${p.category}`)} · ${p.rating}`}</option>)}</select></label>}</div>
-   <PuzzlePlayer key={`${mode}-${current.id}-${sessionId}`} puzzle={current} mode={mode} hasNext={mode!=='daily'} onNext={()=>{if((mode==='sprint'||mode==='review')&&index+1>=pool.length)setFinished(true);else setIndex(i=>(i+1)%pool.length);}}/>
+   {mode==='practice'&&<div className="training-block-toolbar">
+    <label className="training-block-picker">{t('studio.chooseBlock')}
+     <select aria-label={t('studio.chooseBlock')} value={activeBlock} onChange={e=>{setBlockIndex(Number(e.target.value));setIndex(0);setFinished(false);}}>
+      {blocks.map((items,i)=><option value={i} key={i}>{t('studio.blockName',{number:i+1})} · {i*TRAINING_BLOCK_SIZE+1}–{i*TRAINING_BLOCK_SIZE+items.length}</option>)}
+     </select>
+    </label>
+    <div className="training-block-meta"><strong>{t('studio.blockPosition',{number:activeBlock+1,total:blocks.length})}</strong><span>{t('studio.blockSolved',{done:visiblePool.filter(item=>progress.solved.includes(item.id)).length,total:visiblePool.length})}</span></div>
+   </div>}
+   <div className="challenge-counter" ref={anchor} id="training-current-puzzle">
+    <span role="status" aria-live="polite">{t('studio.puzzleCounter',{current:Math.min(index+1,visiblePool.length),total:visiblePool.length})}</span>
+    {mode==='practice'&&<label className="puzzle-select"><span className="sr-only">{t('studio.selectPuzzle')}</span><select aria-label={t('studio.selectPuzzle')} value={current.id} onChange={e=>setIndex(visiblePool.findIndex(p=>p.id===e.target.value))}>{visiblePool.map((p,i)=><option key={p.id} value={p.id}>{i+1}. {p.title?.[lang]||`${t(`studio.category.${p.category}`)} · ${p.rating}`}</option>)}</select></label>}
+   </div>
+   <PuzzlePlayer key={`${mode}-${current.id}-${sessionId}`} puzzle={current} mode={mode} hasNext={mode!=='daily'} onNext={next}/>
   </>}
  </div>;
 }
