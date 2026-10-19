@@ -32,7 +32,25 @@ export async function createFirebaseAuthAdapter(
 
   return {
     observe(listener) {
-      return authModule.onAuthStateChanged(auth, (user) => listener(user ? mapUser(user) : null));
+      let active = true;
+      let revision = 0;
+      const unsubscribe = authModule.onIdTokenChanged(auth, async (user) => {
+        const current = ++revision;
+        if (!user) {
+          listener(null);
+          return;
+        }
+        const mapped = mapUser(user);
+        try {
+          const token = await authModule.getIdTokenResult(user);
+          mapped.premiumThemes = token.claims.chessyPremiumThemes === true;
+        } catch {
+          // Authentication remains usable offline; premium access fails closed.
+          mapped.premiumThemes = false;
+        }
+        if (active && current === revision) listener(mapped);
+      });
+      return () => { active = false; ++revision; unsubscribe(); };
     },
     async signInWithEmail(email, password) {
       await authModule.signInWithEmailAndPassword(auth, email, password);

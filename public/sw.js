@@ -1,5 +1,10 @@
-const CACHE='chessy-mobile-v1-20260906';
-const CORE=['/','/index.html','/manifest.webmanifest','/chess-icon.svg','/chess-icon-maskable.svg','/stockfish.js','/art/forest-study.svg','/art/ivory-study.svg','/art/night-study.svg'];
+const CACHE='chessy-mobile-v2-20261019';
+const THEME_ART=[
+  'forest','ivory','night',
+  'guatemala','colombia','mexico','brasil','usa','argentina','espana','chile',
+  'peru','costarica','japon','obsidian','porcelain','midnight','walnut',
+].map(id=>'/art/'+id+'-study.svg');
+const CORE=['/','/index.html','/manifest.webmanifest','/chess-icon.svg','/chess-icon-maskable.svg','/stockfish.js',...THEME_ART];
 
 async function cacheBuiltShell(cache){
   const response=await fetch('/',{cache:'no-store'});

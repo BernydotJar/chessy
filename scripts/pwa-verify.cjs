@@ -16,7 +16,13 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   await page.goto(`${ORIGIN}/#/home`,{waitUntil:'networkidle'});
   await page.waitForFunction(()=>navigator.serviceWorker?.controller!==null||false,{timeout:8000}).catch(async()=>{await page.reload({waitUntil:'networkidle'});await page.waitForFunction(()=>navigator.serviceWorker?.controller!==null,{timeout:8000});});
   const manifest=await (await page.request.get(`${ORIGIN}/manifest.webmanifest`)).json();assert.equal(manifest.display,'standalone');assert.ok(manifest.icons.some(i=>i.sizes==='any'&&i.type==='image/svg+xml'&&i.purpose==='any'));assert.ok(manifest.icons.some(i=>i.sizes==='any'&&i.type==='image/svg+xml'&&i.purpose==='maskable'));
-  const cached=await page.evaluate(async()=>({shell:!!await caches.match('/index.html'),stockfish:!!await caches.match('/stockfish.js')}));assert.deepEqual(cached,{shell:true,stockfish:true});
+  const themeArt=['forest','ivory','night','guatemala','colombia','mexico','brasil','usa','argentina','espana','chile','peru','costarica','japon','obsidian','porcelain','midnight','walnut'];
+  const cached=await page.evaluate(async ids=>({
+    shell:!!await caches.match('/index.html'),
+    stockfish:!!await caches.match('/stockfish.js'),
+    themes:await Promise.all(ids.map(async id=>!!await caches.match('/art/'+id+'-study.svg'))),
+  }),themeArt);
+  assert.deepEqual(cached,{shell:true,stockfish:true,themes:themeArt.map(()=>true)},'all theme artworks must be available offline on first install');
   await context.setOffline(true);
   await page.reload({waitUntil:'domcontentloaded'});await page.locator('.studio-app').waitFor();
   await page.goto(`${ORIGIN}/#/academy`,{waitUntil:'domcontentloaded'});await page.locator('.track-grid').waitFor();

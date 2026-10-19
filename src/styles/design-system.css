@@ -301,3 +301,36 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
  .mastery-phase-card,.mini-game-card{padding:17px}
  .mastery-phase-card p,.mini-game-card p{max-width:none}
 }
+
+/* Atlas v2: premium studio, board-first previews and native accessible dialog. */
+.theme-collection--premium{padding-top:54px}
+.atlas-card--premium{border-color:color-mix(in srgb,var(--line-strong) 72%,var(--gold))}
+.atlas-card--premium:hover{border-color:var(--gold)}
+.atlas-card__premium-stamp{position:absolute;z-index:4;left:14px;top:14px;display:flex;align-items:center;gap:5px;padding:8px 10px;border:1px solid color-mix(in srgb,var(--atlas-card-accent) 60%,transparent);border-radius:7px;background:var(--atlas-card-bg);color:var(--atlas-card-accent);font-size:9px;font-weight:750;letter-spacing:.7px;text-transform:uppercase}
+.atlas-card--premium .atlas-card__country-code{display:none}
+.theme-preview-dialog{width:min(900px,calc(100vw - 32px));max-width:900px;max-height:calc(100dvh - 32px);margin:auto;padding:0;color:var(--text);background:var(--surface);border:1px solid var(--line-strong);border-radius:18px;box-shadow:var(--shadow-deep);overflow:auto}
+.theme-preview-dialog::backdrop{background:rgba(6,10,13,.72);backdrop-filter:blur(8px)}
+.theme-preview-dialog__inside{padding:24px}
+.theme-preview-dialog__header{display:flex;align-items:center;justify-content:space-between;padding-bottom:18px}
+.theme-preview-dialog__header>.eyebrow{margin:0}
+.theme-preview-dialog__close{flex-shrink:0}
+.theme-preview-dialog__content{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);align-items:center;gap:30px}
+.theme-preview-dialog__visual{position:relative;display:grid;place-items:center;min-height:354px;overflow:hidden;border:1px solid var(--line);border-radius:13px}
+.theme-preview-dialog__landscape{position:absolute;inset:0;opacity:.96;background-position:center;background-size:cover;pointer-events:none}
+.theme-board-sample{position:relative;z-index:1;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));width:min(294px,80%);aspect-ratio:1;border:6px solid rgba(19,26,27,.45);border-radius:3px;box-shadow:0 18px 50px rgba(0,0,0,.28);overflow:hidden}
+.theme-board-sample>span{display:grid;place-items:center;min-width:0;min-height:0;font:clamp(18px,2.65vw,30px)/1 Georgia,'DejaVu Sans',serif;user-select:none}
+.theme-board-sample__black{color:#20272b;text-shadow:0 1px 1px rgba(255,255,255,.8),0 -1px 1px rgba(255,255,255,.6)}
+.theme-board-sample__white{color:#fffef1;text-shadow:0 2px 2px rgba(0,0,0,.9),0 0 2px rgba(0,0,0,.7)}
+.theme-preview-dialog__details{min-width:0;display:grid;align-content:center;gap:15px}
+.theme-preview-dialog__details>h2{font-size:clamp(25px,3vw,37px);line-height:1.14;letter-spacing:-1px;margin:0}
+.theme-preview-dialog__details>p{font-size:13px;line-height:1.7;color:var(--muted);margin:0}
+.theme-preview-dialog__details>.atlas-signature{height:11px;width:168px}
+.theme-preview-dialog__details .theme-preview-dialog__mood{font-size:11px;color:var(--subtle)}
+.theme-preview-dialog__details .theme-preview-dialog__access{display:flex;align-items:flex-start;gap:10px;padding:15px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);color:var(--text);font-size:12px;line-height:1.6}
+.theme-preview-dialog__access svg{flex-shrink:0;margin-top:2px;color:var(--gold)}
+.theme-preview-dialog__actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;padding-top:23px;margin-top:23px;border-top:1px solid var(--line)}
+.theme-preview-dialog__actions>.btn{min-width:135px;min-height:44px}
+.theme-preview-dialog__actions>.btn:disabled{opacity:.58;cursor:not-allowed}
+@media(max-width:760px){.theme-preview-dialog__inside{padding:18px}.theme-preview-dialog__content{grid-template-columns:1fr;gap:23px}.theme-preview-dialog__visual{min-height:270px}.theme-board-sample{width:min(244px,70%)}.theme-board-sample>span{font-size:25px}.theme-preview-dialog__details{gap:10px}.theme-preview-dialog__details>h2{font-size:27px}.theme-preview-dialog__actions{margin-top:18px;padding-top:16px}}
+@media(max-width:380px){.theme-preview-dialog{width:calc(100vw - 16px)}.theme-preview-dialog__inside{padding:14px}.theme-preview-dialog__visual{min-height:220px}.theme-board-sample{width:194px}.theme-board-sample>span{font-size:21px}.theme-preview-dialog__actions>.btn{min-width:0;flex:1}}
+@media(prefers-reduced-motion:reduce){.theme-preview-dialog::backdrop{backdrop-filter:none}}

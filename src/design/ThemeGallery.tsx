@@ -23,22 +23,24 @@ export function ThemePreview({ theme, large = false }: { theme: VisualTheme; lar
 
 export function ThemeCard({ theme, compact = false, onSelect }: { theme: VisualTheme; compact?: boolean; onSelect?: (theme: VisualThemeId) => void }) {
   const { t } = useTranslation();
-  const { themeId, setThemeId } = useVisualTheme();
+  const { themeId, setThemeId, hasPremiumAccess } = useVisualTheme();
   const selected = theme.id === themeId;
+  const locked = theme.collection === 'premium' && !hasPremiumAccess;
   return <button
     type="button"
     data-theme-card={theme.id}
     className={`theme-card ${selected ? 'is-selected' : ''}`}
     aria-pressed={selected}
-    onClick={() => { setThemeId(theme.id); onSelect?.(theme.id); }}
+    aria-disabled={locked}
+    onClick={() => { if (setThemeId(theme.id)) onSelect?.(theme.id); }}
   >
     <ThemePreview theme={theme}/>
-    <span className="theme-card__copy"><strong>{t(theme.labelKey)}</strong>{!compact && <small>{t(theme.descriptionKey)}</small>}</span>
-    <span className="theme-card__state"><ChessyIcon name={selected ? 'check' : 'theme'} size={16}/></span>
+    <span className="theme-card__copy"><strong>{t(theme.labelKey)}</strong>{!compact && <small>{t(theme.descriptionKey)}{locked ? ` · ${t('themes.locked')}` : ''}</small>}</span>
+    <span className="theme-card__state"><ChessyIcon name={selected ? 'check' : locked ? 'shield' : 'theme'} size={16}/></span>
   </button>;
 }
 
-export function ThemeGallery({ compact = false, onSelect, themes = VISUAL_THEMES }: { compact?: boolean; onSelect?: (theme: VisualThemeId) => void; themes?: readonly VisualTheme[] }) {
+export function ThemeGallery({ compact = false, onSelect, themes = VISUAL_THEMES.filter(theme => theme.collection !== 'premium') }: { compact?: boolean; onSelect?: (theme: VisualThemeId) => void; themes?: readonly VisualTheme[] }) {
   return <div className={`theme-gallery ${compact ? 'theme-gallery--compact' : ''}`}>
     {themes.map(theme => <ThemeCard key={theme.id} theme={theme} compact={compact} onSelect={onSelect}/>)}
   </div>;

@@ -9,6 +9,8 @@ export interface AuthUser {
   photoUrl: string | null;
   provider: AuthProviderName;
   emailVerified: boolean;
+  // Only set from Firebase ID-token custom claims, never a client-side preference.
+  premiumThemes?: boolean;
 }
 
 export interface AuthAdapter {

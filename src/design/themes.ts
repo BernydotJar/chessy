@@ -1,11 +1,14 @@
 import type { BoardTheme } from '../types/chess.types';
+import { EXPANDED_THEMES } from './expandedThemes';
 
 export type VisualThemeId =
   | 'forest' | 'ivory' | 'night'
   | 'guatemala' | 'colombia' | 'mexico' | 'brasil'
-  | 'usa' | 'argentina' | 'espana' | 'chile';
+  | 'usa' | 'argentina' | 'espana' | 'chile'
+  | 'peru' | 'costarica' | 'japon'
+  | 'obsidian' | 'porcelain' | 'midnight' | 'walnut';
 
-export type ThemeCollection = 'classic' | 'country';
+export type ThemeCollection = 'classic' | 'country' | 'premium';
 
 export interface VisualThemeTokens {
   colorScheme: 'light' | 'dark';
@@ -194,19 +197,27 @@ export const VISUAL_THEMES: readonly VisualTheme[] = [
       boardSelected: '#c9895e', boardLegal: '#68a18d', boardHint: '#c9895e', heroArt: "url('/art/chile-study.svg')",
     },
   },
+  ...EXPANDED_THEMES,
 ] as const;
 
 export const CLASSIC_THEMES = VISUAL_THEMES.filter(theme => theme.collection === 'classic');
 export const COUNTRY_THEMES = VISUAL_THEMES.filter(theme => theme.collection === 'country');
+export const PREMIUM_THEMES = VISUAL_THEMES.filter(theme => theme.collection === 'premium');
 
 export function getVisualTheme(id: VisualThemeId): VisualTheme {
   return VISUAL_THEMES.find(theme => theme.id === id) ?? VISUAL_THEMES[0];
 }
 
-export function readVisualTheme(): VisualThemeId {
+export function canApplyVisualTheme(id: VisualThemeId, hasPremiumAccess: boolean): boolean {
+  const theme = VISUAL_THEMES.find(candidate => candidate.id === id);
+  return !!theme && (theme.collection !== 'premium' || hasPremiumAccess);
+}
+
+// First paint is safe even if another signed-in session had premium access.
+export function readVisualTheme(hasPremiumAccess = false): VisualThemeId {
   try {
     const saved = localStorage.getItem(VISUAL_THEME_STORAGE_KEY);
-    return VISUAL_THEMES.some(theme => theme.id === saved) ? saved as VisualThemeId : DEFAULT_VISUAL_THEME;
+    return canApplyVisualTheme(saved as VisualThemeId, hasPremiumAccess) ? saved as VisualThemeId : DEFAULT_VISUAL_THEME;
   } catch {
     return DEFAULT_VISUAL_THEME;
   }

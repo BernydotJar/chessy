@@ -3,7 +3,9 @@ import type { VisualThemeId } from './themes';
 
 export type ThemeContextValue = {
   themeId: VisualThemeId;
-  setThemeId: (id: VisualThemeId) => void;
+  // Returns false when a premium theme is unavailable for this account.
+  setThemeId: (id: VisualThemeId) => boolean;
+  hasPremiumAccess: boolean;
 };
 
 export const ThemeContext = createContext<ThemeContextValue | null>(null);

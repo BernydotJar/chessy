@@ -68,7 +68,9 @@ describe('Icon System v3 and mobile delivery contracts', () => {
   expect(manifest.icons.some((icon:{sizes:string,type:string,purpose:string})=>icon.sizes==='any'&&icon.type==='image/svg+xml'&&icon.purpose==='any')).toBe(true);
   expect(manifest.icons.some((icon:{sizes:string,type:string,purpose:string})=>icon.sizes==='any'&&icon.type==='image/svg+xml'&&icon.purpose==='maskable')).toBe(true);
   const worker = await readFile(new URL('../public/sw.js', import.meta.url), 'utf8');
-  expect(worker).toContain("const CACHE='chessy-mobile-v1-20260906'");
+  expect(worker).toMatch(/const CACHE='chessy-mobile-v\d+-\d{8}'/);
+  expect(worker).toContain("const THEME_ART=[");
+  expect(worker).toContain("...THEME_ART");
   expect(worker).toContain("'/stockfish.js'");
   expect(worker).toContain("request.mode==='navigate'");
  });
