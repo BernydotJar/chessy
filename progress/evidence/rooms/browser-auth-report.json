@@ -1,0 +1,61 @@
+{
+  "timestamp": "2026-10-26T20:16:26.140Z",
+  "checks": [
+    {
+      "name": "Coach has a verified identity and an approved coach claim",
+      "result": "PASS",
+      "ms": 2218
+    },
+    {
+      "name": "Coach creates a private age-gated room with a live board",
+      "result": "PASS",
+      "ms": 652
+    },
+    {
+      "name": "Teacher generates a seven-day invitation and shares the link",
+      "result": "PASS",
+      "ms": 485
+    },
+    {
+      "name": "Student follows link and signs in on separate 390px browser session",
+      "result": "PASS",
+      "ms": 2702
+    },
+    {
+      "name": "Guardian selects age band and joins via the bearer invitation",
+      "result": "PASS",
+      "ms": 671
+    },
+    {
+      "name": "Child-specific diagnostic is persisted and produces an advisory route",
+      "result": "PASS",
+      "ms": 526
+    },
+    {
+      "name": "Account deletion blocks while a private classroom record exists",
+      "result": "PASS",
+      "ms": 2233
+    },
+    {
+      "name": "Coach sees anonymous scores and exercises instructor-only board control",
+      "result": "PASS",
+      "ms": 413
+    },
+    {
+      "name": "Coach closes room and learners retain read-only access",
+      "result": "PASS",
+      "ms": 833
+    },
+    {
+      "name": "Guardian withdraws membership and deletes diagnostic data",
+      "result": "PASS",
+      "ms": 262
+    },
+    {
+      "name": "Independent sessions generated no unhandled browser exceptions",
+      "result": "PASS",
+      "ms": 5
+    }
+  ],
+  "pageErrors": []
+}

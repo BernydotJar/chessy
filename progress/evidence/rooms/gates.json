@@ -1,0 +1,31 @@
+{
+  "createdAt": "2026-10-26T20:17:59.368503+00:00",
+  "branch": "feat/chessy-zero-one-rooms-20261023",
+  "baseline": "c996680",
+  "results": {
+    "lint": "PASS",
+    "typescript": "PASS",
+    "productionBuild": "PASS",
+    "unitTests": 318,
+    "unitSuites": 15,
+    "roomFirestoreSecurityScenarios": 13,
+    "legacyCoachFirestoreStorageScenarios": 19,
+    "roomBrowserScenarios": 8,
+    "twoUserFirebaseBrowserScenarios": 11,
+    "chessyRegressionBrowserScenarios": 48,
+    "pwaOfflineGate": "PASS",
+    "wcagAutomated": "PASS (automated scans, not manual certification)"
+  },
+  "productionDeployed": false,
+  "externalEmailDelivery": "NOT_IMPLEMENTED (native share + mail client only)",
+  "minorProtectionReview": "REQUIRED_BEFORE_PUBLIC_ROLLOUT",
+  "roomOwnerDataPurgeAutomation": "NOT_IMPLEMENTED",
+  "sourceEvidence": [
+    "browser-report.json",
+    "browser-auth-report.json",
+    "coach-created-room.png",
+    "guardian-diagnostic-mobile.png",
+    "rooms-390.png",
+    "rooms-1440.png"
+  ]
+}

@@ -69,6 +69,7 @@ export function ChallengeView() {
  const {mode,category,configure,progress}=useLearningStore();
  const [level,setLevel]=useState<Level|'all'>('all');const [index,setIndex]=useState(0);const [blockIndex,setBlockIndex]=useState(0);const [finished,setFinished]=useState(false);const [sessionId,setSessionId]=useState(0);const [reviewIds,setReviewIds]=useState<string[]>([]);
  const anchor=useRef<HTMLDivElement>(null);
+ const [deepLinkId,setDeepLinkId]=useState<string|null>(()=>window.location.hash.match(/^#\/training\/([A-Za-z0-9_-]{2,70})$/)?.[1] ?? null);
  const pool=useMemo(()=>{
   if(mode==='daily')return [dailyPuzzle(localDay())];
   if(mode==='review')return reviewIds.map(id=>PUZZLES.find(p=>p.id===id)).filter((p):p is Puzzle=>Boolean(p));
@@ -80,6 +81,19 @@ export function ChallengeView() {
   }
   return selected;
  },[mode,category,level,sessionId,reviewIds]);
+ useEffect(()=>{
+  const update=()=>setDeepLinkId(window.location.hash.match(/^#\/training\/([A-Za-z0-9_-]{2,70})$/)?.[1] ?? null);
+  window.addEventListener('hashchange',update);
+  return ()=>window.removeEventListener('hashchange',update);
+ },[]);
+ useEffect(()=>{
+  if(!deepLinkId||mode!=='practice')return;
+  const at=pool.findIndex(p=>p.id===deepLinkId);
+  if(at<0)return;
+  setBlockIndex(Math.floor(at/TRAINING_BLOCK_SIZE));
+  setIndex(at%TRAINING_BLOCK_SIZE);
+  setFinished(false);
+ },[deepLinkId,mode,pool]);
  const blocks=useMemo(()=>mode==='practice'?splitPracticeBlocks(pool):[],[mode,pool]);
  const activeBlock=Math.min(blockIndex,Math.max(0,blocks.length-1));
  const visiblePool=mode==='practice'?(blocks[activeBlock]||[]):pool;
