@@ -8,7 +8,7 @@ import { ProgressSyncStatus } from './ProgressSyncStatus';
 import { useAnalyticsStore } from '../../analytics/store';
 import { useLearningStore, guestProgressCanImport, forgetStoredProfile } from '../../learning/store';
 import { useGameStore } from '../../store/gameStore';
-import { hasRoomParticipation } from '../../rooms/cloud';
+import { hasRoomParticipation, eraseAllMyGuardianReviews } from '../../rooms/cloud';
 
 export function AccountView() {
   const { t } = useTranslation();
@@ -60,6 +60,12 @@ export function AccountView() {
       return;
     }
     setRoomsMustBeRemoved(false);
+    try {
+      await eraseAllMyGuardianReviews();
+    } catch {
+      setRoomsMustBeRemoved(true);
+      return;
+    }
     const cloudDeleted = await deleteCloudProgress();
     if (!cloudDeleted) return;
     const deleted = await deleteCurrentAccount();

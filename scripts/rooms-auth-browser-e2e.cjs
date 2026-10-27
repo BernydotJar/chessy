@@ -4,6 +4,9 @@
  */
 const {spawn}=require('node:child_process');
 const {chromium}=require('playwright');
+const {generateKeyPairSync,sign,createHash}=require('node:crypto');
+const {promisify}=require('node:util');
+const exec=promisify(require('node:child_process').execFile);
 const assert=require('node:assert/strict');
 const fs=require('node:fs/promises');
 const path=require('node:path');
@@ -18,8 +21,10 @@ const env={
   VITE_FIREBASE_APP_ID:'1:123456789:web:chessyrooms',
   VITE_FIREBASE_AUTH_EMULATOR_URL:'http://127.0.0.1:19639',
   VITE_FIREBASE_FIRESTORE_EMULATOR_URL:'http://127.0.0.1:19608',
+  VITE_FIREBASE_FUNCTIONS_EMULATOR_URL:'http://127.0.0.1:19649',
+  VITE_CHESSY_ROOM_PRIVACY_URL:'http://127.0.0.1:14319/privacy-test',
 };
-let server,browser,teacher,student;
+let server,browser,teacher,student,guardianBrowser;
 async function waitForServer(){
   for(let tries=0;tries<70;tries++){
     try {if((await fetch(ORIGIN,{signal:AbortSignal.timeout(800)})).ok)return;}
@@ -51,7 +56,8 @@ async function signIn(page,email){
   browser=await chromium.launch({headless:true});
   teacher=await browser.newContext({viewport:{width:1440,height:900},locale:'es-GT',timezoneId:'America/Guatemala'});
   student=await browser.newContext({viewport:{width:390,height:844},locale:'es-GT',timezoneId:'America/Guatemala'});
-  const t=await teacher.newPage(),s=await student.newPage();
+  guardianBrowser=await browser.newContext({viewport:{width:390,height:844},locale:'es-GT'});
+  const t=await teacher.newPage(),s=await student.newPage(),g=await guardianBrowser.newPage();
   t.on('pageerror',e=>report.pageErrors.push('coach: '+e.message));
   s.on('pageerror',e=>report.pageErrors.push('student: '+e.message));
   t.setDefaultTimeout(16000);s.setDefaultTimeout(16000);
@@ -64,7 +70,7 @@ async function signIn(page,email){
   });
   await check('Coach creates a private age-gated room with a live board',async()=>{
     await t.locator('.room-author form input').fill('Chessy nivel cero aula A');
-    await t.locator('.room-author form select').first().selectOption('children');
+    await t.locator('.room-author form select').first().selectOption('mixed');
     await t.locator('.room-author form button').click();
     await t.locator('.room-heading-panel').waitFor({timeout:20000});
     assert.match(await t.locator('.room-heading-panel').innerText(),/Chessy nivel cero aula A/);
@@ -91,16 +97,14 @@ async function signIn(page,email){
     await s.locator('.room-accept form').waitFor({timeout:15000});
     assert.match(await s.locator('.room-accept h2').innerText(),/Chessy nivel cero aula A/);
   });
-  await check('Guardian selects age band and joins via the bearer invitation',async()=>{
-    await s.locator('.room-accept select').selectOption('10-12');
-    const guardian=s.locator('.room-consent input');
-    await guardian.check();
+  await check('Adult learner joins with a verified invitation',async()=>{
+    await s.locator('.room-accept select').selectOption('adult');
     await s.getByRole('button',{name:'Entrar a la sala'}).click();
     await s.locator('.room-heading-panel').waitFor({timeout:18000});
     await s.locator('.room-question').first().waitFor({timeout:18000});
     assert.equal(await s.locator('.room-question').count(),5);
   });
-  await check('Child-specific diagnostic is persisted and produces an advisory route',async()=>{
+  await check('Server grades but does not retain raw questionnaire answers',async()=>{
     const answer=['b','a','c','a','b'];
     for(let i=0;i<answer.length;i++){
       await s.locator('.room-question').nth(i).locator('input[value="'+answer[i]+'"]').check();
@@ -123,6 +127,85 @@ async function signIn(page,email){
     await s.goto(roomLink,{waitUntil:'domcontentloaded'});
     await s.locator('.room-diagnostic-done').waitFor({timeout:18000});
   });
+  await check('Minor invite is blocked pending external verification',async()=>{
+    await g.goto(invite,{waitUntil:'domcontentloaded'});
+    await g.getByRole('heading',{name:'Entra para participar'}).waitFor();
+    await signIn(g,'guardian-rooms-e2e@example.test');
+    await g.getByRole('button',{name:'Retomar invitación'}).click();
+    await g.locator('.room-accept form').waitFor();
+    await g.locator('.room-accept select').selectOption('6-9');
+    await g.locator('.room-consent input').check();
+    await g.getByRole('button',{name:'Entrar a la sala'}).waitFor();
+    assert.equal(await g.getByRole('button',{name:'Entrar a la sala'}).isDisabled(),true);
+    assert.match(await g.locator('.room-accept').innerText(),/La casilla por sí sola no concede acceso/);
+    await g.getByRole('button',{name:'Solicitar validación de autorización'}).click();
+    await g.getByRole('button',{name:'Comprobar autorización'}).waitFor();
+    assert.equal(await g.getByRole('button',{name:'Entrar a la sala'}).isDisabled(),true);
+  });
+  await check('External signed receipt and explicit policy approval unlock only matching guardian',async()=>{
+    const roomKey=new URL(roomUrl).hash.split('/').pop();
+    const {publicKey,privateKey}=generateKeyPairSync('ed25519');
+    const publicKeyPem=publicKey.export({type:'spki',format:'pem'});
+    const issuer='chessy-verified-provider-emulator';
+    const kid='local-vpc-key-1';
+    const legalEvidenceSha256=createHash('sha256').update('synthetic legal review only').digest('hex');
+    const flags=['--project=demo-chessy-rooms','--ticket=E2E-APPROVED-TEST','--apply=yes'];
+    const cli=async(action,more=[],extraEnv={})=>exec(process.execPath,
+      [path.join(ROOT,'functions/ops-admin.cjs'),action,...flags,...more],
+      {cwd:ROOT,env:{...process.env,...extraEnv},timeout:17000});
+    const configEnv={CHESSY_VPC_ED25519_PUBLIC_KEY_PEM:publicKeyPem,
+      CHESSY_VPC_ISSUER:issuer,CHESSY_VPC_KEY_ID:kid};
+    await cli('policy-enable',['--legalReview=legal-review-test','--securityReview=security-review-test',
+      '--legalEvidenceSha256='+legalEvidenceSha256]);
+    await g.getByRole('button',{name:'Comprobar autorización'}).click();
+    assert.equal(await g.getByRole('button',{name:'Entrar a la sala'}).isDisabled(),true);
+    const header={alg:'EdDSA',typ:'JWT',kid};
+    const iat=Math.floor(Date.now()/1000);
+    const claims={iss:issuer,purpose:'chessy-guardian-consent',guardianUid:'guardianChessyE2E',
+      roomId:roomKey,ageBand:'6-9',policyVersion:1,requestId:roomKey+'_guardianChessyE2E',
+      consented:true,iat,exp:iat+3600};
+    const enc=value=>Buffer.from(JSON.stringify(value)).toString('base64url');
+    const content=enc(header)+'.'+enc(claims);
+    const jws=content+'.'+sign(null,Buffer.from(content),privateKey).toString('base64url');
+    const signedPath=path.join(OUT,'synthetic-consent-assertion.tmp');
+    await fs.writeFile(signedPath,jws,{mode:0o600});
+    try{
+      await cli('approve',['--room='+roomKey,'--uid=guardianChessyE2E',
+        '--assertionFile='+signedPath],configEnv);
+    }finally{await fs.unlink(signedPath).catch(()=>{});}
+    await g.getByRole('button',{name:'Comprobar autorización'}).click();
+    await g.getByRole('button',{name:'Entrar a la sala'}).waitFor({state:'visible'});
+    await g.waitForFunction(()=>!Array.from(document.querySelectorAll('button')).find(b=>b.textContent?.includes('Entrar a la sala'))?.disabled);
+    await g.getByRole('button',{name:'Entrar a la sala'}).click();
+    await g.locator('.room-question').first().waitFor();
+    assert.equal(await g.locator('.room-question').count(),5);
+    for(const [i,answer] of ['b','a','c','a','b'].entries())
+      await g.locator('.room-question').nth(i).locator('input[value="'+answer+'"]').check();
+    await g.getByRole('button',{name:'Enviar respuestas'}).click();
+    await g.locator('.room-diagnostic-done').waitFor();
+    const raw=await fetch('http://127.0.0.1:19608/v1/projects/demo-chessy-rooms/databases/(default)/documents/learningRooms/'+roomKey+
+      '/diagnostics/guardianChessyE2E',{headers:{Authorization:'Bearer owner'}});
+    const doc=await raw.json();
+    assert.equal(doc.fields.score.integerValue,'5');
+    assert.equal(doc.fields.answers,undefined);
+    await cli('policy-disable');
+    await g.reload();
+    await g.getByRole('alert').waitFor();
+    assert.equal(await g.locator('.room-heading-panel').count(),0);
+    g.once('dialog',dialog=>dialog.accept());
+    await g.getByRole('button',{name:'Salir y borrar mis datos de esta sala'}).click();
+    await g.locator('.room-list-section').waitFor({timeout:15000});
+    const resource='http://127.0.0.1:19608/v1/projects/demo-chessy-rooms/databases/(default)/documents/';
+    for(const target of [
+      'learningRooms/'+roomKey+'/diagnostics/guardianChessyE2E',
+      'learningRooms/'+roomKey+'/members/guardianChessyE2E',
+      'roomGuardianApprovals/'+roomKey+'_guardianChessyE2E',
+    ]){
+      const result=await fetch(resource+target,{headers:{Authorization:'Bearer owner'}});
+      assert.equal(result.status,404,target+' must be erased');
+    }
+
+  });
   await check('Coach sees anonymous scores and exercises instructor-only board control',async()=>{
     // Teacher stays in the room: results must arrive live, without a manual refresh.
     await t.locator('.room-results').getByText('5 / 5').waitFor({timeout:20000});
@@ -142,7 +225,7 @@ async function signIn(page,email){
     assert.match(await s.locator('.room-heading-panel').innerText(),/Cerrada/);
     assert.equal(await s.locator('.room-board-controls').count(),0);
   });
-  await check('Guardian withdraws membership and deletes diagnostic data',async()=>{
+  await check('Adult learner withdraws membership and deletes diagnostic data',async()=>{
     const previousRoom=s.url();
     s.once('dialog',dialog=>dialog.accept());
     await s.getByRole('button',{name:'Salir y borrar mis datos de esta sala'}).click();
@@ -170,6 +253,7 @@ async function signIn(page,email){
   await fs.mkdir(OUT,{recursive:true});
   await fs.writeFile(path.join(OUT,'browser-auth-report.json'),JSON.stringify(report,null,2)+'\n');
   try{await teacher?.close();}catch{}
+  try{await guardianBrowser?.close();}catch{}
   try{await student?.close();}catch{}
   try{await browser?.close();}catch{}
   try{server?.kill('SIGTERM');}catch{}

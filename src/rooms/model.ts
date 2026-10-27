@@ -21,6 +21,23 @@ export interface RoomInvitation {
   ownerUid: string;
   expiresAt: Date;
 }
+/** Backend-persisted minimal assessment; raw answers are not retained in the cloud. */
+export interface RoomDiagnosticSummary {
+  uid: string;
+  ageBand: AgeBand;
+  goal: LearningGoal;
+  score: number;
+  total: 5;
+}
+export function validSummary(value: unknown): value is RoomDiagnosticSummary {
+  if(!value||typeof value!=='object')return false;
+  const d=value as Partial<RoomDiagnosticSummary>;
+  return typeof d.uid==='string' && d.uid.length>0 &&
+    AGE_BANDS.includes(d.ageBand as AgeBand) &&
+    ['discover','family','compete'].includes(d.goal as string) &&
+    Number.isInteger(d.score) && (d.score as number)>=0 && (d.score as number)<=5 &&
+    d.total===5;
+}
 export interface RoomDiagnostic {
   uid: string;
   ageBand: AgeBand;

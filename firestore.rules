@@ -154,61 +154,30 @@ service cloud.firestore {
       return isCoach() && exists(roomRef(roomId)) &&
         get(roomRef(roomId)).data.ownerUid == request.auth.uid;
     }
+    function currentMinorApproval(roomId, uid, age) {
+      let config = /databases/$(database)/documents/roomSafety/config;
+      let approval = /databases/$(database)/documents/roomGuardianApprovals/$(roomId + '_' + uid);
+      return exists(config) && get(config).data.minorEnrollmentEnabled == true
+        && exists(approval)
+        && get(approval).data.status == 'approved'
+        && get(approval).data.guardianUid == uid
+        && get(approval).data.roomId == roomId
+        && get(approval).data.ageBand == age
+        && get(approval).data.policyVersion == get(config).data.policyVersion
+        && get(approval).data.expiresAt > request.time;
+    }
+    function validActiveMember(roomId, uid) {
+      let member = memberRef(roomId,uid);
+      return exists(member) && get(member).data.expiresAt > request.time
+        && (get(member).data.ageBand == 'adult'
+          || currentMinorApproval(roomId,uid,get(member).data.ageBand));
+    }
     function isRoomMember(roomId) {
-      return request.auth != null && exists(memberRef(roomId, request.auth.uid));
+      return verifiedIdentity() && validActiveMember(roomId,request.auth.uid);
     }
     function mayReadRoom(roomId) {
-      return ownsRoom(roomId) || isRoomMember(roomId);
-    }
-    function supportedAge(age) {
-      return age == '6-9' || age == '10-12' || age == '13-17' || age == 'adult';
-    }
-    function ageAllowed(roomId, age) {
-      let audience = get(roomRef(roomId)).data.audience;
-      return audience == 'mixed' || (age == 'adult' && audience == 'adults') ||
-        (age != 'adult' && audience == 'children');
-    }
-    function validRoomWrite(uid) {
-      let d = request.resource.data;
-      return d.keys().hasOnly(['schemaVersion','ownerUid','title','audience','language','status','createdAt','updatedAt'])
-        && d.keys().hasAll(['schemaVersion','ownerUid','title','audience','language','status','createdAt','updatedAt'])
-        && d.schemaVersion == 1 && d.ownerUid == uid
-        && d.title is string && d.title.size() >= 6 && d.title.size() <= 80
-        && (d.audience == 'children' || d.audience == 'adults' || d.audience == 'mixed')
-        && (d.language == 'es' || d.language == 'en' || d.language == 'pt')
-        && (d.status == 'active' || d.status == 'closed')
-        && d.createdAt is timestamp && d.updatedAt == request.time;
-    }
-    function validInviteWrite(uid) {
-      let d = request.resource.data;
-      return d.keys().hasOnly(['schemaVersion','roomId','ownerUid','roomTitle','audience','createdAt','expiresAt'])
-        && d.keys().hasAll(['schemaVersion','roomId','ownerUid','roomTitle','audience','createdAt','expiresAt'])
-        && d.schemaVersion == 1 && d.ownerUid == uid
-        && d.roomId is string && d.roomId.size() == 20
-        && ownsRoom(d.roomId) && get(roomRef(d.roomId)).data.status == 'active'
-        && d.roomTitle == get(roomRef(d.roomId)).data.title
-        && d.audience == get(roomRef(d.roomId)).data.audience
-        && d.createdAt == request.time
-        && d.expiresAt is timestamp
-        && d.expiresAt > request.time && d.expiresAt <= request.time + duration.value(8,'d');
-    }
-    function validEnrollmentInvite(roomId, inviteId) {
-      return inviteId is string && inviteId.size() == 20
-        && exists(/databases/$(database)/documents/roomInvites/$(inviteId))
-        && get(/databases/$(database)/documents/roomInvites/$(inviteId)).data.roomId == roomId
-        && get(/databases/$(database)/documents/roomInvites/$(inviteId)).data.ownerUid == get(roomRef(roomId)).data.ownerUid
-        && get(/databases/$(database)/documents/roomInvites/$(inviteId)).data.expiresAt > request.time;
-    }
-    function validEnrollment(roomId, uid) {
-      let d = request.resource.data;
-      return d.keys().hasOnly(['schemaVersion','uid','roomId','inviteId','ageBand','guardianConfirmed','joinedAt'])
-        && d.keys().hasAll(['schemaVersion','uid','roomId','inviteId','ageBand','guardianConfirmed','joinedAt'])
-        && d.schemaVersion == 1 && d.uid == uid && d.roomId == roomId
-        && d.joinedAt == request.time
-        && supportedAge(d.ageBand)
-        && d.guardianConfirmed is bool && d.guardianConfirmed == (d.ageBand != 'adult')
-        && exists(roomRef(roomId)) && get(roomRef(roomId)).data.status == 'active'
-        && ageAllowed(roomId,d.ageBand) && validEnrollmentInvite(roomId,d.inviteId);
+      return exists(roomRef(roomId)) && get(roomRef(roomId)).data.expiresAt > request.time
+        && (ownsRoom(roomId) || isRoomMember(roomId));
     }
     function validBoardData() {
       let d = request.resource.data;
@@ -220,45 +189,18 @@ service cloud.firestore {
         && d.revision is int && d.revision >= 0 && d.revision <= 100000
         && d.locked is bool && d.updatedAt == request.time;
     }
-    function validDiagnosticWrite(roomId, uid) {
-      let d = request.resource.data;
-      return d.keys().hasOnly(['schemaVersion','uid','roomId','ageBand','guardianConfirmed','goal','answers','submittedAt'])
-        && d.keys().hasAll(['schemaVersion','uid','roomId','ageBand','guardianConfirmed','goal','answers','submittedAt'])
-        && d.schemaVersion == 1 && d.uid == uid && d.roomId == roomId
-        && d.ageBand == get(memberRef(roomId,uid)).data.ageBand
-        && d.guardianConfirmed == get(memberRef(roomId,uid)).data.guardianConfirmed
-        && (d.goal == 'discover' || d.goal == 'family' || d.goal == 'compete')
-        && d.answers is map
-        && d.answers.keys().hasOnly(['q1','q2','q3','q4','q5'])
-        && d.answers.keys().hasAll(['q1','q2','q3','q4','q5'])
-        && (d.answers.q1 == 'a' || d.answers.q1 == 'b' || d.answers.q1 == 'c')
-        && (d.answers.q2 == 'a' || d.answers.q2 == 'b' || d.answers.q2 == 'c')
-        && (d.answers.q3 == 'a' || d.answers.q3 == 'b' || d.answers.q3 == 'c')
-        && (d.answers.q4 == 'a' || d.answers.q4 == 'b' || d.answers.q4 == 'c')
-        && (d.answers.q5 == 'a' || d.answers.q5 == 'b' || d.answers.q5 == 'c')
-        && d.submittedAt == request.time;
-    }
-
     match /learningRooms/{roomId} {
       allow get: if mayReadRoom(roomId);
       // Owners retain read access for account-data cleanup even if their coach role is later revoked.
       allow list: if verifiedIdentity() && resource.data.ownerUid == request.auth.uid;
-      allow create: if isCoach() && validRoomWrite(request.auth.uid)
-        && request.resource.data.status == 'active'
-        && request.resource.data.createdAt == request.time;
-      allow update: if ownsRoom(roomId) && validRoomWrite(request.auth.uid)
-        && request.resource.data.createdAt == resource.data.createdAt
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','updatedAt'])
-        && resource.data.status == 'active' && request.resource.data.status == 'closed';
+      allow create: if false; // Server-only: quota, App Check and audit in callable.
+      allow update: if false; // Server-only: lifecycle and retention timestamp.
       allow delete: if false;
 
       match /board/{boardId} {
         allow get: if boardId == 'current' && mayReadRoom(roomId);
         allow list: if false;
-        allow create: if boardId == 'current' && isCoach()
-          && getAfter(roomRef(roomId)).data.ownerUid == request.auth.uid
-          && validBoardData() && request.resource.data.revision == 0
-          && request.resource.data.moves.size() == 0;
+        allow create: if false; // Board starts in the same server transaction as its room.
         allow update: if boardId == 'current' && ownsRoom(roomId)
           && get(roomRef(roomId)).data.status == 'active'
           && validBoardData() && request.resource.data.revision == resource.data.revision + 1;
@@ -267,42 +209,57 @@ service cloud.firestore {
       match /members/{uid} {
         allow get: if isOwner(uid) || ownsRoom(roomId);
         allow list: if ownsRoom(roomId);
-        allow create: if verifiedIdentity() && isOwner(uid)
-          && validEnrollment(roomId,uid)
-          && getAfter(myRoomRef(uid,roomId)).data == request.resource.data;
+        allow create: if false; // Admission quota and policy checked by server transaction.
         allow update: if false;
-        allow delete: if isOwner(uid) || ownsRoom(roomId);
+        allow delete: if false; // Server atomic right-to-withdraw handler.
       }
       match /diagnostics/{uid} {
         allow get: if isOwner(uid) || ownsRoom(roomId);
         allow list: if ownsRoom(roomId);
-        allow create: if verifiedIdentity() && isOwner(uid) && isRoomMember(roomId)
-          && get(roomRef(roomId)).data.status == 'active'
-          && validDiagnosticWrite(roomId,uid);
-        allow update: if false;
-        allow delete: if isOwner(uid) || ownsRoom(roomId);
+        allow create, update: if false; // Canonical grade computed by trusted callable.
+        allow delete: if false; // Server atomic right-to-withdraw handler.
       }
     }
 
     match /roomInvites/{inviteId} {
       // An unguessable 20-character ID is the bearer capability; never list invitations as a learner.
       allow get: if verifiedIdentity() && resource.data.expiresAt > request.time
+        && resource.data.roomExpiresAt > request.time
         && exists(roomRef(resource.data.roomId))
         && get(roomRef(resource.data.roomId)).data.status == 'active';
       allow list: if isCoach() && resource.data.ownerUid == request.auth.uid;
-      allow create: if isCoach() && inviteId.size() == 20 && validInviteWrite(request.auth.uid);
+      allow create: if false; // Server-only; rate limits cannot be bypassed.
       allow update: if false;
-      allow delete: if isCoach() && resource.data.ownerUid == request.auth.uid;
+      allow delete: if false; // Revocation audited by callable.
     }
 
     match /userRooms/{uid}/rooms/{roomId} {
       allow get, list: if isOwner(uid);
-      allow create: if verifiedIdentity() && isOwner(uid) &&
-        validEnrollment(roomId,uid)
-        && getAfter(memberRef(roomId,uid)).data == request.resource.data;
+      allow create: if false; // Admission quota checked by server transaction.
       allow update: if false;
-      allow delete: if (isOwner(uid) || ownsRoom(roomId))
-        && !existsAfter(memberRef(roomId,uid));
+      allow delete: if false; // Server atomic right-to-withdraw handler.
+    }
+
+    // Self-attestation never creates verified parental consent.
+    // Only an administrator/service process may write these records.
+    match /roomSafety/{id} {
+      allow read, write: if false;
+    }
+    match /roomGuardianApprovals/{approvalId} {
+      allow read, write: if false;
+    }
+    match /guardianReviewRequests/{requestId} {
+      allow read, write: if false;
+    }
+    match /roomConsentReceipts/{id} {
+      allow read, write: if false; // Replay-protection ledger; no browser access.
+    }
+    match /roomRateLimits/{id} {
+      allow read, write: if false;
+    }
+    match /roomAudit/{id} {
+      allow get, list: if verifiedIdentity() && request.auth.token.chessyRole == 'admin';
+      allow create, update, delete: if false;
     }
 
     match /{document=**} {

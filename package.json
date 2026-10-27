@@ -11,7 +11,7 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test": "vitest",
+    "test": "vitest --dir tests",
     "typecheck": "tsc --noEmit",
     "test:e2e": "node scripts/browser-verify.cjs",
     "verify": "npm run lint && npm test -- --run && npm run build",
@@ -22,7 +22,8 @@
     "test:firestore:rules-live": "node scripts/firestore-rules-live-verify.cjs",
     "test:progress:ui-live": "node scripts/progress-ui-live-verify.cjs",
     "test:analytics": "node scripts/analytics-verify.cjs",
-    "test:themes": "node scripts/theme-verify.cjs"
+    "test:themes": "node scripts/theme-verify.cjs",
+    "verify:safety": "node scripts/rooms-safety-release-gate.cjs --minors --strict"
   },
   "dependencies": {
     "chess.js": "^1.0.0-beta.6",

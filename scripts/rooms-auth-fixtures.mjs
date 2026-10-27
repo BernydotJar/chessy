@@ -8,6 +8,8 @@ const result=await fetch(origin+'/projects/'+project+'/accounts:batchCreate',{
       emailVerified:true,customAttributes:'{"chessyRole":"coach"}'},
     {localId:'studentChessyE2E',email:'student-rooms-e2e@example.test',rawPassword:'ChessyEmulator123',
       emailVerified:true},
+    {localId:'guardianChessyE2E',email:'guardian-rooms-e2e@example.test',rawPassword:'ChessyEmulator123',
+      emailVerified:true},
   ]}),
 });
 console.log('AUTH_EMULATOR_IMPORT',result.status,JSON.stringify(await result.json()).slice(0,1500));

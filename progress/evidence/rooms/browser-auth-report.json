@@ -1,60 +1,70 @@
 {
-  "timestamp": "2026-10-26T20:16:26.140Z",
+  "timestamp": "2026-10-27T02:57:30.623Z",
   "checks": [
     {
       "name": "Coach has a verified identity and an approved coach claim",
       "result": "PASS",
-      "ms": 2218
+      "ms": 2640
     },
     {
       "name": "Coach creates a private age-gated room with a live board",
       "result": "PASS",
-      "ms": 652
+      "ms": 2331
     },
     {
       "name": "Teacher generates a seven-day invitation and shares the link",
       "result": "PASS",
-      "ms": 485
+      "ms": 2064
     },
     {
       "name": "Student follows link and signs in on separate 390px browser session",
       "result": "PASS",
-      "ms": 2702
+      "ms": 2804
     },
     {
-      "name": "Guardian selects age band and joins via the bearer invitation",
+      "name": "Adult learner joins with a verified invitation",
       "result": "PASS",
-      "ms": 671
+      "ms": 2198
     },
     {
-      "name": "Child-specific diagnostic is persisted and produces an advisory route",
+      "name": "Server grades but does not retain raw questionnaire answers",
       "result": "PASS",
-      "ms": 526
+      "ms": 2204
     },
     {
       "name": "Account deletion blocks while a private classroom record exists",
       "result": "PASS",
-      "ms": 2233
+      "ms": 2158
+    },
+    {
+      "name": "Minor invite is blocked pending external verification",
+      "result": "PASS",
+      "ms": 3811
+    },
+    {
+      "name": "External signed receipt and explicit policy approval unlock only matching guardian",
+      "result": "PASS",
+      "ms": 5449
     },
     {
       "name": "Coach sees anonymous scores and exercises instructor-only board control",
       "result": "PASS",
-      "ms": 413
+      "ms": 1909
     },
     {
       "name": "Coach closes room and learners retain read-only access",
       "result": "PASS",
-      "ms": 833
+      "ms": 2523
     },
     {
-      "name": "Guardian withdraws membership and deletes diagnostic data",
+      "name": "Adult learner withdraws membership and deletes diagnostic data",
       "result": "PASS",
-      "ms": 262
+      "ms": 302
     },
     {
       "name": "Independent sessions generated no unhandled browser exceptions",
       "result": "PASS",
-      "ms": 5
+      "ms": 1
     }
   ],
   "pageErrors": []

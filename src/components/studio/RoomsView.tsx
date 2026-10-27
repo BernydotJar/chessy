@@ -8,14 +8,15 @@ import { locale } from '../../learning/types';
 import { PositionBoard, SectionHeading } from './Shared';
 import {
   closeRoom, createInvite, createRoom, getMyDiagnostic, getMyMembership, getRoom, leaveRoom, revokeInvite,
+  getGuardianAccessStatus, requestGuardianReview,
   invitationUrl, isRoomHost, joinRoom, listInvites, listMyRooms, observeRoomRoster,
   redeemInfo, roomBoardCommand, sendDiagnostic, watchRoomBoard,
 } from '../../rooms/cloud';
 import type { ClassroomBoard, ClassroomCommand } from '../../coach/classroomBoard';
 import {
-  AGE_BANDS, gradeDiagnostic, isChild, questionsForAge, roomAllowsAge, validDiagnostic,
+  AGE_BANDS, isChild, questionsForAge, roomAllowsAge, validDiagnostic,
   zeroToOneMilestones, type AgeBand, type Answers, type Language, type LearningGoal,
-  type LearningRoom, type RoomAudience, type RoomDiagnostic, type RoomInvitation,
+  type LearningRoom, type RoomAudience, type RoomDiagnosticSummary, type RoomInvitation,
 } from '../../rooms/model';
 
 const PENDING_KEY = 'chessy-pending-room-invitation-v1';
@@ -96,10 +97,11 @@ export function RoomsView() {
   const [details, setDetails] = useState<InvitationDetails | null>(null);
   const [room, setRoom] = useState<LearningRoom | null>(null);
   const [membership, setMembership] = useState<Membership | null>(null);
-  const [diagnostic, setDiagnostic] = useState<RoomDiagnostic | null>(null);
+  const [guardianAccess, setGuardianAccess] = useState<{allowed:boolean;pending:boolean}|null>(null);
+  const [diagnostic, setDiagnostic] = useState<RoomDiagnosticSummary | null>(null);
   const [board, setBoard] = useState<ClassroomBoard | null>(null);
   const [invites, setInvites] = useState<RoomInvitation[]>([]);
-  const [diagnostics, setDiagnostics] = useState<RoomDiagnostic[]>([]);
+  const [diagnostics, setDiagnostics] = useState<RoomDiagnosticSummary[]>([]);
   const [memberCount, setMemberCount] = useState(0);
   const [title, setTitle] = useState('');
   const [audience, setAudience] = useState<RoomAudience>('children');
@@ -110,6 +112,9 @@ export function RoomsView() {
   const [answers, setAnswers] = useState<Partial<Answers>>({});
   const [share, setShare] = useState<RoomInvitation | null>(null);
   const [recipient, setRecipient] = useState('');
+  const privacyUrl=String(import.meta.env.VITE_CHESSY_ROOM_PRIVACY_URL||'');
+  const privacyReady=/^https:\/\/[^\s/]+\/.+/.test(privacyUrl) ||
+    (import.meta.env.DEV && /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//.test(privacyUrl));
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -181,6 +186,16 @@ export function RoomsView() {
   }, [inviteId, verified, activeRoomId]);
 
   useEffect(() => {
+    let current=true;
+    setGuardianAccess(null);
+    if(!details||!verified||!isChild(ageBand))return;
+    void getGuardianAccessStatus(details.invitation.roomId,ageBand)
+      .then(result=>{if(current)setGuardianAccess({allowed:result.allowed,pending:result.pending});})
+      .catch(()=>{if(current)setGuardianAccess({allowed:false,pending:false});});
+    return ()=>{current=false;};
+  },[details,verified,ageBand,revision]);
+
+  useEffect(() => {
     let current = true;
     let unsubscribe = () => {};
     let stopRoster = () => {};
@@ -217,7 +232,7 @@ export function RoomsView() {
     // Only erase private data after a confirmed sign-out or disabled cloud config.
     if (authStatus !== 'signed-out' && authStatus !== 'unconfigured') return;
     setAvailable([]); setRoom(null); setBoard(null);
-    setDiagnostic(null); setDiagnostics([]);
+    setDiagnostic(null); setDiagnostics([]); setGuardianAccess(null);
   }, [authStatus, user?.id]);
 
   const onCreate = async (event: FormEvent) => {
@@ -237,11 +252,21 @@ export function RoomsView() {
     catch { setError('rooms.error'); }
     finally { setBusy(false); }
   };
+  const requestReview = async () => {
+    if(!inviteId||busy||!isChild(ageBand)||!guardian)return;
+    setBusy(true);setError(null);
+    try {
+      await requestGuardianReview(inviteId,ageBand);
+      setGuardianAccess({allowed:false,pending:true});
+      setMessage('rooms.guardianReviewRequested');
+    }catch{setError('rooms.error');}
+    finally{setBusy(false);}
+  };
   const onJoin = async (event: FormEvent) => {
     event.preventDefault();
     if (!inviteId || !details || busy) return;
-    if (!roomAllowsAge(details.audience,ageBand) || (isChild(ageBand) && !guardian)) {
-      setError('rooms.ageRequired'); return;
+    if (!roomAllowsAge(details.audience,ageBand) || (isChild(ageBand) && (!guardian || !guardianAccess?.allowed))) {
+      setError('rooms.guardianApprovalRequired'); return;
     }
     setBusy(true); setError(null);
     try {
@@ -305,7 +330,7 @@ export function RoomsView() {
   };
   const owns = Boolean(room && user?.id === room.ownerUid && canTeach);
   const questions = membership ? questionsForAge(membership.ageBand) : [];
-  const score = diagnostic ? gradeDiagnostic(diagnostic.ageBand, diagnostic.answers) : null;
+  const score = diagnostic ? {score:diagnostic.score,total:diagnostic.total,route:diagnostic.score>=4?'bridge':'zero'} : null;
   const latestShare = share || (invites.find(item => item.roomId === room?.id) ?? null);
   const safeRecipient = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(recipient.trim())
     ? encodeURIComponent(recipient.trim()) : '';
@@ -330,14 +355,24 @@ export function RoomsView() {
       {loading && <p role="status">{t('rooms.loading')}</p>}
       {details && <form className="room-form" onSubmit={event => void onJoin(event)}>
         <label>{t('rooms.age')}
-          <select value={ageBand} onChange={e => {setAgeBand(e.target.value as AgeBand);setGuardian(false);}}>
+          <select value={ageBand} onChange={e => {setAgeBand(e.target.value as AgeBand);setGuardian(false);setGuardianAccess(null);}}>
             {AGE_BANDS.map(age => <option key={age} value={age}>{age === 'adult' ? t('rooms.ageAdult') : t('rooms.ageRange',{range:age})}</option>)}
           </select>
         </label>
         {!roomAllowsAge(details.audience,ageBand) && <p className="feedback wrong">{t('rooms.differentAudience')}</p>}
+        <p className="fine-print">{privacyReady ? <a className="text-button" href={privacyUrl}
+          target="_blank" rel="noopener noreferrer">{t('rooms.readPrivacyNotice')}</a> :
+          t('rooms.privacyNoticeUnavailable')}</p>
         {isChild(ageBand) && <><p className="fine-print">{t('rooms.guardianPrivacy')}</p>
-          <label className="room-consent"><input type="checkbox" checked={guardian} onChange={e => setGuardian(e.target.checked)} required/>{t('rooms.guardian')}</label></>}
-        <div className="button-row"><button className="btn primary" disabled={busy || !roomAllowsAge(details.audience,ageBand) || (isChild(ageBand) && !guardian)}>{t('rooms.join')}</button>
+          <p className="fine-print" role="status">{t(guardianAccess?.allowed ? 'rooms.guardianApproved' :
+            guardianAccess?.pending ? 'rooms.guardianPending' : 'rooms.guardianApprovalRequired')}</p>
+          <label className="room-consent"><input type="checkbox" checked={guardian} onChange={e => setGuardian(e.target.checked)} required/>{t('rooms.guardian')}</label>
+          {!guardianAccess?.allowed && !guardianAccess?.pending && <button className="btn secondary" type="button"
+            disabled={busy||!guardian||!privacyReady||!roomAllowsAge(details.audience,ageBand)} onClick={()=>void requestReview()}>{t('rooms.requestGuardianReview')}</button>}
+          {guardianAccess?.pending && <button className="btn secondary" type="button"
+            onClick={refresh}>{t('rooms.checkGuardianReview')}</button>}
+        </>}
+        <div className="button-row"><button className="btn primary" disabled={busy || !roomAllowsAge(details.audience,ageBand) || (isChild(ageBand) && (!guardian||!guardianAccess?.allowed))}>{t('rooms.join')}</button>
           <button className="btn secondary" type="button" onClick={clearInvitation}>{t('rooms.leave')}</button></div>
       </form>}
     </section>}
@@ -369,6 +404,14 @@ export function RoomsView() {
     {verified && activeRoomId && <>
       <button className="text-button room-back" type="button" onClick={exitRoom}>{t('rooms.leave')}</button>
       {loading && <p data-testid="room-loading-state" role="status">{t('rooms.loading')}</p>}
+      {!loading && error && !room && <section className="panel room-unavailable">
+        <p>{t('rooms.roomAccessUnavailable')}</p>
+        <button className="btn secondary" type="button" disabled={busy} onClick={()=>{
+          if(!activeRoomId||!window.confirm(t('rooms.leaveConfirm')))return;
+          setBusy(true);
+          void leaveRoom(activeRoomId).then(exitRoom).catch(()=>setError('rooms.error')).finally(()=>setBusy(false));
+        }}>{t('rooms.withdraw')}</button>
+      </section>}
       {room && <><section className="panel room-heading-panel">
         <div><p className="eyebrow">{t('rooms.' + room.audience)} · {room.language.toUpperCase()}</p><h2>{room.title}</h2><span className="tag">{t('rooms.' + room.status)}</span></div>
         {membership && !owns && <button className="btn quiet" type="button" disabled={busy}
@@ -400,7 +443,7 @@ export function RoomsView() {
       </section>}
       {owns && <section className="panel room-results"><h3>{t('rooms.teacherResults')} ({memberCount})</h3>
         <p className="muted">{t('rooms.teacherResultsHint')}</p>
-        {diagnostics.map(item => { const value = gradeDiagnostic(item.ageBand,item.answers); return <div key={item.uid} className="room-result-row">
+        {diagnostics.map(item => { const value = {score:item.score,total:item.total}; return <div key={item.uid} className="room-result-row">
           <span>{t('rooms.learner')}: {item.uid.slice(0,6)}…</span><span>{item.ageBand}</span><strong>{value.score} / {value.total}</strong>
         </div>; })}
       </section>}

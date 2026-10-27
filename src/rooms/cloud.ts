@@ -1,7 +1,7 @@
 import { readAuthRuntimeConfig } from '../auth/config';
-import { getChessyFirebaseApp } from '../firebase/client';
-import { applyInstructorCommand, classroomSnapshotValid, initialClassroomBoard, type ClassroomBoard, type ClassroomCommand } from '../coach/classroomBoard';
-import { gradeDiagnostic, isChild, parseRoom, roomAllowsAge, safeRoomTitle, validDiagnostic, type AgeBand, type Answers, type Language, type LearningGoal, type LearningRoom, type RoomAudience, type RoomDiagnostic, type RoomInvitation } from './model';
+import { getChessyFirebaseApp, getChessyFunctions } from '../firebase/client';
+import { applyInstructorCommand, classroomSnapshotValid, type ClassroomBoard, type ClassroomCommand } from '../coach/classroomBoard';
+import { isChild, parseRoom, safeRoomTitle, validSummary, type AgeBand, type Answers, type Language, type LearningGoal, type LearningRoom, type RoomAudience, type RoomDiagnosticSummary, type RoomInvitation } from './model';
 
 async function context() {
   const config = readAuthRuntimeConfig().firebase;
@@ -26,6 +26,28 @@ async function coach() {
   return ctx;
 }
 
+async function invokeRoom<T>(name:string,data:Record<string,unknown>):Promise<T> {
+  const config=readAuthRuntimeConfig().firebase;
+  if(!config)throw new Error('cloud-unconfigured');
+  const {functionsSdk,functions}=await getChessyFunctions(config);
+  const result=await functionsSdk.httpsCallable<Record<string,unknown>,T>(functions,name)(data);
+  return result.data;
+}
+
+export async function getGuardianAccessStatus(roomId:string,ageBand:AgeBand):
+Promise<{allowed:boolean;pending:boolean;approvalExpiresAt:number|null}> {
+  if(!/^[A-Za-z0-9]{20}$/.test(roomId)||!isChild(ageBand))return {allowed:false,pending:false,approvalExpiresAt:null};
+  return invokeRoom('getGuardianAccessStatus',{roomId,ageBand});
+}
+export async function requestGuardianReview(inviteId:string,ageBand:AgeBand):Promise<void> {
+  await invokeRoom('requestGuardianReview',{inviteId,ageBand,guardianAcknowledged:true});
+}
+export async function eraseAllMyGuardianReviews():Promise<void> {
+  await invokeRoom('eraseAllMyGuardianReviews',{});
+}
+export async function eraseGuardianReview(roomId:string):Promise<void> {
+  await invokeRoom('eraseGuardianReview',{roomId});
+}
 export async function isRoomHost(): Promise<boolean> {
   try { await coach(); return true; } catch { return false; }
 }
@@ -35,16 +57,11 @@ export function invitationUrl(id: string): string {
 }
 
 export async function createRoom(input: {title: string; audience: RoomAudience; language: Language}): Promise<LearningRoom> {
-  const {dbSdk: f,database, user} = await coach();
-  const title = safeRoomTitle(input.title);
+  const {user}=await coach();
+  const title=safeRoomTitle(input.title);
   if (!['children','adults','mixed'].includes(input.audience) || !['es','en','pt'].includes(input.language)) throw new Error('invalid-room');
-  const room = f.doc(f.collection(database,'learningRooms'));
-  const board = f.doc(database,'learningRooms',room.id,'board','current');
-  const batch = f.writeBatch(database);
-  batch.set(room, {schemaVersion:1,ownerUid:user.uid,title,audience:input.audience,language:input.language,status:'active',createdAt:f.serverTimestamp(),updatedAt:f.serverTimestamp()});
-  batch.set(board, {...initialClassroomBoard(),updatedAt:f.serverTimestamp()});
-  await batch.commit();
-  return {id:room.id,ownerUid:user.uid,title,audience:input.audience,language:input.language,status:'active'};
+  const {roomId}=await invokeRoom<{roomId:string}>('createLearningRoom',{title,audience:input.audience,language:input.language});
+  return {id:roomId,ownerUid:user.uid,title,audience:input.audience,language:input.language,status:'active'};
 }
 export async function listMyRooms(): Promise<LearningRoom[]> {
   const {dbSdk:f,database,user} = await verified();
@@ -85,29 +102,16 @@ export async function getRoom(roomId: string): Promise<LearningRoom> {
   return room;
 }
 export async function closeRoom(roomId: string): Promise<void> {
-  const {dbSdk:f,database,user} = await coach();
-  const room = await getRoom(roomId);
-  if (room.ownerUid !== user.uid) throw new Error('coach-only');
-  await f.updateDoc(f.doc(database,'learningRooms',roomId),{status:'closed',updatedAt:f.serverTimestamp()});
+  await invokeRoom('closeLearningRoom',{roomId});
 }
-
 export async function createInvite(room: LearningRoom): Promise<RoomInvitation> {
-  const {dbSdk:f,database,user} = await coach();
+  const {user}=await coach();
   if (room.ownerUid !== user.uid || room.status !== 'active') throw new Error('coach-only');
-  // Firestore auto-ID is an unpredictable 20-character bearer capability; expires after 7 days.
-  const invite = f.doc(f.collection(database,'roomInvites'));
-  const expiresAt = new Date(Date.now()+7*24*60*60*1000);
-  await f.setDoc(invite,{
-    schemaVersion:1,roomId:room.id,ownerUid:user.uid,
-    roomTitle:room.title,audience:room.audience,
-    createdAt:f.serverTimestamp(),expiresAt:f.Timestamp.fromDate(expiresAt),
-  });
-  return {id:invite.id,roomId:room.id,ownerUid:user.uid,expiresAt};
+  const {inviteId}=await invokeRoom<{inviteId:string}>('issueRoomInvitation',{roomId:room.id});
+  return {id:inviteId,roomId:room.id,ownerUid:user.uid,expiresAt:new Date(Date.now()+7*86400000)};
 }
 export async function revokeInvite(id: string): Promise<void> {
-  if (!/^[A-Za-z0-9]{20}$/.test(id)) throw new Error('invalid-invite');
-  const {dbSdk:f,database}=await coach();
-  await f.deleteDoc(f.doc(database,'roomInvites',id));
+  await invokeRoom('revokeRoomInvitation',{inviteId:id});
 }
 export async function listInvites(uid: string): Promise<RoomInvitation[]> {
   const {dbSdk:f,database,user} = await coach();
@@ -119,7 +123,7 @@ export async function listInvites(uid: string): Promise<RoomInvitation[]> {
     return expiration instanceof Date ? {id:item.id,roomId:data.roomId as string,ownerUid:uid,expiresAt:expiration} : null;
   }).filter((item): item is RoomInvitation=>!!item);
 }
-export async function redeemInfo(inviteId: string): Promise<{invitation: RoomInvitation; roomTitle: string; audience: RoomAudience}> {
+export async function redeemInfo(inviteId: string): Promise<{invitation: RoomInvitation; roomTitle: string; audience: RoomAudience; roomExpiresAt: Date}> {
   if (!/^[A-Za-z0-9]{20}$/.test(inviteId)) throw new Error('invalid-invite');
   const {dbSdk:f,database} = await verified();
   const doc = await f.getDoc(f.doc(database,'roomInvites',inviteId));
@@ -128,73 +132,59 @@ export async function redeemInfo(inviteId: string): Promise<{invitation: RoomInv
   const expiresAt=data.expiresAt?.toDate?.();
   if (!(expiresAt instanceof Date) || expiresAt.getTime() <= Date.now()) throw new Error('invite-expired');
   if (!['children','adults','mixed'].includes(data.audience) || typeof data.roomTitle !== 'string') throw new Error('invite-unavailable');
-  return {invitation:{id:inviteId,roomId:data.roomId,ownerUid:data.ownerUid,expiresAt},roomTitle:data.roomTitle,audience:data.audience};
+  const roomExpiresAt=data.roomExpiresAt?.toDate?.();
+  if(!(roomExpiresAt instanceof Date)||roomExpiresAt.getTime()<=Date.now())throw new Error('room-expired');
+  return {invitation:{id:inviteId,roomId:data.roomId,ownerUid:data.ownerUid,expiresAt},roomTitle:data.roomTitle,audience:data.audience,roomExpiresAt};
 }
-export async function joinRoom(inviteId: string, ageBand: AgeBand, guardianConfirmed: boolean): Promise<string> {
-  const {dbSdk:f,database,user} = await verified();
-  const {invitation,audience} = await redeemInfo(inviteId);
-  if (!roomAllowsAge(audience,ageBand)) throw new Error('audience-mismatch');
-  if (isChild(ageBand) !== guardianConfirmed) throw new Error('guardian-required');
-  const member = f.doc(database,'learningRooms',invitation.roomId,'members',user.uid);
-  const index = f.doc(database,'userRooms',user.uid,'rooms',invitation.roomId);
-  const payload = {schemaVersion:1,uid:user.uid,roomId:invitation.roomId,inviteId,ageBand,guardianConfirmed,joinedAt:f.serverTimestamp()};
-  const batch=f.writeBatch(database);
-  batch.set(member,payload);
-  batch.set(index,payload);
-  await batch.commit();
-  return invitation.roomId;
+export async function joinRoom(inviteId: string, ageBand: AgeBand, guardianConfirmed: boolean):Promise<string> {
+  if(isChild(ageBand)!==guardianConfirmed)throw new Error('guardian-required');
+  const result=await invokeRoom<{roomId:string}>('joinLearningRoom',{
+    inviteId,ageBand,guardianAcknowledged:guardianConfirmed,
+  });
+  return result.roomId;
 }
-/** Withdraw consent and erase the learner's personal room data atomically. */
-export async function leaveRoom(roomId: string): Promise<void> {
-  if (!/^[A-Za-z0-9]{20}$/.test(roomId)) throw new Error('invalid-room');
-  const {dbSdk:f,database,user} = await verified();
-  const member=f.doc(database,'learningRooms',roomId,'members',user.uid);
-  const index=f.doc(database,'userRooms',user.uid,'rooms',roomId);
-  const diagnostic=f.doc(database,'learningRooms',roomId,'diagnostics',user.uid);
-  const batch=f.writeBatch(database);
-  batch.delete(diagnostic);
-  batch.delete(member);
-  batch.delete(index);
-  await batch.commit();
+/* Server-owned atomic withdrawal removes the guardian approval as well. */
+export async function leaveRoom(roomId:string):Promise<void> {
+  if(!/^[A-Za-z0-9]{20}$/.test(roomId))throw new Error('invalid-room');
+  await invokeRoom('withdrawRoomParticipation',{roomId});
 }
-export async function getMyMembership(roomId:string): Promise<{ageBand:AgeBand; guardianConfirmed:boolean}|null> {
+export async function getMyMembership(roomId:string): Promise<{ageBand:AgeBand; guardianConfirmed:boolean; expiresAt:Date}|null> {
   const {dbSdk:f,database,user}=await verified();
   const snapshot=await f.getDoc(f.doc(database,'learningRooms',roomId,'members',user.uid));
   if (!snapshot.exists()) return null;
   const data=snapshot.data();
   if (!['6-9','10-12','13-17','adult'].includes(data.ageBand)) return null;
-  return {ageBand:data.ageBand as AgeBand,guardianConfirmed:data.guardianConfirmed===true};
+  const expiresAt=data.expiresAt?.toDate?.();
+  if(!(expiresAt instanceof Date))return null;
+  return {ageBand:data.ageBand as AgeBand,guardianConfirmed:data.guardianConfirmed===true,expiresAt};
 }
-export async function getMyDiagnostic(roomId:string): Promise<RoomDiagnostic|null> {
+export async function getMyDiagnostic(roomId:string): Promise<RoomDiagnosticSummary|null> {
   const {dbSdk:f,database,user}=await verified();
   const snapshot=await f.getDoc(f.doc(database,'learningRooms',roomId,'diagnostics',user.uid));
   if (!snapshot.exists()) return null;
-  const data=snapshot.data();
-  const result={uid:user.uid,ageBand:data.ageBand,guardianConfirmed:data.guardianConfirmed,goal:data.goal,answers:data.answers};
-  return validDiagnostic(result)?result:null;
+  const d=snapshot.data();
+  const result={uid:user.uid,ageBand:d.ageBand,goal:d.goal,score:d.score,total:d.total};
+  return validSummary(result)?result:null;
 }
-export async function sendDiagnostic(roomId:string,ageBand:AgeBand,guardianConfirmed:boolean,goal:LearningGoal,answers:Answers): Promise<RoomDiagnostic> {
-  const {dbSdk:f,database,user}=await verified();
-  const result={uid:user.uid,ageBand,guardianConfirmed,goal,answers};
-  if (!validDiagnostic(result)) throw new Error('incomplete-diagnostic');
-  const _grade = gradeDiagnostic(ageBand,answers); // Result is advisory, not an entitlement or ELO.
-  if (_grade.total !== 5) throw new Error('invalid-questions');
-  await f.setDoc(f.doc(database,'learningRooms',roomId,'diagnostics',user.uid),{...result,schemaVersion:1,roomId,submittedAt:f.serverTimestamp()});
-  return result;
+export async function sendDiagnostic(roomId:string,ageBand:AgeBand,guardianConfirmed:boolean,goal:LearningGoal,answers:Answers): Promise<RoomDiagnosticSummary> {
+  const {user}=await verified();
+  if(guardianConfirmed!==isChild(ageBand)||!answers||Object.keys(answers).length!==5||
+     Object.values(answers).some(v=>!['a','b','c'].includes(v)))throw new Error('incomplete-diagnostic');
+  const outcome=await invokeRoom<{score:number;total:5}>('submitRoomDiagnostic',{roomId,goal,answers});
+  return {uid:user.uid,ageBand,goal,score:outcome.score,total:outcome.total};
 }
-export async function listDiagnostics(roomId:string):Promise<RoomDiagnostic[]> {
+export async function listDiagnostics(roomId:string):Promise<RoomDiagnosticSummary[]> {
   const {dbSdk:f,database}=await coach();
   const docs=await f.getDocs(f.query(f.collection(database,'learningRooms',roomId,'diagnostics'),f.limit(50)));
   return docs.docs.map(doc=>{
-    const d=doc.data();
-    const item={uid:doc.id,ageBand:d.ageBand,guardianConfirmed:d.guardianConfirmed,goal:d.goal,answers:d.answers};
-    return validDiagnostic(item)?item:null;
-  }).filter((d):d is RoomDiagnostic=>!!d);
+    const d=doc.data(),item={uid:doc.id,ageBand:d.ageBand,goal:d.goal,score:d.score,total:d.total};
+    return validSummary(item)?item:null;
+  }).filter((d):d is RoomDiagnosticSummary=>!!d);
 }
 /** Real-time read-only roster. Firestore rules restrict both listeners to the owning coach. */
 export async function observeRoomRoster(
   roomId: string,
-  onDiagnostics: (results: RoomDiagnostic[]) => void,
+  onDiagnostics: (results: RoomDiagnosticSummary[]) => void,
   onMemberCount: (count: number) => void,
   onError: () => void,
 ): Promise<() => void> {
@@ -204,9 +194,9 @@ export async function observeRoomRoster(
   const stopDiagnoses=f.onSnapshot(diagnosticsRef,snapshot=>{
     const diagnostics=snapshot.docs.map(doc=>{
       const d=doc.data();
-      const item={uid:doc.id,ageBand:d.ageBand,guardianConfirmed:d.guardianConfirmed,goal:d.goal,answers:d.answers};
-      return validDiagnostic(item)?item:null;
-    }).filter((item):item is RoomDiagnostic=>!!item);
+      const item={uid:doc.id,ageBand:d.ageBand,goal:d.goal,score:d.score,total:d.total};
+      return validSummary(item)?item:null;
+    }).filter((item):item is RoomDiagnosticSummary=>!!item);
     onDiagnostics(diagnostics);
   },onError);
   const stopMembers=f.onSnapshot(membersRef,snapshot=>onMemberCount(snapshot.docs.length),onError);

@@ -1,31 +1,60 @@
 {
-  "createdAt": "2026-10-26T20:17:59.368503+00:00",
+  "timestamp": "2026-10-27T03:00:46.213839+00:00",
   "branch": "feat/chessy-zero-one-rooms-20261023",
-  "baseline": "c996680",
-  "results": {
-    "lint": "PASS",
+  "evidenceStatus": "PASS_ON_LOCAL_AND_EMULATED_TESTS_ONLY",
+  "measured": {
+    "chessyUnitTests": 318,
+    "chessyUnitSuites": 15,
+    "functionsNodeUnitTests": 8,
+    "roomFirestoreRuleTests": 12,
+    "legacyCoachRuleTests": 19,
+    "browserAuthenticatedCoachAdultGuardian": 13,
+    "backendQuotasAndRetentionScenarios": 12,
+    "roomAnonymousUI": 8,
+    "wholeProductBrowserRegressions": 48,
+    "pwaOffline": "PASS",
     "typescript": "PASS",
-    "productionBuild": "PASS",
-    "unitTests": 318,
-    "unitSuites": 15,
-    "roomFirestoreSecurityScenarios": 13,
-    "legacyCoachFirestoreStorageScenarios": 19,
-    "roomBrowserScenarios": 8,
-    "twoUserFirebaseBrowserScenarios": 11,
-    "chessyRegressionBrowserScenarios": 48,
-    "pwaOfflineGate": "PASS",
-    "wcagAutomated": "PASS (automated scans, not manual certification)"
+    "eslint": "PASS",
+    "productionBuild": "PASS"
   },
-  "productionDeployed": false,
-  "externalEmailDelivery": "NOT_IMPLEMENTED (native share + mail client only)",
-  "minorProtectionReview": "REQUIRED_BEFORE_PUBLIC_ROLLOUT",
-  "roomOwnerDataPurgeAutomation": "NOT_IMPLEMENTED",
-  "sourceEvidence": [
+  "notProven": [
+    "real App Check enforcement / reCAPTCHA Enterprise site credentials",
+    "live Firebase Functions / Firestore indexes / TTL deployment",
+    "real external verifiable parental consent provider and legal acceptance",
+    "jurisdiction-specific child data protection and safeguards approval",
+    "live GCP billing budgets, cleanup scheduler and monitoring configured",
+    "published reviewed privacy notices and data processor agreement"
+  ],
+  "release": {
+    "adults": {
+      "status": "NO_GO",
+      "blockers": [
+        "publishedPrivacyNotice",
+        "appCheckSiteKey"
+      ]
+    },
+    "minors": {
+      "status": "NO_GO",
+      "blockers": [
+        "publishedPrivacyNotice",
+        "appCheckSiteKey",
+        "legalReviewApproved",
+        "securityReviewApproved",
+        "externalConsentProviderConfigured",
+        "providerContractAndJurisdictionReview",
+        "productionBudgetsAndMonitoring",
+        "signedFinalPrivacyNotices"
+      ]
+    },
+    "merged": false,
+    "productionDeployed": false
+  },
+  "evidenceFiles": [
     "browser-report.json",
     "browser-auth-report.json",
+    "safety-release-gate-adults.json",
+    "safety-release-gate-minors.json",
     "coach-created-room.png",
-    "guardian-diagnostic-mobile.png",
-    "rooms-390.png",
-    "rooms-1440.png"
+    "guardian-diagnostic-mobile.png"
   ]
 }

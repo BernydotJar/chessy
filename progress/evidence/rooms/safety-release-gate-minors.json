@@ -1,0 +1,37 @@
+{
+  "generatedAt": "2026-10-27T03:01:44.783Z",
+  "mode": "minors",
+  "status": "NO_GO",
+  "note": "Configuration checks do not prove legal compliance or verify live cloud deployment. Live security and legal sign-off are separately mandatory.",
+  "technical": {
+    "denyDirectMinorConsents": true,
+    "denyDirectRoomCreation": true,
+    "callableAppCheck": true,
+    "retentionWorker": true,
+    "auditsAndQuotas": true,
+    "ttlDefinitions": true,
+    "browserSecurityTests": true,
+    "consentSignatureValidation": true,
+    "publishedPrivacyNotice": false,
+    "appCheckSiteKey": false
+  },
+  "external": {
+    "legalReviewApproved": false,
+    "securityReviewApproved": false,
+    "externalConsentProviderConfigured": false,
+    "providerContractAndJurisdictionReview": false,
+    "productionBudgetsAndMonitoring": false,
+    "signedFinalPrivacyNotices": false
+  },
+  "missing": [
+    "publishedPrivacyNotice",
+    "appCheckSiteKey",
+    "legalReviewApproved",
+    "securityReviewApproved",
+    "externalConsentProviderConfigured",
+    "providerContractAndJurisdictionReview",
+    "productionBudgetsAndMonitoring",
+    "signedFinalPrivacyNotices"
+  ],
+  "approvalRequired": true
+}

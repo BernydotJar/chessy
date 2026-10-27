@@ -1,52 +1,52 @@
 {
-  "createdAt": "2026-10-26T20:15:38.477Z",
+  "createdAt": "2026-10-27T02:59:34.560Z",
   "checks": [
     {
       "name": "Anonymous learner finds level zero-to-one with five evidence milestones",
       "result": "PASS",
-      "ms": 209
+      "ms": 244
     },
     {
       "name": "Zero-to-one milestones open the exact next unfinished lesson or puzzle",
       "result": "PASS",
-      "ms": 249
+      "ms": 302
     },
     {
       "name": "Signup visibly distinguishes guardian and blocks a minor account",
       "result": "PASS",
-      "ms": 95
+      "ms": 121
     },
     {
       "name": "Private invitation preserves sign-in boundary for anonymous visitor",
       "result": "PASS",
-      "ms": 6
+      "ms": 9
     },
     {
       "name": "Desktop room action and mobile drawer do not obstruct navigation",
       "result": "PASS",
-      "ms": 274
+      "ms": 290
     },
     {
       "name": "Room and account anonymous screens pass automated accessibility scan",
       "result": "PASS",
-      "ms": 621
+      "ms": 669
     },
     {
       "name": "Language switch preserves translated room navigation labels",
       "result": "PASS",
-      "ms": 523
+      "ms": 504
     },
     {
       "name": "No unhandled JavaScript errors during room journeys",
       "result": "PASS",
-      "ms": 0
+      "ms": 1
     }
   ],
   "pageErrors": [],
   "screenshots": [
-    "/workspace/projects/chessy-zero-one-rooms-20261023/progress/evidence/rooms/rooms-1440.png",
-    "/workspace/projects/chessy-zero-one-rooms-20261023/progress/evidence/rooms/rooms-760.png",
-    "/workspace/projects/chessy-zero-one-rooms-20261023/progress/evidence/rooms/rooms-390.png",
-    "/workspace/projects/chessy-zero-one-rooms-20261023/progress/evidence/rooms/rooms-375.png"
+    "/workspace/projects/chessy-zero-one-rooms-publish/progress/evidence/rooms/rooms-1440.png",
+    "/workspace/projects/chessy-zero-one-rooms-publish/progress/evidence/rooms/rooms-760.png",
+    "/workspace/projects/chessy-zero-one-rooms-publish/progress/evidence/rooms/rooms-390.png",
+    "/workspace/projects/chessy-zero-one-rooms-publish/progress/evidence/rooms/rooms-375.png"
   ]
 }
