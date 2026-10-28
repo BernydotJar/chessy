@@ -1,45 +1,45 @@
 {
-  "createdAt": "2026-10-27T02:59:34.560Z",
+  "createdAt": "2026-10-28T05:30:32.046Z",
   "checks": [
     {
       "name": "Anonymous learner finds level zero-to-one with five evidence milestones",
       "result": "PASS",
-      "ms": 244
+      "ms": 256
     },
     {
       "name": "Zero-to-one milestones open the exact next unfinished lesson or puzzle",
       "result": "PASS",
-      "ms": 302
+      "ms": 326
     },
     {
       "name": "Signup visibly distinguishes guardian and blocks a minor account",
       "result": "PASS",
-      "ms": 121
+      "ms": 147
     },
     {
       "name": "Private invitation preserves sign-in boundary for anonymous visitor",
       "result": "PASS",
-      "ms": 9
+      "ms": 8
     },
     {
       "name": "Desktop room action and mobile drawer do not obstruct navigation",
       "result": "PASS",
-      "ms": 290
+      "ms": 341
     },
     {
       "name": "Room and account anonymous screens pass automated accessibility scan",
       "result": "PASS",
-      "ms": 669
+      "ms": 667
     },
     {
       "name": "Language switch preserves translated room navigation labels",
       "result": "PASS",
-      "ms": 504
+      "ms": 508
     },
     {
       "name": "No unhandled JavaScript errors during room journeys",
       "result": "PASS",
-      "ms": 1
+      "ms": 0
     }
   ],
   "pageErrors": [],

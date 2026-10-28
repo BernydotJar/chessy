@@ -17,7 +17,7 @@ Estado: PR en Draft. No fusionado ni desplegado. La ruta inicial se construyó e
 
 Cliente React + Firebase Auth + Firestore + Functions v2. Callable Functions con App Check real en producción para crear/cerrar salas, emitir/revocar invitaciones, solicitar revisión y calcular diagnósticos. Firestore Rules bloquea manipulación directa de cuotas, política, aprobaciones y puntuaciones.
 
-El permiso de menores requiere una verificación externa con aserción EdDSA (contrato técnico implementado) emitida para un UID adulto, sala, rango y versión de política concreta. El operador registra solamente un digest de comprobante y debe estar autorizado por IAM. El permiso expira y puede anularse inmediatamente mediante una política global inicialmente deshabilitada.
+La habilitación global para menores requiere manifiesto firmado Ed25519 por dos revisores, vinculado a SHA, proyecto Firebase, versión de política, países y aviso. No basta escribir dos referencias de aprobación. El permiso individual requiere una verificación externa con aserción EdDSA (contrato técnico implementado) emitida para un UID adulto, sala, rango y versión de política concreta. El operador registra solamente un digest de comprobante y debe estar autorizado por IAM. El permiso expira y puede anularse inmediatamente mediante una política global inicialmente deshabilitada.
 
 Límites: 3 salas/24h por profesor; 10 invitaciones/h; 2 solicitudes parentales/día; 15 admisiones/día por cuenta y 50 admisiones acumuladas por sala; membresías hasta 30 días para menores y 90 para adultos. Una sala activa vence en 90 días y se purga recursivamente 30 días después del cierre.
 
@@ -38,7 +38,8 @@ Los escenarios con autorizaciones firmadas utilizan proveedores y cuentas sinté
 
 - docs/CHILD_SAFETY_DATA_GOVERNANCE.md: inventario, riesgos, retención y revisión legal regional.
 - docs/ROOMS_PRIVACY_NOTICE_DRAFT_ES.md: borrador público; requiere responsable/contacto y revisión.
-- docs/ROOMS_SAFETY_RUNBOOK.md: despliegue, configuración, TTL, autorización y respuesta a incidentes.
+- docs/ROOMS_SAFETY_RUNBOOK.md: despliegue, TTL, manifiesto firmado y respuesta a incidentes.
+- .github/workflows/github-pages.yml: pruebas de seguridad de salas en CI con aceptación técnica, sin levantar el NO-GO infantil.
 - progress/evidence/rooms/safety-release-gate-adults.json y safety-release-gate-minors.json: evaluación local de configuración, sin certificar entorno real.
 
 **No es una integración de Chess.com.** Las referencias externas orientan UX, pero las salas y datos pertenecen a Chessy.

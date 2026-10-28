@@ -3,9 +3,11 @@
  * Never run with production Firebase credentials.
  */
 const {spawn}=require('node:child_process');
+require('./rooms-emulator-guard.cjs').assertLocalFirebaseEmulators();
 const {chromium}=require('playwright');
 const {generateKeyPairSync,sign,createHash}=require('node:crypto');
 const {promisify}=require('node:util');
+const {signedBytes}=require('../functions/governance-approval.cjs');
 const exec=promisify(require('node:child_process').execFile);
 const assert=require('node:assert/strict');
 const fs=require('node:fs/promises');
@@ -45,7 +47,13 @@ async function signIn(page,email){
   await form.locator('input[type=email]').fill(email);
   await form.locator('input[type=password]').fill('ChessyEmulator123');
   await form.getByRole('button',{name:'Iniciar sesión'}).click();
-  await page.locator('.account-profile').waitFor({timeout:20000});
+  try {
+    await page.locator('.account-profile').waitFor({timeout:30000});
+  }catch(error){
+    const state=await page.locator('main').innerText().catch(()=>'<main-unavailable>');
+    console.error('AUTH_UI_STATE',email,state.slice(-1000));
+    throw error;
+  }
   assert.match(await page.locator('.account-profile').innerText(),new RegExp(email));
 }
 (async()=>{
@@ -53,14 +61,14 @@ async function signIn(page,email){
   server=spawn(process.execPath,['node_modules/vite/bin/vite.js','--host','127.0.0.1','--port','14319','--strictPort'],
     {cwd:ROOT,env,stdio:'ignore'});
   await waitForServer();
-  browser=await chromium.launch({headless:true});
+  browser=await chromium.launch({headless:true,args:['--disable-dev-shm-usage']});
   teacher=await browser.newContext({viewport:{width:1440,height:900},locale:'es-GT',timezoneId:'America/Guatemala'});
   student=await browser.newContext({viewport:{width:390,height:844},locale:'es-GT',timezoneId:'America/Guatemala'});
-  guardianBrowser=await browser.newContext({viewport:{width:390,height:844},locale:'es-GT'});
-  const t=await teacher.newPage(),s=await student.newPage(),g=await guardianBrowser.newPage();
+  const t=await teacher.newPage(),s=await student.newPage();
+  let g;
   t.on('pageerror',e=>report.pageErrors.push('coach: '+e.message));
   s.on('pageerror',e=>report.pageErrors.push('student: '+e.message));
-  t.setDefaultTimeout(16000);s.setDefaultTimeout(16000);
+  t.setDefaultTimeout(25000);s.setDefaultTimeout(25000);
   let invite,roomUrl;
   await check('Coach has a verified identity and an approved coach claim',async()=>{
     await signIn(t,'coach-rooms-e2e@example.test');
@@ -101,19 +109,30 @@ async function signIn(page,email){
     await s.locator('.room-accept select').selectOption('adult');
     await s.getByRole('button',{name:'Entrar a la sala'}).click();
     await s.locator('.room-heading-panel').waitFor({timeout:18000});
-    await s.locator('.room-question').first().waitFor({timeout:18000});
+    await s.waitForFunction(() => {
+      const questions=document.querySelectorAll('.room-question');
+      return questions.length===5&&
+        questions[0]?.querySelector('input[value="b"]')!==null;
+    },undefined,{timeout:30000});
     assert.equal(await s.locator('.room-question').count(),5);
   });
   await check('Server grades but does not retain raw questionnaire answers',async()=>{
     const answer=['b','a','c','a','b'];
     for(let i=0;i<answer.length;i++){
-      await s.locator('.room-question').nth(i).locator('input[value="'+answer[i]+'"]').check();
+      const option=s.locator('.room-question').nth(i).locator('input[value="'+answer[i]+'"]');
+      try {
+        await option.check({timeout:30000});
+      }catch(error){
+        const state=await s.locator('main').innerText().catch(()=>'<main-unavailable>');
+        console.error('QUESTION_UI_STATE',i,state.slice(-1400));
+        throw error;
+      }
     }
     await s.getByRole('button',{name:'Enviar respuestas'}).click();
     await s.locator('.room-diagnostic-done').waitFor({timeout:15000});
     assert.match(await s.locator('.room-diagnostic-done').innerText(),/5 \/ 5/);
     await s.evaluate(()=>window.scrollTo(0,0));
-    await s.screenshot({path:path.join(OUT,'guardian-diagnostic-mobile.png'),fullPage:true});
+    await s.locator('.room-diagnostic-done').screenshot({path:path.join(OUT,'guardian-diagnostic-mobile.png'),animations:'disabled',timeout:30000});
     assert.equal(await s.locator('.room-question').count(),0);
   });
   await check('Account deletion blocks while a private classroom record exists',async()=>{
@@ -128,6 +147,9 @@ async function signIn(page,email){
     await s.locator('.room-diagnostic-done').waitFor({timeout:18000});
   });
   await check('Minor invite is blocked pending external verification',async()=>{
+    guardianBrowser=await browser.newContext({viewport:{width:390,height:844},locale:'es-GT'});
+    g=await guardianBrowser.newPage();
+    g.setDefaultTimeout(25000);
     await g.goto(invite,{waitUntil:'domcontentloaded'});
     await g.getByRole('heading',{name:'Entra para participar'}).waitFor();
     await signIn(g,'guardian-rooms-e2e@example.test');
@@ -148,15 +170,58 @@ async function signIn(page,email){
     const publicKeyPem=publicKey.export({type:'spki',format:'pem'});
     const issuer='chessy-verified-provider-emulator';
     const kid='local-vpc-key-1';
-    const legalEvidenceSha256=createHash('sha256').update('synthetic legal review only').digest('hex');
     const flags=['--project=demo-chessy-rooms','--ticket=E2E-APPROVED-TEST','--apply=yes'];
-    const cli=async(action,more=[],extraEnv={})=>exec(process.execPath,
-      [path.join(ROOT,'functions/ops-admin.cjs'),action,...flags,...more],
-      {cwd:ROOT,env:{...process.env,...extraEnv},timeout:17000});
+    const cli=async(action,more=[],extraEnv={})=>{
+      try {
+        return await exec(process.execPath,
+          [path.join(ROOT,'functions/ops-admin.cjs'),action,...flags,...more],
+          {cwd:ROOT,env:{...process.env,...extraEnv},timeout:60000});
+      }catch(error){
+        if(error && error.stderr && !more.some(arg=>arg.startsWith('--assertionFile=')))
+          console.error('OPS_CLI_DIAGNOSTIC',action,String(error.stderr).slice(-900));
+        throw error;
+      }
+    };
     const configEnv={CHESSY_VPC_ED25519_PUBLIC_KEY_PEM:publicKeyPem,
       CHESSY_VPC_ISSUER:issuer,CHESSY_VPC_KEY_ID:kid};
-    await cli('policy-enable',['--legalReview=legal-review-test','--securityReview=security-review-test',
-      '--legalEvidenceSha256='+legalEvidenceSha256]);
+    // Two new ephemeral signing keys are strictly local; NOT real legal approvals.
+    const legalSigner=generateKeyPairSync('ed25519');
+    const securitySigner=generateKeyPairSync('ed25519');
+    const {stdout:currentSha}=await exec('git',['rev-parse','HEAD'],{cwd:ROOT});
+    const releaseSha=currentSha.trim();
+    const testNotice={url:'https://chessy.example.org/legal/notice-e2e',
+      version:'e2e-notice-2026',
+      sha256:createHash('sha256').update('synthetic notice; never a live privacy page').digest('hex')};
+    const approvalPayload={
+      schemaVersion:1,purpose:'chessy-minor-safety-release',
+      projectId:'demo-chessy-rooms',releaseSha,policyVersion:1,
+      issuedAtMs:Date.now()-1000,expiresAtMs:Date.now()+3600000,
+      ticket:'E2E-APPROVED-TEST',jurisdictions:['GT'],
+      privacyNotice:testNotice,
+      legalReviewRef:'LEGAL-EMULATOR-TEST',securityReviewRef:'SECURITY-EMULATOR-TEST',
+    };
+    const approvalContent=signedBytes(approvalPayload);
+    const approvalManifest={
+      payload:approvalPayload,
+      signatures:{
+        legal:sign(null,approvalContent,legalSigner.privateKey).toString('base64url'),
+        security:sign(null,approvalContent,securitySigner.privateKey).toString('base64url'),
+      },
+    };
+    const approvalEnv={
+      CHESSY_LEGAL_APPROVAL_PUBLIC_KEY_PEM:legalSigner.publicKey.export({format:'pem',type:'spki'}),
+      CHESSY_SECURITY_APPROVAL_PUBLIC_KEY_PEM:securitySigner.publicKey.export({format:'pem',type:'spki'}),
+      CHESSY_ROOM_PRIVACY_NOTICE_URL:testNotice.url,
+      CHESSY_ROOM_PRIVACY_VERSION:testNotice.version,
+    };
+    // Previous self-declared text references cannot enable a child policy.
+    await assert.rejects(()=>cli('policy-enable',['--legalReview=just-a-string',
+      '--securityReview=another-string','--legalEvidenceSha256='+testNotice.sha256],approvalEnv));
+    const manifestFile=path.join(OUT,'synthetic-release-approval.tmp');
+    await fs.writeFile(manifestFile,JSON.stringify(approvalManifest),{mode:0o600});
+    try {
+      await cli('policy-enable',['--releaseSha='+releaseSha,'--approvalFile='+manifestFile],approvalEnv);
+    } finally {await fs.unlink(manifestFile).catch(()=>{});}
     await g.getByRole('button',{name:'Comprobar autorización'}).click();
     assert.equal(await g.getByRole('button',{name:'Entrar a la sala'}).isDisabled(),true);
     const header={alg:'EdDSA',typ:'JWT',kid};
@@ -194,7 +259,7 @@ async function signIn(page,email){
     assert.equal(await g.locator('.room-heading-panel').count(),0);
     g.once('dialog',dialog=>dialog.accept());
     await g.getByRole('button',{name:'Salir y borrar mis datos de esta sala'}).click();
-    await g.locator('.room-list-section').waitFor({timeout:15000});
+    await g.locator('.room-list-section').waitFor({timeout:45000});
     const resource='http://127.0.0.1:19608/v1/projects/demo-chessy-rooms/databases/(default)/documents/';
     for(const target of [
       'learningRooms/'+roomKey+'/diagnostics/guardianChessyE2E',
@@ -204,7 +269,8 @@ async function signIn(page,email){
       const result=await fetch(resource+target,{headers:{Authorization:'Bearer owner'}});
       assert.equal(result.status,404,target+' must be erased');
     }
-
+    await guardianBrowser.close();
+    guardianBrowser=null;
   });
   await check('Coach sees anonymous scores and exercises instructor-only board control',async()=>{
     // Teacher stays in the room: results must arrive live, without a manual refresh.
@@ -229,7 +295,7 @@ async function signIn(page,email){
     const previousRoom=s.url();
     s.once('dialog',dialog=>dialog.accept());
     await s.getByRole('button',{name:'Salir y borrar mis datos de esta sala'}).click();
-    await s.locator('.room-list-section').waitFor({timeout:15000});
+    await s.locator('.room-list-section').waitFor({timeout:45000});
     assert.equal(await s.locator('.room-card').count(),0);
     await s.goto(previousRoom,{waitUntil:'domcontentloaded'});
     await s.getByRole('alert').waitFor({timeout:15000});

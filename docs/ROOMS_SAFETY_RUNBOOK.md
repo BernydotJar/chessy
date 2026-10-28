@@ -16,7 +16,7 @@ El sistema no acepta datos personales ni documentos de menores en el diagnóstic
 4. Configurar en frontend VITE_CHESSY_ROOM_PRIVACY_URL y VITE_FIREBASE_APP_CHECK_SITE_KEY. Registrar dominio y reCAPTCHA Enterprise con App Check; probar permisos reales. Si faltan, las Functions protegidas rechazarán tráfico, no usar un bypass.
 5. Confirmar proveedores de Firebase Auth, verificación de correo y dominios autorizados. Los roles coach/admin se asignan únicamente mediante claims del backend.
 6. Desplegar funciones, índices/TTL y reglas de Firestore de forma coordinada ANTES de frontend; evitar períodos de reglas permisivas.
-7. Confirmar índices compuestos de salas y de collectionGroup rooms, así como TTL de roomInvites, diagnostics, guardianReviewRequests, roomGuardianApprovals, roomConsentReceipts, roomRateLimits y roomAudit.
+7. Confirmar índices compuestos de salas y de collectionGroup rooms, así como TTL de roomInvites, diagnostics, guardianReviewRequests, roomGuardianApprovals, roomConsentReceipts, roomReleaseApprovals, roomRateLimits y roomAudit.
 8. Confirmar que Cloud Scheduler invoca cleanupExpiredLearningRooms cada día. No basta el borrado automático TTL: las subcolecciones no se eliminan con el documento padre.
 9. Ejecutar pruebas con identidades sintéticas: reglas, backend, E2E profesor/tutor, PWA, accesibilidad y regresiones. Registrar hash y evidencia.
 10. Mantener roomSafety/config.minorEnrollmentEnabled en false durante el lanzamiento de adultos. Esto no requiere crear el documento: ausente también significa DENY.
@@ -33,7 +33,9 @@ El sistema no acepta datos personales ni documentos de menores en el diagnóstic
     firebase emulators:exec --project demo-chessy-rooms --config firebase.coach-emulators.json --only firestore "node scripts/room-rules-verify.mjs"
     firebase emulators:exec --project demo-chessy --config firebase.coach-emulators.json --only firestore,storage "node scripts/coach-rules-verify.mjs"
 
-En el emulador se desactiva la validación App Check porque no existe emisor real de attestation; el código mantiene enforcement en producción. Las cuentas de QA no son personas reales y los recibos de QA NO representan autorizaciones legales.
+La verificación de GitHub Actions incluye ahora un job rooms-safety que ejecuta este conjunto adversarial de pruebas; los resultados verdes no representan aprobación de despliegue. El gate infantil permanecerá NO-GO hasta cerrar las dependencias externas.
+
+En el emulador se desactiva la validación App Check porque no existe emisor real de attestation; el código mantiene enforcement en producción. Las cuentas de QA no son personas reales y los recibos de QA NO representan autorizaciones legales. Los scripts operativos del emulador incorporan un guardia que exige hosts locales exactos antes de inicializar Firebase Admin; al ejecutar fuera del emulador se aborta con SAFETY_STOP. Se recomienda ejecutar el job de GitHub Actions en un runner aislado; un workstation compartido saturado puede introducir timeouts de Playwright.
 
 ## Operación manual con IAM autorizado
 
@@ -48,11 +50,29 @@ Deshabilitar inmediatamente las salas infantiles ante incidente:
 
     node functions/ops-admin.cjs policy-disable --project=MI_PROYECTO --ticket=INCIDENTE-APROBADO --apply=yes
 
-Activarlas SOLO tras dictamen legal y aprobación de Seguridad independientes:
+Activarlas SOLO tras dictamen legal y revisión de Seguridad independientes, ambos **firmados criptográficamente**. El sistema ya no acepta las antiguas referencias de texto como autorización suficiente.
 
-    node functions/ops-admin.cjs policy-enable --project=MI_PROYECTO --ticket=CASO-APROBADO --legalReview=REVISION-LEGAL-REAL --securityReview=REVISION-SEGURIDAD-REAL --legalEvidenceSha256=HASH-DE-64-DIGITOS --apply=yes
+El responsable de release prepara un manifiesto JSON con los campos payload y signatures. Los revisores firman offline el mismo mensaje normalizado (contrato en functions/governance-approval.cjs) con **dos claves privadas Ed25519 distintas**, que nunca deben estar en Git ni en el Sandbox. El payload contiene exactamente:
 
-Activar la política incrementa su versión; requiere emitir aprobaciones individuales para la nueva versión. No convertir simples textos de referencia en una afirmación de revisión real: verificar evidencia y responsables fuera de la app.
+| Campo | Regla de validación |
+| --- | --- |
+| schemaVersion y purpose | 1 y chessy-minor-safety-release |
+| projectId, releaseSha y policyVersion | Proyecto Firebase exacto, SHA Git de 40 caracteres y siguiente versión |
+| issuedAtMs y expiresAtMs | Milisegundos UTC, hasta 30 días de vigencia |
+| ticket | Caso aprobado, idéntico a --ticket |
+| jurisdictions | Códigos ISO de país únicos |
+| privacyNotice | URL HTTPS, versión y hash SHA-256 del aviso revisado |
+| legalReviewRef y securityReviewRef | Referencias a dictámenes independientes reales |
+
+El objeto signatures contiene las firmas Base64URL legal y security, obtenidas sobre los bytes que produce la función signedBytes(payload) de functions/governance-approval.cjs. El CLI coteja el manifiesto con proyecto, commit, siguiente versión, URL y versión del aviso, verifica ambas firmas y registra un digest de un solo uso.
+
+Configurar fuera de Git las **claves públicas** autorizadas CHESSY_LEGAL_APPROVAL_PUBLIC_KEY_PEM y CHESSY_SECURITY_APPROVAL_PUBLIC_KEY_PEM, además de CHESSY_ROOM_PRIVACY_NOTICE_URL y CHESSY_ROOM_PRIVACY_VERSION. Las claves privadas y los dictámenes deben permanecer custodiados fuera de Chessy.
+
+    node functions/ops-admin.cjs policy-enable --project=MI_PROYECTO --ticket=CASO-APROBADO --releaseSha=SHA-EXACTO-DE-40-CARACTERES --approvalFile=/ruta/segura/manifiesto.json --apply=yes
+
+Una política habilitada no se puede volver a aprobar sin desactivarla antes. La siguiente activación incrementa la versión y requiere firmas **nuevas**. Las autorizaciones individuales necesitan esa misma versión. Una firma no prueba por sí sola que el SHA esté desplegado, que el aviso esté publicado o que exista cumplimiento legal: todo eso requiere aceptación externa.
+
+El script scripts/rooms-safety-release-gate.cjs puede comprobar opcionalmente el manifiesto, cuando se le suministran CHESSY_MINOR_GOVERNANCE_APPROVAL_FILE, las dos claves públicas, CHESSY_RELEASE_FIREBASE_PROJECT_ID, CHESSY_RELEASE_SHA, CHESSY_NEXT_POLICY_VERSION y los datos del aviso. Incluso con configuración completa, **nunca certifica un GO de producción**.
 
 ### Registro de autorización individual con comprobante firmado
 

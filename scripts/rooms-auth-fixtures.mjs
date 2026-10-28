@@ -1,3 +1,5 @@
+import guard from './rooms-emulator-guard.cjs';
+guard.assertLocalFirebaseEmulators({firestore:false});
 const origin='http://127.0.0.1:19639/identitytoolkit.googleapis.com/v1';
 const project='demo-chessy-rooms';
 const result=await fetch(origin+'/projects/'+project+'/accounts:batchCreate',{

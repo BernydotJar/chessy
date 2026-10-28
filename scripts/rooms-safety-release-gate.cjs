@@ -14,6 +14,24 @@ const functions=read('functions/index.cjs');
 const indexes=JSON.parse(read('firestore.indexes.json'));
 const exist=file=>fs.existsSync(path.join(ROOT,file));
 const configPresent=(key,regex)=>regex.test(process.env[key]||'');
+function signedGovernanceValid(){
+  const file=process.env.CHESSY_MINOR_GOVERNANCE_APPROVAL_FILE;
+  if(!file||!fs.existsSync(file))return false;
+  try {
+    const {verifyReleaseApproval}=require('../functions/governance-approval.cjs');
+    verifyReleaseApproval(JSON.parse(fs.readFileSync(file,'utf8')),{
+      legalPublicKeyPem:process.env.CHESSY_LEGAL_APPROVAL_PUBLIC_KEY_PEM,
+      securityPublicKeyPem:process.env.CHESSY_SECURITY_APPROVAL_PUBLIC_KEY_PEM,
+      projectId:process.env.CHESSY_RELEASE_FIREBASE_PROJECT_ID,
+      releaseSha:process.env.CHESSY_RELEASE_SHA,
+      policyVersion:Number(process.env.CHESSY_NEXT_POLICY_VERSION),
+      privacyNoticeUrl:process.env.CHESSY_ROOM_PRIVACY_NOTICE_URL,
+      privacyNoticeVersion:process.env.CHESSY_ROOM_PRIVACY_VERSION,
+    });
+    return true;
+  }catch{return false;}
+}
+
 const technical={
   denyDirectMinorConsents:rules.includes('function currentMinorApproval')&&rules.includes("allow read, write: if false;"),
   denyDirectRoomCreation:rules.includes('allow create: if false; // Server-only: quota'),
@@ -28,6 +46,7 @@ const technical={
   appCheckSiteKey:configPresent('VITE_FIREBASE_APP_CHECK_SITE_KEY',/^[A-Za-z0-9_-]{12,}$/),
 };
 const external={
+  signedGovernanceApproval:signedGovernanceValid(),
   legalReviewApproved:configPresent('CHESSY_LEGAL_REVIEW_REF',/^[A-Za-z0-9._-]{8,}$/),
   securityReviewApproved:configPresent('CHESSY_SECURITY_REVIEW_REF',/^[A-Za-z0-9._-]{8,}$/),
   externalConsentProviderConfigured:!!process.env.CHESSY_VPC_ED25519_PUBLIC_KEY_PEM &&
@@ -39,7 +58,7 @@ const external={
 const missing=Object.entries(technical).filter(([,value])=>!value).map(([name])=>name);
 if(mode==='minors')missing.push(...Object.entries(external).filter(([,value])=>!value).map(([name])=>name));
 const report={
-  generatedAt:new Date().toISOString(),mode,status:missing.length?'NO_GO':'CONFIGURATION_CHECKS_PASS',
+  generatedAt:new Date().toISOString(),mode,status:missing.length?'NO_GO':'CONFIGURATION_ONLY_REQUIRES_LIVE_RELEASE_ACCEPTANCE',
   note:'Configuration checks do not prove legal compliance or verify live cloud deployment. Live security and legal sign-off are separately mandatory.',
   technical,external,missing,approvalRequired:mode==='minors',
 };

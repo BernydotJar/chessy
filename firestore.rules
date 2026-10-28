@@ -254,6 +254,9 @@ service cloud.firestore {
     match /roomConsentReceipts/{id} {
       allow read, write: if false; // Replay-protection ledger; no browser access.
     }
+    match /roomReleaseApprovals/{id} {
+      allow read, write: if false; // Two-signature policy proof; no browser access.
+    }
     match /roomRateLimits/{id} {
       allow read, write: if false;
     }

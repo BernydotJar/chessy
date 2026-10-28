@@ -1,5 +1,6 @@
 'use strict';
 const assert=require('node:assert/strict');
+require('./rooms-emulator-guard.cjs').assertLocalFirebaseEmulators();
 const fromFunctions=require('node:module').createRequire(require('node:path').resolve(__dirname,'../functions/package.json'));
 const {initializeApp}=fromFunctions('firebase-admin/app');
 const {getFirestore,Timestamp}=fromFunctions('firebase-admin/firestore');

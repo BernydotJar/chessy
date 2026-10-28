@@ -1,11 +1,11 @@
 {
-  "timestamp": "2026-10-27T03:00:46.213839+00:00",
+  "timestamp": "2026-10-28T05:31:23.472729+00:00",
   "branch": "feat/chessy-zero-one-rooms-20261023",
-  "evidenceStatus": "PASS_ON_LOCAL_AND_EMULATED_TESTS_ONLY",
+  "evidenceStatus": "PASS_LOCAL_AND_FIREBASE_EMULATORS_NOT_PRODUCTION",
   "measured": {
     "chessyUnitTests": 318,
     "chessyUnitSuites": 15,
-    "functionsNodeUnitTests": 8,
+    "functionsNodeUnitTests": 14,
     "roomFirestoreRuleTests": 12,
     "legacyCoachRuleTests": 19,
     "browserAuthenticatedCoachAdultGuardian": 13,
@@ -38,6 +38,7 @@
       "blockers": [
         "publishedPrivacyNotice",
         "appCheckSiteKey",
+        "signedGovernanceApproval",
         "legalReviewApproved",
         "securityReviewApproved",
         "externalConsentProviderConfigured",
@@ -56,5 +57,20 @@
     "safety-release-gate-minors.json",
     "coach-created-room.png",
     "guardian-diagnostic-mobile.png"
-  ]
+  ],
+  "ci": {
+    "roomsSafetyJobDefined": true,
+    "executedOnGitHubRunner": false,
+    "pending": "Re-run safety job on the final PR SHA using an independent GitHub runner"
+  },
+  "governanceControls": {
+    "legalSecurityDistinctEd25519Signatures": "PASS (synthetic test keys)",
+    "signedReleaseBinding": "PASS (project, SHA, policy version, countries, privacy notice)",
+    "oldTextOnlyApprovalRejected": "PASS",
+    "signedApprovalReplayGuard": "IMPLEMENTED",
+    "testScriptsRejectNonlocalEmulators": "PASS"
+  },
+  "executorCaveat": "Shared Sandbox V3 experienced high load and intermittent Playwright timeouts; the last complete authenticated run passed 13/13; clean CI runner verification remains pending.",
+  "baselineSha": "d2365811dfe49fd50bf23f902bc5a1d6297044ee",
+  "testedWorkingTreeIncludesUncommittedSafetyChanges": true
 }

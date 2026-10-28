@@ -1,3 +1,5 @@
+import guard from './rooms-emulator-guard.cjs';
+guard.assertLocalFirebaseEmulators({auth:false});
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import firebase from 'firebase/compat/app';

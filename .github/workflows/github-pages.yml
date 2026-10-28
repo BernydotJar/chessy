@@ -74,3 +74,75 @@ jobs:
             progress/evidence/browser/
             progress/evidence/release/
           retention-days: 14
+
+  rooms-safety:
+    name: Private rooms child-safety technical gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            functions/package-lock.json
+      - name: Install pinned frontend and Functions dependencies
+        run: |
+          npm ci
+          npm ci --prefix functions
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Install isolated Chromium browser
+        run: npx playwright install --with-deps chromium
+      - name: Signed governance release approvals and callable unit contracts
+        run: npm --prefix functions run check
+      - name: Client cannot bypass private-room Firestore restrictions
+        run: >-
+          npx --yes firebase-tools@15.32.1 emulators:exec
+          --project demo-chessy-rooms
+          --config firebase.coach-emulators.json
+          --only firestore
+          "node scripts/room-rules-verify.mjs"
+      - name: Quotas, audit, access revocation and retention
+        run: >-
+          npx --yes firebase-tools@15.32.1 emulators:exec
+          --project demo-chessy-rooms
+          --config firebase.rooms-emulators.json
+          --only firestore,auth,functions
+          "node scripts/rooms-auth-fixtures.mjs && node scripts/rooms-ops-e2e.cjs"
+      - name: Coach/adult/guardian Playwright with signed synthetic approvals
+        run: >-
+          npx --yes firebase-tools@15.32.1 emulators:exec
+          --project demo-chessy-rooms
+          --config firebase.rooms-emulators.json
+          --only firestore,auth,functions
+          "node scripts/rooms-auth-fixtures.mjs && node scripts/rooms-auth-browser-e2e.cjs"
+      - name: Room UI, mobile and accessible navigation
+        run: node scripts/rooms-browser-verify.cjs
+      - name: Release readiness must show missing external approvals as NO-GO
+        shell: bash
+        run: |
+          node scripts/rooms-safety-release-gate.cjs --minors --strict && {
+            echo "ERROR: minors unexpectedly approved without independent production evidence"
+            exit 1
+          } || {
+            status=$?
+            if [ "$status" -ne 2 ]; then
+              echo "ERROR: safety gate failed unexpectedly ($status)"
+              exit 1
+            fi
+          }
+          node -e "const g=require('./progress/evidence/rooms/safety-release-gate-minors.json');if(g.status!=='NO_GO'||!g.missing.includes('signedGovernanceApproval'))process.exit(1)"
+      - name: Archive room security evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: chessy-rooms-safety
+          path: progress/evidence/rooms/
+          retention-days: 14

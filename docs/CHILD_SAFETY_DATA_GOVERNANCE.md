@@ -52,7 +52,7 @@ Estos plazos son decisiones iniciales de producto, NO periodos legales universal
 3. Verificar identidad y autoridad parental con método aprobado fuera de la app.
 4. El tercero emite recibo JWS EdDSA firmado para UID, sala, edad, finalidad, versión de política y expiración.
 5. La herramienta operativa verifica firma y reclamaciones, registra solo digest, bloquea replay y conserva ticket.
-6. La política global, inicialmente deshabilitada, requiere aprobación independiente de Jurídico y Seguridad.
+6. La política global, inicialmente deshabilitada, requiere **dos firmas Ed25519 distintas de Jurídico y Seguridad** sobre proyecto, SHA de release, países, versión, aviso y dictámenes. Las claves privadas se custodian fuera de Chessy.
 7. Firestore revisa política y recibo en cada acceso. Revocar o desactivar la política corta el acceso.
 8. Retirarse borra índice, membresía y diagnóstico. Revocación administrativa borra también solicitud y aprobación.
 
@@ -82,7 +82,7 @@ Se requiere dictamen específico por jurisdicción antes de habilitar público i
 - [ ] Evaluación de impacto infantil, amenazas y edad falsa.
 - [ ] Aviso publicado ES/EN/PT y método de información directa al tutor.
 - [ ] Proveedor verificable contratado, probada su aserción firmada y DPA.
-- [ ] Revisiones legal y seguridad con evidencias y responsables.
+- [ ] Revisiones legal y seguridad con evidencias y dos firmas de responsables distintos, vinculadas al SHA exacto.
 - [ ] Periodos de retención, acceso/borrado, backup y excepciones auditados.
 - [ ] Configuración de App Check, Auth, IAM, presupuestos y monitoreo reales.
 - [ ] Piloto supervisado con identidades sintéticas y pruebas de emergencia.

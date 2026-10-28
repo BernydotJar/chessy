@@ -10,6 +10,7 @@ const {initializeApp}=require('firebase-admin/app');
 const {getFirestore,Timestamp}=require('firebase-admin/firestore');
 const fs=require('node:fs');
 const {verifyConsentEvidence}=require('./consent-evidence.cjs');
+const {verifyReleaseApproval}=require('./governance-approval.cjs');
 const {LIMITS,isSafeId,isMinor,text}=require('./policy.cjs');
 const opts=Object.fromEntries(process.argv.slice(2).filter(arg=>arg.startsWith('--'))
   .map(arg=>arg.slice(2).split(/=(.*)/s).slice(0,2)));
@@ -63,19 +64,57 @@ async function main(){
   }
   if(action==='policy-enable'){
     yes();
-    const review=text(opts.legalReview,8,120),security=text(opts.securityReview,8,120);
-    const digest=opts.legalEvidenceSha256;
-    if(!review||!security||review===security||!/^[a-f0-9]{64}$/.test(digest||''))
-      throw new Error('Independent --legalReview, --securityReview and --legalEvidenceSha256 required');
+    if(!opts.approvalFile||!/^[a-f0-9]{40}$/.test(opts.releaseSha||''))
+      throw new Error('A --releaseSha and --approvalFile with two independent signatures are required');
+    if(!process.env.CHESSY_LEGAL_APPROVAL_PUBLIC_KEY_PEM||
+       !process.env.CHESSY_SECURITY_APPROVAL_PUBLIC_KEY_PEM)
+      throw new Error('Both independent pinned governance public keys are required');
+    const source=fs.readFileSync(opts.approvalFile,'utf8');
+    if(Buffer.byteLength(source,'utf8')>16384)throw new Error('Governance approval manifest too large');
+    const approvalManifest=JSON.parse(source);
     const ref=db.doc('roomSafety/config');
     await db.runTransaction(async tx=>{
-      const prior=(await tx.get(ref)).data()||{};
-      tx.set(ref,{schemaVersion:1,minorEnrollmentEnabled:true,policyVersion:(prior.policyVersion||0)+1,
-        enabledAt:Timestamp.now(),reviewTicket:ticket,legalReviewerRef:review,securityReviewerRef:security,
-        evidenceDigest:digest},{merge:true});
+      const snap=await tx.get(ref),prior=snap.data()||{};
+      if(prior.minorEnrollmentEnabled===true)
+        throw new Error('The minor safety policy is already enabled: disable it before a new release');
+      const nextVersion=(prior.policyVersion||0)+1;
+      const evidence=verifyReleaseApproval(approvalManifest,{
+        legalPublicKeyPem:process.env.CHESSY_LEGAL_APPROVAL_PUBLIC_KEY_PEM,
+        securityPublicKeyPem:process.env.CHESSY_SECURITY_APPROVAL_PUBLIC_KEY_PEM,
+        projectId:project,releaseSha:opts.releaseSha,policyVersion:nextVersion,
+        privacyNoticeUrl:process.env.CHESSY_ROOM_PRIVACY_NOTICE_URL,
+        privacyNoticeVersion:process.env.CHESSY_ROOM_PRIVACY_VERSION,
+      });
+      if(evidence.payload.ticket!==ticket)throw new Error('Signed review ticket mismatch');
+      const receipt=db.doc('roomReleaseApprovals/'+evidence.evidenceDigest);
+      const consumed=await tx.get(receipt);
+      if(consumed.exists)throw new Error('Signed release approval has already been used');
+      const timestamp=Timestamp.now();
+      tx.create(receipt,{schemaVersion:1,projectId:project,policyVersion:nextVersion,
+        releaseSha:opts.releaseSha,createdAt:timestamp,
+        expiresAt:Timestamp.fromMillis(Date.now()+LIMITS.auditMs)});
+      tx.set(ref,{
+        schemaVersion:1,minorEnrollmentEnabled:true,policyVersion:nextVersion,
+        enabledAt:timestamp,reviewTicket:ticket,
+        legalReviewerRef:evidence.payload.legalReviewRef,
+        securityReviewerRef:evidence.payload.securityReviewRef,
+        evidenceDigest:evidence.evidenceDigest,
+        approvedReleaseSha:opts.releaseSha,
+        privacyNoticeVersion:evidence.payload.privacyNotice.version,
+        privacyNoticeUrl:evidence.payload.privacyNotice.url,
+        privacyNoticeSha256:evidence.payload.privacyNotice.sha256,
+        allowedJurisdictions:evidence.payload.jurisdictions,
+      },{merge:true});
+      tx.create(db.collection('roomAudit').doc(),{
+        schemaVersion:1,action:'safety.minors.enabled',actorUid:'ops-admin-iam',
+        roomId:'global',
+        details:{ticket,releaseSha:opts.releaseSha,policyVersion:nextVersion,
+          jurisdictions:evidence.payload.jurisdictions,
+          approvalDigest:evidence.evidenceDigest},
+        createdAt:timestamp,expiresAt:Timestamp.fromMillis(Date.now()+LIMITS.auditMs),
+      });
     });
-    await log('safety.minors.enabled','global',{legalReviewerRef:review,securityReviewerRef:security});
-    console.log('Minor enrollment policy updated. Re-issue approvals for the new policy version.');
+    console.log('Signed two-reviewer policy authorization verified and activated.');
     return;
   }
   requireId();requireUid();
@@ -99,8 +138,9 @@ async function main(){
       if(!data||data.status!=='pending'||data.guardianUid!==opts.uid||!validAge(data.ageBand)||
         data.expiresAt?.toMillis()<=Date.now()||room.data()?.status!=='active')
         throw new Error('No active matching request and room');
-      if(!settings||!Number.isSafeInteger(settings.policyVersion)||settings.policyVersion<1)
-        throw new Error('Safety policy must be initialized before provider verification');
+      if(!settings||settings.minorEnrollmentEnabled!==true||
+         !Number.isSafeInteger(settings.policyVersion)||settings.policyVersion<1)
+        throw new Error('Active signed safety policy is required before guardian verification');
       const evidence=verifyConsentEvidence(raw,{
         publicKeyPem:process.env.CHESSY_VPC_ED25519_PUBLIC_KEY_PEM,
         issuer:process.env.CHESSY_VPC_ISSUER,kid:process.env.CHESSY_VPC_KEY_ID,
