@@ -25,6 +25,9 @@ El sistema no acepta datos personales ni documentos de menores en el diagnóstic
 
     npm run verify
     npm --prefix functions run check
+    npm audit --audit-level=low
+    npm audit --prefix functions --audit-level=low
+    npm run build
     node scripts/rooms-browser-verify.cjs
     CHESSY_HEADLESS=1 node scripts/browser-verify.cjs
 

@@ -21,6 +21,9 @@ async function check(name,run){
 }
 (async()=>{
   await fs.mkdir(OUT,{recursive:true});
+  await fs.access(path.join(ROOT,'dist','index.html')).catch(()=>{
+    throw new Error('ROOMS_BROWSER_PRECHECK: dist/index.html missing; run npm run build before the static UI suite');
+  });
   const browser=await chromium.launch({headless:true});
   const ctx=await browser.newContext({viewport:{width:1440,height:1000},locale:'es-GT',timezoneId:'America/Guatemala',reducedMotion:'reduce'});
   await ctx.route(ORIGIN+'/**',async route=>{

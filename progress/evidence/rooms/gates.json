@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-28T05:31:23.472729+00:00",
+  "timestamp": "2026-10-28T05:37:20.745614+00:00",
   "branch": "feat/chessy-zero-one-rooms-20261023",
   "evidenceStatus": "PASS_LOCAL_AND_FIREBASE_EMULATORS_NOT_PRODUCTION",
   "measured": {
@@ -15,7 +15,9 @@
     "pwaOffline": "PASS",
     "typescript": "PASS",
     "eslint": "PASS",
-    "productionBuild": "PASS"
+    "productionBuild": "PASS",
+    "npmAuditFrontend": "PASS (0 findings at low threshold)",
+    "npmAuditFunctions": "PASS (0 findings at low threshold)"
   },
   "notProven": [
     "real App Check enforcement / reCAPTCHA Enterprise site credentials",
@@ -60,8 +62,17 @@
   ],
   "ci": {
     "roomsSafetyJobDefined": true,
-    "executedOnGitHubRunner": false,
-    "pending": "Re-run safety job on the final PR SHA using an independent GitHub runner"
+    "previousRun": {
+      "url": "https://github.com/BernydotJar/chessy/actions/runs/40638551888",
+      "headSha": "d48c8ecbaed072ccbeb352e3cc3a0533477b4685",
+      "generalVerify": "FAIL (Vite/Vitest npm audit advisories; pinned upgrades applied in next commit)",
+      "roomsSafety": "FAIL (static UI step omitted npm run build; fixed in next commit)",
+      "roomsFirebaseRules": "PASS",
+      "roomsBackendAndQuota": "PASS",
+      "roomsAuthenticatedPlaywright": "PASS (13/13)"
+    },
+    "finalCommitRunnerVerification": "PENDING: local changes have not yet been observed in GitHub Actions",
+    "releaseAuthorization": "NO_GO for adults and minors without external evidence"
   },
   "governanceControls": {
     "legalSecurityDistinctEd25519Signatures": "PASS (synthetic test keys)",
@@ -72,5 +83,11 @@
   },
   "executorCaveat": "Shared Sandbox V3 experienced high load and intermittent Playwright timeouts; the last complete authenticated run passed 13/13; clean CI runner verification remains pending.",
   "baselineSha": "d2365811dfe49fd50bf23f902bc5a1d6297044ee",
-  "testedWorkingTreeIncludesUncommittedSafetyChanges": true
+  "testedWorkingTreeIncludesUncommittedSafetyChanges": true,
+  "dependencyUpgrades": {
+    "vite": "8.3.5",
+    "vitest": "5.0.5",
+    "npmCi": "PASS",
+    "npmAuditLow": "0 vulnerabilities"
+  }
 }
