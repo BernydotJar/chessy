@@ -163,5 +163,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: chessy-rooms-safety
-          path: progress/evidence/rooms/
+          path: |
+            progress/evidence/rooms/
+            progress/evidence/livekit-adversarial/
           retention-days: 14

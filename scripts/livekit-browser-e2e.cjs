@@ -2,7 +2,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs/promises'),path=require('node:path');
 const {spawn}=require('node:child_process'),{execFileSync}=require('node:child_process');
 const {chromium}=require('playwright');
-const ROOT=path.resolve(__dirname,'..'),OUT=path.join(ROOT,'progress/evidence/livekit'),ORIGIN='http://127.0.0.1:14329';
+const ROOT=path.resolve(__dirname,'..'),OUT=path.resolve(ROOT,process.env.CHESSY_LIVE_QA_OUT||'progress/evidence/livekit'),ORIGIN='http://127.0.0.1:14329';
 const PROJECT='demo-chessy-livekit',AUTH='http://127.0.0.1:19739/identitytoolkit.googleapis.com/v1';
 if(process.env.FIRESTORE_EMULATOR_HOST!=='127.0.0.1:19708'||process.env.FIREBASE_AUTH_EMULATOR_HOST!=='127.0.0.1:19739')
   throw new Error('Refusing QA outside dedicated local demo emulators');

@@ -1,7 +1,8 @@
 'use strict';
 /** Disposable, adult-only provider QA using an existing approved QA account. No credentials are printed. */
 const fs=require('node:fs'),path=require('node:path'),{spawn}=require('node:child_process'),crypto=require('node:crypto');
-const ROOT=path.resolve(__dirname,'..'),OUT=path.join(ROOT,'progress/evidence/livekit');
+const ROOT=path.resolve(__dirname,'..'),OUT=path.resolve(ROOT,process.env.CHESSY_LIVE_QA_OUT||'progress/evidence/livekit');
+if(!OUT.startsWith(path.join(ROOT,'progress/evidence')+path.sep))throw new Error('QA evidence path must stay inside project evidence');
 fs.mkdirSync(OUT,{recursive:true});
 if(!process.argv.includes('--existing-qa-project'))throw new Error('Explicit existing QA project selection required');
 const configPath='/opt/luma-livekit-qa/privatehome/.livekit/cli-config.yaml';
