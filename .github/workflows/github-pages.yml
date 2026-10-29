@@ -53,6 +53,8 @@ jobs:
         run: npm run test:popup-opener
       - name: Browser workflows and accessibility checks
         run: npm run test:e2e
+      - name: Mobile gameplay viewport regression
+        run: npm run test:gameplay:mobile
       - name: All visual themes accessibility and layout
         run: npm run test:themes
       - name: Installable offline PWA checks
@@ -74,6 +76,7 @@ jobs:
           name: chessy-verification-${{ github.sha }}
           path: |
             progress/evidence/browser/
+            progress/evidence/mobile-gameplay/
             progress/evidence/release/
           retention-days: 14
 

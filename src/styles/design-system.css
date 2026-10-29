@@ -301,3 +301,26 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
  .mastery-phase-card,.mini-game-card{padding:17px}
  .mastery-phase-card p,.mini-game-card p{max-width:none}
 }
+
+/* Stable mobile gameplay: keep actions by the board and scroll only the score sheet. */
+.move-history-list{overscroll-behavior:contain}
+.play-view-v3 .board-notation--left{left:2px;display:grid;grid-template-rows:repeat(8,minmax(0,1fr));align-items:start;gap:0;padding-top:2px}
+.play-view-v3 .board-notation--bottom{bottom:2px;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));justify-items:end;gap:0;padding-right:2px}
+.play-view-v3 .board-notation__label{font-size:9px;line-height:1;padding:1px 2px;border:0;border-radius:2px}
+@media(max-width:760px){
+ .match-rail.is-ai-game>.ai-opponent{display:none}
+ .play-view-v3 .game-controls-v3:not(.is-finished){display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:10px 12px}
+ .play-view-v3 .game-controls-v3:not(.is-finished)>.game-status-v3,
+ .play-view-v3 .game-controls-v3>.local-clock-picker,
+ .play-view-v3 .game-controls-v3>.resign-confirm,
+ .play-view-v3 .game-controls-v3>.feedback{grid-column:1/-1}
+ .play-view-v3 .game-controls-v3:not(.is-finished)>.game-status-v3{align-items:center;padding:0;border:0;min-height:24px}
+ .play-view-v3 .game-controls-v3:not(.is-finished) .game-status-v3>div{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+ .play-view-v3 .game-controls-v3:not(.is-finished) .game-status-v3 .eyebrow{display:none}
+ .play-view-v3 .game-controls-v3:not(.is-finished) .game-status-v3 strong{font-size:13px}
+ .play-view-v3 .game-controls-v3 .game-core-actions{margin:0}
+ .play-view-v3 .game-controls-v3 .game-core-actions .btn{min-height:44px;font-size:11px;padding:8px}
+ .play-view-v3 .game-controls-v3 .resign-link{margin:0;min-height:44px;padding:8px}
+ .play-view-v3 .game-controls-v3 .local-clock-picker{padding:4px 0 0}
+ .play-view-v3 .game-controls-v3 .resign-confirm{margin:0}
+}

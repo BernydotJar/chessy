@@ -1,0 +1,59 @@
+{
+  "baseSha": "91ef5db31ce1fde97c0090e7a05b65018c3cd969",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "before": {
+    "scrollY": 0,
+    "board": {
+      "top": 182.296875,
+      "bottom": 548.296875,
+      "height": 366,
+      "width": 366
+    },
+    "stage": {
+      "top": 117.296875,
+      "bottom": 613.296875,
+      "height": 496,
+      "width": 378
+    },
+    "history": {
+      "top": 1157.046875,
+      "bottom": 1338.546875,
+      "height": 181.5,
+      "width": 378
+    },
+    "ai": {
+      "top": 623.296875,
+      "bottom": 880.296875,
+      "height": 257,
+      "width": 378
+    },
+    "viewport": 844
+  },
+  "after": {
+    "scrollY": 103,
+    "board": {
+      "top": 79.296875,
+      "bottom": 445.296875,
+      "height": 366,
+      "width": 366
+    },
+    "stage": {
+      "top": 14.296875,
+      "bottom": 510.296875,
+      "height": 496,
+      "width": 378
+    },
+    "history": {
+      "top": 736.046875,
+      "bottom": 917.546875,
+      "height": 181.5,
+      "width": 378
+    },
+    "ai": null,
+    "viewport": 844
+  },
+  "scrollDelta": 103
+}
