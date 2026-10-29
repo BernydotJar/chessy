@@ -1,0 +1,39 @@
+{
+  "commands": [
+    {
+      "command": "npm run typecheck",
+      "result": "PASS"
+    },
+    {
+      "command": "npm run lint",
+      "result": "PASS"
+    },
+    {
+      "command": "npm test -- --run --maxWorkers=2",
+      "result": "PASS",
+      "tests": 318,
+      "files": 15
+    },
+    {
+      "command": "npm run test:gameplay:mobile",
+      "result": "PASS",
+      "checks": 16,
+      "failed": 0,
+      "viewport_measurements": 41,
+      "max_document_scroll_delta_px": 0
+    }
+  ],
+  "productionBuild": {
+    "result": "BLOCKED",
+    "reason": "Configured storage gate requires 80 GiB; preflight observed 26.885 GiB. Existing checkout and dependencies reused, verification served source with Vite. Threshold was not overridden."
+  },
+  "graphValidation": {
+    "result": "BLOCKED",
+    "reason": "Existing scripts/graph.py requires shared Graph Harness 6a5f201e2bc640ac46cc0b4b6a3d11b788555664; installed shared checkout is 168b740045293089720964bdc0d2bda79828b5c8. Existing graph events and framework pin left unchanged."
+  },
+  "independentReview": {
+    "result": "NOT_RUN",
+    "reason": "Same-agent code review; no independent model review claimed."
+  },
+  "deployment": "NOT_PERFORMED"
+}
