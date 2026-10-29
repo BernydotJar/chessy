@@ -24,7 +24,8 @@
     "test:progress:ui-live": "node scripts/progress-ui-live-verify.cjs",
     "test:analytics": "node scripts/analytics-verify.cjs",
     "test:themes": "node scripts/theme-verify.cjs",
-    "verify:safety": "node scripts/rooms-safety-release-gate.cjs --minors --strict"
+    "verify:safety": "node scripts/rooms-safety-release-gate.cjs --minors --strict",
+    "test:live": "node scripts/livekit-browser-e2e.cjs"
   },
   "dependencies": {
     "chess.js": "^1.0.0-beta.6",
@@ -38,7 +39,8 @@
     "react-dom": "19.2.8",
     "react-i18next": "^16.5.3",
     "stockfish.js": "^10.0.2",
-    "zustand": "^4.4.7"
+    "zustand": "^4.4.7",
+    "livekit-client": "2.22.4"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.11.0",

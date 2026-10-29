@@ -197,6 +197,10 @@ service cloud.firestore {
       allow update: if false; // Server-only: lifecycle and retention timestamp.
       allow delete: if false;
 
+      match /live/{documentId} {
+        allow get: if documentId == 'current' && mayReadRoom(roomId);
+        allow list, create, update, delete: if false;
+      }
       match /board/{boardId} {
         allow get: if boardId == 'current' && mayReadRoom(roomId);
         allow list: if false;

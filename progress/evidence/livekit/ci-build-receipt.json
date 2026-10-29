@@ -1,0 +1,211 @@
+{
+  "checkedAt": "2026-10-29T16:24:31.563Z",
+  "sourceCommit": "938e1142b8abc33fdfe950f73c8c7af0b29c17e3",
+  "runUrl": "https://github.com/BernydotJar/chessy/actions/runs/40910227004",
+  "jobs": [
+    {
+      "name": "verify",
+      "url": "https://github.com/BernydotJar/chessy/actions/runs/40910227004/job/123575872784",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install locked dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Lint",
+          "conclusion": "success"
+        },
+        {
+          "name": "Unit tests and exact puzzle fixtures",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install Java for Firebase security emulators",
+          "conclusion": "success"
+        },
+        {
+          "name": "Firestore and Storage adversarial authorization checks",
+          "conclusion": "success"
+        },
+        {
+          "name": "Independent chess rules implementation",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build production artifact",
+          "conclusion": "success"
+        },
+        {
+          "name": "Compile the opt-in LiveKit classroom separately",
+          "conclusion": "success"
+        },
+        {
+          "name": "Dependency security audit",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install dedicated CI browser",
+          "conclusion": "success"
+        },
+        {
+          "name": "Popup opener security contract",
+          "conclusion": "success"
+        },
+        {
+          "name": "Browser workflows and accessibility checks",
+          "conclusion": "success"
+        },
+        {
+          "name": "All visual themes accessibility and layout",
+          "conclusion": "success"
+        },
+        {
+          "name": "Installable offline PWA checks",
+          "conclusion": "success"
+        },
+        {
+          "name": "Firebase Auth cloud lifecycle",
+          "conclusion": "success"
+        },
+        {
+          "name": "Firebase Auth UI lifecycle",
+          "conclusion": "success"
+        },
+        {
+          "name": "Firestore owner-only rules live",
+          "conclusion": "success"
+        },
+        {
+          "name": "Consent-aware Firebase Analytics lifecycle",
+          "conclusion": "success"
+        },
+        {
+          "name": "Progress sync two-device and offline lifecycle",
+          "conclusion": "success"
+        },
+        {
+          "name": "Preserve verification evidence",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Install Java for Firebase security emulators",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "name": "Private rooms child-safety technical gates",
+      "url": "https://github.com/BernydotJar/chessy/actions/runs/40910227004/job/123575873147",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install pinned frontend and Functions dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-java@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install isolated Chromium browser",
+          "conclusion": "success"
+        },
+        {
+          "name": "Signed governance release approvals and callable unit contracts",
+          "conclusion": "success"
+        },
+        {
+          "name": "Audit backend dependency tree without suppressions",
+          "conclusion": "success"
+        },
+        {
+          "name": "Client cannot bypass private-room Firestore restrictions",
+          "conclusion": "success"
+        },
+        {
+          "name": "Disabled media secret fixtures for local room emulators",
+          "conclusion": "success"
+        },
+        {
+          "name": "Quotas, audit, access revocation and retention",
+          "conclusion": "success"
+        },
+        {
+          "name": "Coach/adult/guardian Playwright with signed synthetic approvals",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build the frontend fixture for isolated static-route browser checks",
+          "conclusion": "success"
+        },
+        {
+          "name": "Room UI, mobile and accessible navigation",
+          "conclusion": "success"
+        },
+        {
+          "name": "Release readiness must show missing external approvals as NO-GO",
+          "conclusion": "success"
+        },
+        {
+          "name": "Archive room security evidence",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-java@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ]
+}

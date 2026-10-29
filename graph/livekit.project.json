@@ -1,0 +1,68 @@
+{
+  "schema_version": "graph-harness.project.v1",
+  "project_id": "chessy-livekit-v1",
+  "mode": "SHIP",
+  "gate_definitions": [
+    {
+      "id": "spec",
+      "required_evidence_kinds": [
+        "spec"
+      ],
+      "blocking": true
+    },
+    {
+      "id": "verification",
+      "required_evidence_kinds": [
+        "verification"
+      ],
+      "blocking": true
+    },
+    {
+      "id": "acceptance",
+      "required_evidence_kinds": [
+        "acceptance"
+      ],
+      "blocking": true
+    },
+    {
+      "id": "release",
+      "required_evidence_kinds": [
+        "release"
+      ],
+      "blocking": true
+    }
+  ],
+  "nodes": [
+    {
+      "id": "CH-LIVE-001",
+      "title": "Integrated adult LiveKit classroom",
+      "kind": "feature",
+      "status": "spec_ready",
+      "depends_on": [],
+      "capability": "engineering",
+      "allowed_paths": [
+        "src/**",
+        "functions/**",
+        "scripts/**",
+        "specs/livekit-v1/**",
+        "graph/livekit*",
+        "progress/evidence/livekit/**",
+        "docs/**",
+        "*.json",
+        ".github/**"
+      ],
+      "gates": {
+        "approved": [
+          "spec"
+        ],
+        "review": [
+          "verification"
+        ],
+        "done": [
+          "acceptance",
+          "release"
+        ]
+      }
+    }
+  ]
+}

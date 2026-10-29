@@ -1,0 +1,66 @@
+{
+  "startedAt": "2026-10-29T16:11:03.150Z",
+  "commit": "91ef5db31ce1fde97c0090e7a05b65018c3cd969",
+  "environment": "Firebase emulators + LiveKit Cloud QA; synthetic media/adult identities",
+  "checks": [
+    {
+      "name": "Three separate authenticated adult browser sessions",
+      "result": "PASS",
+      "ms": 14519
+    },
+    {
+      "name": "Instructor creates an adult room and learners enroll through its private invitation",
+      "result": "PASS",
+      "ms": 12976
+    },
+    {
+      "name": "A learner and an outsider cannot start the class or access its private state",
+      "result": "PASS",
+      "ms": 2261
+    },
+    {
+      "name": "Instructor starts class, two learners join with devices off, all see three participants",
+      "result": "PASS",
+      "ms": 6088
+    },
+    {
+      "name": "Real Cloud media: synthetic camera is decoded in both learner browsers and audio plays",
+      "result": "PASS",
+      "ms": 688
+    },
+    {
+      "name": "Only the instructor can share a screen; learner grants forbid screen/data/admin permissions",
+      "result": "PASS",
+      "ms": 2132
+    },
+    {
+      "name": "Instructor moves update both shared boards without scrolling the mobile learner",
+      "result": "PASS",
+      "ms": 964
+    },
+    {
+      "name": "Instructor mutes a learner through the authenticated server control",
+      "result": "PASS",
+      "ms": 2761
+    },
+    {
+      "name": "Responsive desktop/mobile classroom has no horizontal overflow or serious accessibility violations",
+      "result": "PASS",
+      "ms": 41997
+    },
+    {
+      "name": "Removed learner disconnects, cannot obtain another token, and cannot replay the cached Cloud token",
+      "result": "FAIL",
+      "error": "Error: locator.click: Target crashed \nCall log:\n  - waiting for locator('.live-participant').filter({ hasText: 'ec0d' }).getByRole('button', { name: 'Retirar', exact: true })\n"
+    }
+  ],
+  "pageErrors": [],
+  "screenshots": [
+    "classroom-desktop.png",
+    "classroom-mobile.png"
+  ],
+  "failure": "Error: Removed learner disconnects, cannot obtain another token, and cannot replay the cached Cloud token: Error: locator.click: Target crashed \nCall log:\n  - waiting for locator('.live-participant').filter({ hasText: 'ec0d' }).getByRole('button', { name: 'Retirar', exact: true })\n",
+  "finishedAt": "2026-10-29T16:12:37.306Z",
+  "passed": 9,
+  "failed": 1
+}

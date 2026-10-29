@@ -1,0 +1,155 @@
+{
+  "startedAt": "2026-10-29T18:49:40.604Z",
+  "commit": "4b0bf6a1304015293f569edf2b2ab66e75978769",
+  "environment": "Firebase emulators + LiveKit Cloud QA; synthetic media/adult identities",
+  "checks": [
+    {
+      "name": "Three separate authenticated adult browser sessions",
+      "result": "PASS",
+      "ms": 3147
+    },
+    {
+      "name": "Instructor creates an adult room and learners enroll through its private invitation",
+      "result": "PASS",
+      "ms": 10241
+    },
+    {
+      "name": "A learner and an outsider cannot start the class or access its private state",
+      "result": "PASS",
+      "ms": 1850
+    },
+    {
+      "name": "Firestore emulator: pre-existing minor membership is denied by the adult video pilot",
+      "result": "PASS",
+      "ms": 346
+    },
+    {
+      "name": "Firestore emulator: closing while a credential is signed fences the response and revokes its ledger entry",
+      "result": "PASS",
+      "ms": 163
+    },
+    {
+      "name": "Firestore emulator: provider revocation failure keeps closing retryable and blocks new credentials",
+      "result": "PASS",
+      "ms": 172
+    },
+    {
+      "name": "Firestore emulator: lifecycle reconciliation ends an expired class and its issued credentials",
+      "result": "PASS",
+      "ms": 228
+    },
+    {
+      "name": "Adversarial: another coach and body-supplied role cannot acquire owner powers across rooms",
+      "result": "PASS",
+      "ms": 111
+    },
+    {
+      "name": "Adversarial: missing, expired and minor membership cannot be replaced by client-supplied eligibility",
+      "result": "PASS",
+      "ms": 75
+    },
+    {
+      "name": "Adversarial: a valid owner cannot use a session identifier belonging to another room",
+      "result": "PASS",
+      "ms": 123
+    },
+    {
+      "name": "Adversarial: concurrent learner joins reserve an instructor seat and never exceed class capacity",
+      "result": "PASS",
+      "ms": 4080
+    },
+    {
+      "name": "Adversarial: withdrawing membership during credential signing prevents a late token response",
+      "result": "PASS",
+      "ms": 88
+    },
+    {
+      "name": "Adversarial: removing a learner during signing blocks both the pending response and future tokens",
+      "result": "PASS",
+      "ms": 110
+    },
+    {
+      "name": "Adversarial: token rate limits and closed-room checks remain server-authoritative",
+      "result": "PASS",
+      "ms": 408
+    },
+    {
+      "name": "Adversarial: uncertain provider startup is retryable on the same class, without duplicate sessions",
+      "result": "PASS",
+      "ms": 63
+    },
+    {
+      "name": "Instructor starts class, two learners join with devices off, all see three participants",
+      "result": "PASS",
+      "ms": 5702
+    },
+    {
+      "name": "Real Cloud media: synthetic camera is decoded in both learner browsers and audio plays",
+      "result": "PASS",
+      "ms": 1229
+    },
+    {
+      "name": "Only the instructor can share a screen; learner grants forbid screen/data/admin permissions",
+      "result": "PASS",
+      "ms": 455
+    },
+    {
+      "name": "Adversarial browser: a malformed live snapshot disconnects safely and recovery restores the class",
+      "result": "PASS",
+      "ms": 3553
+    },
+    {
+      "name": "Instructor moves update both shared boards without scrolling the mobile learner",
+      "result": "PASS",
+      "ms": 530
+    },
+    {
+      "name": "Adversarial browser: a delayed join response cannot reopen media after navigating away",
+      "result": "PASS",
+      "ms": 3100
+    },
+    {
+      "name": "A learner leaves and rejoins the same Cloud class with its latest board and video",
+      "result": "PASS",
+      "ms": 1030
+    },
+    {
+      "name": "Instructor mutes a learner through the authenticated server control",
+      "result": "PASS",
+      "ms": 2420
+    },
+    {
+      "name": "Responsive desktop/mobile classroom has no horizontal overflow or serious accessibility violations",
+      "result": "PASS",
+      "ms": 2501
+    },
+    {
+      "name": "Removed learner disconnects, cannot obtain another token, and cannot replay the cached Cloud token",
+      "result": "PASS",
+      "ms": 5045
+    },
+    {
+      "name": "Ending the class disconnects the remaining learner and rejects cached learner/instructor tokens",
+      "result": "PASS",
+      "ms": 8531
+    },
+    {
+      "name": "A new class has a distinct session; withdrawal revokes media and room closure ends instructor media",
+      "result": "PASS",
+      "ms": 12958
+    },
+    {
+      "name": "No unhandled browser exceptions",
+      "result": "PASS",
+      "ms": 0
+    }
+  ],
+  "pageErrors": [],
+  "screenshots": [
+    "classroom-desktop.png",
+    "classroom-mobile.png"
+  ],
+  "finishedAt": "2026-10-29T18:50:50.644Z",
+  "passed": 28,
+  "failed": 0
+}

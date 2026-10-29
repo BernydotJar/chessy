@@ -1,0 +1,105 @@
+{
+  "startedAt": "2026-10-29T16:20:06.264Z",
+  "commit": "43130b3704f32ce7baf5abf4c0df1db942182439",
+  "environment": "Firebase emulators + LiveKit Cloud QA; synthetic media/adult identities",
+  "checks": [
+    {
+      "name": "Three separate authenticated adult browser sessions",
+      "result": "PASS",
+      "ms": 3610
+    },
+    {
+      "name": "Instructor creates an adult room and learners enroll through its private invitation",
+      "result": "PASS",
+      "ms": 11993
+    },
+    {
+      "name": "A learner and an outsider cannot start the class or access its private state",
+      "result": "PASS",
+      "ms": 2782
+    },
+    {
+      "name": "Firestore emulator: pre-existing minor membership is denied by the adult video pilot",
+      "result": "PASS",
+      "ms": 637
+    },
+    {
+      "name": "Firestore emulator: closing while a credential is signed fences the response and revokes its ledger entry",
+      "result": "PASS",
+      "ms": 311
+    },
+    {
+      "name": "Firestore emulator: provider revocation failure keeps closing retryable and blocks new credentials",
+      "result": "PASS",
+      "ms": 268
+    },
+    {
+      "name": "Firestore emulator: lifecycle reconciliation ends an expired class and its issued credentials",
+      "result": "PASS",
+      "ms": 191
+    },
+    {
+      "name": "Instructor starts class, two learners join with devices off, all see three participants",
+      "result": "PASS",
+      "ms": 6865
+    },
+    {
+      "name": "Real Cloud media: synthetic camera is decoded in both learner browsers and audio plays",
+      "result": "PASS",
+      "ms": 1234
+    },
+    {
+      "name": "Only the instructor can share a screen; learner grants forbid screen/data/admin permissions",
+      "result": "PASS",
+      "ms": 634
+    },
+    {
+      "name": "Instructor moves update both shared boards without scrolling the mobile learner",
+      "result": "PASS",
+      "ms": 969
+    },
+    {
+      "name": "A learner leaves and rejoins the same Cloud class with its latest board and video",
+      "result": "PASS",
+      "ms": 1020
+    },
+    {
+      "name": "Instructor mutes a learner through the authenticated server control",
+      "result": "PASS",
+      "ms": 2669
+    },
+    {
+      "name": "Responsive desktop/mobile classroom has no horizontal overflow or serious accessibility violations",
+      "result": "PASS",
+      "ms": 3964
+    },
+    {
+      "name": "Removed learner disconnects, cannot obtain another token, and cannot replay the cached Cloud token",
+      "result": "PASS",
+      "ms": 1639
+    },
+    {
+      "name": "Ending the class disconnects the remaining learner and rejects cached learner/instructor tokens",
+      "result": "PASS",
+      "ms": 11195
+    },
+    {
+      "name": "A new class has a distinct session; withdrawal revokes media and room closure ends instructor media",
+      "result": "PASS",
+      "ms": 17711
+    },
+    {
+      "name": "No unhandled browser exceptions",
+      "result": "PASS",
+      "ms": 0
+    }
+  ],
+  "pageErrors": [],
+  "screenshots": [
+    "classroom-desktop.png",
+    "classroom-mobile.png"
+  ],
+  "finishedAt": "2026-10-29T16:21:16.985Z",
+  "passed": 18,
+  "failed": 0
+}
