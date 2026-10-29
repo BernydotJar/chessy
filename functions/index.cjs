@@ -11,6 +11,8 @@ const REGION='us-central1';
 // The Functions emulator does not provision an App Check issuer.
  // Production always enforces App Check; emulator tests verify Auth and rules separately.
 const PRIVATE={region:REGION,enforceAppCheck:process.env.FUNCTIONS_EMULATOR!=='true',maxInstances:10,memory:'256MiB'};
+const LIVE_PRIVATE={...PRIVATE,secrets:['CHESSY_LIVEKIT_API_KEY','CHESSY_LIVEKIT_API_SECRET']};
+const live=require('./livekit.cjs').createLiveService({db,Timestamp,HttpsError});
 const ttl=ms=>Timestamp.fromMillis(Date.now()+ms);
 const now=()=>Timestamp.now();
 function requirePublishedPrivacyNotice(){
@@ -161,16 +163,17 @@ exports.revokeRoomInvitation=onCall(PRIVATE,async request=>{
   return {revoked:true};
 });
 
-exports.closeLearningRoom=onCall(PRIVATE,async request=>{
+exports.closeLearningRoom=onCall(LIVE_PRIVATE,async request=>{
   const a=coach(request),id=request.data?.roomId;
   if(!isSafeId(id))throw new HttpsError('invalid-argument','Invalid room identifier');
   const ref=db.doc('learningRooms/'+id);
   await db.runTransaction(async tx=>{
     const snapshot=await tx.get(ref),data=snapshot.data();
-    if(!data||data.ownerUid!==a.uid||data.status!=='active')throw new HttpsError('permission-denied','Active room not found');
-    tx.update(ref,{status:'closed',updatedAt:now(),closedAt:now(),purgeAfter:ttl(LIMITS.closedRoomGraceMs)});
+    if(!data||data.ownerUid!==a.uid||!['active','closed'].includes(data.status))throw new HttpsError('permission-denied','Active room not found');
+    if(data.status==='active')tx.update(ref,{status:'closed',updatedAt:now(),closedAt:now(),purgeAfter:ttl(LIMITS.closedRoomGraceMs)});
     writeAudit(tx,'room.closed',a.uid,id);
   });
+  await live.closeRoom(id);
   return {closed:true};
 });
 
@@ -207,7 +210,7 @@ exports.requestGuardianReview=onCall(PRIVATE,async request=>{
 });
 
 /** Retire all learner-derived room records, even when a safety policy has been disabled. */
-exports.withdrawRoomParticipation=onCall(PRIVATE,async request=>{
+exports.withdrawRoomParticipation=onCall(LIVE_PRIVATE,async request=>{
   const a=principal(request),roomId=request.data?.roomId;
   if(!isSafeId(roomId))throw new HttpsError('invalid-argument','Invalid room identifier');
   const member=db.doc('learningRooms/'+roomId+'/members/'+a.uid);
@@ -225,6 +228,7 @@ exports.withdrawRoomParticipation=onCall(PRIVATE,async request=>{
     tx.delete(review);
     if(membership.exists)writeAudit(tx,'learner.withdrawn',a.uid,roomId);
   });
+  await live.withdraw(roomId,a.uid);
   return {removed:true};
 });
 
@@ -328,4 +332,17 @@ exports.cleanupExpiredLearningRooms=onSchedule({
   const report=await cleanupExpired({db,logger});
   logger.info('Chessy room retention cleanup',report);
   if(report.errors>0)throw new Error('Retention cleanup had failures; review logs and retry');
+});
+
+// Media endpoints keep the same verified identity/App Check boundary as private rooms.
+exports.startLearningRoomLive=onCall(LIVE_PRIVATE,request=>{requirePublishedPrivacyNotice();return live.start(request);});
+exports.joinLearningRoomLive=onCall(LIVE_PRIVATE,request=>{requirePublishedPrivacyNotice();return live.join(request);});
+exports.endLearningRoomLive=onCall(LIVE_PRIVATE,request=>live.end(request));
+exports.moderateLearningRoomLive=onCall(LIVE_PRIVATE,request=>live.moderate(request));
+exports.reconcileLearningRoomLive=onSchedule({region:REGION,schedule:'every 1 minutes',
+  secrets:LIVE_PRIVATE.secrets,memory:'256MiB',timeoutSeconds:120,maxInstances:1,retryCount:0,
+},async()=>{
+  const report=await live.reconcile();
+  logger.info('Chessy media lifecycle reconciliation',report);
+  if(report.failed)throw new Error('Classroom media cleanup needs retry');
 });

@@ -1,4 +1,4 @@
-import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import { lazy, Suspense, FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Copy, Mail, Share2, Users, CheckCircle2, ShieldCheck, LockKeyhole } from 'lucide-react';
 import { useAuthStore } from '../../auth/store';
@@ -6,6 +6,8 @@ import { useGameStore } from '../../store/gameStore';
 import { useLearningStore } from '../../learning/store';
 import { locale } from '../../learning/types';
 import { privateRoomsEnabled } from '../../rooms/release';
+import { liveClassroomEnabled } from '../../rooms/live';
+const LiveClassroom = lazy(() => import('./LiveClassroom'));
 import { PositionBoard, SectionHeading } from './Shared';
 import {
   closeRoom, createInvite, createRoom, getMyDiagnostic, getMyMembership, getRoom, leaveRoom, revokeInvite,
@@ -441,6 +443,24 @@ function PrivateRoomsView() {
           void closeRoom(room.id).then(refresh).catch(() => setError('rooms.error')).finally(() => setBusy(false));
         }}>{t('rooms.close')}</button>}
       </section>
+      <div className={"room-classroom-workspace" + (liveClassroomEnabled ? " with-live" : "")}><section className="panel room-board" aria-labelledby="room-board-title">
+        <div className="room-board-heading"><h3 id="room-board-title">{t('rooms.board')}</h3><p className="muted">{t('rooms.boardDescription')}</p></div>
+        {board ? <>
+          <div className="room-board-layout"><div className="room-position">
+            <PositionBoard fen={board.fen} readOnly={!owns || busy || board.locked || room.status !== 'active'}
+              onMove={move => { command({type:'move',uci:move,expectedRevision:board.revision}); return true; }} />
+          </div><div className="room-board-side"><span className="tag">{t(board.locked ? 'rooms.boardLocked' : 'rooms.boardUnlocked')}</span>
+            <h4>{t('rooms.moves')}</h4><p className="room-moves" aria-live="polite">{board.moves.join(' · ') || '—'}</p>
+            {owns && room.status === 'active' && <div className="button-row room-board-controls">
+              <button className="btn secondary" type="button" disabled={busy} onClick={() => command({type:'lock',locked:!board.locked,expectedRevision:board.revision})}>{t(board.locked ? 'rooms.unlock' : 'rooms.lock')}</button>
+              <button className="btn secondary" type="button" disabled={busy} onClick={() => command({type:'reset',expectedRevision:board.revision})}>{t('rooms.reset')}</button>
+            </div>}</div></div>
+        </> : <p role="status">{t('rooms.loading')}</p>}
+        {!liveClassroomEnabled && <p className="fine-print">{t('rooms.notVideo')}</p>}
+      </section>
+      {liveClassroomEnabled && <Suspense fallback={<p role="status">{t('rooms.loading')}</p>}>
+        <LiveClassroom key={room.id + ':' + user?.id} room={room} owns={owns}/>
+      </Suspense>}</div>
       {owns && room.status === 'active' && <section className="panel room-invitations">
         <h3>{t('rooms.shareLabel')}</h3><p className="muted">{t('rooms.inviteInfo')}</p>
         <button className="btn secondary" type="button" disabled={busy} onClick={() => void onInvite()}>{t(busy ? 'rooms.inviting' : 'rooms.invite')}</button>
@@ -466,21 +486,7 @@ function PrivateRoomsView() {
           <span>{t('rooms.learner')}: {item.uid.slice(0,6)}…</span><span>{item.ageBand}</span><strong>{value.score} / {value.total}</strong>
         </div>; })}
       </section>}
-      <section className="panel room-board" aria-labelledby="room-board-title">
-        <div className="room-board-heading"><h3 id="room-board-title">{t('rooms.board')}</h3><p className="muted">{t('rooms.boardDescription')}</p></div>
-        {board ? <>
-          <div className="room-board-layout"><div className="room-position">
-            <PositionBoard fen={board.fen} readOnly={!owns || busy || board.locked || room.status !== 'active'}
-              onMove={move => { command({type:'move',uci:move,expectedRevision:board.revision}); return true; }} />
-          </div><div className="room-board-side"><span className="tag">{t(board.locked ? 'rooms.boardLocked' : 'rooms.boardUnlocked')}</span>
-            <h4>{t('rooms.moves')}</h4><p className="room-moves" aria-live="polite">{board.moves.join(' · ') || '—'}</p>
-            {owns && room.status === 'active' && <div className="button-row room-board-controls">
-              <button className="btn secondary" type="button" disabled={busy} onClick={() => command({type:'lock',locked:!board.locked,expectedRevision:board.revision})}>{t(board.locked ? 'rooms.unlock' : 'rooms.lock')}</button>
-              <button className="btn secondary" type="button" disabled={busy} onClick={() => command({type:'reset',expectedRevision:board.revision})}>{t('rooms.reset')}</button>
-            </div>}</div></div>
-        </> : <p role="status">{t('rooms.loading')}</p>}
-        <p className="fine-print">{t('rooms.notVideo')}</p>
-      </section>
+
       {membership && room.status === 'active' && (!diagnostic ? <section className="panel room-quiz" aria-labelledby="room-quiz-title">
         <p className="eyebrow">{t('rooms.welcome')}</p><h3 id="room-quiz-title">{t('rooms.diagnosticTitle')}</h3><p>{t('rooms.diagnosticIntro')}</p>
         <form onSubmit={event => void onDiagnostic(event)} className="room-form">

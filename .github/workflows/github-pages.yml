@@ -43,6 +43,8 @@ jobs:
           python3 scripts/verify-independent.py
       - name: Build production artifact
         run: npm run build
+      - name: Compile the opt-in LiveKit classroom separately
+        run: VITE_CHESSY_PRIVATE_ROOMS_ENABLED=true VITE_CHESSY_LIVEKIT_ENABLED=true npx vite build --outDir /tmp/chessy-livekit-compile
       - name: Dependency security audit
         run: npm audit --audit-level=low
       - name: Install dedicated CI browser
@@ -111,6 +113,9 @@ jobs:
           --config firebase.coach-emulators.json
           --only firestore
           "node scripts/room-rules-verify.mjs"
+      - name: Disabled media secret fixtures for local room emulators
+        run: |
+          printf 'CHESSY_LIVEKIT_API_KEY=disabled-emulator-key\nCHESSY_LIVEKIT_API_SECRET=disabled-emulator-secret\n' > functions/.secret.local
       - name: Quotas, audit, access revocation and retention
         run: >-
           npx --yes firebase-tools@15.32.1 emulators:exec

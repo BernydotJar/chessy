@@ -45,3 +45,6 @@ pnpm-debug.log*
 *.tsbuildinfo
 
 progress/runtime/
+
+# Local Functions emulator secret bindings
+functions/.secret.local
