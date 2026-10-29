@@ -116,6 +116,7 @@ async function shot(page,name){
     const url='http://127.0.0.1:19708/v1/projects/'+PROJECT+'/databases/(default)/documents/learningRooms/'+roomId+'/live/current';
     const denied=await fetch(url,{headers:{Authorization:'Bearer '+tokens.outsiderLiveE2E}});assert.equal(denied.status,403);
   });
+  await require('./livekit-backend-e2e.cjs')({check,roomId});
   await check('Instructor starts class, two learners join with devices off, all see three participants',async()=>{
     await teacher.getByRole('button',{name:'Iniciar clase',exact:true}).click();await connected(teacher);
     sessionId=credentials.coachLiveE2E.sessionId;
@@ -152,6 +153,14 @@ async function shot(page,name){
     assert.match(await two.locator('.room-moves').innerText(),/e4/);
     assert.ok(Math.abs((await one.evaluate(()=>scrollY))-y)<4,'incoming moves preserve mobile scroll');
     assert.equal(await one.locator('.room-board-controls').count(),0);
+  });
+  await check('A learner leaves and rejoins the same Cloud class with its latest board and video',async()=>{
+    await one.getByRole('button',{name:'Salir de la llamada',exact:true}).click();
+    await until(async()=>await one.locator('.live-grid').count()===0);
+    await one.getByRole('button',{name:'Entrar a la clase',exact:true}).click();await connected(one);
+    await one.waitForFunction(()=>[...document.querySelectorAll('.live-grid video')].some(v=>v.videoWidth>0));
+    assert.match(await one.locator('.room-moves').innerText(),/e4/);
+    await until(async()=>await teacher.locator('.live-grid .live-tile').count()===3);
   });
   await check('Instructor mutes a learner through the authenticated server control',async()=>{
     await one.getByRole('button',{name:'Activar micrófono',exact:true}).click();
@@ -191,6 +200,10 @@ async function shot(page,name){
     assert.notEqual(sessionId,previous);
     await two.getByRole('button',{name:'Entrar a la clase',exact:true}).click();await connected(two);
     const cached=credentials.studentTwoLiveE2E;
+    await two.locator('.account-launch').click();await two.locator('.account-profile').waitFor();
+    await until(async()=>await teacher.locator('.live-grid .live-tile').count()===1);
+    await two.goto(ORIGIN+'/#/rooms/open/'+roomId);await two.getByTestId('live-classroom').waitFor();
+    await two.getByRole('button',{name:'Entrar a la clase',exact:true}).click();await connected(two);
     two.once('dialog',d=>d.accept());await two.getByRole('button',{name:'Salir y borrar mis datos de esta sala',exact:true}).click();
     await two.locator('.room-list-section').waitFor();assert.equal(await two.locator('.live-grid').count(),0);
     assert.equal(await rejectedReplay(two,cached),true);
