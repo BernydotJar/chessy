@@ -10,8 +10,12 @@ import {
   type LiveSession,
 } from '../../rooms/live';
 import type { LearningRoom } from '../../rooms/model';
+import { sessionEndsConnection } from '../../rooms/live-model';
 import '../../styles/live-classroom.css';
 
+function participantRole(participant: Participant): string {
+  try { return JSON.parse(participant.metadata || '{}').role || ''; } catch { return ''; }
+}
 function CameraTile({participant, screen = false}: {participant: Participant; screen?: boolean}) {
   const {t} = useTranslation();
   const video = useRef<HTMLVideoElement>(null);
@@ -23,7 +27,7 @@ function CameraTile({participant, screen = false}: {participant: Participant; sc
     track.attach(element);
     return () => { track.detach(element); };
   }, [track]);
-  const role = (() => { try { return JSON.parse(participant.metadata || '{}').role; } catch { return ''; } })();
+  const role = participantRole(participant);
   const label = role === 'coach' ? t('live.coach') : t('live.learner') + ' ' + participant.identity.slice(2,6);
   return <div className={'live-tile' + (screen ? ' live-screen' : '')} data-identity={participant.identity}>
     <video ref={video} autoPlay playsInline muted className={!track || publication?.isMuted ? 'live-video-hidden' : ''}
@@ -64,20 +68,20 @@ export default function LiveClassroom({room, owns}: {room: LearningRoom; owns: b
     void observeLiveClass(room.id, state => {
       if (!alive) return;
       setSession(state);
-      if (state?.status !== 'live' || (joinedSession.current && joinedSession.current !== state.sessionId)) {
+      if (sessionEndsConnection(state, joinedSession.current, callRef.current !== null)) {
         attempt.current++;
         void callRef.current?.disconnect();
-        callRef.current = null; setCall(null); setConnection(ConnectionState.Disconnected);
+        callRef.current = null; joinedSession.current = null; setCall(null); setConnection(ConnectionState.Disconnected);
       }
     }, () => {
       if (!alive) return;
-      attempt.current++; void callRef.current?.disconnect(); callRef.current = null; setCall(null);
+      attempt.current++; void callRef.current?.disconnect(); callRef.current = null; joinedSession.current = null; setCall(null);
       setConnection(ConnectionState.Disconnected); setError('live.accessDenied');
     }).then(unsubscribe => { if (!alive) unsubscribe(); else stop = unsubscribe; })
       .catch(() => { if (alive) setError('live.error'); });
     return () => {
       alive = false; mounted.current = false; invalidateAttempt();
-      stop(); void callRef.current?.disconnect(); callRef.current = null;
+      stop(); void callRef.current?.disconnect(); callRef.current = null; joinedSession.current = null;
     };
   }, [room.id, invalidateAttempt]);
   useEffect(() => {
@@ -91,16 +95,17 @@ export default function LiveClassroom({room, owns}: {room: LearningRoom; owns: b
   }, [session]);
   useEffect(() => {
     if (room.status === 'active') return;
-    attempt.current++; void callRef.current?.disconnect(); callRef.current = null; setCall(null);
+    attempt.current++; void callRef.current?.disconnect(); callRef.current = null; joinedSession.current = null; setCall(null);
   }, [room.status]);
   async function connect(sessionId: string) {
     const request = ++attempt.current;
+    joinedSession.current = sessionId;
     const credentials = await joinLiveClass(room.id, sessionId);
     if (!mounted.current || request !== attempt.current) return;
     const next = new Room({adaptiveStream: true, dynacast: true, videoCaptureDefaults: {resolution: {width: 640, height: 360, frameRate: 15}}, publishDefaults: {simulcast: false}});
     callRef.current = next; joinedSession.current = sessionId;
-    const update = () => { if (mounted.current) setVersion(value => value + 1); };
-    next.on(RoomEvent.ConnectionStateChanged, state => { if (mounted.current) setConnection(state); });
+    const update = () => { if (mounted.current && callRef.current === next) setVersion(value => value + 1); };
+    next.on(RoomEvent.ConnectionStateChanged, state => { if (mounted.current && callRef.current === next) setConnection(state); });
     for (const event of [RoomEvent.ParticipantConnected, RoomEvent.ParticipantDisconnected,
       RoomEvent.TrackSubscribed, RoomEvent.TrackUnsubscribed, RoomEvent.TrackMuted, RoomEvent.TrackUnmuted,
       RoomEvent.LocalTrackPublished, RoomEvent.LocalTrackUnpublished, RoomEvent.AudioPlaybackStatusChanged]) {
@@ -108,7 +113,7 @@ export default function LiveClassroom({room, owns}: {room: LearningRoom; owns: b
     }
     next.on(RoomEvent.Disconnected, reason => {
       if (!mounted.current || callRef.current !== next) return;
-      callRef.current = null; setCall(null); setConnection(ConnectionState.Disconnected);
+      callRef.current = null; joinedSession.current = null; setCall(null); setConnection(ConnectionState.Disconnected);
       if (reason === DisconnectReason.PARTICIPANT_REMOVED) setError('live.accessDenied');
       else setNotice('live.disconnected');
     });
@@ -120,7 +125,7 @@ export default function LiveClassroom({room, owns}: {room: LearningRoom; owns: b
       await next.startAudio().catch(() => { /* The explicit audio-resume button remains available. */ });
     } catch (cause) {
       await next.disconnect();
-      if (callRef.current === next) callRef.current = null;
+      if (callRef.current === next) { callRef.current = null; joinedSession.current = null; }
       throw cause;
     }
   }
@@ -131,10 +136,12 @@ export default function LiveClassroom({room, owns}: {room: LearningRoom; owns: b
     catch (cause) { if (mounted.current) setError(liveErrorKey(cause)); }
     finally { if (mounted.current) { setBusy(false); refresh(); } }
   }
+  const mediaSessionId = joinedSession.current;
   const connected = !!call && connection === ConnectionState.Connected;
   // Room/participant instances are mutable; version is advanced by subscribed SDK events.
   void version;
-  const people = call ? [call.localParticipant, ...call.remoteParticipants.values()] : [];
+  const people = call ? [call.localParticipant, ...call.remoteParticipants.values()]
+    .sort((a, b) => Number(participantRole(b) === 'coach') - Number(participantRole(a) === 'coach')) : [];
   const others = people.filter(person => person.identity !== call?.localParticipant.identity);
   const screen = people.find(person => person.getTrackPublication(Track.Source.ScreenShare)?.isSubscribed ||
     (person === call?.localParticipant && person.getTrackPublication(Track.Source.ScreenShare)?.track));
@@ -158,8 +165,8 @@ export default function LiveClassroom({room, owns}: {room: LearningRoom; owns: b
       <p>{t(owns ? 'live.coachIntro' : 'live.learnerIntro')}</p>
       <p className="fine-print">{t('live.devicesOff')}</p>
       <div className="button-row">
-        {owns && room.status === 'active' && !inProgress && <button className="btn primary" type="button" disabled={busy}
-          onClick={() => void perform(async () => { const result = await startLiveClass(room.id); await connect(result.sessionId); })}>{t('live.start')}</button>}
+        {owns && room.status === 'active' && (!inProgress || session?.status === 'starting') && <button className="btn primary" type="button" disabled={busy}
+          onClick={() => void perform(async () => { const result = await startLiveClass(room.id); await connect(result.sessionId); })}>{t(session?.status === 'starting' ? 'live.retryStart' : 'live.start')}</button>}
         {room.status === 'active' && session?.status === 'live' && <button className="btn primary" type="button" disabled={busy}
           onClick={() => void perform(() => connect(session.sessionId))}>{t(busy ? 'live.connecting' : 'live.join')}</button>}
       </div>
@@ -182,20 +189,20 @@ export default function LiveClassroom({room, owns}: {room: LearningRoom; owns: b
           aria-label={t(sharing ? 'live.stopShare' : 'live.share')}
           onClick={() => void perform(() => call.localParticipant.setScreenShareEnabled(!sharing, {resolution: {width: 1280, height: 720, frameRate: 10}}))}><MonitorUp size={18}/><span>{t('live.screen')}</span></button>}
         <button className="btn quiet" type="button" onClick={() => {
-          attempt.current++; void call.disconnect(); callRef.current = null; setCall(null);
+          attempt.current++; void call.disconnect(); callRef.current = null; joinedSession.current = null; setCall(null);
           setConnection(ConnectionState.Disconnected); setNotice('live.disconnected');
         }}><PhoneOff size={18}/><span>{t('live.leave')}</span></button>
       </div>
       <details className="live-participants" open={owns}>
         <summary><Users size={16} aria-hidden="true"/> {t('live.participants')} ({people.length})</summary>
         {others.map(person => <div className="live-participant" key={person.identity}>
-          <span>{person.name || t('live.learner')}</span>
+          <span>{participantRole(person) === 'coach' ? t('live.coach') : t('live.learner') + ' ' + person.identity.slice(2,6)}</span>
           {owns && <div className="button-row">
-            <button type="button" className="text-button" disabled={busy}
-              onClick={() => void perform(() => moderateLiveClass(room.id, session!.sessionId, person.identity, 'mute'))}>{t('live.mute')}</button>
-            <button type="button" className="text-button" disabled={busy}
+            <button type="button" className="text-button" disabled={busy || !mediaSessionId}
+              onClick={() => void perform(() => moderateLiveClass(room.id, mediaSessionId!, person.identity, 'mute'))}>{t('live.mute')}</button>
+            <button type="button" className="text-button" disabled={busy || !mediaSessionId}
               onClick={() => { if (window.confirm(t('live.removeConfirm'))) void perform(() =>
-                moderateLiveClass(room.id, session!.sessionId, person.identity, 'remove')); }}>{t('live.remove')}</button>
+                moderateLiveClass(room.id, mediaSessionId!, person.identity, 'remove')); }}>{t('live.remove')}</button>
           </div>}
         </div>)}
       </details>

@@ -2,6 +2,7 @@
 const {createHash}=require('node:crypto');
 const {rateNext}=require('./policy.cjs');
 const SAFE=/^[A-Za-z0-9]{20}$/;
+const safeId=value=>typeof value==='string'&&SAFE.test(value);
 const MAX_PARTICIPANTS=12,TOKEN_SECONDS=90,CLASS_MS=120*60*1000;
 const digest=value=>createHash('sha256').update(value).digest('hex');
 const providerRoom=(roomId,sessionId)=>'chessy_'+digest(roomId+':'+sessionId);
@@ -52,8 +53,10 @@ function createLiveService({db,Timestamp,HttpsError,clock=Date.now,getConfig=liv
     return a;
   };
   const ids=request=>{
-    const {roomId,sessionId}=request.data||{};
-    if(!SAFE.test(roomId||'')||(sessionId!==undefined&&!SAFE.test(sessionId)))fail('invalid-argument','Invalid classroom identifier');
+    const data=request.data;
+    if(!data||typeof data!=='object'||Array.isArray(data))fail('invalid-argument','Invalid classroom request');
+    const {roomId,sessionId}=data;
+    if(!safeId(roomId)||(sessionId!==undefined&&!safeId(sessionId)))fail('invalid-argument','Invalid classroom identifier');
     return {roomId,sessionId};
   };
   const current=roomId=>db.doc('learningRooms/'+roomId+'/live/current');
@@ -128,7 +131,9 @@ function createLiveService({db,Timestamp,HttpsError,clock=Date.now,getConfig=liv
       if(state?.roomId!==roomId||state.status!=='live'||c.data()?.sessionId!==sessionId||millis(state.endsAt)<=clock())
         fail('failed-precondition','live-ended');
       if(entry?.blocked)fail('permission-denied','live-removed');
-      if(!entry&&all.size>=MAX_PARTICIPANTS)fail('resource-exhausted','live-full');
+      const learners=all.docs.filter(doc=>doc.data().role!=='coach').length;
+      if(!entry&&(all.size>=MAX_PARTICIPANTS||(info.role==='learner'&&learners>=MAX_PARTICIPANTS-1)))
+        fail('resource-exhausted','live-full');
       if(issue){
         const charge=await takeRate(tx,a.uid,'join',15,60000);charge();
         tx.set(ledger,{identity,uid:a.uid,role:info.role,blocked:false,status:'issued',issuedAt:stamp(clock()),
@@ -182,7 +187,7 @@ function createLiveService({db,Timestamp,HttpsError,clock=Date.now,getConfig=liv
   }
   async function moderate(request){
     const a=identify(request),{roomId,sessionId}=ids(request),{identity,action}=request.data||{};
-    if(!sessionId||!/^p_[a-f0-9]{64}$/.test(identity||'')||!['mute','remove'].includes(action))fail('invalid-argument','Invalid moderation action');
+    if(!sessionId||typeof identity!=='string'||!/^p_[a-f0-9]{64}$/.test(identity)||!['mute','remove'].includes(action))fail('invalid-argument','Invalid moderation action');
     const ref=session(sessionId),target=ref.collection('participants').doc(identity);
     const state=await db.runTransaction(async tx=>{
       await access(tx,roomId,a,true);

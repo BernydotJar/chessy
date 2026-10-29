@@ -3,11 +3,9 @@ import { getChessyFirebaseApp, getChessyFunctions } from '../firebase/client';
 import { privateRoomsEnabled } from './release';
 
 export const liveClassroomEnabled = privateRoomsEnabled && import.meta.env.VITE_CHESSY_LIVEKIT_ENABLED === 'true';
-export interface LiveSession {
-  sessionId: string;
-  status: 'starting' | 'live' | 'closing' | 'ended';
-  endsAt: number;
-}
+import { parseLiveSession } from './live-model';
+import type { LiveSession } from './live-model';
+export type { LiveSession } from './live-model';
 export interface LiveCredentials {
   token: string; serverUrl: string; identity: string;
   role: 'coach' | 'learner'; sessionId: string; expiresIn: number;
@@ -33,10 +31,9 @@ export async function observeLiveClass(roomId: string, onState: (state: LiveSess
   return f.onSnapshot(f.doc(f.getFirestore(app), 'learningRooms', roomId, 'live', 'current'), snapshot => {
     const data = snapshot.data();
     if (!data) { onState(null); return; }
-    if (!/^[A-Za-z0-9]{20}$/.test(data.sessionId) || !['starting','live','closing','ended'].includes(data.status)) {
-      onError(); return;
-    }
-    onState({sessionId: data.sessionId, status: data.status, endsAt: data.endsAt.toMillis()});
+    const state = parseLiveSession(data);
+    if (!state) { onError(); return; }
+    onState(state);
   }, onError);
 }
 export function liveErrorKey(error: unknown): string {

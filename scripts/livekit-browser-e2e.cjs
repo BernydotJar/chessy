@@ -117,6 +117,7 @@ async function shot(page,name){
     const denied=await fetch(url,{headers:{Authorization:'Bearer '+tokens.outsiderLiveE2E}});assert.equal(denied.status,403);
   });
   await require('./livekit-backend-e2e.cjs')({check,roomId});
+  await require('./livekit-adversarial-backend.cjs')({check});
   await check('Instructor starts class, two learners join with devices off, all see three participants',async()=>{
     await teacher.getByRole('button',{name:'Iniciar clase',exact:true}).click();await connected(teacher);
     sessionId=credentials.coachLiveE2E.sessionId;
@@ -145,6 +146,25 @@ async function shot(page,name){
     await one.waitForFunction(()=>document.querySelector('.live-screen video')?.videoWidth>0);
     await teacher.getByRole('button',{name:'Dejar de compartir',exact:true}).click();
   });
+  await check('Adversarial browser: a malformed live snapshot disconnects safely and recovery restores the class',async()=>{
+    const {createRequire}=require('node:module'),backend=createRequire(path.join(ROOT,'functions/index.cjs'));
+    const {initializeApp}=backend('firebase-admin/app'),{getFirestore}=backend('firebase-admin/firestore');
+    const db=getFirestore(initializeApp({projectId:PROJECT},'chessy-live-snapshot-qa'));
+    const live=db.doc('learningRooms/'+roomId+'/live/current'),before=(await live.get()).data();
+    try{
+      await live.update({endsAt:'malformed-synthetic-timestamp'});
+      for(const p of [teacher,one,two]){
+        await until(async()=>await p.locator('.live-grid').count()===0);
+        await p.getByTestId('live-classroom').getByRole('alert').waitFor();
+      }
+    }finally{await live.update({endsAt:before.endsAt});}
+    for(const p of [teacher,one,two]){
+      await p.getByRole('button',{name:'Entrar a la clase',exact:true}).click();await connected(p);
+    }
+    await teacher.getByRole('button',{name:'Activar cámara',exact:true}).click();
+    await teacher.getByRole('button',{name:'Activar micrófono',exact:true}).click();
+    await until(async()=>await teacher.locator('.live-grid .live-tile').count()===3);
+  });
   await check('Instructor moves update both shared boards without scrolling the mobile learner',async()=>{
     await one.locator('.room-position').scrollIntoViewIfNeeded();const y=await one.evaluate(()=>scrollY);
     await teacher.locator('.room-position [data-square="e2"]').first().click();
@@ -153,6 +173,22 @@ async function shot(page,name){
     assert.match(await two.locator('.room-moves').innerText(),/e4/);
     assert.ok(Math.abs((await one.evaluate(()=>scrollY))-y)<4,'incoming moves preserve mobile scroll');
     assert.equal(await one.locator('.room-board-controls').count(),0);
+  });
+  await check('Adversarial browser: a delayed join response cannot reopen media after navigating away',async()=>{
+    await one.getByRole('button',{name:'Salir de la llamada',exact:true}).click();
+    let captured,release;const received=new Promise(resolve=>{captured=resolve;}),gate=new Promise(resolve=>{release=resolve;});
+    let socketCount=0;const onSocket=socket=>{if(socket.url().includes('.livekit.cloud'))socketCount++;};one.on('websocket',onSocket);
+    await one.route('**/joinLearningRoomLive',async route=>{const response=await route.fetch();captured();await gate;await route.fulfill({response});});
+    try{
+      await one.getByRole('button',{name:'Entrar a la clase',exact:true}).click();await received;
+      await one.locator('.account-launch').click();await one.locator('.account-profile').waitFor();
+      const finished=one.waitForResponse(response=>response.url().endsWith('/joinLearningRoomLive'));
+      release();await finished;await one.waitForTimeout(1500);
+      assert.equal(socketCount,0,'Cancelled navigation must not open a provider WebSocket');
+      assert.equal(await one.locator('.live-grid').count(),0);
+    }finally{release();await one.unroute('**/joinLearningRoomLive');one.off('websocket',onSocket);}
+    await one.goto(ORIGIN+'/#/rooms/open/'+roomId);await one.getByTestId('live-classroom').waitFor();
+    await one.getByRole('button',{name:'Entrar a la clase',exact:true}).click();await connected(one);
   });
   await check('A learner leaves and rejoins the same Cloud class with its latest board and video',async()=>{
     await one.getByRole('button',{name:'Salir de la llamada',exact:true}).click();

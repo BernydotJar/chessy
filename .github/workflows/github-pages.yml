@@ -113,6 +113,13 @@ jobs:
           --config firebase.coach-emulators.json
           --only firestore
           "node scripts/room-rules-verify.mjs"
+      - name: Adversarial video classroom authorization, capacity and races
+        run: >-
+          npx --yes firebase-tools@15.32.1 emulators:exec
+          --project demo-chessy-livekit
+          --config firebase.livekit-emulators.json
+          --only firestore
+          "node scripts/livekit-adversarial-backend.cjs"
       - name: Disabled media secret fixtures for local room emulators
         run: |
           printf 'CHESSY_LIVEKIT_API_KEY=disabled-emulator-key\nCHESSY_LIVEKIT_API_SECRET=disabled-emulator-secret\n' > functions/.secret.local

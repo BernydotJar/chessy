@@ -43,7 +43,8 @@ export const liveLocales = {
     "permissionDenied": "No se pudo activar el dispositivo. Revisa los permisos de cámara, micrófono o pantalla y vuelve a intentarlo.",
     "unconfigured": "Las videoclases todavía no están habilitadas para esta sala.",
     "full": "La clase alcanzó su límite de participantes.",
-    "error": "No se pudo completar la acción. Comprueba tu conexión y vuelve a intentarlo."
+    "error": "No se pudo completar la acción. Comprueba tu conexión y vuelve a intentarlo.",
+    "retryStart": "Reintentar inicio"
   },
   "en": {
     "eyebrow": "Live lesson",
@@ -89,7 +90,8 @@ export const liveLocales = {
     "permissionDenied": "The device could not be enabled. Check camera, microphone or screen permissions and try again.",
     "unconfigured": "Video classes have not been enabled for this room yet.",
     "full": "The class has reached its participant limit.",
-    "error": "The action could not be completed. Check your connection and try again."
+    "error": "The action could not be completed. Check your connection and try again.",
+    "retryStart": "Retry starting"
   },
   "pt": {
     "eyebrow": "Aula ao vivo",
@@ -135,6 +137,7 @@ export const liveLocales = {
     "permissionDenied": "Não foi possível ativar o dispositivo. Confira as permissões de câmera, microfone ou tela e tente novamente.",
     "unconfigured": "As videoaulas ainda não foram habilitadas para esta sala.",
     "full": "A aula atingiu o limite de participantes.",
-    "error": "Não foi possível concluir a ação. Confira sua conexão e tente novamente."
+    "error": "Não foi possível concluir a ação. Confira sua conexão e tente novamente.",
+    "retryStart": "Tentar iniciar novamente"
   }
 } as const;

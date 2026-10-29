@@ -33,3 +33,29 @@ test('Feature-disabled and unverified requests fail before any database or media
   await assert.rejects(()=>service.join({}),{code:'failed-precondition'});
   await assert.rejects(()=>service.end({}),{code:'unauthenticated'});
 });
+test('Malformed JSON identifiers are rejected before database/provider access across every endpoint',async()=>{
+  class Failure extends Error{constructor(code,message){super(message);this.code=code;}}
+  const db=new Proxy({}, {get(){throw new Error('malformed request reached database');}});
+  const service=createLiveService({db,Timestamp:{},HttpsError:Failure,enabled:()=>true,getConfig:()=>({}),makeProvider:()=>({})});
+  const auth={uid:'coach',token:{email_verified:true,chessyRole:'coach'}};
+  const good='A'.repeat(20);
+  const values=[null,[],{roomId:[good],sessionId:good},{roomId:{},sessionId:good},
+    {roomId:42,sessionId:good},{roomId:good,sessionId:[good]},{roomId:'../other',sessionId:good}];
+  for(const name of ['start','join','end','moderate'])for(const data of values)
+    await assert.rejects(()=>service[name]({auth,data}),{code:'invalid-argument'},name+' rejects malformed JSON');
+});
+test('Moderation rejects identity arrays instead of coercing them to a provider identity',async()=>{
+  class Failure extends Error{constructor(code,message){super(message);this.code=code;}}
+  const db=new Proxy({}, {get(){throw new Error('invalid moderation reached database');}});
+  const service=createLiveService({db,Timestamp:{},HttpsError:Failure,enabled:()=>true});
+  await assert.rejects(()=>service.moderate({auth:{uid:'coach',token:{email_verified:true,chessyRole:'coach'}},
+    data:{roomId:'A'.repeat(20),sessionId:'B'.repeat(20),identity:['p_'+'a'.repeat(64)],action:'remove'}}),{code:'invalid-argument'});
+});
+test('Body-supplied identities and nonboolean verified claims cannot elevate a request',async()=>{
+  class Failure extends Error{constructor(code,message){super(message);this.code=code;}}
+  const db=new Proxy({}, {get(){throw new Error('spoofed identity reached database');}});
+  const service=createLiveService({db,Timestamp:{},HttpsError:Failure,enabled:()=>true});
+  for(const auth of [undefined,{uid:'attacker',token:{email_verified:'true',chessyRole:'coach'}},
+    {uid:'attacker',token:{email_verified:false,chessyRole:'admin'}}])
+    await assert.rejects(()=>service.start({auth,data:{roomId:'A'.repeat(20),auth:{uid:'coach',token:{email_verified:true,chessyRole:'coach'}}}}),{code:'unauthenticated'});
+});
