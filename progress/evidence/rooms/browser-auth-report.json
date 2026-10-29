@@ -1,0 +1,71 @@
+{
+  "timestamp": "2026-10-28T05:35:50.984Z",
+  "checks": [
+    {
+      "name": "Coach has a verified identity and an approved coach claim",
+      "result": "PASS",
+      "ms": 3123
+    },
+    {
+      "name": "Coach creates a private age-gated room with a live board",
+      "result": "PASS",
+      "ms": 2205
+    },
+    {
+      "name": "Teacher generates a seven-day invitation and shares the link",
+      "result": "PASS",
+      "ms": 2004
+    },
+    {
+      "name": "Student follows link and signs in on separate 390px browser session",
+      "result": "PASS",
+      "ms": 2784
+    },
+    {
+      "name": "Adult learner joins with a verified invitation",
+      "result": "PASS",
+      "ms": 2193
+    },
+    {
+      "name": "Server grades but does not retain raw questionnaire answers",
+      "result": "PASS",
+      "ms": 2498
+    },
+    {
+      "name": "Account deletion blocks while a private classroom record exists",
+      "result": "PASS",
+      "ms": 2172
+    },
+    {
+      "name": "Minor invite is blocked pending external verification",
+      "result": "PASS",
+      "ms": 2479
+    },
+    {
+      "name": "External signed receipt and explicit policy approval unlock only matching guardian",
+      "result": "PASS",
+      "ms": 4674
+    },
+    {
+      "name": "Coach sees anonymous scores and exercises instructor-only board control",
+      "result": "PASS",
+      "ms": 291
+    },
+    {
+      "name": "Coach closes room and learners retain read-only access",
+      "result": "PASS",
+      "ms": 2418
+    },
+    {
+      "name": "Adult learner withdraws membership and deletes diagnostic data",
+      "result": "PASS",
+      "ms": 175
+    },
+    {
+      "name": "Independent sessions generated no unhandled browser exceptions",
+      "result": "PASS",
+      "ms": 1
+    }
+  ],
+  "pageErrors": []
+}

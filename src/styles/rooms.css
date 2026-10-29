@@ -1,0 +1,65 @@
+.rooms-view{display:grid;gap:20px;min-width:0}
+.rooms-view .panel{padding:clamp(18px,3vw,32px)}
+.rooms-view h2,.rooms-view h3,.rooms-view h4{margin:0}
+.rooms-view .muted{line-height:1.6}
+.zero-path{display:grid;gap:14px}
+.zero-path-heading,.room-heading-panel,.room-card-top,.room-author-header,.room-invite-entry{display:flex;align-items:center;gap:14px;justify-content:space-between}
+.zero-path-heading{align-items:flex-start}
+.zero-path-heading h2,.room-heading-panel h2{font-size:clamp(1.3rem,2.5vw,2rem);margin:6px 0}
+.zero-path progress{width:100%;height:8px;accent-color:var(--accent,#3a8a76)}
+.zero-level{font-weight:700}
+.zero-milestones{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.zero-milestones li{display:flex;align-items:center;gap:14px;min-width:0;border:1px solid var(--border,rgba(127,127,127,.25));border-radius:16px;padding:10px 14px}
+.zero-milestones li>div{display:grid;gap:3px;min-width:0;flex:1}
+.zero-milestones li>div span{font-size:.83rem;color:var(--text-muted,#7d8590)}
+.zero-milestones .zero-count{display:grid;place-items:center;min-width:32px;min-height:32px;border-radius:50%;background:rgba(100,150,140,.15)}
+.zero-milestones .done .zero-count{color:var(--accent,#408a78)}
+.zero-milestones .btn{flex-shrink:0}
+.room-auth,.room-diagnostic-done{display:flex;align-items:center;gap:18px}
+.room-auth>div,.room-diagnostic-done>div{flex:1}
+.room-list-section>h2{margin-bottom:16px}
+.room-card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}
+.room-card{display:grid;gap:12px}
+.room-author{display:grid;gap:20px}
+.room-author-header{justify-content:flex-start}
+.room-form{display:grid;gap:16px;max-width:720px}
+.room-form label:not(.room-radio):not(.room-consent),.room-share-actions label{display:grid;gap:8px;font-weight:650}
+.room-form-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.room-form input:not([type=radio]):not([type=checkbox]),.room-form select,.room-share-actions input{width:100%;max-width:100%;min-width:0;border-radius:12px;padding:11px 12px;border:1px solid var(--border,rgba(127,127,127,.35));background:var(--surface,#fff);color:var(--text-primary,inherit);font:inherit}
+.room-consent,.room-radio{display:flex;align-items:flex-start;gap:12px;line-height:1.5;cursor:pointer}
+.room-consent input,.room-radio input{margin-top:.28em;flex-shrink:0;accent-color:var(--accent,#377e6e);width:18px;height:18px}
+.room-accept,.room-invitations,.room-results,.room-board,.room-quiz{display:grid;gap:18px}
+.room-back{justify-self:start}
+.room-share-actions{display:grid;gap:12px;margin-top:8px}
+.room-existing-invites summary{cursor:pointer;font-weight:650}
+.room-invite-entry{padding:10px 0;border-bottom:1px solid var(--border,rgba(127,127,127,.25))}
+.room-result-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:space-between;border-bottom:1px solid var(--border,rgba(127,127,127,.25));padding:12px 0}
+.room-board-layout{display:grid;grid-template-columns:minmax(250px,450px) minmax(210px,1fr);gap:24px;align-items:start}
+.room-position{width:100%;max-width:450px}
+.room-board-side{display:grid;gap:14px;align-content:start}
+.room-board-controls{flex-wrap:wrap}
+.room-moves{line-height:1.75;overflow-wrap:anywhere;max-height:140px;overflow:auto}
+.room-question,.room-goals{padding:14px 0;margin:0;border:0;border-bottom:1px solid var(--border,rgba(127,127,127,.25));display:grid;gap:10px;min-width:0}
+.room-question legend,.room-goals legend{font-weight:700;padding:0 0 12px;line-height:1.5}
+.room-radio{border:1px solid var(--border,rgba(127,127,127,.25));border-radius:12px;padding:12px;transition:border-color .15s ease}
+.room-radio:has(input:checked){border-color:var(--accent,#377e6e);background:rgba(70,145,120,.08)}
+.room-radio:focus-within{outline:2px solid var(--accent,#377e6e);outline-offset:2px}
+.zero-home-teaser{border-color:rgba(70,145,120,.2)}
+@media(max-width:760px){
+  .rooms-view{gap:16px}
+  .rooms-view .panel{padding:18px}
+  .room-board-layout,.room-form-row{grid-template-columns:minmax(0,1fr)}
+  .room-auth,.room-heading-panel{align-items:flex-start;flex-wrap:wrap}
+  .room-auth>.btn{width:100%}
+  .zero-milestones li{flex-wrap:wrap}
+  .zero-milestones .btn{margin-left:46px}
+  .room-position{max-width:100%}
+  .room-results{overflow-wrap:anywhere}
+}
+@media(prefers-reduced-motion:reduce){.room-radio{transition:none}}
+
+/* Keep share controls compact and suppress inherited article-style note margins. */
+.rooms-view .fine-print{margin:0}
+.room-invitations>.btn,.room-share-actions>.btn{justify-self:start}
+.room-share-actions>label{width:100%;min-width:0}
+.room-invite-entry>.button-row{justify-content:flex-end}

@@ -135,6 +135,136 @@ service cloud.firestore {
       allow list, create, update, delete: if false;
     }
 
+
+    // Rooms are private. A learner gains membership only through an unpredictable,
+    // short-lived invitation AND an atomic self-owned enrollment index.
+    function verifiedIdentity() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+    function roomRef(roomId) {
+      return /databases/$(database)/documents/learningRooms/$(roomId);
+    }
+    function memberRef(roomId, uid) {
+      return /databases/$(database)/documents/learningRooms/$(roomId)/members/$(uid);
+    }
+    function myRoomRef(uid, roomId) {
+      return /databases/$(database)/documents/userRooms/$(uid)/rooms/$(roomId);
+    }
+    function ownsRoom(roomId) {
+      return isCoach() && exists(roomRef(roomId)) &&
+        get(roomRef(roomId)).data.ownerUid == request.auth.uid;
+    }
+    function currentMinorApproval(roomId, uid, age) {
+      let config = /databases/$(database)/documents/roomSafety/config;
+      let approval = /databases/$(database)/documents/roomGuardianApprovals/$(roomId + '_' + uid);
+      return exists(config) && get(config).data.minorEnrollmentEnabled == true
+        && exists(approval)
+        && get(approval).data.status == 'approved'
+        && get(approval).data.guardianUid == uid
+        && get(approval).data.roomId == roomId
+        && get(approval).data.ageBand == age
+        && get(approval).data.policyVersion == get(config).data.policyVersion
+        && get(approval).data.expiresAt > request.time;
+    }
+    function validActiveMember(roomId, uid) {
+      let member = memberRef(roomId,uid);
+      return exists(member) && get(member).data.expiresAt > request.time
+        && (get(member).data.ageBand == 'adult'
+          || currentMinorApproval(roomId,uid,get(member).data.ageBand));
+    }
+    function isRoomMember(roomId) {
+      return verifiedIdentity() && validActiveMember(roomId,request.auth.uid);
+    }
+    function mayReadRoom(roomId) {
+      return exists(roomRef(roomId)) && get(roomRef(roomId)).data.expiresAt > request.time
+        && (ownsRoom(roomId) || isRoomMember(roomId));
+    }
+    function validBoardData() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['fen','initialFen','moves','revision','locked','updatedAt'])
+        && d.keys().hasAll(['fen','initialFen','moves','revision','locked','updatedAt'])
+        && d.fen is string && d.fen.size() >= 15 && d.fen.size() <= 120
+        && d.initialFen is string && d.initialFen.size() >= 15 && d.initialFen.size() <= 120
+        && d.moves is list && d.moves.size() <= 500
+        && d.revision is int && d.revision >= 0 && d.revision <= 100000
+        && d.locked is bool && d.updatedAt == request.time;
+    }
+    match /learningRooms/{roomId} {
+      allow get: if mayReadRoom(roomId);
+      // Owners retain read access for account-data cleanup even if their coach role is later revoked.
+      allow list: if verifiedIdentity() && resource.data.ownerUid == request.auth.uid;
+      allow create: if false; // Server-only: quota, App Check and audit in callable.
+      allow update: if false; // Server-only: lifecycle and retention timestamp.
+      allow delete: if false;
+
+      match /board/{boardId} {
+        allow get: if boardId == 'current' && mayReadRoom(roomId);
+        allow list: if false;
+        allow create: if false; // Board starts in the same server transaction as its room.
+        allow update: if boardId == 'current' && ownsRoom(roomId)
+          && get(roomRef(roomId)).data.status == 'active'
+          && validBoardData() && request.resource.data.revision == resource.data.revision + 1;
+        allow delete: if false;
+      }
+      match /members/{uid} {
+        allow get: if isOwner(uid) || ownsRoom(roomId);
+        allow list: if ownsRoom(roomId);
+        allow create: if false; // Admission quota and policy checked by server transaction.
+        allow update: if false;
+        allow delete: if false; // Server atomic right-to-withdraw handler.
+      }
+      match /diagnostics/{uid} {
+        allow get: if isOwner(uid) || ownsRoom(roomId);
+        allow list: if ownsRoom(roomId);
+        allow create, update: if false; // Canonical grade computed by trusted callable.
+        allow delete: if false; // Server atomic right-to-withdraw handler.
+      }
+    }
+
+    match /roomInvites/{inviteId} {
+      // An unguessable 20-character ID is the bearer capability; never list invitations as a learner.
+      allow get: if verifiedIdentity() && resource.data.expiresAt > request.time
+        && resource.data.roomExpiresAt > request.time
+        && exists(roomRef(resource.data.roomId))
+        && get(roomRef(resource.data.roomId)).data.status == 'active';
+      allow list: if isCoach() && resource.data.ownerUid == request.auth.uid;
+      allow create: if false; // Server-only; rate limits cannot be bypassed.
+      allow update: if false;
+      allow delete: if false; // Revocation audited by callable.
+    }
+
+    match /userRooms/{uid}/rooms/{roomId} {
+      allow get, list: if isOwner(uid);
+      allow create: if false; // Admission quota checked by server transaction.
+      allow update: if false;
+      allow delete: if false; // Server atomic right-to-withdraw handler.
+    }
+
+    // Self-attestation never creates verified parental consent.
+    // Only an administrator/service process may write these records.
+    match /roomSafety/{id} {
+      allow read, write: if false;
+    }
+    match /roomGuardianApprovals/{approvalId} {
+      allow read, write: if false;
+    }
+    match /guardianReviewRequests/{requestId} {
+      allow read, write: if false;
+    }
+    match /roomConsentReceipts/{id} {
+      allow read, write: if false; // Replay-protection ledger; no browser access.
+    }
+    match /roomReleaseApprovals/{id} {
+      allow read, write: if false; // Two-signature policy proof; no browser access.
+    }
+    match /roomRateLimits/{id} {
+      allow read, write: if false;
+    }
+    match /roomAudit/{id} {
+      allow get, list: if verifiedIdentity() && request.auth.token.chessyRole == 'admin';
+      allow create, update, delete: if false;
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }

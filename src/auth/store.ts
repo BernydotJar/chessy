@@ -15,6 +15,8 @@ interface AuthStore {
   createAccount(email: string, password: string, displayName?: string): Promise<boolean>;
   signInWithGoogle(): Promise<boolean>;
   resetPassword(email: string): Promise<boolean>;
+  sendVerificationEmail(): Promise<boolean>;
+  refreshVerification(): Promise<boolean>;
   signOut(): Promise<boolean>;
   deleteCurrentAccount(): Promise<boolean>;
   clearFeedback(): void;
@@ -72,6 +74,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
   createAccount: (email, password, displayName) => runAuthAction(set, (active) => active.createAccount(email, password, displayName)),
   signInWithGoogle: () => runAuthAction(set, (active) => active.signInWithGoogle()),
   resetPassword: (email) => runAuthAction(set, (active) => active.resetPassword(email), 'password-reset-sent'),
+  sendVerificationEmail: () => runAuthAction(set, (active) => active.sendVerificationEmail()),
+  refreshVerification: () => runAuthAction(set, (active) => active.refreshVerification()),
   signOut: () => runAuthAction(set, (active) => active.signOut()),
   deleteCurrentAccount: () => runAuthAction(set, (active) => active.deleteCurrentAccount(), 'account-deleted'),
   clearFeedback: () => set({ error: null, notice: null }),

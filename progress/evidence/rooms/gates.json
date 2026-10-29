@@ -1,0 +1,93 @@
+{
+  "timestamp": "2026-10-28T05:37:20.745614+00:00",
+  "branch": "feat/chessy-zero-one-rooms-20261023",
+  "evidenceStatus": "PASS_LOCAL_AND_FIREBASE_EMULATORS_NOT_PRODUCTION",
+  "measured": {
+    "chessyUnitTests": 318,
+    "chessyUnitSuites": 15,
+    "functionsNodeUnitTests": 14,
+    "roomFirestoreRuleTests": 12,
+    "legacyCoachRuleTests": 19,
+    "browserAuthenticatedCoachAdultGuardian": 13,
+    "backendQuotasAndRetentionScenarios": 12,
+    "roomAnonymousUI": 8,
+    "wholeProductBrowserRegressions": 48,
+    "pwaOffline": "PASS",
+    "typescript": "PASS",
+    "eslint": "PASS",
+    "productionBuild": "PASS",
+    "npmAuditFrontend": "PASS (0 findings at low threshold)",
+    "npmAuditFunctions": "PASS (0 findings at low threshold)"
+  },
+  "notProven": [
+    "real App Check enforcement / reCAPTCHA Enterprise site credentials",
+    "live Firebase Functions / Firestore indexes / TTL deployment",
+    "real external verifiable parental consent provider and legal acceptance",
+    "jurisdiction-specific child data protection and safeguards approval",
+    "live GCP billing budgets, cleanup scheduler and monitoring configured",
+    "published reviewed privacy notices and data processor agreement"
+  ],
+  "release": {
+    "adults": {
+      "status": "NO_GO",
+      "blockers": [
+        "publishedPrivacyNotice",
+        "appCheckSiteKey"
+      ]
+    },
+    "minors": {
+      "status": "NO_GO",
+      "blockers": [
+        "publishedPrivacyNotice",
+        "appCheckSiteKey",
+        "signedGovernanceApproval",
+        "legalReviewApproved",
+        "securityReviewApproved",
+        "externalConsentProviderConfigured",
+        "providerContractAndJurisdictionReview",
+        "productionBudgetsAndMonitoring",
+        "signedFinalPrivacyNotices"
+      ]
+    },
+    "merged": false,
+    "productionDeployed": false
+  },
+  "evidenceFiles": [
+    "browser-report.json",
+    "browser-auth-report.json",
+    "safety-release-gate-adults.json",
+    "safety-release-gate-minors.json",
+    "coach-created-room.png",
+    "guardian-diagnostic-mobile.png"
+  ],
+  "ci": {
+    "roomsSafetyJobDefined": true,
+    "previousRun": {
+      "url": "https://github.com/BernydotJar/chessy/actions/runs/40638551888",
+      "headSha": "d48c8ecbaed072ccbeb352e3cc3a0533477b4685",
+      "generalVerify": "FAIL (Vite/Vitest npm audit advisories; pinned upgrades applied in next commit)",
+      "roomsSafety": "FAIL (static UI step omitted npm run build; fixed in next commit)",
+      "roomsFirebaseRules": "PASS",
+      "roomsBackendAndQuota": "PASS",
+      "roomsAuthenticatedPlaywright": "PASS (13/13)"
+    },
+    "finalCommitRunnerVerification": "PENDING: local changes have not yet been observed in GitHub Actions",
+    "releaseAuthorization": "NO_GO for adults and minors without external evidence"
+  },
+  "governanceControls": {
+    "legalSecurityDistinctEd25519Signatures": "PASS (synthetic test keys)",
+    "signedReleaseBinding": "PASS (project, SHA, policy version, countries, privacy notice)",
+    "oldTextOnlyApprovalRejected": "PASS",
+    "signedApprovalReplayGuard": "IMPLEMENTED",
+    "testScriptsRejectNonlocalEmulators": "PASS"
+  },
+  "executorCaveat": "Shared Sandbox V3 experienced high load and intermittent Playwright timeouts; the last complete authenticated run passed 13/13; clean CI runner verification remains pending.",
+  "baselineSha": "d2365811dfe49fd50bf23f902bc5a1d6297044ee",
+  "testedWorkingTreeIncludesUncommittedSafetyChanges": true,
+  "dependencyUpgrades": {
+    "vite": "8.3.5",
+    "vitest": "5.0.5",
+    "npmCi": "PASS",
+    "npmAuditLow": "0 vulnerabilities"
+  }
+}

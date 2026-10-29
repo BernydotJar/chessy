@@ -5,7 +5,7 @@ import { stockfishService, DifficultyLevel, AIMove } from '../utils/stockfishSer
 import { soundManager } from '../utils/soundManager';
 import { DEFAULT_TIME_CONTROL, getTimeControl, isTimeControlId, TIME_CONTROL_STORAGE_KEY, type TimeControlId } from '../game/timeControls';
 
-export type GameView = 'home' | 'academy' | 'classes' | 'progress' | 'library' | 'play' | 'games' | 'review' | 'analysis' | 'training' | 'account' | 'settings' | 'themes';
+export type GameView = 'home' | 'academy' | 'classes' | 'rooms' | 'progress' | 'library' | 'play' | 'games' | 'review' | 'analysis' | 'training' | 'account' | 'settings' | 'themes';
 
 interface GameStore extends GameState {
   chess: Chess;
