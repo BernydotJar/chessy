@@ -9,6 +9,7 @@ import { useAnalyticsStore } from '../../analytics/store';
 import { useLearningStore, guestProgressCanImport, forgetStoredProfile } from '../../learning/store';
 import { useGameStore } from '../../store/gameStore';
 import { hasRoomParticipation, eraseAllMyGuardianReviews } from '../../rooms/cloud';
+import { roomDataMayExist } from '../../rooms/release';
 
 export function AccountView() {
   const { t } = useTranslation();
@@ -49,23 +50,27 @@ export function AccountView() {
   const handleDelete = async () => {
     if (!user) return;
     clearFeedback();
-    try {
-      if (await hasRoomParticipation()) {
+    if(roomDataMayExist){
+      // Once any private room data may exist, fail closed on verification errors.
+      try {
+        if (await hasRoomParticipation()) {
+          setRoomsMustBeRemoved(true);
+          return;
+        }
+      } catch {
         setRoomsMustBeRemoved(true);
         return;
       }
-    } catch {
-      // Never erase identity when private classroom records cannot be checked.
-      setRoomsMustBeRemoved(true);
-      return;
+      try {
+        await eraseAllMyGuardianReviews();
+      } catch {
+        setRoomsMustBeRemoved(true);
+        return;
+      }
     }
+    // First public pilot has no deployed room backend. Nonexistent Functions
+    // must not permanently block deletion of an existing Chessy account.
     setRoomsMustBeRemoved(false);
-    try {
-      await eraseAllMyGuardianReviews();
-    } catch {
-      setRoomsMustBeRemoved(true);
-      return;
-    }
     const cloudDeleted = await deleteCloudProgress();
     if (!cloudDeleted) return;
     const deleted = await deleteCurrentAccount();

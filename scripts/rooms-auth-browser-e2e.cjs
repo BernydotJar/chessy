@@ -25,6 +25,8 @@ const env={
   VITE_FIREBASE_FIRESTORE_EMULATOR_URL:'http://127.0.0.1:19608',
   VITE_FIREBASE_FUNCTIONS_EMULATOR_URL:'http://127.0.0.1:19649',
   VITE_CHESSY_ROOM_PRIVACY_URL:'http://127.0.0.1:14319/privacy-test',
+  VITE_CHESSY_PRIVATE_ROOMS_ENABLED:'true',
+  VITE_CHESSY_ROOMS_DATA_MAY_EXIST:'true',
 };
 let server,browser,teacher,student,guardianBrowser;
 async function waitForServer(){

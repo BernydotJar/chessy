@@ -69,8 +69,9 @@ async function check(name,run){
       await page.waitForFunction(()=>document.querySelector('select[aria-label="Elegir posición"]')?.value==='bishop-diagonal');
     });
     await check('Signup visibly distinguishes guardian and blocks a minor account',async()=>{
-      await goto('rooms');
-      await page.getByRole('button',{name:'Ir a registro'}).click();
+      // The safe public pilot has no private-room login CTA; account registration
+      // must still work directly for existing and new adult users.
+      await goto('account');
       await page.locator('.account-login-card').waitFor();
       await page.locator('.account-tabs button').nth(1).click();
       const form=page.locator('.account-form');
@@ -86,11 +87,13 @@ async function check(name,run){
       await select.selectOption('adult');
       assert.equal(await form.locator('button.btn.primary').isEnabled(),true);
     });
-    await check('Private invitation preserves sign-in boundary for anonymous visitor',async()=>{
+    await check('Production pilot denies private invitation and classroom API UI',async()=>{
       await goto('rooms/InviteTesting1234567');
-      assert.equal(await page.locator('.room-auth').count(),1);
+      assert.equal(await page.locator('.room-auth').count(),0);
       assert.equal(await page.locator('.room-accept form').count(),0);
-      assert.ok((await page.locator('main').innerText()).includes('Entra para participar'));
+      assert.equal(await page.locator('.room-author').count(),0);
+      await page.getByTestId('private-rooms-disabled').waitFor();
+      assert.match(await page.getByTestId('private-rooms-disabled').innerText(),/Salas privadas en preparación/);
     });
     await check('Desktop room action and mobile drawer do not obstruct navigation',async()=>{
       await goto('rooms');

@@ -45,3 +45,13 @@ Los escenarios con autorizaciones firmadas utilizan proveedores y cuentas sinté
 **No es una integración de Chess.com.** Las referencias externas orientan UX, pero las salas y datos pertenecen a Chessy.
 
 **No activar menores reales con el comprobante sintético o con una casilla de autodeclaración.** El proveedor VPC, la identidad del responsable legal, avisos finales, revisión de jurisdicciones, App Check real y garantías operativas siguen siendo gates externos obligatorios.
+
+## Piloto público protegido (release mode)
+
+- La ruta nivel 0->1 permanece accesible aun cuando VITE_CHESSY_PRIVATE_ROOMS_ENABLED no esté definido o valga false.
+- Crear salas, consultar invitaciones, enviar diagnósticos o aprobar tutores no se muestran ni se invocan en ese modo; la vista presenta un estado en preparación.
+- Las salas privadas SOLO pueden activarse con VITE_CHESSY_PRIVATE_ROOMS_ENABLED=true tras desplegar y verificar Functions, reglas Firestore, App Check y aviso de privacidad aprobado.
+- Si un proyecto tuvo datos de salas alguna vez, mantener VITE_CHESSY_ROOMS_DATA_MAY_EXIST=true incluso al deshabilitar UI. Esto preserva las verificaciones de borrado de cuentas y exige que el backend permanezca disponible.
+- No implantar el backend infantil ni habilitar la política global mientras existan bloqueos jurídicos.
+
+- Release sin backend de salas: seguir docs/CHESSY_PUBLIC_PILOT_RELEASE.md para publicar exclusivamente el aprendizaje nivel 0 a 1.

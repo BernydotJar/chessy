@@ -5,6 +5,7 @@ import { useAuthStore } from '../../auth/store';
 import { useGameStore } from '../../store/gameStore';
 import { useLearningStore } from '../../learning/store';
 import { locale } from '../../learning/types';
+import { privateRoomsEnabled } from '../../rooms/release';
 import { PositionBoard, SectionHeading } from './Shared';
 import {
   closeRoom, createInvite, createRoom, getMyDiagnostic, getMyMembership, getRoom, leaveRoom, revokeInvite,
@@ -82,7 +83,25 @@ interface Membership {
   guardianConfirmed: boolean;
 }
 
-export function RoomsView() {
+/** Safe public pilot: teach level 0->1 without exposing an unconfigured classroom. */
+function RoomsPilotPreview(){
+  const {t}=useTranslation();
+  return <div className="view-enter rooms-view">
+    <SectionHeading eyebrow={t('rooms.eyebrow')} title={t('rooms.title')} subtitle={t('rooms.subtitle')}/>
+    <FirstSteps/>
+    <section className="panel room-pilot-status" role="status" data-testid="private-rooms-disabled">
+      <ShieldCheck size={24} aria-hidden="true"/>
+      <div><h2>{t('rooms.privateRoomsComingSoon')}</h2>
+        <p>{t('rooms.privateRoomsUnavailable')}</p></div>
+    </section>
+  </div>;
+}
+
+export function RoomsView(){
+  return privateRoomsEnabled ? <PrivateRoomsView/> : <RoomsPilotPreview/>;
+}
+
+function PrivateRoomsView() {
   const { t, i18n } = useTranslation();
   const lang = locale(i18n.resolvedLanguage);
   const user = useAuthStore(s => s.user);
