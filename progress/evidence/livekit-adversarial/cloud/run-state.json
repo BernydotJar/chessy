@@ -1,0 +1,9 @@
+{
+  "startedAt": "2026-10-29T18:49:27.648Z",
+  "status": "PASS",
+  "scope": "disposable adult QA, existing LiveKit QA project",
+  "projectId": "p_5650huuc5om",
+  "exitCode": 0,
+  "finishedAt": "2026-10-29T18:50:51.689Z",
+  "backendSha256": "904a56ded6b7fcb084f260c98e9b41829cdf03258ba11f69a2db529ada1f034c"
+}

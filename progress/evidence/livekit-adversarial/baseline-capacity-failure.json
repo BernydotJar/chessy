@@ -1,0 +1,24 @@
+{
+  "startedAt": "2026-10-29T18:44:51.438Z",
+  "checks": [
+    {
+      "name": "Adversarial: another coach and body-supplied role cannot acquire owner powers across rooms",
+      "result": "PASS"
+    },
+    {
+      "name": "Adversarial: missing, expired and minor membership cannot be replaced by client-supplied eligibility",
+      "result": "PASS"
+    },
+    {
+      "name": "Adversarial: a valid owner cannot use a session identifier belonging to another room",
+      "result": "PASS"
+    },
+    {
+      "name": "Adversarial: concurrent learner joins reserve an instructor seat and never exceed class capacity",
+      "result": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Learners must leave the twelfth seat available to the instructor; got 12"
+    }
+  ],
+  "failure": "AssertionError [ERR_ASSERTION]: Learners must leave the twelfth seat available to the instructor; got 12",
+  "finishedAt": "2026-10-29T18:45:12.015Z"
+}

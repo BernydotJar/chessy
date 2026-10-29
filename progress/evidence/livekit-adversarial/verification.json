@@ -1,0 +1,23 @@
+{
+  "result": "PASS",
+  "sourceCommit": "4b0bf6a1304015293f569edf2b2ab66e75978769",
+  "runtimeSourceSha256": "deb214b447ac67e433174262c626aeea807292b3ed0009f81a49bb86405fbaed",
+  "frontendTests": 328,
+  "backendTests": 21,
+  "integrationScenarios": 28,
+  "cloudBrowserScenarios": 16,
+  "firestoreLifecycleScenarios": 12,
+  "ciJobs": "2/2 PASS",
+  "ciRun": "https://github.com/BernydotJar/chessy/actions/runs/40934440828",
+  "selfReview": true,
+  "independentReview": false,
+  "productionActivation": false,
+  "qaSecretsRemoved": true,
+  "qaPortsClosed": {
+    "14329": true,
+    "19708": true,
+    "19739": true,
+    "19749": true
+  },
+  "preFixFailureArtifact": "progress/evidence/livekit-adversarial/baseline-capacity-failure.json"
+}
