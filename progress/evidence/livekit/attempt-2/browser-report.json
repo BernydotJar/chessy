@@ -1,0 +1,80 @@
+{
+  "startedAt": "2026-10-29T16:14:13.920Z",
+  "commit": "91ef5db31ce1fde97c0090e7a05b65018c3cd969",
+  "environment": "Firebase emulators + LiveKit Cloud QA; synthetic media/adult identities",
+  "checks": [
+    {
+      "name": "Three separate authenticated adult browser sessions",
+      "result": "PASS",
+      "ms": 3102
+    },
+    {
+      "name": "Instructor creates an adult room and learners enroll through its private invitation",
+      "result": "PASS",
+      "ms": 11753
+    },
+    {
+      "name": "A learner and an outsider cannot start the class or access its private state",
+      "result": "PASS",
+      "ms": 2015
+    },
+    {
+      "name": "Instructor starts class, two learners join with devices off, all see three participants",
+      "result": "PASS",
+      "ms": 8570
+    },
+    {
+      "name": "Real Cloud media: synthetic camera is decoded in both learner browsers and audio plays",
+      "result": "PASS",
+      "ms": 1333
+    },
+    {
+      "name": "Only the instructor can share a screen; learner grants forbid screen/data/admin permissions",
+      "result": "PASS",
+      "ms": 1555
+    },
+    {
+      "name": "Instructor moves update both shared boards without scrolling the mobile learner",
+      "result": "PASS",
+      "ms": 942
+    },
+    {
+      "name": "Instructor mutes a learner through the authenticated server control",
+      "result": "PASS",
+      "ms": 2107
+    },
+    {
+      "name": "Responsive desktop/mobile classroom has no horizontal overflow or serious accessibility violations",
+      "result": "PASS",
+      "ms": 3501
+    },
+    {
+      "name": "Removed learner disconnects, cannot obtain another token, and cannot replay the cached Cloud token",
+      "result": "PASS",
+      "ms": 7072
+    },
+    {
+      "name": "Ending the class disconnects the remaining learner and rejects cached learner/instructor tokens",
+      "result": "PASS",
+      "ms": 8596
+    },
+    {
+      "name": "A new class has a distinct session; withdrawal revokes media and room closure ends instructor media",
+      "result": "PASS",
+      "ms": 12232
+    },
+    {
+      "name": "No unhandled browser exceptions",
+      "result": "PASS",
+      "ms": 1
+    }
+  ],
+  "pageErrors": [],
+  "screenshots": [
+    "classroom-desktop.png",
+    "classroom-mobile.png"
+  ],
+  "finishedAt": "2026-10-29T16:15:18.118Z",
+  "passed": 13,
+  "failed": 0
+}

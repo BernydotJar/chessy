@@ -1,0 +1,23 @@
+{
+  "result": "PASS",
+  "implementationSourceCommit": "43130b3704f32ce7baf5abf4c0df1db942182439",
+  "runtimeSourceSha256": "d93eaa5285896b7db2144f5bb5591b5b6a555b2b9c414e8d51e35975712f1d91",
+  "ciRuntimeContentIdentical": true,
+  "ciBuildCommit": "938e1142b8abc33fdfe950f73c8c7af0b29c17e3",
+  "ciBuildRun": "https://github.com/BernydotJar/chessy/actions/runs/40910227004",
+  "frontendTests": 318,
+  "backendTests": 18,
+  "qaScenarios": 18,
+  "qaScope": "14 Cloud/browser scenarios + 4 Firestore lifecycle scenarios; synthetic adult identities and media",
+  "checks": {
+    "typescript": "PASS",
+    "eslint": "PASS",
+    "productionBuild": "PASS_IN_CI",
+    "optInLivekitBuild": "PASS_IN_CI",
+    "dependencyAudits": "0 runtime/backend vulnerabilities",
+    "desktopMobileAccessibility": "PASS",
+    "cachedTokenReplayAfterRemovalAndClosure": "PASS"
+  },
+  "independentReview": false,
+  "publicDeployment": false
+}

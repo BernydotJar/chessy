@@ -1,0 +1,12 @@
+{
+  "result": "BLOCKED",
+  "sourceCommit": "43130b3704f32ce7baf5abf4c0df1db942182439",
+  "productionChanged": false,
+  "flagsDefault": "OFF",
+  "remaining": [
+    "Configure Chessy-scoped LiveKit Cloud secrets",
+    "Deploy/verify private-room Functions, rules, App Check and approved privacy notice",
+    "Complete pilot acceptance and authorize production activation"
+  ],
+  "note": "PR #19 is Draft; no merge or public activation performed."
+}

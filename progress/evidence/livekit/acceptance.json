@@ -1,0 +1,17 @@
+{
+  "result": "BLOCKED",
+  "sourceCommit": "43130b3704f32ce7baf5abf4c0df1db942182439",
+  "completed": [
+    "Authenticated instructor + two adult learners",
+    "Actual LiveKit Cloud synthetic AV and screen media",
+    "Shared board, moderation, withdrawal, close, replay rejection",
+    "Transactional sign/close race and retryable provider failure",
+    "390/760/1440 layouts; serious/critical accessibility checks"
+  ],
+  "remaining": [
+    "Independent review of the candidate",
+    "Real device/network and pilot-teacher acceptance",
+    "Concurrency/cost and production operational monitoring acceptance"
+  ],
+  "note": "Implementing-agent checks do not substitute for independent product acceptance."
+}
