@@ -11,7 +11,7 @@ Scope: Eduardo requested adversarial testing and merge of PR #19 so the instruct
 | P3 — startup retry and localized participant presentation | Instructor-path source review | Expose idempotent retry while starting; prioritize instructor video and localize participant labels |
 
 ## Verification
-Candidate source: 4b0bf6a1304015293f569edf2b2ab66e75978769, rebased by a normal merge onto current main a8736b3 (mobile viewport fix #18).
+Candidate source: 4b0bf6a1304015293f569edf2b2ab66e75978769, integrated by a normal merge with current main a8736b3 (mobile viewport fix #18).
 - TypeScript, ESLint, 328 frontend tests and 21 backend tests PASS.
 - 28 integration scenarios PASS: 16 real Cloud/browser scenarios with synthetic media/adult identities, plus 12 Firestore lifecycle/adversarial scenarios with an injected provider for fault/concurrency control.
 - Validated foreign-coach escalation, cross-room IDs, missing/expired/minor memberships, concurrent capacity, pending-token withdrawal/removal, rate limits, startup retry, late HTTP response after navigation, malformed realtime state, screen permissions, media reception, shared board, moderation, cached JWT rejection and cleanup.
