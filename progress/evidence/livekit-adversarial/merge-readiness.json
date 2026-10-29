@@ -3,6 +3,6 @@
   "authorization": "Eduardo explicitly requested adversarial testing and merge of PR #19",
   "scope": "Merge guarded implementation, flags OFF",
   "sourceCommit": "4b0bf6a1304015293f569edf2b2ab66e75978769",
-  "productionActivation": "BLOCKED: provider/backend/App Check/privacy notice/pilot acceptance pending",
+  "productionActivation": "Separate operational release; feature flags default OFF",
   "independentAcceptance": "Not asserted"
 }
