@@ -71,10 +71,10 @@ export function PlayView() {
         <div className="play-board-frame"><ChessBoard/></div>
         {!game.setupMode && <MatchPlayerBar color={bottomColor}/>}
       </section>
-      <aside className="match-rail" aria-label={t('match.matchRail')}>
+      <aside className={`match-rail ${game.isAIGame ? 'is-ai-game' : ''}`} aria-label={t('match.matchRail')}>
         {game.setupMode ? <BoardSetupPanel/> : <>
-          {!game.isGameOver && (game.history.length === 0 || game.isAIGame) && <AIOpponent onStartGame={startAI} isPlaying={game.isAIGame}/>}
           <GameControls/>
+          {!game.isGameOver && (game.history.length === 0 || game.isAIGame) && <AIOpponent onStartGame={startAI} isPlaying={game.isAIGame}/>}
           <section className="panel match-moves-panel" aria-labelledby="match-moves-title">
             <header><div><p className="eyebrow">{t('match.scoreSheet')}</p><h2 id="match-moves-title">{t('studio.moveHistory')}</h2></div><span className="move-count">{game.history.length}</span></header>
             <MoveHistory/>
