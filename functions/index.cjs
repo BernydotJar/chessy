@@ -5,6 +5,7 @@ const {onCall,HttpsError}=require('firebase-functions/v2/https');
 const {onSchedule}=require('firebase-functions/v2/scheduler');
 const {logger}=require('firebase-functions');
 const {LIMITS,text,isSafeId,isMinor,isAgeBand,isAudience,isLanguage,allows,rateNext}=require('./policy.cjs');
+const {adultPilotOnly,allowsAdultRoom,allowsAdultEnrollment}=require('./adult-pilot.cjs');
 if(getApps().length===0)initializeApp();
 const db=getFirestore();
 const REGION='us-central1';
@@ -59,6 +60,7 @@ function rateUpdate(tx,rate,snap){
 exports.createLearningRoom=onCall(PRIVATE,async request=>{
   requirePublishedPrivacyNotice();
   const a=coach(request), data=checkRoomData(request.data);
+  if(!allowsAdultRoom(data.audience))throw new HttpsError('permission-denied','Adult-only pilot');
   const room=db.collection('learningRooms').doc();
   const board=room.collection('board').doc('current');
   const rate=rateInTransaction(null,a.uid,'roomCreation');
@@ -87,6 +89,7 @@ exports.issueRoomInvitation=onCall(PRIVATE,async request=>{
     const data=roomSnap.data();
     if(!data||data.ownerUid!==a.uid||data.status!=='active'||data.expiresAt?.toMillis()<=Date.now())
       throw new HttpsError('permission-denied','Room is not active or not owned by coach');
+    if(!allowsAdultRoom(data.audience))throw new HttpsError('permission-denied','Adult-only pilot');
     rateUpdate(tx,rate,rateSnap);
     tx.create(invite,{
       schemaVersion:1,roomId,ownerUid:a.uid,roomTitle:data.title,audience:data.audience,
@@ -103,6 +106,7 @@ exports.joinLearningRoom=onCall(PRIVATE,async request=>{
   const {inviteId,ageBand,guardianAcknowledged}=request.data||{};
   if(!isSafeId(inviteId)||!isAgeBand(ageBand)||guardianAcknowledged!==isMinor(ageBand))
     throw new HttpsError('invalid-argument','Age and adult supervision required');
+  if(adultPilotOnly()&&ageBand!=='adult')throw new HttpsError('permission-denied','Adult-only pilot');
   const invitation=db.doc('roomInvites/'+inviteId);
   const rate=rateInTransaction(null,a.uid,'enrollment');
   let enrolledRoomId;
@@ -112,6 +116,7 @@ exports.joinLearningRoom=onCall(PRIVATE,async request=>{
     if(!invite||invite.expiresAt?.toMillis()<=Date.now()||!allows(invite.audience,ageBand)||
       !isSafeId(invite.roomId))
       throw new HttpsError('failed-precondition','Invitation unavailable');
+    if(!allowsAdultEnrollment(invite.audience,ageBand))throw new HttpsError('permission-denied','Adult-only pilot');
     const room=db.doc('learningRooms/'+invite.roomId);
     const member=room.collection('members').doc(a.uid);
     const userIndex=db.doc('userRooms/'+a.uid+'/rooms/'+invite.roomId);
@@ -121,6 +126,7 @@ exports.joinLearningRoom=onCall(PRIVATE,async request=>{
       tx.get(room),tx.get(member),tx.get(userIndex),tx.get(consent),tx.get(policy),
     ]);
     const roomData=roomSnap.data(),epoch=Date.now();
+    if(!allowsAdultEnrollment(roomData?.audience,ageBand))throw new HttpsError('permission-denied','Adult-only pilot');
     if(!roomData||roomData.status!=='active'||roomData.ownerUid!==invite.ownerUid||
       roomData.expiresAt?.toMillis()<=epoch||indexSnap.exists||memberSnap.exists)
       throw new HttpsError('failed-precondition','Room unavailable or membership exists');
@@ -182,6 +188,7 @@ exports.closeLearningRoom=onCall(LIVE_PRIVATE,async request=>{
  * the legal basis or consent. It must never create a guardian approval.
  */
 exports.requestGuardianReview=onCall(PRIVATE,async request=>{
+  if(adultPilotOnly())throw new HttpsError('permission-denied','Adult-only pilot');
   requirePublishedPrivacyNotice();
   const a=principal(request);
   const {inviteId,ageBand,guardianAcknowledged}=request.data||{};

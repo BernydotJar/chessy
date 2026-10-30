@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
+import { mediaPermissionsPolicy } from './classroom-http-policy.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(here, '..');
@@ -25,7 +26,7 @@ const mime = {
 const security = {
   'X-Content-Type-Options': 'nosniff',
   'Referrer-Policy': 'strict-origin-when-cross-origin',
-  'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
+  'Permissions-Policy': mediaPermissionsPolicy({deploymentClass, enabled: false, isHtml: false}),
   'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
   'X-Frame-Options': 'DENY'
 };
@@ -65,6 +66,9 @@ const server = http.createServer((req, res) => {
   const immutable = candidate.includes(`${path.sep}assets${path.sep}`);
   res.writeHead(200, {
     ...security,
+    'Permissions-Policy': mediaPermissionsPolicy({
+      deploymentClass, enabled: process.env.CHESSY_MEDIA_PERMISSIONS_ENABLED, isHtml: ext === '.html'
+    }),
     'Content-Type': mime[ext] || 'application/octet-stream',
     'Content-Length': stat.size,
     'Cache-Control': immutable ? 'public, max-age=31536000, immutable' : 'no-cache'

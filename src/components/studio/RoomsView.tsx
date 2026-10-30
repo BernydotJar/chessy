@@ -5,7 +5,7 @@ import { useAuthStore } from '../../auth/store';
 import { useGameStore } from '../../store/gameStore';
 import { useLearningStore } from '../../learning/store';
 import { locale } from '../../learning/types';
-import { privateRoomsEnabled } from '../../rooms/release';
+import { privateRoomsEnabled, adultPilotOnly } from '../../rooms/release';
 import { liveClassroomEnabled } from '../../rooms/live';
 const LiveClassroom = lazy(() => import('./LiveClassroom'));
 import { PositionBoard, SectionHeading } from './Shared';
@@ -125,7 +125,7 @@ function PrivateRoomsView() {
   const [diagnostics, setDiagnostics] = useState<RoomDiagnosticSummary[]>([]);
   const [memberCount, setMemberCount] = useState(0);
   const [title, setTitle] = useState('');
-  const [audience, setAudience] = useState<RoomAudience>('children');
+  const [audience, setAudience] = useState<RoomAudience>(adultPilotOnly ? 'adults' : 'children');
   const [language, setLanguage] = useState<Language>(lang);
   const [ageBand, setAgeBand] = useState<AgeBand>('adult');
   const [guardian, setGuardian] = useState(false);
@@ -261,7 +261,7 @@ function PrivateRoomsView() {
     if (!canTeach || busy) return;
     setBusy(true); setError(null); setMessage(null);
     try {
-      const created = await createRoom({title,audience,language});
+      const created = await createRoom({title,audience:adultPilotOnly?'adults':audience,language});
       setTitle(''); openRoom(created.id); refresh();
     } catch { setError('rooms.error'); }
     finally { setBusy(false); }
@@ -286,6 +286,9 @@ function PrivateRoomsView() {
   const onJoin = async (event: FormEvent) => {
     event.preventDefault();
     if (!inviteId || !details || busy) return;
+    if (adultPilotOnly && (details.audience !== 'adults' || ageBand !== 'adult')) {
+      setError('rooms.adultPilotOnly'); return;
+    }
     if (!roomAllowsAge(details.audience,ageBand) || (isChild(ageBand) && (!guardian || !guardianAccess?.allowed))) {
       setError('rooms.guardianApprovalRequired'); return;
     }
@@ -374,10 +377,11 @@ function PrivateRoomsView() {
       <p className="eyebrow">{t('rooms.inviteTitle')}</p>
       <h2 id="invite-heading">{details?.roomTitle || t('rooms.loading')}</h2>
       {loading && <p role="status">{t('rooms.loading')}</p>}
+      {adultPilotOnly && <p className="fine-print" role="status">{t('rooms.adultPilotOnly')}</p>}
       {details && <form className="room-form" onSubmit={event => void onJoin(event)}>
         <label>{t('rooms.age')}
           <select value={ageBand} onChange={e => {setAgeBand(e.target.value as AgeBand);setGuardian(false);setGuardianAccess(null);}}>
-            {AGE_BANDS.map(age => <option key={age} value={age}>{age === 'adult' ? t('rooms.ageAdult') : t('rooms.ageRange',{range:age})}</option>)}
+            {AGE_BANDS.filter(age=>!adultPilotOnly||age==='adult').map(age => <option key={age} value={age}>{age === 'adult' ? t('rooms.ageAdult') : t('rooms.ageRange',{range:age})}</option>)}
           </select>
         </label>
         {!roomAllowsAge(details.audience,ageBand) && <p className="feedback wrong">{t('rooms.differentAudience')}</p>}
@@ -393,7 +397,7 @@ function PrivateRoomsView() {
           {guardianAccess?.pending && <button className="btn secondary" type="button"
             onClick={refresh}>{t('rooms.checkGuardianReview')}</button>}
         </>}
-        <div className="button-row"><button className="btn primary" disabled={busy || !roomAllowsAge(details.audience,ageBand) || (isChild(ageBand) && (!guardian||!guardianAccess?.allowed))}>{t('rooms.join')}</button>
+        <div className="button-row"><button className="btn primary" disabled={busy || (adultPilotOnly && details.audience !== 'adults') || !roomAllowsAge(details.audience,ageBand) || (isChild(ageBand) && (!guardian||!guardianAccess?.allowed))}>{t('rooms.join')}</button>
           <button className="btn secondary" type="button" onClick={clearInvitation}>{t('rooms.leave')}</button></div>
       </form>}
     </section>}
@@ -410,11 +414,12 @@ function PrivateRoomsView() {
       </section>
       <section className="panel room-author" aria-labelledby="new-room-heading">
         <div className="room-author-header"><Users size={23}/><h2 id="new-room-heading">{t('rooms.newRoom')}</h2></div>
+        {adultPilotOnly && <p className="fine-print" role="status">{t('rooms.adultPilotOnly')}</p>}
         {!canTeach ? <p className="muted">{t('rooms.teacherOnly')}</p> : <form className="room-form" onSubmit={event => void onCreate(event)}>
           <label>{t('rooms.roomTitle')}<input required minLength={6} maxLength={80} placeholder={t('rooms.roomTitlePlaceholder')}
             value={title} onChange={e => setTitle(e.target.value)} /></label>
-          <div className="room-form-row"><label>{t('rooms.audience')}<select value={audience} onChange={e => setAudience(e.target.value as RoomAudience)}>
-            <option value="children">{t('rooms.children')}</option><option value="adults">{t('rooms.adults')}</option><option value="mixed">{t('rooms.mixed')}</option>
+          <div className="room-form-row"><label>{t('rooms.audience')}<select value={audience} disabled={adultPilotOnly} onChange={e => setAudience(e.target.value as RoomAudience)}>
+            {!adultPilotOnly && <option value="children">{t('rooms.children')}</option>}<option value="adults">{t('rooms.adults')}</option>{!adultPilotOnly && <option value="mixed">{t('rooms.mixed')}</option>}
           </select></label><label>{t('rooms.language')}<select value={language} onChange={e => setLanguage(e.target.value as Language)}>
             <option value="es">Español</option><option value="en">English</option><option value="pt">Português</option>
           </select></label></div>
