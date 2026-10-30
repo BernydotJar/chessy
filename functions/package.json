@@ -5,7 +5,7 @@
   "main": "index.cjs",
   "scripts": {
     "test": "node --test test/*.test.cjs",
-    "check": "node --check index.cjs && node --check policy.cjs && node --check livekit.cjs && npm test"
+    "check": "node --check index.cjs && node --check policy.cjs && node --check livekit.cjs && node --check classroom-exercises.cjs && npm test"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +15,7 @@
     "node": "22"
   },
   "dependencies": {
+    "chess.js": "1.4.0",
     "firebase-admin": "14.5.0",
     "firebase-functions": "7.4.0",
     "livekit-server-sdk": "2.19.1"

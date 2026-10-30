@@ -63,3 +63,6 @@
 .room-invitations>.btn,.room-share-actions>.btn{justify-self:start}
 .room-share-actions>label{width:100%;min-width:0}
 .room-invite-entry>.button-row{justify-content:flex-end}
+
+/* The learner exercise and free board share one teaching column beside LiveKit. */
+.room-learning-column{min-width:0}

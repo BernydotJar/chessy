@@ -201,6 +201,26 @@ service cloud.firestore {
         allow get: if documentId == 'current' && mayReadRoom(roomId);
         allow list, create, update, delete: if false;
       }
+      // A 1:1 teaching assignment is visible only to its instructor and adult learner.
+      // Answers remain in the Functions package; clients cannot change attempts or scores.
+      match /exercise/{exerciseId} {
+        // A metadata-only signal lets an unassigned student notice later
+        // assignments without ever seeing the private answer/attempt document.
+        allow get: if exerciseId == 'announcement'
+          && mayReadRoom(roomId)
+          && get(roomRef(roomId)).data.audience == 'adults'
+          && get(roomRef(roomId)).data.status == 'active'
+          && (ownsRoom(roomId) || (isRoomMember(roomId)
+            && get(memberRef(roomId,request.auth.uid)).data.ageBand == 'adult'));
+        allow get: if exerciseId == 'current'
+          && mayReadRoom(roomId)
+          && get(roomRef(roomId)).data.audience == 'adults'
+          && get(roomRef(roomId)).data.status == 'active'
+          && (ownsRoom(roomId) || (isRoomMember(roomId)
+            && get(memberRef(roomId,request.auth.uid)).data.ageBand == 'adult'
+            && resource.data.assignedUid == request.auth.uid));
+        allow list, create, update, delete: if false;
+      }
       match /board/{boardId} {
         allow get: if boardId == 'current' && mayReadRoom(roomId);
         allow list: if false;

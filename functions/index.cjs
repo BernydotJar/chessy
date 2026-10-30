@@ -14,6 +14,7 @@ const REGION='us-central1';
 const PRIVATE={region:REGION,enforceAppCheck:process.env.FUNCTIONS_EMULATOR!=='true',maxInstances:10,memory:'256MiB'};
 const LIVE_PRIVATE={...PRIVATE,secrets:['CHESSY_LIVEKIT_API_KEY','CHESSY_LIVEKIT_API_SECRET']};
 const live=require('./livekit.cjs').createLiveService({db,Timestamp,HttpsError});
+const guided=require('./classroom-exercises.cjs').createExerciseService({db,Timestamp,HttpsError});
 const ttl=ms=>Timestamp.fromMillis(Date.now()+ms);
 const now=()=>Timestamp.now();
 function requirePublishedPrivacyNotice(){
@@ -225,9 +226,18 @@ exports.withdrawRoomParticipation=onCall(LIVE_PRIVATE,async request=>{
   const diagnostic=db.doc('learningRooms/'+roomId+'/diagnostics/'+a.uid);
   const approval=db.doc('roomGuardianApprovals/'+roomId+'_'+a.uid);
   const review=db.doc('guardianReviewRequests/'+roomId+'_'+a.uid);
+  const assignment=db.doc('learningRooms/'+roomId+'/exercise/current');
+  const announcement=db.doc('learningRooms/'+roomId+'/exercise/announcement');
   await db.runTransaction(async tx=>{
-    const membership=await tx.get(index);
+    const [membership,assigned,signal]=await Promise.all([
+      tx.get(index),tx.get(assignment),tx.get(announcement)
+    ]);
     // Safe to retry even when the membership no longer exists.
+    if(assigned.data()?.assignedUid===a.uid){
+      tx.delete(assignment);
+      if(signal.exists)tx.update(announcement,{status:'ended',
+        revision:Math.min(Number(signal.data().revision||0)+1,1000000),updatedAt:now()});
+    }
     tx.delete(index);
     tx.delete(member);
     tx.delete(diagnostic);
@@ -340,6 +350,13 @@ exports.cleanupExpiredLearningRooms=onSchedule({
   logger.info('Chessy room retention cleanup',report);
   if(report.errors>0)throw new Error('Retention cleanup had failures; review logs and retry');
 });
+
+// Exercises are server-adjudicated; no answer key or learner writes live in Firestore.
+exports.assignLearningRoomExercise=onCall(PRIVATE,request=>{
+  requirePublishedPrivacyNotice();return guided.assign(request);
+});
+exports.submitLearningRoomExerciseMove=onCall(PRIVATE,request=>guided.submit(request));
+exports.endLearningRoomExercise=onCall(PRIVATE,request=>guided.end(request));
 
 // Media endpoints keep the same verified identity/App Check boundary as private rooms.
 exports.startLearningRoomLive=onCall(LIVE_PRIVATE,request=>{requirePublishedPrivacyNotice();return live.start(request);});

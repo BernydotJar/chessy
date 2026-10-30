@@ -68,6 +68,14 @@ async function check(name,run){
       assert.equal(new URL(page.url()).hash,'#/training/bishop-diagonal');
       await page.waitForFunction(()=>document.querySelector('select[aria-label="Elegir posición"]')?.value==='bishop-diagonal');
     });
+    await check('Classes offers the interactive classroom even if the catalogue backend is unavailable',async()=>{
+      await goto('classes');
+      const cta=page.locator('.coach-classroom-cta');
+      await cta.getByRole('heading',{name:'Aula interactiva con tu profesor'}).waitFor();
+      await cta.getByRole('button',{name:'Abrir mis salas'}).click();
+      await page.getByTestId('private-rooms-disabled').waitFor();
+      assert.match(new URL(page.url()).hash,/rooms/);
+    });
     await check('Signup visibly distinguishes guardian and blocks a minor account',async()=>{
       // The safe public pilot has no private-room login CTA; account registration
       // must still work directly for existing and new adult users.

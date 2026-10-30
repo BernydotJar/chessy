@@ -18,13 +18,27 @@ async function cleanupExpired({limit=40,dryRun=false,db,logger=console}={}) {
     report.expiredEnrollmentIndexes++;
     if(dryRun)continue;
     try {
-      const batch=db.batch();
-      batch.delete(snap.ref);
-      batch.delete(db.doc('learningRooms/'+roomId+'/members/'+uid));
-      batch.delete(db.doc('learningRooms/'+roomId+'/diagnostics/'+uid));
-      batch.delete(db.doc('roomGuardianApprovals/'+roomId+'_'+uid));
-      batch.delete(db.doc('guardianReviewRequests/'+roomId+'_'+uid));
-      await batch.commit();
+      // Transactional deletion prevents a delayed cleanup from erasing a
+      // renewed membership or a newly reassigned exercise.
+      await db.runTransaction(async tx=>{
+        const exercise=db.doc('learningRooms/'+roomId+'/exercise/current');
+        const signal=db.doc('learningRooms/'+roomId+'/exercise/announcement');
+        const [index,assignment,announcement]=await Promise.all([
+          tx.get(snap.ref),tx.get(exercise),tx.get(signal)
+        ]);
+        if(!index.exists||index.data().expiresAt?.toMillis?.()>current.toMillis())return;
+        tx.delete(snap.ref);
+        tx.delete(db.doc('learningRooms/'+roomId+'/members/'+uid));
+        tx.delete(db.doc('learningRooms/'+roomId+'/diagnostics/'+uid));
+        tx.delete(db.doc('roomGuardianApprovals/'+roomId+'_'+uid));
+        tx.delete(db.doc('guardianReviewRequests/'+roomId+'_'+uid));
+        if(assignment.data()?.assignedUid===uid){
+          tx.delete(exercise);
+          if(announcement.exists)tx.update(signal,{status:'ended',
+            revision:Math.min(Number(announcement.data().revision||0)+1,1000000),
+            updatedAt:Timestamp.now()});
+        }
+      });
     }catch(error){report.errors++;logger.error('Failed to purge enrollment', {roomId});}
   }
   // Room expiry is enforced in Firestore rules. Worker closes room for audit+eventual purge.

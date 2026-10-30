@@ -43,6 +43,8 @@ jobs:
           python3 scripts/verify-independent.py
       - name: Media policy and adult pilot release safeguards
         run: node --test scripts/test/server-media-policy.test.mjs scripts/test/adult-pilot-release-gate.test.cjs
+      - name: Verify the exact 200-puzzle server exercise catalogue
+        run: node scripts/sync-classroom-exercise-bank.cjs --check
       - name: Build production artifact
         run: npm run build
       - name: Compile the opt-in LiveKit classroom separately

@@ -8,6 +8,7 @@ import { locale } from '../../learning/types';
 import { privateRoomsEnabled, adultPilotOnly } from '../../rooms/release';
 import { liveClassroomEnabled } from '../../rooms/live';
 const LiveClassroom = lazy(() => import('./LiveClassroom'));
+const GuidedExercisePanel = lazy(() => import('./GuidedExercisePanel'));
 import { PositionBoard, SectionHeading } from './Shared';
 import {
   closeRoom, createInvite, createRoom, getMyDiagnostic, getMyMembership, getRoom, leaveRoom, revokeInvite,
@@ -448,8 +449,13 @@ function PrivateRoomsView() {
           void closeRoom(room.id).then(refresh).catch(() => setError('rooms.error')).finally(() => setBusy(false));
         }}>{t('rooms.close')}</button>}
       </section>
-      <div className={"room-classroom-workspace" + (liveClassroomEnabled ? " with-live" : "")}><section className="panel room-board" aria-labelledby="room-board-title">
-        <div className="room-board-heading"><h3 id="room-board-title">{t('rooms.board')}</h3><p className="muted">{t('rooms.boardDescription')}</p></div>
+      <div className={"room-classroom-workspace" + (liveClassroomEnabled ? " with-live" : "")}>
+      <div className="room-learning-column">
+        {room.audience === 'adults' && <Suspense fallback={<p role="status">{t('rooms.loading')}</p>}>
+          <GuidedExercisePanel room={room} owns={owns} memberCount={memberCount}/>
+        </Suspense>}
+        <section className="panel room-board" aria-labelledby="room-board-title">
+        <div className="room-board-heading"><h3 id="room-board-title">{t(room.audience === 'adults' ? 'rooms.demoBoard' : 'rooms.board')}</h3><p className="muted">{t('rooms.boardDescription')}</p></div>
         {board ? <>
           <div className="room-board-layout"><div className="room-position">
             <PositionBoard fen={board.fen} readOnly={!owns || busy || board.locked || room.status !== 'active'}
@@ -462,7 +468,8 @@ function PrivateRoomsView() {
             </div>}</div></div>
         </> : <p role="status">{t('rooms.loading')}</p>}
         {!liveClassroomEnabled && <p className="fine-print">{t('rooms.notVideo')}</p>}
-      </section>
+        </section>
+      </div>
       {liveClassroomEnabled && <Suspense fallback={<p role="status">{t('rooms.loading')}</p>}>
         <LiveClassroom key={room.id + ':' + user?.id} room={room} owns={owns}/>
       </Suspense>}</div>
