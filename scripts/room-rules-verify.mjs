@@ -137,6 +137,41 @@ try {
     await assertSucceeds(board.update({revision:1,updatedAt:serverTimestamp()}));
     await assertFails(board.update({revision:1,updatedAt:serverTimestamp()}));
   });
+  await check('Only coach and assigned adult read server-owned exercise; another adult or minor cannot',async()=>{
+    const exercisePath='learningRooms/'+roomId+'/exercise/current';
+    await seed(async db=>{
+      await room(db).update({audience:'adults'});
+      await ref(db,exercisePath).set({
+        schemaVersion:1,puzzleId:'rook-file',assignedUid:uid.adult,
+        fen:'4k3/8/8/p7/8/8/8/R3K3 w - - 0 1',ply:0,status:'active',revision:0,
+        attempts:0,lastResult:'assigned',createdAt:ts(-1000),updatedAt:ts(-1000),expiresAt:roomExpiry
+      });
+      await batchEnroll(db,'other-adult',enrollment('other-adult','adult'));
+    });
+    await seed(db=>ref(db,'learningRooms/'+roomId+'/exercise/announcement')
+      .set({schemaVersion:1,revision:0,status:'active',updatedAt:ts(-1000)}));
+    const signalPath='learningRooms/'+roomId+'/exercise/announcement';
+    await assertSucceeds(ref(coach,signalPath).get());
+    await assertSucceeds(ref(adult,signalPath).get());
+    await assertFails(ref(guardian,signalPath).get());
+    await assertFails(ref(outsider,signalPath).get());
+    await assertSucceeds(ref(coach,exercisePath).get());
+    await assertSucceeds(ref(adult,exercisePath).get());
+    await assertFails(ref(guardian,exercisePath).get());
+    await assertFails(ref(outsider,exercisePath).get());
+    await assertFails(ref(anonymous,exercisePath).get());
+    const other=env.authenticatedContext('other-adult',{email_verified:true}).firestore();
+    await assertFails(ref(other,exercisePath).get());
+    await assertSucceeds(ref(other,signalPath).get());
+    for(const client of [adult,coach,other]){
+      await assertFails(ref(client,signalPath).update({revision:99,updatedAt:serverTimestamp()}));
+      const item=ref(client,exercisePath);
+      await assertFails(item.update({attempts:100,revision:1,updatedAt:serverTimestamp()}));
+      await assertFails(item.delete());
+      await assertFails(item.set({puzzleId:'forged'}));
+      await assertFails(client.collection('learningRooms/'+roomId+'/exercise').get());
+    }
+  });
   await check('Room closures and expired invitation tokens deny new reads',async()=>{
     await seed(async db=>room(db).update({status:'closed',closedAt:ts(-1000),purgeAfter:ts(30*DAY)}));
     await assertFails(invite(adult).get());

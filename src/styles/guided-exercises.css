@@ -1,0 +1,30 @@
+.room-learning-column{display:grid;gap:16px;min-width:0;align-content:start}
+.guided-exercise{display:grid;gap:16px;min-width:0}
+.guided-heading,.guided-active-header{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.guided-heading .eyebrow{display:flex;align-items:center;gap:7px;margin:0 0 6px}
+.guided-heading h3{margin:0}
+.guided-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.guided-controls label{display:grid;gap:7px;min-width:0;font-size:.92rem;font-weight:600}
+.guided-controls select{min-width:0;width:100%;background:var(--surface,#fff);color:var(--text-primary,inherit);font:inherit;border:1px solid var(--border,rgba(127,127,127,.32));border-radius:10px;padding:10px 12px;max-width:100%}
+.guided-controls .guided-picker,.guided-controls .guided-actions{grid-column:1/-1}
+.guided-actions{flex-wrap:wrap;align-items:center}
+.guided-active{display:grid;gap:14px}
+.guided-active-header h4{margin:0 0 5px}
+.guided-active-header .fine-print{margin:0}
+.guided-play{display:grid;grid-template-columns:minmax(230px,1.35fr) minmax(160px,1fr);gap:16px;align-items:start}
+.guided-board{max-width:520px;min-width:0}
+.guided-instruction{display:grid;gap:10px;line-height:1.5}
+.guided-instruction p{margin:0}
+.guided-exercise .muted{margin:0}
+@media(max-width:1100px){.guided-play{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:540px){.guided-controls{grid-template-columns:minmax(0,1fr)}.guided-controls .guided-picker,.guided-controls .guided-actions{grid-column:auto}.guided-actions .btn{flex:1}.guided-play{gap:10px}}
+@media(prefers-reduced-motion:reduce){.guided-exercise *{scroll-behavior:auto}}
+
+/* On phones the exercise comes first, LiveKit second, and the free board last. */
+@media(max-width:1000px){
+ .room-classroom-workspace.with-live{display:flex;flex-direction:column;gap:15px}
+ .room-classroom-workspace.with-live .room-learning-column{display:contents}
+ .room-classroom-workspace.with-live .guided-exercise{order:1;width:100%}
+ .room-classroom-workspace.with-live .live-classroom{order:2;width:100%}
+ .room-classroom-workspace.with-live .room-board{order:3;width:100%}
+}

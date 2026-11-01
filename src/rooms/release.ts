@@ -4,5 +4,6 @@
  * Once real room data ever exists, preserve DATA_MAY_EXIST=true across rollbacks.
  */
 export const privateRoomsEnabled = import.meta.env.VITE_CHESSY_PRIVATE_ROOMS_ENABLED === 'true';
+export const adultPilotOnly = import.meta.env.VITE_CHESSY_ADULT_PILOT_ONLY === 'true';
 export const roomDataMayExist =
   privateRoomsEnabled || import.meta.env.VITE_CHESSY_ROOMS_DATA_MAY_EXIST === 'true';

@@ -2,6 +2,8 @@
 
 NO PUBLICAR NI USAR PARA AUTORIZAR MENORES SIN REVISIÓN LEGAL.
 
+> **Alcance:** borrador histórico de salas sin medios. No describe las videoclases LiveKit. Para el piloto adulto con video, revisar `docs/ADULT_LIVEKIT_PRIVACY_NOTICE_DRAFT_ES.md`. Ninguno de los dos borradores está aprobado para publicación.
+
 Responsable: [RAZÓN SOCIAL]  
 Contacto de privacidad: [CORREO VERIFICADO]  
 Países del servicio: [JURISDICCIONES]  

@@ -99,16 +99,71 @@ async function shot(page,name){
     two=await context('studentTwoLiveE2E',{width:760,height:1000});
   });
   let invite;
+  if(process.env.CHESSY_ADULT_PILOT_ONLY==='true'){
+    await check('Pilot backend rejects forged child and mixed classroom requests',async()=>{
+      for(const audience of ['children','mixed']){
+        await assert.rejects(()=>callable('coachLiveE2E','createLearningRoom',
+          {title:'Denied synthetic classroom',audience,language:'es'}),/PERMISSION_DENIED/);
+      }
+    });
+  }
   await check('Instructor creates an adult room and learners enroll through its private invitation',async()=>{
     await teacher.goto(ORIGIN+'/#/rooms');await teacher.locator('.room-author form').waitFor();
     await teacher.locator('.room-author form input').fill('Clase LiveKit QA para adultos');
-    await teacher.locator('.room-author form select').first().selectOption('adults');
+    const audience=teacher.locator('.room-author form select').first();
+    // Adult-only pilots lock the audience choice in the UI.
+    if(await audience.isEnabled())await audience.selectOption('adults');
+    else assert.equal(await audience.inputValue(),'adults');
     await teacher.locator('.room-author form button').click();await teacher.locator('.room-heading-panel').waitFor();
     roomId=teacher.url().split('/').pop();
     await teacher.getByRole('button',{name:'Generar invitación',exact:true}).click();
     const field=teacher.locator('.room-share-actions input[readonly]');await field.waitFor();invite=await field.inputValue();
+    if(process.env.CHESSY_ADULT_PILOT_ONLY==='true'){
+      const match=invite.match(/#\/rooms\/([A-Za-z0-9]{20})$/);
+      assert.ok(match,'Synthetic invite has safe ID');
+      await assert.rejects(()=>callable('minorLiveE2E','joinLearningRoom',
+        {inviteId:match[1],ageBand:'6-9',guardianAcknowledged:true}),/PERMISSION_DENIED/);
+    }
     await enroll(one,invite);await enroll(two,invite);
     assert.equal(await one.getByRole('button',{name:'Iniciar clase',exact:true}).count(),0);
+  });
+  await check('Coach assigns a verified training exercise to exactly one enrolled adult',async()=>{
+    await teacher.getByTestId('guided-exercise').waitFor();
+    await teacher.locator('.guided-controls select').first().selectOption('studentOneLiveE2E');
+    await teacher.locator('.guided-controls .guided-picker select').selectOption('rook-file');
+    await teacher.getByRole('button',{name:'Enviar ejercicio',exact:true}).click();
+    await until(async()=>await one.locator('.guided-active').count()===1);
+    await until(async()=>await teacher.locator('.guided-active').count()===1);
+    assert.equal(await two.locator('.guided-active').count(),0,'unassigned learner cannot read private assignment');
+    assert.equal(await one.locator('.guided-board').count(),1);
+  });
+  await check('Wrong moves are retained as attempts; correct moves synchronize completion',async()=>{
+    const initial=await callable('studentOneLiveE2E','submitLearningRoomExerciseMove',
+      {roomId,expectedRevision:0,uci:'a1a2'});
+    assert.equal(initial.result,'retry');
+    await until(async()=>await teacher.locator('.guided-active-header .fine-print').innerText()
+      .then(text=>text.includes('1')));
+    await assert.rejects(()=>callable('studentOneLiveE2E','submitLearningRoomExerciseMove',
+      {roomId,expectedRevision:0,uci:'a1a5'}),/ABORTED/);
+    const completed=await callable('studentOneLiveE2E','submitLearningRoomExerciseMove',
+      {roomId,expectedRevision:1,uci:'a1a5'});
+    assert.equal(completed.completed,true);
+    await until(async()=>await one.locator('.guided-active .tag').innerText()==='Resuelto');
+    assert.equal(await teacher.locator('.guided-active .tag').innerText(),'Resuelto');
+  });
+  await check('Another learner, outsider, and coach cannot forge learner moves',async()=>{
+    for(const uid of ['studentTwoLiveE2E','outsiderLiveE2E','coachLiveE2E','minorLiveE2E'])
+      await assert.rejects(()=>callable(uid,'submitLearningRoomExerciseMove',
+        {roomId,expectedRevision:2,uci:'a1a5'}),/PERMISSION_DENIED/);
+  });
+  await check('Coach continues directly to the next exercise without reloading the room',async()=>{
+    await teacher.getByRole('button',{name:'Siguiente ejercicio',exact:true}).click();
+    await until(async()=>await one.locator('.guided-active-header h4').innerText()==='Captura con la torre');
+    assert.equal(await teacher.locator('.guided-active .tag').innerText(),'En progreso');
+    const next=await callable('studentOneLiveE2E','submitLearningRoomExerciseMove',
+      {roomId,expectedRevision:3,uci:'a1g1'});
+    assert.equal(next.completed,true);
+    await until(async()=>await one.locator('.guided-active .tag').innerText()==='Resuelto');
   });
   await check('A learner and an outsider cannot start the class or access its private state',async()=>{
     await assert.rejects(()=>callable('studentOneLiveE2E','startLearningRoomLive',{roomId}),/PERMISSION_DENIED/);
@@ -225,7 +280,15 @@ async function shot(page,name){
   await check('Ending the class disconnects the remaining learner and rejects cached learner/instructor tokens',async()=>{
     const cached=[credentials.studentTwoLiveE2E,credentials.coachLiveE2E];
     teacher.once('dialog',d=>d.accept());await teacher.getByRole('button',{name:'Terminar clase para todos',exact:true}).click();
-    await until(async()=>await two.locator('.live-grid').count()===0);
+    try{
+      await until(async()=>await two.locator('.live-grid').count()===0,45000);
+    }catch(cause){
+      const teacherStatus=await teacher.getByTestId('live-status').innerText().catch(()=>'<unavailable>');
+      const learnerStatus=await two.getByTestId('live-status').innerText().catch(()=>'<unavailable>');
+      const teacherError=await teacher.locator('.live-classroom [role=alert]').allInnerTexts().catch(()=>[]);
+      throw new Error('Close did not reach learner UI; instructor='+teacherStatus+
+        ' learner='+learnerStatus+' errors='+JSON.stringify(teacherError)+' root='+String(cause));
+    }
     await teacher.getByRole('button',{name:'Iniciar clase',exact:true}).waitFor();
     for(const credential of cached)assert.equal(await rejectedReplay(two,credential),true);
     await assert.rejects(()=>callable('studentTwoLiveE2E','joinLearningRoomLive',{roomId,sessionId}),/FAILED_PRECONDITION/);
@@ -240,8 +303,18 @@ async function shot(page,name){
     await until(async()=>await teacher.locator('.live-grid .live-tile').count()===1);
     await two.goto(ORIGIN+'/#/rooms/open/'+roomId);await two.getByTestId('live-classroom').waitFor();
     await two.getByRole('button',{name:'Entrar a la clase',exact:true}).click();await connected(two);
+    await callable('coachLiveE2E','assignLearningRoomExercise',{
+      roomId,puzzleId:'rook-file',learnerUid:'studentTwoLiveE2E'
+    });
+    await until(async()=>await two.locator('.guided-active').count()===1);
     two.once('dialog',d=>d.accept());await two.getByRole('button',{name:'Salir y borrar mis datos de esta sala',exact:true}).click();
     await two.locator('.room-list-section').waitFor();assert.equal(await two.locator('.live-grid').count(),0);
+    const assignmentUrl='http://127.0.0.1:19708/v1/projects/'+PROJECT+
+      '/databases/(default)/documents/learningRooms/'+roomId+'/exercise/current';
+    const assignment=await fetch(assignmentUrl,{headers:{
+      Authorization:'Bearer '+tokens.coachLiveE2E
+    }});
+    assert.equal(assignment.status,404,'withdrawal erases assigned exercise attempts');
     assert.equal(await rejectedReplay(two,cached),true);
     await callable('coachLiveE2E','closeLearningRoom',{roomId});
     await until(async()=>await teacher.locator('.live-grid').count()===0);

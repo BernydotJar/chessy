@@ -6,7 +6,7 @@ import { PromotionDialog } from '../PromotionDialog';
 import { createAccessibleChessPieces } from '../accessibleChessPieces';
 import { useGameStore } from '../../store/gameStore';
 
-export function PositionBoard({fen,onMove,readOnly=false,hintSquare}:{fen:string;onMove?:(move:string)=>boolean;readOnly?:boolean;hintSquare?:string}) {
+export function PositionBoard({fen,onMove,readOnly=false,hintSquare,boardId='challenge-board'}:{fen:string;onMove?:(move:string)=>boolean;readOnly?:boolean;hintSquare?:string;boardId?:string}) {
  const {t}=useTranslation();
  const boardTheme=useGameStore(state=>state.theme);
  const accessiblePieces=useMemo(()=>createAccessibleChessPieces(t),[t]);
@@ -27,7 +27,7 @@ export function PositionBoard({fen,onMove,readOnly=false,hintSquare}:{fen:string
  if(selected){styles[selected]={boxShadow:'inset 0 0 0 4px var(--board-selected)'};for(const m of game.moves({square:selected,verbose:true}))styles[m.to]={backgroundImage:'radial-gradient(circle, var(--board-legal) 19%, transparent 22%)'};}
  if(hintSquare)styles[hintSquare]={boxShadow:'inset 0 0 0 4px var(--board-hint)'};
  const options:ChessboardOptions={
-  id:readOnly?'daily-preview':'challenge-board',
+  id:boardId,
   position:fen,
   pieces:accessiblePieces,
   boardOrientation:orientation,

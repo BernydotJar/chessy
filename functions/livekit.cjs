@@ -1,6 +1,7 @@
 'use strict';
 const {createHash}=require('node:crypto');
 const {rateNext}=require('./policy.cjs');
+const {allowsAdultRoom}=require('./adult-pilot.cjs');
 const SAFE=/^[A-Za-z0-9]{20}$/;
 const safeId=value=>typeof value==='string'&&SAFE.test(value);
 const MAX_PARTICIPANTS=12,TOKEN_SECONDS=90,CLASS_MS=120*60*1000;
@@ -69,6 +70,7 @@ function createLiveService({db,Timestamp,HttpsError,clock=Date.now,getConfig=liv
     const [r,m]=await Promise.all([tx.get(db.doc('learningRooms/'+roomId)),tx.get(db.doc('learningRooms/'+roomId+'/members/'+a.uid))]);
     const room=r.data(),member=m.data(),owner=room?.ownerUid===a.uid&&['coach','admin'].includes(a.token.chessyRole);
     if(!room||room.status!=='active'||millis(room.expiresAt)<=clock())fail('permission-denied','live-access-denied');
+    if(!allowsAdultRoom(room.audience))fail('permission-denied','Adult-only pilot');
     if(ownerOnly&&!owner)fail('permission-denied','Coach required');
     if(!owner&&(!member||member.ageBand!=='adult'||millis(member.expiresAt)<=clock()))fail('permission-denied','Adult enrollment required');
     return {room,role:owner?'coach':'learner',member};

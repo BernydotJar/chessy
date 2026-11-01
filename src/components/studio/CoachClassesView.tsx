@@ -173,13 +173,27 @@ export function CoachClassesView() {
 
   return <div className="view-enter coach-classes">
     <SectionHeading eyebrow={t('classes.eyebrow')} title={t('classes.title')} subtitle={t('classes.subtitle')}/>
+    <section className="panel coach-classroom-cta" aria-labelledby="coach-classroom-cta-title">
+      <div><p className="eyebrow">{t('rooms.exerciseEyebrow')}</p>
+        <h2 id="coach-classroom-cta-title">{t('classes.interactiveTitle')}</h2>
+        <p className="muted">{t('classes.interactiveBody')}</p>
+      </div>
+      <button type="button" className="btn primary" onClick={()=>{window.location.hash='/rooms';setView('rooms');}}>
+        {t('classes.interactiveAction')}
+      </button>
+    </section>
     <section className="coach-intro panel" aria-label={t('classes.approach')}>
       <strong>{t('classes.approach')}</strong>
       <p>{t('classes.approachText')}</p>
       <button className="btn secondary" type="button" onClick={() => setView('training')}>{t('classes.practice')}</button>
     </section>
     {loading && <p className="muted" role="status">{t('classes.loading')}</p>}
-    {problem && <p className="feedback wrong" role="alert">{t('classes.loadError')}</p>}
+    {problem && <div className="panel coach-catalogue-unavailable" role="status">
+      <p>{t('classes.loadError')}</p>
+      <button type="button" className="btn secondary" onClick={()=>void reload()} disabled={loading}>
+        {t('classes.retry')}
+      </button>
+    </div>}
     {!loading && !problem && items.filter(item => item.status === 'published').length === 0 &&
       <div className="panel coach-empty"><h2>{t('classes.emptyTitle')}</h2><p>{t('classes.emptyBody')}</p>
         <button className="btn secondary" onClick={() => setView('academy')}>{t('classes.existingAcademy')}</button>

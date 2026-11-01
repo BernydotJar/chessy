@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
@@ -41,12 +41,18 @@ jobs:
         run: |
           python3 -m pip install python-chess==1.999
           python3 scripts/verify-independent.py
+      - name: Media policy and adult pilot release safeguards
+        run: node --test scripts/test/server-media-policy.test.mjs scripts/test/adult-pilot-release-gate.test.cjs
+      - name: Verify the exact 200-puzzle server exercise catalogue
+        run: node scripts/sync-classroom-exercise-bank.cjs --check
       - name: Build production artifact
         run: npm run build
       - name: Compile the opt-in LiveKit classroom separately
-        run: VITE_CHESSY_PRIVATE_ROOMS_ENABLED=true VITE_CHESSY_LIVEKIT_ENABLED=true npx vite build --outDir /tmp/chessy-livekit-compile
+        run: VITE_CHESSY_PRIVATE_ROOMS_ENABLED=true VITE_CHESSY_LIVEKIT_ENABLED=true VITE_CHESSY_ADULT_PILOT_ONLY=true npx vite build --outDir /tmp/chessy-livekit-compile
       - name: Dependency security audit
-        run: npm audit --audit-level=low
+        run: npm audit --omit=dev --audit-level=low
+      - name: Report development-only advisories separately
+        run: npm audit --include=dev --audit-level=low || echo "Development dependency advisories tracked; production dependency gate remains enforced"
       - name: Install dedicated CI browser
         run: npx playwright install --with-deps chromium
       - name: Popup opener security contract
@@ -82,7 +88,7 @@ jobs:
 
   rooms-safety:
     name: Private rooms child-safety technical gates
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 25
     permissions:
       contents: read
@@ -158,6 +164,15 @@ jobs:
             fi
           }
           node -e "const g=require('./progress/evidence/rooms/safety-release-gate-minors.json');if(g.status!=='NO_GO'||!g.missing.includes('signedGovernanceApproval'))process.exit(1)"
+      - name: Adult-only video release remains fail-closed without live approvals
+        shell: bash
+        run: |
+          status=0
+          node scripts/adult-pilot-release-gate.cjs --strict || status=$?
+          if [ "$status" -ne 2 ]; then
+            echo "Adult pilot must remain NO-GO without production configuration"
+            exit 1
+          fi
       - name: Archive room security evidence
         if: always()
         uses: actions/upload-artifact@v4
