@@ -25,7 +25,9 @@
     "test:analytics": "node scripts/analytics-verify.cjs",
     "test:themes": "node scripts/theme-verify.cjs",
     "verify:safety": "node scripts/rooms-safety-release-gate.cjs --minors --strict",
-    "test:live": "node scripts/livekit-browser-e2e.cjs"
+    "test:live": "node scripts/livekit-browser-e2e.cjs",
+    "test:pilot:gateway": "node --test scripts/test/dev-pilot-gateway.test.mjs",
+    "test:pilot:gateway": "node --test scripts/test/dev-pilot-gateway.test.mjs"
   },
   "dependencies": {
     "chess.js": "^1.0.0-beta.6",

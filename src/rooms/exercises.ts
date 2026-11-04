@@ -1,6 +1,6 @@
 import { Chess } from 'chess.js';
 import { readAuthRuntimeConfig } from '../auth/config';
-import { getChessyFirebaseApp, getChessyFunctions } from '../firebase/client';
+import { getChessyFirebaseApp, invokeChessyCallable } from '../firebase/client';
 import { PUZZLES } from '../learning/puzzles';
 import { orderPracticePuzzles } from '../learning/trainingBlocks';
 import type { Puzzle } from '../learning/types';
@@ -42,8 +42,7 @@ export function parseAssignedRoomExercise(raw: unknown): AssignedRoomExercise | 
 async function call<T>(name: string, data: Record<string, unknown>): Promise<T> {
   const config=readAuthRuntimeConfig().firebase;
   if (!config) throw new Error('classroom-unconfigured');
-  const {functions,functionsSdk}=await getChessyFunctions(config);
-  return (await functionsSdk.httpsCallable<Record<string, unknown>, T>(functions,name)(data)).data;
+  return invokeChessyCallable<T>(config,name,data);
 }
 export async function watchRoomExercise(roomId: string, onChange:(value:AssignedRoomExercise|null)=>void,
   onDenied:()=>void):Promise<()=>void>{

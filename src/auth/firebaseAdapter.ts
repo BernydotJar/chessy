@@ -18,8 +18,11 @@ export async function createFirebaseAuthAdapter(
 
   // Configure the emulator before any async auth operation; on a page reload
   // setPersistence() may restore a user and begin token refresh immediately.
-  if (emulatorUrl && !auth.emulatorConfig) {
-    authModule.connectAuthEmulator(auth, emulatorUrl, { disableWarnings: true });
+  const remotePilot = import.meta.env.VITE_CHESSY_REMOTE_DEV_PILOT === 'true';
+  if (remotePilot && location.protocol !== 'https:') throw new Error('Remote pilot requires HTTPS');
+  const effectiveEmulatorUrl = remotePilot ? location.origin : emulatorUrl;
+  if (effectiveEmulatorUrl && !auth.emulatorConfig) {
+    authModule.connectAuthEmulator(auth, effectiveEmulatorUrl, { disableWarnings: true });
   }
   await authModule.setPersistence(auth, authModule.indexedDBLocalPersistence);
 
