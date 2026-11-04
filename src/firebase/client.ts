@@ -3,6 +3,7 @@ import type { FirebaseClientConfig } from '../auth/config';
 export const CHESSY_FIREBASE_APP_NAME = 'chessy-auth';
 const emulatorConnections = new Map<string, Promise<void>>();
 const appCheckConnections = new Set<string>();
+const remotePilot = import.meta.env.VITE_CHESSY_REMOTE_DEV_PILOT === 'true';
 export async function getChessyFunctions(config: FirebaseClientConfig) {
   const app=await getChessyFirebaseApp(config);
   const functionsSdk=await import('firebase/functions');
@@ -20,12 +21,36 @@ export async function getChessyFunctions(config: FirebaseClientConfig) {
   return {functionsSdk,functions};
 }
 
+/** HTTPS-only same-origin transport to the disposable adult QA emulators.
+ * This is never enabled in the regular public-web release. */
+export async function invokeChessyCallable<T>(config: FirebaseClientConfig, name: string,
+  data: Record<string, unknown>): Promise<T> {
+  const {functionsSdk, functions}=await getChessyFunctions(config);
+  const invoke = remotePilot ?
+    functionsSdk.httpsCallableFromURL<Record<string, unknown>, T>(functions,
+      `${location.origin}/demo-chessy-livekit/us-central1/${encodeURIComponent(name)}`) :
+    functionsSdk.httpsCallable<Record<string, unknown>, T>(functions,name);
+  return (await invoke(data)).data;
+}
+
 /** All Firebase consumers share one app; local Firestore emulator must be attached before any operation. */
 export async function getChessyFirebaseApp(config: FirebaseClientConfig) {
   const appModule = await import('firebase/app');
   const existing = appModule.getApps().find((app) => app.name === CHESSY_FIREBASE_APP_NAME);
   const app = existing ?? appModule.initializeApp(config, CHESSY_FIREBASE_APP_NAME);
-  const devEmulator = import.meta.env.DEV && import.meta.env.VITE_FIREBASE_FIRESTORE_EMULATOR_URL;
+  if (remotePilot) {
+    // The gateway authenticates users and proxies SDK traffic over TLS. Do not
+    // accept a cross-origin or insecure endpoint from build-time configuration.
+    if (location.protocol !== 'https:') throw new Error('Remote pilot requires HTTPS');
+    if (!emulatorConnections.has(app.name)) {
+      emulatorConnections.set(app.name, import('firebase/firestore').then(firestore => {
+        firestore.initializeFirestore(app, { host: location.host, ssl: true,
+          experimentalForceLongPolling: true });
+      }));
+    }
+    await emulatorConnections.get(app.name);
+  }
+  const devEmulator = !remotePilot && import.meta.env.DEV && import.meta.env.VITE_FIREBASE_FIRESTORE_EMULATOR_URL;
   if (typeof devEmulator === 'string' && devEmulator.trim()) {
     if (!emulatorConnections.has(app.name)) {
       const uri = new URL(devEmulator);

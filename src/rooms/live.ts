@@ -1,5 +1,5 @@
 import { readAuthRuntimeConfig } from '../auth/config';
-import { getChessyFirebaseApp, getChessyFunctions } from '../firebase/client';
+import { getChessyFirebaseApp, invokeChessyCallable } from '../firebase/client';
 import { privateRoomsEnabled } from './release';
 
 export const liveClassroomEnabled = privateRoomsEnabled && import.meta.env.VITE_CHESSY_LIVEKIT_ENABLED === 'true';
@@ -13,8 +13,7 @@ export interface LiveCredentials {
 async function call<T>(name: string, data: Record<string, unknown>): Promise<T> {
   const config = readAuthRuntimeConfig().firebase;
   if (!config) throw new Error('live-unconfigured');
-  const {functionsSdk, functions} = await getChessyFunctions(config);
-  return (await functionsSdk.httpsCallable<Record<string, unknown>, T>(functions, name)(data)).data;
+  return invokeChessyCallable<T>(config,name,data);
 }
 export const startLiveClass = (roomId: string) => call<{sessionId: string}>('startLearningRoomLive', {roomId});
 export const joinLiveClass = (roomId: string, sessionId: string) =>

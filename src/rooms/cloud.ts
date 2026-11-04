@@ -1,5 +1,5 @@
 import { readAuthRuntimeConfig } from '../auth/config';
-import { getChessyFirebaseApp, getChessyFunctions } from '../firebase/client';
+import { getChessyFirebaseApp, invokeChessyCallable } from '../firebase/client';
 import { applyInstructorCommand, classroomSnapshotValid, type ClassroomBoard, type ClassroomCommand } from '../coach/classroomBoard';
 import { isChild, parseRoom, safeRoomTitle, validSummary, type AgeBand, type Answers, type Language, type LearningGoal, type LearningRoom, type RoomAudience, type RoomDiagnosticSummary, type RoomInvitation } from './model';
 
@@ -29,9 +29,7 @@ async function coach() {
 async function invokeRoom<T>(name:string,data:Record<string,unknown>):Promise<T> {
   const config=readAuthRuntimeConfig().firebase;
   if(!config)throw new Error('cloud-unconfigured');
-  const {functionsSdk,functions}=await getChessyFunctions(config);
-  const result=await functionsSdk.httpsCallable<Record<string,unknown>,T>(functions,name)(data);
-  return result.data;
+  return invokeChessyCallable<T>(config,name,data);
 }
 
 export async function getGuardianAccessStatus(roomId:string,ageBand:AgeBand):

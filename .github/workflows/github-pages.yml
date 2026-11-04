@@ -49,6 +49,10 @@ jobs:
         run: npm run build
       - name: Compile the opt-in LiveKit classroom separately
         run: VITE_CHESSY_PRIVATE_ROOMS_ENABLED=true VITE_CHESSY_LIVEKIT_ENABLED=true VITE_CHESSY_ADULT_PILOT_ONLY=true npx vite build --outDir /tmp/chessy-livekit-compile
+      - name: Disposable pilot gateway auth isolation
+        run: npm run test:pilot:gateway
+      - name: Disposable pilot gateway auth isolation
+        run: npm run test:pilot:gateway
       - name: Dependency security audit
         run: npm audit --omit=dev --audit-level=low
       - name: Report development-only advisories separately
