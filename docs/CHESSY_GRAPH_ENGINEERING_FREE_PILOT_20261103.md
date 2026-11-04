@@ -16,7 +16,9 @@
 | G1 | Adult-only, rechazo de menores, permisos/aislamiento, ejercicios y estado: LiveKit QA con emuladores: **29/29** (runbook del 29-oct) | PASS en QA |
 | G2 | Repetición de smoke en navegador: **12/12**; profesor + dos alumnos, video/audio desde LiveKit Cloud, pantalla, sin JS exceptions | PASS en QA (01-nov) |
 | G3 | Gateway privado: sin cookie 401, login autorizado, rutas de administración 404, frontend autenticado | PASS local (04-nov) |
-| G4 | Acceso remoto reproducible HTTPS con teléfono y proveedor de video autorizado | PENDIENTE: URL Cloudflare Quick Tunnel no generada en ejecución 04-nov; credenciales QA no montadas en runtime migrado |
+| G4 | Acceso remoto reproducible HTTPS con teléfono y proveedor de video autorizado | PENDIENTE: gateway y Cloudflare Quick Tunnel responden por HTTPS, pero el runtime actual no levanta Firestore Emulator (timeout de JVM) y no tiene montadas las credenciales de LiveKit QA. Seguimiento operativo en [issue #22](https://github.com/BernydotJar/chessy/issues/22). |
+
+**Cierre técnico verificado (04-nov-2026):** PR [#21](https://github.com/BernydotJar/chessy/pull/21) fusionado en `main` (merge `6b658fc5fba757280781f88b9ea77316e9454393`), CI 2/2 aprobada. La historia de implementación es **DONE**; la aceptación remota G4 permanece abierta como tarea operativa independiente. No se ha habilitado producción ni facturación.
 
 ## Cierre responsable
 
