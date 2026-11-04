@@ -3,6 +3,7 @@ import { createServer as createHttpServer, request as httpRequest } from 'node:h
 import { createServer as createHttpsServer } from 'node:https';
 import fs from 'node:fs';
 import crypto from 'node:crypto';
+import { connect } from 'node:net';
 import { URL } from 'node:url';
 
 const cfg = JSON.parse(fs.readFileSync(process.env.CHESSY_PILOT_ACCESS_FILE, 'utf8'));
@@ -39,11 +40,22 @@ function upstream(req,path){
 const handle=async (req,res)=>{
   let url;
   try {url=new URL(req.url || '/', 'https://pilot.invalid');} catch {return send(res,400,'Bad request');}
-  if (url.pathname==='/_pilot/health' && req.method==='GET')
-    return send(res,200,JSON.stringify({status:'ok',deployment_class:'adult-dev-only',media:true}), 'application/json; charset=utf-8');
+  if (url.pathname==='/_pilot/health' && req.method==='GET') {
+    const services=await Promise.all([19739,19708,19749].map(port=>new Promise(resolve=>{
+      const socket=connect({host:'127.0.0.1',port});let done=false;
+      const finish=ok=>{if(done)return;done=true;socket.destroy();resolve(ok);};
+      socket.once('connect',()=>finish(true));socket.once('error',()=>finish(false));
+      socket.setTimeout(700,()=>finish(false));
+    })));
+    const ready=services.every(Boolean);
+    return send(res,ready?200:503,JSON.stringify({status:ready?'ok':'degraded',deployment_class:'adult-dev-only',backendReady:ready,mediaConfigured:Boolean(process.env.CHESSY_DEV_LIVEKIT_CONFIG)}), 'application/json; charset=utf-8');
+  }
   if (url.pathname==='/_pilot/login' && req.method==='POST') {
     const origin=req.headers.origin;
-    if (origin && new URL(origin).host!==req.headers.host) return send(res,403,'Origin denied');
+    if (origin) {
+      let originHost;try{originHost=new URL(origin).host;}catch{return send(res,403,'Origin denied');}
+      if(originHost!==req.headers.host)return send(res,403,'Origin denied');
+    }
     const ip=String(req.headers['cf-connecting-ip']||req.socket.remoteAddress).slice(0,110);
     const record=attempts.get(ip)||{at:Date.now(),count:0};
     if(Date.now()-record.at>600000){record.at=Date.now();record.count=0;}
