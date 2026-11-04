@@ -19,10 +19,14 @@ test('pilot gateway requires an authenticated session and blocks emulator admini
   env:{...process.env,CHESSY_PILOT_ACCESS_FILE:access,CHESSY_PILOT_GATEWAY_PORT:String(port),
    CHESSY_PILOT_STATIC_PORT:String(backend.address().port)},stdio:'ignore'});
  try{
-  let up=false;for(let i=0;i<60;i++){try{if((await fetch(base+'/_pilot/health')).ok){up=true;break;}}catch{}await wait(100);}
+  let up=false;for(let i=0;i<60;i++){try{if((await fetch(base+'/')).ok){up=true;break;}}catch{}await wait(100);}
   assert.ok(up,'gateway starts');
+  let health=await fetch(base+'/_pilot/health');assert.equal(health.status,503);
+  assert.deepEqual((({status,backendReady,mediaConfigured})=>({status,backendReady,mediaConfigured}))(await health.json()),
+   {status:'degraded',backendReady:false,mediaConfigured:false});
   let r=await fetch(base+'/identitytoolkit.googleapis.com/v1/accounts:lookup');assert.equal(r.status,401);
   r=await fetch(base+'/');assert.equal(r.status,200);assert.match(await r.text(),/Piloto privado/);
+  r=await fetch(base+'/_pilot/login',{method:'POST',body:'code=wrong',headers:{Origin:'not a valid origin'},redirect:'manual'});assert.equal(r.status,403);
   r=await fetch(base+'/_pilot/login',{method:'POST',body:'code=wrong',redirect:'manual'});assert.equal(r.status,403);
   r=await fetch(base+'/_pilot/login',{method:'POST',body:'code=TEST-ONLY-GATE-KEY',redirect:'manual'});
   assert.equal(r.status,303);
