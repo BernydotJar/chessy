@@ -178,9 +178,12 @@ export function CoachClassesView() {
         <h2 id="coach-classroom-cta-title">{t('classes.interactiveTitle')}</h2>
         <p className="muted">{t('classes.interactiveBody')}</p>
       </div>
-      <button type="button" className="btn primary" onClick={()=>{window.location.hash='/rooms';setView('rooms');}}>
-        {t('classes.interactiveAction')}
-      </button>
+      <div className="button-row">
+        {import.meta.env.VITE_CHESSY_DIRECT_AULA_ENABLED === 'true' &&
+          <a className="btn primary" href="/aula/" data-testid="direct-aula-link">{t('classes.directAulaAction')}</a>}
+        <button type="button" className={import.meta.env.VITE_CHESSY_DIRECT_AULA_ENABLED === 'true' ? 'btn secondary' : 'btn primary'}
+          onClick={()=>{window.location.hash='/rooms';setView('rooms');}}>{t('classes.interactiveAction')}</button>
+      </div>
     </section>
     <section className="coach-intro panel" aria-label={t('classes.approach')}>
       <strong>{t('classes.approach')}</strong>
