@@ -51,8 +51,6 @@ jobs:
         run: VITE_CHESSY_PRIVATE_ROOMS_ENABLED=true VITE_CHESSY_LIVEKIT_ENABLED=true VITE_CHESSY_ADULT_PILOT_ONLY=true npx vite build --outDir /tmp/chessy-livekit-compile
       - name: Disposable pilot gateway auth isolation
         run: npm run test:pilot:gateway
-      - name: Disposable pilot gateway auth isolation
-        run: npm run test:pilot:gateway
       - name: Dependency security audit
         run: npm audit --omit=dev --audit-level=low
       - name: Report development-only advisories separately
@@ -79,6 +77,11 @@ jobs:
         run: npm run test:analytics
       - name: Progress sync two-device and offline lifecycle
         run: npm run test:progress:ui-live
+      - name: Build and test free 1-to-1 adult classroom without Blaze or LiveKit credentials
+        run: |
+          VITE_CHESSY_DIRECT_AULA_ENABLED=true VITE_CHESSY_PRIVATE_ROOMS_ENABLED=false VITE_CHESSY_LIVEKIT_ENABLED=false npm run build
+          npm run build:server
+          CHESSY_AULA_SERVER_SCRIPT=progress/runtime/aula-server.mjs npm run test:aula:direct
       - name: Preserve verification evidence
         if: always()
         uses: actions/upload-artifact@v4

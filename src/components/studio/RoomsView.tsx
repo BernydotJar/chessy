@@ -95,7 +95,10 @@ function RoomsPilotPreview(){
     <section className="panel room-pilot-status" role="status" data-testid="private-rooms-disabled">
       <ShieldCheck size={24} aria-hidden="true"/>
       <div><h2>{t('rooms.privateRoomsComingSoon')}</h2>
-        <p>{t('rooms.privateRoomsUnavailable')}</p></div>
+        <p>{t('rooms.privateRoomsUnavailable')}</p>
+        {import.meta.env.VITE_CHESSY_DIRECT_AULA_ENABLED === 'true' &&
+          <a href="/aula/" className="btn primary" data-testid="direct-aula-rooms">{t('rooms.directAulaAction')}</a>}
+      </div>
     </section>
   </div>;
 }

@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { mediaPermissionsPolicy } from './classroom-http-policy.mjs';
+import { attachAulaDirect } from './aula-direct.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(here, '..');
@@ -42,18 +43,28 @@ function respond(res, code, body, type = 'text/plain; charset=utf-8', extra = {}
   res.end(payload);
 }
 
+let aula = null;
 const server = http.createServer((req, res) => {
   let pathname;
   try { pathname = decodeURIComponent(new URL(req.url ?? '/', 'http://localhost').pathname); }
   catch { return respond(res, 400, 'Bad request\n'); }
 
+  if (pathname === '/aula') return respond(res, 302, 'Aula directa\n', undefined, {Location:'/aula/', 'Cache-Control':'no-store'});
+  if (pathname.startsWith('/aula/api/')) {
+    if (!aula) return respond(res, 404, 'Not found\n');
+    void aula.handle(req,res,pathname).catch(() => {
+      if (!res.headersSent) respond(res,500,'Classroom service error\n'); else res.destroy();
+    });
+    return;
+  }
+  if (pathname.startsWith('/aula/') && !aula) return respond(res, 404, 'Not found\n');
   if (pathname === '/health') {
     return respond(res, 200, JSON.stringify({ status: 'ok', product: 'chessy', release_sha: gitSha, deployment_class: deploymentClass }) + '\n', 'application/json; charset=utf-8', { 'Cache-Control': 'no-store' });
   }
   if (blocked.has(pathname)) return respond(res, 404, 'Not found\n', undefined, { 'Cache-Control': 'no-store' });
   if (req.method !== 'GET' && req.method !== 'HEAD') return respond(res, 405, 'Method not allowed\n', undefined, { Allow: 'GET, HEAD' });
 
-  const requested = pathname === '/' ? '/index.html' : pathname;
+  const requested = pathname === '/' ? '/index.html' : pathname === '/aula/' ? '/aula/index.html' : pathname;
   let candidate = path.resolve(root, '.' + requested);
   if (candidate !== root && !candidate.startsWith(root + path.sep)) return respond(res, 400, 'Bad request\n');
   let stat;
@@ -66,9 +77,14 @@ const server = http.createServer((req, res) => {
   const immutable = candidate.includes(`${path.sep}assets${path.sep}`);
   res.writeHead(200, {
     ...security,
-    'Permissions-Policy': mediaPermissionsPolicy({
-      deploymentClass, enabled: process.env.CHESSY_MEDIA_PERMISSIONS_ENABLED, isHtml: ext === '.html'
-    }),
+    'Permissions-Policy': aula && pathname.startsWith('/aula/') && ext === '.html' ?
+      'camera=(self), microphone=(self), display-capture=(self), geolocation=()' :
+      mediaPermissionsPolicy({deploymentClass, enabled: process.env.CHESSY_MEDIA_PERMISSIONS_ENABLED, isHtml: ext === '.html'}),
+    ...(pathname.startsWith('/aula/') ? {
+      'X-Robots-Tag':'noindex, nofollow, noarchive',
+      'Referrer-Policy':'no-referrer',
+      'Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' wss:; media-src 'self' blob:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'"
+    } : {}),
     'Content-Type': mime[ext] || 'application/octet-stream',
     'Content-Length': stat.size,
     'Cache-Control': immutable ? 'public, max-age=31536000, immutable' : 'no-cache'
@@ -77,4 +93,7 @@ const server = http.createServer((req, res) => {
   fs.createReadStream(candidate).pipe(res);
 });
 
-server.listen(port, host, () => console.log(`chessy release server http://${host}:${port} root=${root} sha=${gitSha}`));
+if (process.env.CHESSY_AULA_TEACHER_SECRET_FILE) {
+  aula = attachAulaDirect(server,{secretPath:process.env.CHESSY_AULA_TEACHER_SECRET_FILE});
+}
+server.listen(port, host, () => console.log(`chessy release server http://${host}:${port} root=${root} sha=${gitSha} aula=${Boolean(aula)}`));
