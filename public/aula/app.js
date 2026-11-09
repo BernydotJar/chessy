@@ -5,7 +5,7 @@
 const root=document.querySelector('#app');
 const apiBase='/aula/api/';
 let role=null, room=null, socket=null, selected=null, flipped=false, puzzles=[], reconnectTimer=null;
-let legalSquares=[],dragStart=null,suppressClickUntil=0;
+let legalSquares=[],dragStart=null,recentlyDropped=null;
 let rtc=null, audioSender=null, videoSender=null, remoteStream=null, micTrack=null, cameraTrack=null, screenTrack=null;
 let offerStarted=false, candidates=[];
 let errorTimeout=null;
@@ -259,9 +259,14 @@ function selectSquare(square){
   send({type:'legal',square});
 }
 function clickBoard(ev){
-  if(Date.now()<suppressClickUntil)return;
   const square=ev.target.closest('button[data-square]');if(!square||!room)return;
   const target=square.dataset.square;
+  // A native drag/touch drop may emit a trailing click on the destination.
+  // Suppress only that one square, never unrelated rapid lesson moves.
+  if(recentlyDropped){
+    const ignore=recentlyDropped.square===target && Date.now()<recentlyDropped.until;
+    recentlyDropped=null;if(ignore)return;
+  }
   if(!selected){selectSquare(target);return;}
   if(selected===target){selected=null;legalSquares=[];renderBoard();return;}
   const from=selected;selected=null;legalSquares=[];renderBoard();sendMove(from,target);
@@ -280,7 +285,7 @@ function dropBoard(ev){
   const from=ev.dataTransfer?.getData('text/plain');
   if(!square || !/^[a-h][1-8]$/.test(from||''))return;
   selected=null;legalSquares=[];renderBoard();
-  suppressClickUntil=Date.now()+300;sendMove(from,square.dataset.square);
+  recentlyDropped={square:square.dataset.square,until:Date.now()+250};sendMove(from,square.dataset.square);
 }
 function pointerStartBoard(ev){
   if(ev.pointerType==='mouse')return;
@@ -296,7 +301,7 @@ function pointerEndBoard(ev){
   const square=document.elementFromPoint(ev.clientX,ev.clientY)?.closest('button[data-square]');
   if(!square||square.dataset.square===origin.square)return;
   selected=null;legalSquares=[];renderBoard();
-  suppressClickUntil=Date.now()+400;sendMove(origin.square,square.dataset.square);
+  recentlyDropped={square:square.dataset.square,until:Date.now()+350};sendMove(origin.square,square.dataset.square);
 }
 async function openRoom(){
   root.innerHTML=htmlRoom();
@@ -382,7 +387,10 @@ function connectSocket(){
     if(msg.type==='state')updateRoom(msg);
     else if(msg.type==='legal' && selected===msg.from){
       legalSquares=Array.isArray(msg.moves)?msg.moves.filter(x=>/^[a-h][1-8]$/.test(x)):[];
-      renderBoard();
+      // Do not replace live square buttons while the next pointer/click is in flight.
+      document.querySelectorAll('#board button[data-square]').forEach(button=>{
+        button.classList.toggle('legal',legalSquares.includes(button.dataset.square));
+      });
     }
     else if(msg.type==='signal')void handleSignal(msg);
     else if(msg.type==='error')feedback(msg.message||'No se puede completar la acción');
