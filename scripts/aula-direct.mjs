@@ -107,7 +107,7 @@ export function attachAulaDirect(server,{secretPath,adminSecretPath,registryPath
   const authorized=(req,id)=>{
     const room=rooms.get(id),s=getSession(req);
     if(!room || room.closed || room.exp<=now() || !s)return null;
-    if(s.role==='teacher' && s.id===room.owner)return {room,role:'teacher',session:s};
+    if(s.role==='teacher' && s.teacherId===room.teacherId)return {room,role:'teacher',session:s};
     if(s.role==='student' && s.id===room.studentSession && s.roomId===id)return {room,role:'student',session:s};
     return null;
   };
@@ -154,6 +154,14 @@ export function attachAulaDirect(server,{secretPath,adminSecretPath,registryPath
     if(req.method==='GET' && pathname==='/aula/api/me'){
       const s=getSession(req);
       return send(res,200,{role:s?.role||null,roomId:s?.roomId||null});
+    }
+    if(req.method==='GET' && pathname==='/aula/api/my-rooms'){
+      const s=getSession(req);
+      if(s?.role!=='teacher')return send(res,403,{error:'teacher-only'});
+      const list=[...rooms.values()].filter(r=>!r.closed&&r.exp>now()&&r.teacherId===s.teacherId)
+        .map(r=>({id:r.id,title:r.title,exp:r.exp,invite:r.invite,present:status(r).present}))
+        .slice(-MAX_ROOMS).reverse();
+      return send(res,200,{rooms:list});
     }
     if(req.method==='GET' && pathname==='/aula/api/puzzles'){
       return getSession(req)?send(res,200,{puzzles:puzzleCatalogue}):send(res,401,{error:'login-required'});
@@ -235,8 +243,8 @@ export function attachAulaDirect(server,{secretPath,adminSecretPath,registryPath
     if(pathname==='/aula/api/create'){
       const s=getSession(req);
       if(!s || s.role!=='teacher')return send(res,403,{error:'teacher-only'});
-      if(!limiter('create:'+s.id,10,60*60*1000))return send(res,429,{error:'quota'});
-      const active=[...rooms.values()].filter(r=>!r.closed&&r.exp>now()&&r.owner===s.id);
+      if(!limiter('create:'+s.teacherId,10,60*60*1000))return send(res,429,{error:'quota'});
+      const active=[...rooms.values()].filter(r=>!r.closed&&r.exp>now()&&r.teacherId===s.teacherId);
       if(active.length>=MAX_ROOMS)return send(res,429,{error:'room-limit'});
       const title=typeof input.title==='string'?input.title.trim().slice(0,70):'';
       if(title.length<3)return send(res,400,{error:'title-required'});
