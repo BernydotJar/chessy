@@ -7,6 +7,7 @@ import fs from 'node:fs';
 import crypto from 'node:crypto';
 import { WebSocketServer, WebSocket } from 'ws';
 import { Chess } from 'chess.js';
+import { createAulaGovernance } from './aula-governance.mjs';
 import bank from '../functions/classroom-exercise-bank.json' with { type: 'json' };
 
 const ROOM_TTL = 2 * 60 * 60 * 1000;
@@ -67,6 +68,7 @@ function now(){return Date.now();}
 function status(room){
   return {
     id:room.id,title:room.title,fen:room.fen,revision:room.revision,
+    control:room.control||'both',lastMove:room.lastMove||null,hint:room.hint||null,
     status:room.closed?'closed':'active',exercise:room.exercise ?
       {id:room.exercise.id,status:room.exercise.status,attempts:room.exercise.attempts,ply:room.exercise.ply} : null,
     history:room.history.slice(-30),chat:room.chat.slice(-12),
@@ -75,19 +77,26 @@ function status(room){
   };
 }
 
-export function attachAulaDirect(server,{secretPath}){
+export function attachAulaDirect(server,{secretPath,adminSecretPath,registryPath}){
   const stat=fs.statSync(secretPath);
   if((stat.mode & 0o077)!==0)throw Error('Aula teacher secret must have owner-only permissions');
   const teacherCode=fs.readFileSync(secretPath,'utf8').trim();
   if(teacherCode.length<24)throw Error('Aula teacher secret too short');
+  const governance=createAulaGovernance({adminSecretPath,registryPath,legacyTeacherCode:teacherCode});
   const sessions=new Map();
   const rooms=new Map();
   const attempts=new Map();
   const wss=new WebSocketServer({noServer:true,maxPayload:16384,perMessageDeflate:false,clientTracking:true});
   const getSession=req=>{
-    for(const name of ['chessy_teacher','chessy_learner']){
+    for(const name of ['chessy_admin','chessy_teacher','chessy_learner']){
       const id=cookie(req,name),s=sessions.get(id);
-      if(s && s.exp>now() && s.cookieName===name)return s;
+      if(s && s.exp>now() && s.cookieName===name){
+        if(s.role==='teacher' && !governance.teacherActive(s.teacherId||'legacy')){
+          sessions.delete(id);continue;
+        }
+        if(s.role==='admin' && !governance.enabled){sessions.delete(id);continue;}
+        return s;
+      }
     }
     return null;
   };
@@ -107,9 +116,10 @@ export function attachAulaDirect(server,{secretPath}){
     }
   };
   const sessionCookie=(name,value)=>name+'='+value+'; Path=/aula; Max-Age=28800; HttpOnly; Secure; SameSite=Lax';
+  const expireCookie=name=>name+'=; Path=/aula; Max-Age=0; HttpOnly; Secure; SameSite=Lax';
   const newSession=(role,extra={})=>{
     const id=token();
-    const s={id,role,exp:now()+SESSION_TTL,cookieName:role==='teacher'?'chessy_teacher':'chessy_learner',...extra};
+    const s={id,role,exp:now()+SESSION_TTL,cookieName:role==='admin'?'chessy_admin':role==='teacher'?'chessy_teacher':'chessy_learner',...extra};
     sessions.set(id,s);return s;
   };
   const limiter=(key,limit,ms)=>{
@@ -120,6 +130,17 @@ export function attachAulaDirect(server,{secretPath}){
   };
   async function handle(req,res,pathname){
     if(pathname==='/aula/api/health' && req.method==='GET')return send(res,200,{status:'ok',mode:'direct-1to1',backendReady:true,roomsActive:[...rooms.values()].filter(r=>!r.closed&&r.exp>now()).length});
+    if(req.method==='GET' && pathname==='/aula/api/admin/me'){
+      const s=getSession(req);
+      return send(res,200,{role:s?.role==='admin'?'admin':null,configured:governance.enabled});
+    }
+    if(req.method==='GET' && pathname==='/aula/api/admin/teachers'){
+      const s=getSession(req);
+      return s?.role==='admin'
+        ? send(res,200,{teachers:governance.listTeachers(),legacyEnabled:governance.legacyEnabled(),
+            events:governance.audit()})
+        :send(res,403,{error:'administrator-only'});
+    }
     if(req.method==='GET' && pathname==='/aula/api/me'){
       const s=getSession(req);
       return send(res,200,{role:s?.role||null,roomId:s?.roomId||null});
@@ -136,12 +157,65 @@ export function attachAulaDirect(server,{secretPath}){
     if(!secureOrigin(req))return send(res,403,{error:'origin-denied'});
     let input;
     try{input=await readBody(req);}catch{return send(res,400,{error:'invalid-body'});}
+    if(pathname==='/aula/api/admin/login'){
+      if(!governance.enabled)return send(res,503,{error:'administrator-not-configured'});
+      const ip=req.socket.remoteAddress||'unknown';
+      if(!limiter('admin-login:'+ip,8,15*60*1000))return send(res,429,{error:'retry-later'});
+      if(typeof input.code!=='string' || !governance.verifyAdmin(input.code))
+        return send(res,403,{error:'access-denied'});
+      const s=newSession('admin');
+      governance.addAudit('admin-login');
+      return send(res,200,{role:'admin'}, {'Set-Cookie':sessionCookie(s.cookieName,s.id)});
+    }
+    if(pathname==='/aula/api/admin/teachers/create'){
+      const s=getSession(req);
+      if(s?.role!=='admin')return send(res,403,{error:'administrator-only'});
+      try{
+        const teacher=governance.createTeacher(input.name,input.days??30);
+        return send(res,201,{teacher});
+      }catch(e){return send(res,400,{error:e.message});}
+    }
+    if(pathname==='/aula/api/admin/teachers/revoke'){
+      const s=getSession(req);
+      if(s?.role!=='admin')return send(res,403,{error:'administrator-only'});
+      if(!governance.revokeTeacher(input.teacherId))
+        return send(res,404,{error:'teacher-not-found'});
+      for(const [sid,session] of sessions)
+        if(session.role==='teacher' && session.teacherId===input.teacherId)sessions.delete(sid);
+      for(const rm of rooms.values())if(rm.teacherId===input.teacherId && !rm.closed){
+        rm.closed=true;broadcast(rm);
+        for(const ws of Object.values(rm.sockets))ws?.close(1008,'teacher revoked');
+      }
+      return send(res,200,{revoked:true});
+    }
+    if(pathname==='/aula/api/admin/legacy'){
+      const s=getSession(req);
+      if(s?.role!=='admin')return send(res,403,{error:'administrator-only'});
+      if(typeof input.enabled!=='boolean')return send(res,400,{error:'invalid-setting'});
+      governance.setLegacy(input.enabled);
+      if(!input.enabled){
+        for(const [sid,session] of sessions)
+          if(session.role==='teacher' && session.teacherId==='legacy')sessions.delete(sid);
+        for(const rm of rooms.values())if(rm.teacherId==='legacy' && !rm.closed){
+          rm.closed=true;broadcast(rm);
+          for(const ws of Object.values(rm.sockets))ws?.close(1008,'legacy access disabled');
+        }
+      }
+      return send(res,200,{legacyEnabled:governance.legacyEnabled()});
+    }
+    if(pathname==='/aula/api/logout'){
+      const s=getSession(req);
+      if(s)sessions.delete(s.id);
+      const cname=s?.cookieName||'chessy_teacher';
+      return send(res,200,{loggedOut:true},{'Set-Cookie':expireCookie(cname)});
+    }
     if(pathname==='/aula/api/login'){
       const ip=req.socket.remoteAddress||'unknown';
       if(!limiter('login:'+ip,15,15*60*1000))return send(res,429,{error:'retry-later'});
-      if(typeof input.code!=='string'||!same(input.code,teacherCode))return send(res,403,{error:'access-denied'});
-      const s=newSession('teacher');
-      return send(res,200,{role:'teacher'}, {'Set-Cookie':sessionCookie(s.cookieName,s.id)});
+      const account=governance.verifyTeacher(input.code);
+      if(!account)return send(res,403,{error:'access-denied'});
+      const s=newSession('teacher',{teacherId:account.id});
+      return send(res,200,{role:'teacher',name:account.name}, {'Set-Cookie':sessionCookie(s.cookieName,s.id)});
     }
     if(pathname==='/aula/api/create'){
       const s=getSession(req);
@@ -152,11 +226,13 @@ export function attachAulaDirect(server,{secretPath}){
       const title=typeof input.title==='string'?input.title.trim().slice(0,70):'';
       if(title.length<3)return send(res,400,{error:'title-required'});
       const id=crypto.randomBytes(12).toString('hex'),inviteToken=token();
-      const room={id,title,owner:s.id,studentSession:null,inviteHash:hash(inviteToken),
+      const room={id,title,owner:s.id,teacherId:s.teacherId||'legacy',studentSession:null,inviteHash:hash(inviteToken),
         invite:'',exp:now()+ROOM_TTL,closed:false,
-        fen:new Chess().fen(),revision:0,exercise:null,history:[],chat:[],sockets:{teacher:null,student:null}};
+        fen:new Chess().fen(),revision:0,exercise:null,history:[],chat:[],sockets:{teacher:null,student:null},
+        control:'both',past:[],lastMove:null,hint:null};
       room.invite='/aula/#/join/'+id+'/'+inviteToken;
       rooms.set(id,room);
+      governance.addAudit('room-created',{roomId:id,teacherId:room.teacherId});
       return send(res,201,{...status(room),role:'teacher',invite:room.invite});
     }
     if(pathname==='/aula/api/join'){
@@ -170,12 +246,38 @@ export function attachAulaDirect(server,{secretPath}){
         return send(res,409,{error:'seat-occupied'});
       const s=newSession('student',{roomId:r.id});
       r.studentSession=s.id;
+      governance.addAudit('learner-joined',{roomId:r.id,teacherId:r.teacherId});
       return send(res,200,{...status(r),role:'student'}, {'Set-Cookie':sessionCookie(s.cookieName,s.id)});
+    }
+    if(pathname==='/aula/api/invite/rotate'){
+      const a=authorized(req,input.roomId);
+      if(!a || a.role!=='teacher')return send(res,403,{error:'teacher-only'});
+      const value=token();
+      a.room.inviteHash=hash(value);
+      a.room.invite='/aula/#/join/'+a.room.id+'/'+value;
+      governance.addAudit('invite-rotated',{roomId:a.room.id,teacherId:a.room.teacherId});
+      return send(res,200,{invite:a.room.invite});
+    }
+    if(pathname==='/aula/api/learner/remove'){
+      const a=authorized(req,input.roomId);
+      if(!a || a.role!=='teacher')return send(res,403,{error:'teacher-only'});
+      const rm=a.room;
+      if(rm.studentSession)sessions.delete(rm.studentSession);
+      rm.studentSession=null;
+      rm.sockets.student?.close(1008,'teacher removed learner');
+      rm.sockets.student=null;
+      const value=token();
+      rm.inviteHash=hash(value);
+      rm.invite='/aula/#/join/'+rm.id+'/'+value;
+      governance.addAudit('learner-removed',{roomId:rm.id,teacherId:rm.teacherId});
+      broadcast(rm);
+      return send(res,200,{removed:true,invite:rm.invite});
     }
     if(pathname==='/aula/api/close'){
       const a=authorized(req,input.roomId);
       if(!a || a.role!=='teacher')return send(res,403,{error:'teacher-only'});
       a.room.closed=true;
+      governance.addAudit('room-closed',{roomId:a.room.id,teacherId:a.room.teacherId});
       broadcast(a.room);
       for(const role of ['teacher','student'])a.room.sockets[role]?.close(1000,'class ended');
       return send(res,200,{closed:true});
@@ -192,7 +294,7 @@ export function attachAulaDirect(server,{secretPath}){
     const a=authorized(req,id);
     if(!a){socket.write('HTTP/1.1 403 Forbidden\r\nConnection: close\r\n\r\n');socket.destroy();return;}
     wss.handleUpgrade(req,socket,head,ws=>{
-      ws.roomId=id;ws.role=a.role;
+      ws.roomId=id;ws.role=a.role;ws.sessionId=a.session.id;
       const prev=a.room.sockets[a.role];
       if(prev && prev!==ws)prev.close(4001,'replaced');
       a.room.sockets[a.role]=ws;
@@ -205,7 +307,8 @@ export function attachAulaDirect(server,{secretPath}){
     broadcast(room);
     ws.on('message',raw=>{
       if(ws.readyState!==WebSocket.OPEN || room.closed || room.exp<=now() ||
-        room.sockets[role]!==ws)return;
+        room.sockets[role]!==ws || !sessions.has(ws.sessionId) ||
+        (role==='teacher' && !governance.teacherActive(room.teacherId)))return;
       if(now()-windowStart>60000){count=0;windowStart=now();}
       if(++count>120){ws.close(1008,'rate limit');return;}
       let data;try{data=JSON.parse(raw.toString());}catch{return;}
