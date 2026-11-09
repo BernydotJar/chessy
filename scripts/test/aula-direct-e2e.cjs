@@ -225,11 +225,13 @@ async function smoke(){
    assert.deepEqual(report.errors,[]);
  });
  await check('Coach removes the learner and newly invited adult can join',async()=>{
+   const beforeKick=await teacher.locator('#invite-url').inputValue();
    teacher.once('dialog',d=>d.accept());
    await teacher.getByRole('button',{name:'Retirar alumno'}).click();
    await student.getByText('Acceso al aula revocado.').waitFor({timeout:15000});
    const denied=await student.evaluate(id=>fetch('/aula/api/room?id='+id).then(x=>x.status),roomId);
    assert.equal(denied,403);
+   await teacher.waitForFunction(old=>document.querySelector('#invite-url')?.value!==old,beforeKick);
    const newInvite=await teacher.locator('#invite-url').inputValue();
    replacementCtx=await browser.newContext({viewport:{width:390,height:844}});
    const nextStudent=await replacementCtx.newPage();
