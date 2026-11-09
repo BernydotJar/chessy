@@ -18,7 +18,7 @@ fs.writeFileSync(secretPath,SECRET,{mode:0o600});
 const adminSecretPath=path.join(dir,'admin.code');
 const registryPath=path.join(dir,'teacher-registry.json');
 fs.writeFileSync(adminSecretPath,ADMIN,{mode:0o600});
-let browser,child,teacherCtx,studentCtx;
+let browser,child,teacherCtx,studentCtx,replacementCtx;
 async function check(name,fn){
  const start=Date.now();
  try{await fn();report.checks.push({name,status:'PASS',ms:Date.now()-start});console.log('PASS',name);}
@@ -112,6 +112,34 @@ async function smoke(){
    await teacher.getByText('Profesor y alumno conectados',{exact:true}).waitFor({timeout:20000});
    await student.getByText('Profesor y alumno conectados',{exact:true}).waitFor({timeout:20000});
  });
+ await check('Coach can lock learner moves, make legal move and undo for both browsers',async()=>{
+   await teacher.locator('#board-controller').selectOption('teacher');
+   await student.locator('#board-permission').getByText('Solo profesor mueve').waitFor();
+   await student.locator('[data-square=e2]').click();
+   await student.getByText('El profesor controla quién puede mover las piezas.').waitFor();
+   await teacher.locator('[data-square=e2]').click();
+   await teacher.locator('.square.legal[data-square=e4]').waitFor();
+   await teacher.locator('[data-square=e4]').click();
+   await student.waitForFunction(()=>document.querySelector('#move-history')?.textContent?.includes('e4'));
+   await teacher.getByRole('button',{name:'Deshacer jugada'}).click();
+   await student.getByText('Sin jugadas todavía').waitFor();
+   await teacher.locator('#board-controller').selectOption('both');
+   await student.locator('#board-permission').getByText('Ambos pueden mover').waitFor();
+ });
+ await check('Learner drags a legal piece and teacher synchronizes the result',async()=>{
+   await student.locator('[data-square=e2]').dragTo(student.locator('[data-square=e4]'));
+   await teacher.waitForFunction(()=>document.querySelector('#move-history')?.textContent?.includes('e4'));
+   await teacher.getByRole('button',{name:'Deshacer jugada'}).click();
+   await student.getByText('Sin jugadas todavía').waitFor();
+ });
+ await check('Coach imports FEN and resets board without leaving stale exercises',async()=>{
+   const fen='4k3/8/8/8/8/8/4P3/4K3 w - - 0 1';
+   await teacher.locator('#fen-editor').fill(fen);
+   await teacher.getByRole('button',{name:'Cargar FEN'}).click();
+   await student.waitForFunction(()=>document.querySelectorAll('#board .piece-white').length===2);
+   await teacher.getByRole('button',{name:'Tablero libre'}).click();
+   await student.waitForFunction(()=>document.querySelectorAll('#board .piece-white').length===16);
+ });
  await check('Exercise is assigned to learner, wrong move increments attempts without mutating FEN',async()=>{
    await teacher.locator('#puzzle-picker').selectOption('rook-file');
    await teacher.getByRole('button',{name:'Enviar ejercicio'}).click();
@@ -147,6 +175,21 @@ async function smoke(){
      await p.getByText(/sala ya tiene un alumno/).waitFor();
    }finally{await outsider.close();}
  });
+ await check('Coach can rotate invitation without disconnecting existing learner',async()=>{
+   const oldInvite=await teacher.locator('#invite-url').inputValue();
+   await teacher.getByRole('button',{name:'Regenerar enlace'}).click();
+   const newInvite=await teacher.locator('#invite-url').inputValue();
+   assert.notEqual(oldInvite,newInvite);
+   const outsider=await browser.newContext();
+   try{
+     const p=await outsider.newPage();
+     await p.goto(oldInvite);
+     await p.locator('#adult').check();
+     await p.getByRole('button',{name:'Entrar al aula'}).click();
+     await p.getByText('La invitación venció o ya no existe.').waitFor();
+   }finally{await outsider.close();}
+   await teacher.getByText('Profesor y alumno conectados',{exact:true}).waitFor();
+ });
  await check('Teacher and learner media connects through WebRTC with synthetic camera',async()=>{
    await teacher.getByRole('button',{name:'Cámara'}).click();
    await teacher.locator('#toggle-camera[aria-pressed=true]').waitFor();
@@ -180,6 +223,22 @@ async function smoke(){
    assert.ok(widths.scroll<=widths.inner+2,JSON.stringify(widths));
    assert.deepEqual(report.errors,[]);
  });
+ await check('Coach removes the learner and newly invited adult can join',async()=>{
+   teacher.once('dialog',d=>d.accept());
+   await teacher.getByRole('button',{name:'Retirar alumno'}).click();
+   await student.getByText('Acceso al aula revocado.').waitFor({timeout:15000});
+   const denied=await student.evaluate(id=>fetch('/aula/api/room?id='+id).then(x=>x.status),roomId);
+   assert.equal(denied,403);
+   const newInvite=await teacher.locator('#invite-url').inputValue();
+   replacementCtx=await browser.newContext({viewport:{width:390,height:844}});
+   const nextStudent=await replacementCtx.newPage();
+   await nextStudent.goto(newInvite);
+   await nextStudent.locator('#adult').check();
+   await nextStudent.getByRole('button',{name:'Entrar al aula'}).click();
+   await nextStudent.locator('#board').waitFor();
+   await teacher.getByText('Profesor y alumno conectados',{exact:true}).waitFor();
+   student=nextStudent;
+ });
  await check('Teacher closes the room and student access is revoked',async()=>{
    teacher.once('dialog',d=>d.accept());
    await teacher.getByRole('button',{name:'Terminar clase'}).click();
@@ -192,6 +251,7 @@ async function smoke(){
 }
 smoke().catch(e=>{report.failure=String(e);process.exitCode=1;console.error('AULA_DIRECT_ERROR',String(e).slice(0,1100));})
  .finally(async()=>{
+   await replacementCtx?.close().catch(()=>{});
    await studentCtx?.close().catch(()=>{});await teacherCtx?.close().catch(()=>{});
    await browser?.close().catch(()=>{});
    if(child){child.kill('SIGTERM');await Promise.race([once(child,'exit').catch(()=>{}),new Promise(r=>setTimeout(r,2000))]);}
