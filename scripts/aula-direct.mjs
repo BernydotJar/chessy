@@ -88,7 +88,7 @@ export function attachAulaDirect(server,{secretPath,adminSecretPath,registryPath
   const attempts=new Map();
   const wss=new WebSocketServer({noServer:true,maxPayload:16384,perMessageDeflate:false,clientTracking:true});
   const getSession=req=>{
-    for(const name of ['chessy_admin','chessy_teacher','chessy_learner']){
+    for(const name of ['chessy_teacher','chessy_learner','chessy_admin']){
       const id=cookie(req,name),s=sessions.get(id);
       if(s && s.exp>now() && s.cookieName===name){
         if(s.role==='teacher' && !governance.teacherActive(s.teacherId||'legacy')){
@@ -99,6 +99,10 @@ export function attachAulaDirect(server,{secretPath,adminSecretPath,registryPath
       }
     }
     return null;
+  };
+  const getAdminSession=req=>{
+    const s=sessions.get(cookie(req,'chessy_admin'));
+    return s?.role==='admin' && s.exp>now() && governance.enabled ? s : null;
   };
   const authorized=(req,id)=>{
     const room=rooms.get(id),s=getSession(req);
@@ -131,12 +135,12 @@ export function attachAulaDirect(server,{secretPath,adminSecretPath,registryPath
   async function handle(req,res,pathname){
     if(pathname==='/aula/api/health' && req.method==='GET')return send(res,200,{status:'ok',mode:'direct-1to1',backendReady:true,roomsActive:[...rooms.values()].filter(r=>!r.closed&&r.exp>now()).length});
     if(req.method==='GET' && pathname==='/aula/api/admin/me'){
-      const s=getSession(req);
-      return send(res,200,{role:s?.role==='admin'?'admin':null,configured:governance.enabled});
+      const s=getAdminSession(req);
+      return send(res,200,{role:s?'admin':null,configured:governance.enabled});
     }
     if(req.method==='GET' && pathname==='/aula/api/admin/teachers'){
-      const s=getSession(req);
-      return s?.role==='admin'
+      const s=getAdminSession(req);
+      return s
         ? send(res,200,{teachers:governance.listTeachers(),legacyEnabled:governance.legacyEnabled(),
             events:governance.audit()})
         :send(res,403,{error:'administrator-only'});
@@ -168,16 +172,16 @@ export function attachAulaDirect(server,{secretPath,adminSecretPath,registryPath
       return send(res,200,{role:'admin'}, {'Set-Cookie':sessionCookie(s.cookieName,s.id)});
     }
     if(pathname==='/aula/api/admin/teachers/create'){
-      const s=getSession(req);
-      if(s?.role!=='admin')return send(res,403,{error:'administrator-only'});
+      const s=getAdminSession(req);
+      if(!s)return send(res,403,{error:'administrator-only'});
       try{
         const teacher=governance.createTeacher(input.name,input.days??30);
         return send(res,201,{teacher});
       }catch(e){return send(res,400,{error:e.message});}
     }
     if(pathname==='/aula/api/admin/teachers/revoke'){
-      const s=getSession(req);
-      if(s?.role!=='admin')return send(res,403,{error:'administrator-only'});
+      const s=getAdminSession(req);
+      if(!s)return send(res,403,{error:'administrator-only'});
       if(!governance.revokeTeacher(input.teacherId))
         return send(res,404,{error:'teacher-not-found'});
       for(const [sid,session] of sessions)
@@ -189,8 +193,8 @@ export function attachAulaDirect(server,{secretPath,adminSecretPath,registryPath
       return send(res,200,{revoked:true});
     }
     if(pathname==='/aula/api/admin/legacy'){
-      const s=getSession(req);
-      if(s?.role!=='admin')return send(res,403,{error:'administrator-only'});
+      const s=getAdminSession(req);
+      if(!s)return send(res,403,{error:'administrator-only'});
       if(typeof input.enabled!=='boolean')return send(res,400,{error:'invalid-setting'});
       governance.setLegacy(input.enabled);
       if(!input.enabled){
@@ -202,6 +206,11 @@ export function attachAulaDirect(server,{secretPath,adminSecretPath,registryPath
         }
       }
       return send(res,200,{legacyEnabled:governance.legacyEnabled()});
+    }
+    if(pathname==='/aula/api/admin/logout'){
+      const s=getAdminSession(req);
+      if(s)sessions.delete(s.id);
+      return send(res,200,{loggedOut:true},{'Set-Cookie':expireCookie('chessy_admin')});
     }
     if(pathname==='/aula/api/logout'){
       const s=getSession(req);
