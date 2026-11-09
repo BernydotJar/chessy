@@ -81,6 +81,7 @@ async function teacherHome(){
     '<div class="card"><h2>Nueva aula en vivo</h2><form id="create-form"><div class="field"><label for="class-title">Nombre de la clase</label>'+
     '<input type="text" id="class-title" placeholder="Primera clase de ajedrez" value="Clase de ajedrez 1:1" minlength="3" maxlength="70" required></div>'+
     '<button class="btn primary" type="submit">Crear aula e invitar al alumno</button></form><div id="alert" class="hidden" role="alert"></div></div>'+
+    '<section id="teacher-room-list" class="card soft teacher-room-list" hidden></section>'+ 
     '<p class="notice">Las salas duran hasta 2 horas y son temporales. Sin menores, grabaciones ni facturación.</p>'+ 
     '<p class="notice"><a href="/aula/admin.html">Administrar profesores y códigos de acceso</a></p></section>';
   bind('create-form','submit',async ev=>{
@@ -90,6 +91,25 @@ async function teacherHome(){
       role='teacher';sessionStorage.setItem('chessy-aula-room',room.id);await openRoom();
     }catch(e){feedback(e.message);}finally{setBusy(button,false);}
   });
+  // Room ownership is bound to the teacher identity, not to a browser session.
+  try{
+    const data=await request('my-rooms');
+    const active=data.rooms||[],container=document.querySelector('#teacher-room-list');
+    if(container && active.length){
+      container.hidden=false;
+      container.innerHTML='<h2>Mis aulas activas</h2>'+
+        active.map(item=>'<div class="existing-room"><div><strong>'+esc(item.title)+'</strong>'+
+          '<p class="muted small">'+(item.present.student?'Alumno conectado':'Esperando alumno')+'</p></div>'+
+          '<button class="btn secondary" type="button" data-open-room="'+esc(item.id)+'">Reanudar</button></div>').join('');
+      container.querySelectorAll('[data-open-room]').forEach(btn=>btn.addEventListener('click',async()=>{
+        btn.disabled=true;
+        try{
+          room=await request('room?id='+encodeURIComponent(btn.dataset.openRoom));
+          sessionStorage.setItem('chessy-aula-room',room.id);await openRoom();
+        }catch(e){feedback(e.message);btn.disabled=false;}
+      }));
+    }
+  }catch{}
 }
 const htmlRoom=()=>{
   const isTeacher=role==='teacher';
