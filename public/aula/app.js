@@ -161,7 +161,10 @@ function renderBoard(){
     const sq=file+rank, piece=map[sq],dark=((rank+'abcdefgh'.indexOf(file))%2===0);
     const readable=piece?labels[piece.toUpperCase()]+(piece===piece.toUpperCase()?' blanco':' negro'):'vacía';
     const coord=(!flipped?rank===1:rank===8)?file:'';
-    list.push('<button type="button" class="square'+(dark?' dark':'')+(selected===sq?' selected':'')+
+    list.push('<button type="button" draggable="'+(piece?'true':'false')+'" class="square'+(dark?' dark':'')+(selected===sq?' selected':'')+
+      (legalSquares.includes(sq)?' legal':'')+
+      (room.lastMove && (room.lastMove.from===sq||room.lastMove.to===sq)?' last-move':'')+
+      (room.hint && (room.hint.from===sq||room.hint.to===sq)?' hint-square':'')+
       '" data-square="'+sq+'" aria-label="'+sq+': '+readable+'">'+
       (piece?'<span class="'+(piece===piece.toUpperCase()?'piece-white':'piece-black')+'">'+glyph[piece]+'</span>':'')+
       (coord?'<span class="coord" aria-hidden="true">'+coord+'</span>':'')+'</button>');
@@ -170,13 +173,24 @@ function renderBoard(){
 }
 function updateRoom(info){
   const wasPresent=room?.present?.student;
-  room={...room,...info};selected=null;renderBoard();
+  room={...room,...info};selected=null;legalSquares=[];renderBoard();
   const present=room.present||{teacher:false,student:false};
   const pill=document.querySelector('#seat-status');
   if(pill)pill.textContent=present.teacher&&present.student?'Profesor y alumno conectados':
     (role==='teacher'?'Esperando al alumno':'Esperando al profesor');
   const count=document.querySelector('#move-count');
-  if(count)count.textContent=room.history?.length?'Jugadas: '+room.history.join(' · '):'Tablero listo para mover';
+  if(count)count.textContent=room.history?.length?'Jugadas: '+room.history.length:'Tablero listo para mover';
+  const hist=document.querySelector('#move-history');
+  if(hist)hist.textContent=room.history?.length?room.history.join('  ·  '):'Sin jugadas todavía';
+  const turn=document.querySelector('#turn-status');
+  if(turn)turn.textContent=room.fen.split(' ')[1]==='b'?'Turno de las negras':'Turno de las blancas';
+  const permissions=document.querySelector('#board-permission');
+  if(permissions)permissions.textContent=room.control==='teacher'?'Solo profesor mueve':
+    room.control==='student'?'Solo alumno mueve':'Ambos pueden mover';
+  const control=document.querySelector('#board-controller');
+  if(control && control.value!==room.control)control.value=room.control||'both';
+  const undo=document.querySelector('#undo-move');
+  if(undo)undo.disabled=!room.history?.length;
   const ex=document.querySelector('#exercise-status'),badge=document.querySelector('#assignment-badge');
   if(ex&&badge){
     const e=room.exercise;
@@ -197,7 +211,11 @@ function updateRoom(info){
     const label={retry:'Esa no es la jugada del ejercicio. Intenta de nuevo.',
       completed:'¡Ejercicio resuelto! El profesor puede enviar el siguiente.',
       correct:'¡Bien! Continúa el ejercicio.', 'exercise-assigned':'El profesor asignó un ejercicio.',
-      move:'Movimiento sincronizado.', 'board-reset':'El tablero está listo.'};
+      move:'Movimiento sincronizado.', 'board-reset':'El tablero está listo.',
+      'control-updated':'Permisos del tablero actualizados.',
+      'move-undone':'Se deshizo la última jugada.',
+      'position-updated':'Nueva posición cargada para ambos.',
+      'hint-shown':'Pista visible en el tablero.'};
     const status=document.querySelector('#board-feedback');if(status)status.textContent=label[info.feedback]||'';
   }
   if(room.status==='closed'){resetPeer();socket?.close();root.innerHTML='<section class="landing"><h1>La clase ha terminado.</h1><p class="muted">El profesor cerró el aula. Puedes volver a Chessy.</p><a class="btn primary" href="/#/classes">Volver a Chessy</a></section>';return;}
@@ -210,17 +228,75 @@ function sendMove(from,to){
   send({type:'move',from,to,revision:room.revision,
     ...(/[a-h][27]$/.test(from)&&/[a-h][18]$/.test(to)?{promotion:'q'}:{})});
 }
+function mayMove(){
+  if(!room)return false;
+  if(room.exercise)return room.exercise.status==='active' && role==='student';
+  return room.control==='both'||room.control===role;
+}
+function selectSquare(square){
+  if(!mayMove()){feedback('El profesor controla quién puede mover las piezas.');return;}
+  selected=square;legalSquares=[];renderBoard();
+  send({type:'legal',square});
+}
 function clickBoard(ev){
+  if(Date.now()<suppressClickUntil)return;
   const square=ev.target.closest('button[data-square]');if(!square||!room)return;
   const target=square.dataset.square;
-  if(!selected){selected=target;renderBoard();return;}
-  if(selected===target){selected=null;renderBoard();return;}
-  const from=selected;selected=null;renderBoard();sendMove(from,target);
+  if(!selected){selectSquare(target);return;}
+  if(selected===target){selected=null;legalSquares=[];renderBoard();return;}
+  const from=selected;selected=null;legalSquares=[];renderBoard();sendMove(from,target);
+}
+function dragStartBoard(ev){
+  const square=ev.target.closest('button[data-square]');
+  if(!square||!mayMove()){ev.preventDefault();return;}
+  ev.dataTransfer.effectAllowed='move';
+  ev.dataTransfer.setData('text/plain',square.dataset.square);
+  selectSquare(square.dataset.square);
+}
+function dropBoard(ev){
+  ev.preventDefault();
+  const square=ev.target.closest('button[data-square]');
+  const from=ev.dataTransfer?.getData('text/plain');
+  if(!square || !/^[a-h][1-8]$/.test(from||''))return;
+  selected=null;legalSquares=[];renderBoard();
+  suppressClickUntil=Date.now()+300;sendMove(from,square.dataset.square);
+}
+function pointerStartBoard(ev){
+  if(ev.pointerType==='mouse')return;
+  const square=ev.target.closest('button[data-square]');
+  if(!square)return;
+  dragStart={square:square.dataset.square,x:ev.clientX,y:ev.clientY};
+  square.setPointerCapture?.(ev.pointerId);
+}
+function pointerEndBoard(ev){
+  if(!dragStart||ev.pointerType==='mouse')return;
+  const origin=dragStart;dragStart=null;
+  if(Math.hypot(ev.clientX-origin.x,ev.clientY-origin.y)<14)return;
+  const square=document.elementFromPoint(ev.clientX,ev.clientY)?.closest('button[data-square]');
+  if(!square||square.dataset.square===origin.square)return;
+  selected=null;legalSquares=[];renderBoard();
+  suppressClickUntil=Date.now()+400;sendMove(origin.square,square.dataset.square);
 }
 async function openRoom(){
   root.innerHTML=htmlRoom();
   bind('board','click',clickBoard);
+  bind('board','dragstart',dragStartBoard);
+  bind('board','dragover',ev=>ev.preventDefault());
+  bind('board','drop',dropBoard);
+  bind('board','pointerdown',pointerStartBoard);
+  bind('board','pointerup',pointerEndBoard);
   bind('flip-board','click',()=>{flipped=!flipped;renderBoard();});
+  bind('undo-move','click',()=>send({type:'undo'}));
+  bind('board-controller','change',ev=>send({type:'control',value:ev.target.value}));
+  bind('apply-fen','click',()=>{
+    const fen=document.querySelector('#fen-editor')?.value?.trim();
+    if(fen)send({type:'setup',fen});else feedback('Pega una posición FEN válida.');
+  });
+  bind('copy-fen','click',async()=>{
+    try{await navigator.clipboard.writeText(room.fen);feedback('Posición FEN copiada.',true);}
+    catch{feedback('No se pudo copiar la posición.');}
+  });
+  bind('show-hint','click',()=>send({type:'hint'}));
   bind('chat-form','submit',ev=>{
     ev.preventDefault();const input=document.querySelector('#chat-input');
     const text=input.value.trim();if(text)send({type:'chat',text});input.value='';
@@ -229,6 +305,21 @@ async function openRoom(){
     const el=document.querySelector('#invite-url');
     try{await navigator.clipboard.writeText(el.value);feedback('Enlace copiado. Envíalo a tu alumno.',true);}
     catch{el.select();document.execCommand('copy');feedback('Copia el enlace seleccionado.',true);}
+  });
+  bind('rotate-invite','click',async()=>{
+    try{
+      const out=await request('invite/rotate','POST',{roomId:room.id});
+      room.invite=out.invite;document.querySelector('#invite-url').value=new URL(out.invite,location.origin).href;
+      feedback('Enlace regenerado. El anterior ya no permite entrar.',true);
+    }catch(e){feedback(e.message);}
+  });
+  bind('remove-learner','click',async()=>{
+    if(!confirm('¿Retirar al alumno y cancelar su acceso a la clase?'))return;
+    try{
+      const out=await request('learner/remove','POST',{roomId:room.id});
+      room.invite=out.invite;document.querySelector('#invite-url').value=new URL(out.invite,location.origin).href;
+      feedback('Alumno retirado. Puedes compartir el nuevo enlace.',true);
+    }catch(e){feedback(e.message);}
   });
   bind('assign-exercise','click',()=>send({type:'assign',id:document.querySelector('#puzzle-picker').value}));
   bind('next-exercise','click',()=>{
@@ -268,11 +359,22 @@ function connectSocket(){
   ws.addEventListener('message',ev=>{
     let msg;try{msg=JSON.parse(ev.data);}catch{return;}
     if(msg.type==='state')updateRoom(msg);
+    else if(msg.type==='legal' && selected===msg.from){
+      legalSquares=Array.isArray(msg.moves)?msg.moves.filter(x=>/^[a-h][1-8]$/.test(x)):[];
+      renderBoard();
+    }
     else if(msg.type==='signal')void handleSignal(msg);
     else if(msg.type==='error')feedback(msg.message||'No se puede completar la acción');
   });
-  ws.addEventListener('close',()=>{
+  ws.addEventListener('close',ev=>{
     if(socket!==ws)return;
+    if(ev.code===1008){
+      resetPeer();room=null;
+      root.innerHTML='<section class="landing"><h1>Acceso al aula revocado.</h1>'+
+        '<p class="muted">El profesor cerró tu acceso o tu código venció.</p>'+
+        '<a class="btn primary" href="/aula/">Volver al inicio</a></section>';
+      return;
+    }
     setCallStatus('Reconectando al aula…');
     if(reconnectTimer)clearTimeout(reconnectTimer);
     if(room?.status!=='closed')reconnectTimer=setTimeout(connectSocket,1900);
