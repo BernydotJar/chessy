@@ -271,7 +271,8 @@ function dragStartBoard(ev){
   if(!square||!mayMove()){ev.preventDefault();return;}
   ev.dataTransfer.effectAllowed='move';
   ev.dataTransfer.setData('text/plain',square.dataset.square);
-  selectSquare(square.dataset.square);
+  // Never rebuild the source element while HTML5 drag-and-drop owns it.
+  selected=square.dataset.square;legalSquares=[];
 }
 function dropBoard(ev){
   ev.preventDefault();
