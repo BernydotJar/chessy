@@ -80,3 +80,24 @@ select{appearance:auto}.exercise-card select{margin-bottom:9px}
 @media(max-width:760px){.room-layout{grid-template-columns:1fr}.side{grid-template-columns:minmax(0,1fr)}.chessboard{max-width:560px}.site-header{padding:0 16px;height:62px;gap:10px}.private-chip{font-size:10px}.room-layout{gap:12px}main{padding:14px 10px 36px}.board-panel{padding:10px}.square{font-size:clamp(27px,9vw,53px)}.site-footer{padding:10px}}
 @media(max-width:420px){.header-divider,.header-label{display:none}.chessboard{border-width:3px}.square{font-size:clamp(26px,9vw,44px)}.side .card{padding:12px}.videos{gap:6px}.media-buttons .btn{font-size:11px}.board-heading h2{font-size:16px}}
 @media(prefers-reduced-motion:reduce){.spinner{animation:none}.btn{transition:none}}
+
+/* Teaching board: legal move indicators, piece dragging, annotations and move timeline. */
+.chessboard{touch-action:none}
+.square[draggable=true]{cursor:grab}
+.square[draggable=true]:active{cursor:grabbing}
+.square.legal:after{content:"";position:absolute;width:28%;height:28%;border-radius:50%;background:#f0bf43a6;pointer-events:none;box-shadow:0 0 0 3px #1c2a1845}
+.square.legal:has(.piece-white):after,.square.legal:has(.piece-black):after{width:82%;height:82%;background:transparent;border:4px solid #e6bc56a6}
+.square.last-move:not(.selected){box-shadow:inset 0 0 0 4px #e3cb4f6e}
+.square.hint-square:not(.selected){outline:3px dashed #dce978;outline-offset:-6px;z-index:2}
+.move-history{min-height:35px;max-height:72px;overflow:auto;margin-top:11px;padding:9px 12px;border-radius:9px;border:1px solid #50645583;background:#12231b;color:#cbded0;font:500 12px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace}
+.board-tools select{margin-bottom:8px}
+.board-tools .button-row{margin-top:8px}
+.invite-actions{margin-top:10px}
+@media(max-width:520px){.board-heading .button-row{width:100%;justify-content:flex-start}.chessboard{touch-action:none}}
+
+.teacher-room-list{text-align:left;max-width:440px;margin:20px auto}
+.teacher-room-list h2{font-size:18px}
+.existing-room{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid var(--line);padding:13px 0}
+.existing-room strong{font-size:14px}
+.existing-room .muted{margin:3px 0 0}
+.existing-room .btn{flex:0 0 auto}

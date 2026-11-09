@@ -94,6 +94,10 @@ const server = http.createServer((req, res) => {
 });
 
 if (process.env.CHESSY_AULA_TEACHER_SECRET_FILE) {
-  aula = attachAulaDirect(server,{secretPath:process.env.CHESSY_AULA_TEACHER_SECRET_FILE});
+  aula = attachAulaDirect(server,{
+    secretPath:process.env.CHESSY_AULA_TEACHER_SECRET_FILE,
+    adminSecretPath:process.env.CHESSY_AULA_ADMIN_SECRET_FILE,
+    registryPath:process.env.CHESSY_AULA_TEACHERS_FILE
+  });
 }
 server.listen(port, host, () => console.log(`chessy release server http://${host}:${port} root=${root} sha=${gitSha} aula=${Boolean(aula)}`));
