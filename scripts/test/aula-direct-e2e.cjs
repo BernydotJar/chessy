@@ -114,7 +114,7 @@ async function smoke(){
  });
  await check('Coach can lock learner moves, make legal move and undo for both browsers',async()=>{
    await teacher.locator('#board-controller').selectOption('teacher');
-   await student.locator('#board-permission').getByText('Solo profesor mueve').waitFor();
+   await student.getByText('Solo profesor mueve',{exact:true}).waitFor();
    await student.locator('[data-square=e2]').click();
    await student.getByText('El profesor controla quién puede mover las piezas.').waitFor();
    await teacher.locator('[data-square=e2]').click();
@@ -124,7 +124,7 @@ async function smoke(){
    await teacher.getByRole('button',{name:'Deshacer jugada'}).click();
    await student.getByText('Sin jugadas todavía').waitFor();
    await teacher.locator('#board-controller').selectOption('both');
-   await student.locator('#board-permission').getByText('Ambos pueden mover').waitFor();
+   await student.getByText('Ambos pueden mover',{exact:true}).waitFor();
  });
  await check('Learner drags a legal piece and teacher synchronizes the result',async()=>{
    await student.locator('[data-square=e2]').dragTo(student.locator('[data-square=e4]'));
