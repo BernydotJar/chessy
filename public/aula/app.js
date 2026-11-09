@@ -118,7 +118,7 @@ const htmlRoom=()=>{
     (isTeacher?'<section class="card"><h2>Invitar al alumno</h2><p class="muted small">Envía este enlace solo a un adulto. El alumno entra sin crear cuenta.</p>'+
       '<div class="room-invite"><input id="invite-url" type="text" readonly value="'+esc(invite)+'" aria-label="Enlace de invitación del alumno">'+
       '<button id="copy-invite" class="btn secondary" type="button">Copiar</button></div>'+
-      '<div class="button-row" style="margin-top:10px"><button id="rotate-invite" class="btn quiet small" type="button">Regenerar enlace</button>'+
+      '<div class="button-row invite-actions"><button id="rotate-invite" class="btn quiet small" type="button">Regenerar enlace</button>'+
       '<button id="remove-learner" class="btn danger small" type="button">Retirar alumno</button></div>'+
       '<p class="notice">Un profesor + un alumno por sala. Recomendado: Chrome, Edge o Safari actual.</p></section>':'')+
     (isTeacher?'<section class="card board-tools"><h2>Control del tablero</h2>'+
