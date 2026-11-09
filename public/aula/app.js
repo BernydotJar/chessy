@@ -5,6 +5,7 @@
 const root=document.querySelector('#app');
 const apiBase='/aula/api/';
 let role=null, room=null, socket=null, selected=null, flipped=false, puzzles=[], reconnectTimer=null;
+let legalSquares=[],dragStart=null,suppressClickUntil=0;
 let rtc=null, audioSender=null, videoSender=null, remoteStream=null, micTrack=null, cameraTrack=null, screenTrack=null;
 let offerStarted=false, candidates=[];
 let errorTimeout=null;
@@ -34,7 +35,8 @@ function landing(){
     '<div class="card"><h2>Entrar como profesor</h2><p class="muted small">Acceso privado del piloto. Tu código de profesor lo proporciona el administrador de Chessy.</p>'+
     '<form id="teacher-login"><div class="field"><label for="teacher-code">Código de profesor</label><input id="teacher-code" type="password" autocomplete="off" required minlength="16" placeholder="Introduce tu código"></div>'+
     '<button class="btn primary" type="submit">Abrir mi aula</button></form><div id="alert" class="hidden" role="alert"></div></div>'+
-    '<p class="notice">Aula privada para pruebas con adultos. Cámara y micrófono apagados al entrar. No grabamos las llamadas ni almacenamos datos personales.</p></section>';
+    '<p class="notice">Aula privada para pruebas con adultos. Cámara y micrófono apagados al entrar. No grabamos las llamadas ni almacenamos datos personales.</p>'+ 
+    '<p class="notice"><a href="/aula/admin.html">Administrar profesores y códigos de acceso</a></p></section>';
   bind('teacher-login','submit',async ev=>{
     ev.preventDefault();
     const button=ev.currentTarget.querySelector('button');
@@ -79,7 +81,8 @@ async function teacherHome(){
     '<div class="card"><h2>Nueva aula en vivo</h2><form id="create-form"><div class="field"><label for="class-title">Nombre de la clase</label>'+
     '<input type="text" id="class-title" placeholder="Primera clase de ajedrez" value="Clase de ajedrez 1:1" minlength="3" maxlength="70" required></div>'+
     '<button class="btn primary" type="submit">Crear aula e invitar al alumno</button></form><div id="alert" class="hidden" role="alert"></div></div>'+
-    '<p class="notice">Las salas duran hasta 2 horas y son temporales. Sin menores, grabaciones ni facturación.</p></section>';
+    '<p class="notice">Las salas duran hasta 2 horas y son temporales. Sin menores, grabaciones ni facturación.</p>'+ 
+    '<p class="notice"><a href="/aula/admin.html">Administrar profesores y códigos de acceso</a></p></section>';
   bind('create-form','submit',async ev=>{
     ev.preventDefault();const button=ev.currentTarget.querySelector('button');setBusy(button,true);
     try{
@@ -95,9 +98,14 @@ const htmlRoom=()=>{
     '<div class="button-row"><span class="tag" id="seat-status">Esperando…</span>'+
     (isTeacher?'<button id="end-room" class="btn danger" type="button">Terminar clase</button>':'<span class="tag">Alumno</span>')+'</div></div>'+
     '<div class="room-layout"><div class="card board-panel"><div class="board-heading"><div><h2>Tablero interactivo</h2>'+
-    '<span class="muted" id="board-status">Movimientos sincronizados</span></div><button id="flip-board" class="btn quiet small" type="button">Voltear tablero</button></div>'+
+    '<span class="muted" id="board-status">Movimientos sincronizados</span></div><div class="button-row">'+
+    '<button id="flip-board" class="btn quiet small" type="button">Voltear</button>'+
+    (isTeacher?'<button id="undo-move" class="btn secondary small" type="button">Deshacer jugada</button>':'')+
+    '</div></div>'+
     '<div id="board" class="chessboard" role="group" aria-label="Tablero de ajedrez sincronizado"></div>'+
     '<div class="board-meta"><span id="move-count">Posición inicial</span><span id="exercise-status" class="text-gold">Tablero libre</span></div>'+
+    '<div class="board-meta"><span id="turn-status">Turno de las blancas</span><span id="board-permission">Ambos pueden mover</span></div>'+
+    '<div id="move-history" class="move-history" role="log" aria-label="Historial de jugadas">Sin jugadas todavía</div>'+
     '<p id="board-feedback" class="muted small" style="margin:12px 0 0" aria-live="polite">Haz clic en una pieza y después en la casilla de destino.</p></div>'+
     '<aside class="side"><section class="card media-card"><h2>Videoclase 1 a 1</h2><div class="videos">'+
     '<div id="local-wrap" class="video-wrap"><span class="fallback">♙</span><video id="local-video" autoplay muted playsinline></video><span class="video-label">Tú</span></div>'+
@@ -110,12 +118,24 @@ const htmlRoom=()=>{
     (isTeacher?'<section class="card"><h2>Invitar al alumno</h2><p class="muted small">Envía este enlace solo a un adulto. El alumno entra sin crear cuenta.</p>'+
       '<div class="room-invite"><input id="invite-url" type="text" readonly value="'+esc(invite)+'" aria-label="Enlace de invitación del alumno">'+
       '<button id="copy-invite" class="btn secondary" type="button">Copiar</button></div>'+
+      '<div class="button-row" style="margin-top:10px"><button id="rotate-invite" class="btn quiet small" type="button">Regenerar enlace</button>'+
+      '<button id="remove-learner" class="btn danger small" type="button">Retirar alumno</button></div>'+
       '<p class="notice">Un profesor + un alumno por sala. Recomendado: Chrome, Edge o Safari actual.</p></section>':'')+
+    (isTeacher?'<section class="card board-tools"><h2>Control del tablero</h2>'+
+      '<label for="board-controller">Quién puede mover las piezas</label>'+
+      '<select id="board-controller"><option value="both">Profesor y alumno</option>'+
+      '<option value="teacher">Solo profesor</option><option value="student">Solo alumno</option></select>'+
+      '<div class="field"><label for="fen-editor">Cargar posición (FEN)</label>'+
+      '<input id="fen-editor" type="text" placeholder="Pega una posición FEN" maxlength="110" spellcheck="false"></div>'+
+      '<div class="button-row"><button id="apply-fen" class="btn secondary" type="button">Cargar FEN</button>'+
+      '<button id="copy-fen" class="btn quiet" type="button">Copiar FEN actual</button></div>'+
+      '<p class="notice">Arrastra las piezas o pulsa la casilla de origen y después la de destino. Las jugadas ilegales se rechazan automáticamente.</p></section>':'')+
     '<section class="card exercise-card"><h2>Ejercicios con el profesor</h2>'+
     (isTeacher?'<label for="puzzle-picker">Elegir ejercicio</label><select id="puzzle-picker" aria-label="Elegir ejercicio"><option value="rook-file">Torre y columnas</option></select>'+
       '<div class="button-row"><button id="assign-exercise" class="btn primary" type="button">Enviar ejercicio</button>'+
       '<button id="next-exercise" class="btn secondary" type="button">Siguiente</button>'+
-      '<button id="reset-board" class="btn quiet" type="button">Tablero libre</button></div>':
+      '<button id="reset-board" class="btn quiet" type="button">Tablero libre</button>'+
+      '<button id="show-hint" class="btn secondary" type="button">Mostrar pista</button></div>':
       '<p class="muted small">Tu profesor puede asignarte ejercicios. Mueve las piezas para resolverlos.</p>')+
     '<div id="assignment-badge" class="assignment-badge">Sin ejercicio asignado.</div></section>'+
     '<section class="card"><h2>Mensajes rápidos</h2><div id="messages" class="chat-messages" role="log" aria-label="Mensajes del aula"></div>'+
