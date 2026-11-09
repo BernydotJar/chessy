@@ -178,6 +178,7 @@ async function smoke(){
  await check('Coach can rotate invitation without disconnecting existing learner',async()=>{
    const oldInvite=await teacher.locator('#invite-url').inputValue();
    await teacher.getByRole('button',{name:'Regenerar enlace'}).click();
+   await teacher.waitForFunction(old=>document.querySelector('#invite-url')?.value!==old,oldInvite);
    const newInvite=await teacher.locator('#invite-url').inputValue();
    assert.notEqual(oldInvite,newInvite);
    const outsider=await browser.newContext();
