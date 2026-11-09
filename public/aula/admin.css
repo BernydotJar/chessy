@@ -1,0 +1,18 @@
+.admin-main{max-width:1160px}.admin-login{max-width:460px;margin:8vh auto;text-align:left}
+.admin-grid{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:16px;align-items:start}
+.admin-wide{grid-column:1/-1}.admin-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.admin-heading h1{margin:0}.admin-grid .card{padding:21px;min-width:0}
+.admin-form{display:grid;gap:12px}.admin-form .btn{width:max-content}.admin-form .field{margin:0}
+.admin-table{width:100%;border-collapse:collapse;font-size:13px}
+.admin-table th,.admin-table td{text-align:left;border-bottom:1px solid #526c5c45;padding:12px 8px;vertical-align:middle}
+.admin-table th{color:var(--muted);font-weight:550}.admin-table td:first-child{font-weight:650}
+.admin-table .btn{font-size:11px;min-height:32px;padding:5px 9px}
+.admin-code{font:700 14px ui-monospace,Menlo,Consolas,monospace;overflow-wrap:anywhere;background:#0d2018;border:1px solid #7b9e794d;padding:12px;border-radius:8px;margin:12px 0}
+.admin-code-card{border:1px solid #dcb665a8;background:#c5a14818;border-radius:10px;padding:15px;margin:17px 0}
+.admin-code-card strong{color:var(--gold)}
+.admin-audit{max-height:300px;overflow-y:auto;list-style:none;padding:0;margin:0}
+.admin-audit li{padding:9px 3px;border-bottom:1px solid #526c5c45;font-size:12px;display:flex;justify-content:space-between;gap:12px}
+.admin-legacy{display:flex;align-items:center;gap:13px;flex-wrap:wrap}
+.admin-legacy p{flex:1;margin:0;min-width:180px}
+.status-active{color:#9ad3ac}.status-revoked,.status-expired{color:#efa395}
+@media(max-width:840px){.admin-grid{grid-template-columns:1fr}.admin-wide{grid-column:auto}.admin-table{display:block;overflow-x:auto;white-space:nowrap}}
