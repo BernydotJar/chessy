@@ -84,11 +84,25 @@ jobs:
         run: npm run test:analytics
       - name: Progress sync two-device and offline lifecycle
         run: npm run test:progress:ui-live
+      - name: Classroom board unit and two-peer WebSocket authority gates
+        run: npm run test:aula:free-board
       - name: Build and test free 1-to-1 adult classroom without Blaze or LiveKit credentials
         run: |
           VITE_CHESSY_DIRECT_AULA_ENABLED=true VITE_CHESSY_PRIVATE_ROOMS_ENABLED=false VITE_CHESSY_LIVEKIT_ENABLED=false npm run build
           npm run build:server
           CHESSY_AULA_SERVER_SCRIPT=progress/runtime/aula-server.mjs npm run test:aula:direct
+      - name: Classroom free-board two-browser visual acceptance (desktop and mobile)
+        run: npm run test:aula:free-board:browser
+      - name: Archive verified immutable release bundle
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: chessy-aula-release-${{ github.sha }}
+          path: |
+            dist/
+            progress/runtime/aula-server.mjs
+          if-no-files-found: error
+          retention-days: 14
       - name: Preserve verification evidence
         if: always()
         uses: actions/upload-artifact@v4

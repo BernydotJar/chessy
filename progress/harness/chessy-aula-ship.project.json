@@ -1,0 +1,133 @@
+{
+  "schema_version": "graph-harness.project.v1",
+  "project_id": "CHESSY-AULA-SHIP-20261110",
+  "mode": "SHIP",
+  "gate_definitions": [
+    {
+      "id": "G-SECURITY",
+      "required_evidence_kinds": [
+        "audit"
+      ],
+      "blocking": true
+    },
+    {
+      "id": "G-UNIT",
+      "required_evidence_kinds": [
+        "unit"
+      ],
+      "blocking": true
+    },
+    {
+      "id": "G-BROWSER",
+      "required_evidence_kinds": [
+        "browser"
+      ],
+      "blocking": true
+    },
+    {
+      "id": "G-CI",
+      "required_evidence_kinds": [
+        "ci"
+      ],
+      "blocking": true
+    },
+    {
+      "id": "G-PRODUCTION",
+      "required_evidence_kinds": [
+        "production"
+      ],
+      "blocking": true
+    },
+    {
+      "id": "G-ROLLBACK",
+      "required_evidence_kinds": [
+        "rollback"
+      ],
+      "blocking": true
+    }
+  ],
+  "nodes": [
+    {
+      "id": "SEC",
+      "kind": "repair",
+      "title": "Patch affected Functions dependency with zero vulnerabilities",
+      "status": "spec_ready",
+      "depends_on": [],
+      "capability": "security",
+      "gates": {
+        "review": [
+          "G-SECURITY"
+        ],
+        "done": [
+          "G-SECURITY"
+        ]
+      },
+      "allowed_paths": [
+        "functions/package.json",
+        "functions/package-lock.json"
+      ],
+      "metadata": {
+        "source": "GitHub CI rooms-safety audit",
+        "scope": "adult aula only; do not relax minor gates"
+      }
+    },
+    {
+      "id": "QA",
+      "kind": "verification",
+      "title": "Run board and full classroom E2E across two isolated browsers",
+      "status": "spec_ready",
+      "depends_on": [],
+      "capability": "qa",
+      "gates": {
+        "review": [
+          "G-UNIT",
+          "G-BROWSER",
+          "G-CI"
+        ],
+        "done": [
+          "G-UNIT",
+          "G-BROWSER",
+          "G-CI"
+        ]
+      },
+      "allowed_paths": [
+        "scripts/test/**",
+        ".github/workflows/**"
+      ],
+      "metadata": {
+        "source": "Graph Harness SHIP",
+        "mobile": "390px",
+        "safe_session": "synthetic adult-only"
+      }
+    },
+    {
+      "id": "RELEASE",
+      "kind": "release",
+      "title": "Cut an immutable Chessy release and verify HTTPS without collateral restarts",
+      "status": "spec_ready",
+      "depends_on": [
+        "SEC",
+        "QA"
+      ],
+      "capability": "deploy",
+      "gates": {
+        "review": [
+          "G-ROLLBACK"
+        ],
+        "done": [
+          "G-ROLLBACK",
+          "G-PRODUCTION"
+        ]
+      },
+      "allowed_paths": [
+        "progress/runtime/releases/**",
+        "progress/evidence/release/**"
+      ],
+      "metadata": {
+        "target": "https://chessy.textilesdemedellin.com/aula/",
+        "constraint": "only restart chessy when zero active rooms; preserve secrets",
+        "approved_by": "user 2026-11-10"
+      }
+    }
+  ]
+}
