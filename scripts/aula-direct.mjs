@@ -7,6 +7,7 @@ import fs from 'node:fs';
 import crypto from 'node:crypto';
 import { WebSocketServer, WebSocket } from 'ws';
 import { Chess } from 'chess.js';
+import { beginPositionEditor, changePositionDraft, validateEditedPosition } from './aula-board-editor.mjs';
 import { createAulaGovernance } from './aula-governance.mjs';
 import bank from '../functions/classroom-exercise-bank.json' with { type: 'json' };
 
@@ -69,6 +70,9 @@ function status(room){
   return {
     id:room.id,title:room.title,fen:room.fen,revision:room.revision,
     control:room.control||'both',lastMove:room.lastMove||null,hint:room.hint||null,
+    boardMode:room.boardMode||'play',editor:room.editor||null,
+    annotations:room.annotations||{arrows:[],squares:[]},
+    undoCount:room.past?.length||0,redoCount:room.future?.length||0,
     status:room.closed?'closed':'active',exercise:room.exercise ?
       {id:room.exercise.id,status:room.exercise.status,attempts:room.exercise.attempts,ply:room.exercise.ply} : null,
     history:room.history.slice(-30),chat:room.chat.slice(-12),
@@ -119,11 +123,30 @@ export function attachAulaDirect(server,{secretPath,adminSecretPath,registryPath
       sendTo(room.sockets[role],{type:'state',...status(room),role,...event});
     }
   };
+  const capture=rm=>({
+    fen:rm.fen,history:rm.history.slice(),
+    exercise:rm.exercise?{...rm.exercise,solution:rm.exercise.solution.slice()}:null,
+    control:rm.control,lastMove:rm.lastMove,hint:rm.hint,
+    boardMode:rm.boardMode,editor:rm.editor?{...rm.editor}:null,
+    annotations:{arrows:rm.annotations.arrows.map(x=>({...x})),squares:[...rm.annotations.squares]}
+  });
+  const restore=(rm,frame)=>{
+    for(const key of Object.keys(frame))rm[key]=frame[key];
+  };
   const snapshot=rm=>{
-    rm.past.push({fen:rm.fen,history:rm.history.slice(),exercise:rm.exercise?
-      {...rm.exercise,solution:rm.exercise.solution.slice()}:null,
-      control:rm.control,lastMove:rm.lastMove,hint:rm.hint});
+    rm.past.push(capture(rm));
     if(rm.past.length>120)rm.past.shift();
+    rm.future=[];
+  };
+  const allowedToMove=(rm,role)=>{
+    if(rm.boardMode==='setup')return false;
+    if(rm.exercise)return rm.exercise.status==='active' && role==='student';
+    const turn=rm.fen.split(' ')[1];
+    if(rm.control==='both')return true;
+    if(rm.control==='teacher'||rm.control==='student')return role===rm.control;
+    if(rm.control==='student-white')return role===(turn==='w'?'student':'teacher');
+    if(rm.control==='student-black')return role===(turn==='b'?'student':'teacher');
+    return false;
   };
   const sessionCookie=(name,value)=>name+'='+value+'; Path=/aula; Max-Age=28800; HttpOnly; Secure; SameSite=Lax';
   const expireCookie=name=>name+'=; Path=/aula; Max-Age=0; HttpOnly; Secure; SameSite=Lax';
@@ -252,7 +275,8 @@ export function attachAulaDirect(server,{secretPath,adminSecretPath,registryPath
       const room={id,title,owner:s.id,teacherId:s.teacherId||'legacy',studentSession:null,inviteHash:hash(inviteToken),
         invite:'',exp:now()+ROOM_TTL,closed:false,
         fen:new Chess().fen(),revision:0,exercise:null,history:[],chat:[],sockets:{teacher:null,student:null},
-        control:'both',past:[],lastMove:null,hint:null};
+        control:'both',past:[],future:[],lastMove:null,hint:null,
+        boardMode:'play',editor:null,annotations:{arrows:[],squares:[]}};
       room.invite='/aula/#/join/'+id+'/'+inviteToken;
       rooms.set(id,room);
       governance.addAudit('room-created',{roomId:id,teacherId:room.teacherId});
@@ -352,19 +376,21 @@ export function attachAulaDirect(server,{secretPath,adminSecretPath,registryPath
       if(data.type==='assign'){
         if(role!=='teacher' || typeof data.id!=='string' || !puzzles.has(data.id))return sendTo(ws,{type:'error',message:'Acceso denegado'});
         const p=puzzles.get(data.id);
-        room.exercise={id:p.id,solution:p.solution,attempts:0,ply:0,status:'active'};
-        room.fen=p.fen;room.history=[];room.past=[];
+        snapshot(room);room.exercise={id:p.id,solution:p.solution,attempts:0,ply:0,status:'active'};
+        room.fen=p.fen;room.history=[];
+        room.boardMode='play';room.editor=null;room.annotations={arrows:[],squares:[]};
         room.lastMove=null;room.hint=null;room.control='student';room.revision++;
         broadcast(room,{feedback:'exercise-assigned'});return;
       }
       if(data.type==='reset'){
         if(role!=='teacher')return sendTo(ws,{type:'error',message:'Solo el profesor puede reiniciar'});
-        room.exercise=null;room.fen=new Chess().fen();room.history=[];
-        room.past=[];room.lastMove=null;room.hint=null;room.control='both';room.revision++;
+        snapshot(room);room.exercise=null;room.fen=new Chess().fen();room.history=[];
+        room.boardMode='play';room.editor=null;room.annotations={arrows:[],squares:[]};
+        room.lastMove=null;room.hint=null;room.control='both';room.revision++;
         broadcast(room,{feedback:'board-reset'});return;
       }
       if(data.type==='control'){
-        if(role!=='teacher' || !['teacher','student','both'].includes(data.value))
+        if(role!=='teacher' || !['teacher','student','both','student-white','student-black'].includes(data.value))
           return sendTo(ws,{type:'error',message:'Solo el profesor puede asignar turnos'});
         room.control=data.value;room.revision++;
         broadcast(room,{feedback:'control-updated'});return;
@@ -372,18 +398,75 @@ export function attachAulaDirect(server,{secretPath,adminSecretPath,registryPath
       if(data.type==='undo'){
         if(role!=='teacher')return sendTo(ws,{type:'error',message:'Solo el profesor puede deshacer'});
         const previous=room.past.pop();
-        if(!previous)return sendTo(ws,{type:'error',message:'No hay jugadas para deshacer'});
-        room.fen=previous.fen;room.history=previous.history;
-        room.exercise=previous.exercise;room.control=previous.control;
-        room.lastMove=previous.lastMove;room.hint=previous.hint;room.revision++;
+        if(!previous)return sendTo(ws,{type:'error',message:'No hay cambios para deshacer'});
+        room.future.push(capture(room));restore(room,previous);room.revision++;
         broadcast(room,{feedback:'move-undone'});return;
+      }
+      if(data.type==='redo'){
+        if(role!=='teacher')return sendTo(ws,{type:'error',message:'Solo el profesor puede rehacer'});
+        const next=room.future.pop();
+        if(!next)return sendTo(ws,{type:'error',message:'No hay cambios para rehacer'});
+        room.past.push(capture(room));restore(room,next);room.revision++;
+        broadcast(room,{feedback:'move-redone'});return;
+      }
+      if(data.type==='mode'){
+        if(role!=='teacher'||!['setup','play'].includes(data.value))
+          return sendTo(ws,{type:'error',message:'Solo el profesor puede editar'});
+        if(!Number.isSafeInteger(data.revision)||data.revision!==room.revision)
+          return sendTo(ws,{type:'error',message:'La posición cambió. Actualiza el tablero.'});
+        if(data.value===room.boardMode)return;
+        if(data.value==='setup'){
+          snapshot(room);room.editor=beginPositionEditor(room.fen);room.boardMode='setup';
+          room.exercise=null;room.lastMove=null;room.hint=null;room.control='teacher';
+          room.revision++;broadcast(room,{feedback:'editor-started'});return;
+        }
+        try{
+          const fen=validateEditedPosition(room.editor);
+          snapshot(room);room.fen=fen;room.history=[];room.editor=null;room.boardMode='play';
+          room.lastMove=null;room.hint=null;room.control='both';
+          room.revision++;broadcast(room,{feedback:'editor-finished'});
+        }catch{return sendTo(ws,{type:'error',message:'La posición requiere un rey de cada color y una FEN válida.'});}
+        return;
+      }
+      if(data.type==='edit'){
+        if(role!=='teacher'||room.boardMode!=='setup')
+          return sendTo(ws,{type:'error',message:'Solo el profesor puede editar'});
+        if(!Number.isSafeInteger(data.revision)||data.revision!==room.revision)
+          return sendTo(ws,{type:'error',message:'La posición cambió. Actualiza el tablero.'});
+        try{
+          const next=changePositionDraft(room.editor,data);
+          if(JSON.stringify(next)===JSON.stringify(room.editor))return;
+          snapshot(room);room.editor=next;room.revision++;
+          broadcast(room,{feedback:'editor-updated'});
+        }catch{return sendTo(ws,{type:'error',message:'No se pudo editar esa casilla.'});}
+        return;
+      }
+      if(data.type==='annotate'){
+        if(role!=='teacher')return sendTo(ws,{type:'error',message:'Solo el profesor puede señalar casillas'});
+        if(!Number.isSafeInteger(data.revision)||data.revision!==room.revision)
+          return sendTo(ws,{type:'error',message:'La posición cambió. Actualiza el tablero.'});
+        if(data.action==='clear'){
+          room.annotations={arrows:[],squares:[]};
+        }else if(data.action==='square' && validSquare(data.square)){
+          const squares=[...room.annotations.squares],idx=squares.indexOf(data.square);
+          if(idx>=0)squares.splice(idx,1);else if(squares.length<16)squares.push(data.square);
+          room.annotations={...room.annotations,squares};
+        }else if(data.action==='arrow' && validSquare(data.from) && validSquare(data.to)&&data.from!==data.to){
+          const arrows=[...room.annotations.arrows],
+            idx=arrows.findIndex(x=>x.from===data.from&&x.to===data.to);
+          if(idx>=0)arrows.splice(idx,1);
+          else if(arrows.length<16)arrows.push({from:data.from,to:data.to});
+          room.annotations={...room.annotations,arrows};
+        }else return sendTo(ws,{type:'error',message:'Anotación inválida'});
+        broadcast(room,{feedback:'annotation-updated'});return;
       }
       if(data.type==='setup'){
         if(role!=='teacher' || typeof data.fen!=='string' || data.fen.length>110)
           return sendTo(ws,{type:'error',message:'Solo el profesor puede cambiar la posición'});
         try{
           const game=new Chess(data.fen.trim());
-          room.fen=game.fen();room.exercise=null;room.history=[];room.past=[];
+          snapshot(room);room.fen=game.fen();room.exercise=null;room.history=[];
+          room.boardMode='play';room.editor=null;room.annotations={arrows:[],squares:[]};
           room.control='both';room.lastMove=null;room.hint=null;room.revision++;
           broadcast(room,{feedback:'position-updated'});
         }catch{sendTo(ws,{type:'error',message:'FEN inválido. Revisa la posición.'});}
@@ -399,8 +482,7 @@ export function attachAulaDirect(server,{secretPath,adminSecretPath,registryPath
       }
       if(data.type==='legal'){
         if(!validSquare(data.square))return;
-        const allowed=(!room.exercise || room.exercise.status==='active') &&
-          (room.exercise ? role==='student' : room.control==='both'||room.control===role);
+        const allowed=allowedToMove(room,role);
         let moves=[];
         if(allowed){
           try{moves=new Chess(room.fen).moves({square:data.square,verbose:true}).map(m=>m.to);}
@@ -412,7 +494,7 @@ export function attachAulaDirect(server,{secretPath,adminSecretPath,registryPath
         if(!validSquare(data.from)||!validSquare(data.to)||
           !Number.isSafeInteger(data.revision) || data.revision!==room.revision)
           return sendTo(ws,{type:'error',message:'La posición cambió. Actualiza el tablero.'});
-        if(!room.exercise && room.control!=='both' && room.control!==role)
+        if(!allowedToMove(room,role))
           return sendTo(ws,{type:'error',message:'El profesor bloqueó tus movimientos'});
         const game=new Chess(room.fen),promo=['q','r','b','n'].includes(data.promotion)?data.promotion:'q';
         if(room.exercise){

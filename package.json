@@ -28,7 +28,9 @@
     "test:live": "node scripts/livekit-browser-e2e.cjs",
     "test:pilot:gateway": "node --test scripts/test/dev-pilot-gateway.test.mjs",
     "build:server": "node scripts/build-aula-server.mjs",
-    "test:aula:direct": "node scripts/test/aula-direct-e2e.cjs"
+    "test:aula:direct": "node scripts/test/aula-direct-e2e.cjs",
+    "test:aula:free-board": "node --test scripts/test/aula-board-editor.test.mjs scripts/test/aula-free-board-ws.test.mjs",
+    "test:aula:free-board:browser": "node scripts/test/aula-free-board-browser.cjs"
   },
   "dependencies": {
     "chess.js": "^1.0.0-beta.6",
