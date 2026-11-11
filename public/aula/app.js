@@ -5,7 +5,7 @@
 const root=document.querySelector('#app');
 const apiBase='/aula/api/';
 let role=null, room=null, socket=null, selected=null, flipped=false, puzzles=[], reconnectTimer=null;
-let legalSquares=[],dragStart=null,recentlyDropped=null;
+let legalSquares=[],dragStart=null,recentlyDropped=null,editorTool=null,marking=false,markSource=null;
 let rtc=null, audioSender=null, videoSender=null, remoteStream=null, micTrack=null, cameraTrack=null, screenTrack=null;
 let offerStarted=false, candidates=[];
 let errorTimeout=null;
@@ -120,9 +120,19 @@ const htmlRoom=()=>{
     '<div class="room-layout"><div class="card board-panel"><div class="board-heading"><div><h2>Tablero interactivo</h2>'+
     '<span class="muted" id="board-status">Movimientos sincronizados</span></div><div class="button-row">'+
     '<button id="flip-board" class="btn quiet small" type="button">Voltear</button>'+
-    (isTeacher?'<button id="undo-move" class="btn secondary small" type="button">Deshacer jugada</button>':'')+
+    (isTeacher?'<button id="undo-move" class="btn secondary small" type="button">Deshacer</button>'+
+      '<button id="redo-move" class="btn secondary small" type="button">Rehacer</button>':'')+
     '</div></div>'+
     '<div id="board" class="chessboard" role="group" aria-label="Tablero de ajedrez sincronizado"></div>'+
+    (isTeacher?'<div id="editor-panel" class="editor-panel" hidden>'+
+      '<p class="muted small">Preparar posición: elige una pieza y toca una casilla; para moverla, toca origen y destino. Los movimientos son libres mientras editas.</p>'+
+      '<div id="piece-palette" class="piece-palette" role="group" aria-label="Piezas para preparar posición">'+
+      Object.entries(glyph).map(([piece,symbol])=>'<button type="button" class="palette-piece" data-piece="'+piece+'" aria-label="'+
+        esc(labels[piece.toUpperCase()]+' '+(piece===piece.toUpperCase()?'blanco':'negro'))+'">'+symbol+'</button>').join('')+
+      '<button type="button" class="palette-piece palette-remove" data-piece="remove" aria-label="Borrar pieza">×</button></div>'+
+      '<div class="button-row editor-actions"><button id="clear-position" class="btn quiet small" type="button">Vaciar tablero</button>'+
+      '<label for="board-turn" class="turn-label">Juegan <select id="board-turn"><option value="w">Blancas</option><option value="b">Negras</option></select></label></div>'+
+      '<p id="editor-help" role="status" class="muted small">Al terminar debe haber un rey blanco y uno negro.</p></div>':'')+
     '<div class="board-meta"><span id="move-count">Posición inicial</span><span id="exercise-status" class="text-gold">Tablero libre</span></div>'+
     '<div class="board-meta"><span id="turn-status">Turno de las blancas</span><span id="board-permission">Ambos pueden mover</span></div>'+
     '<div id="move-history" class="move-history" role="log" aria-label="Historial de jugadas">Sin jugadas todavía</div>'+
@@ -142,9 +152,15 @@ const htmlRoom=()=>{
       '<button id="remove-learner" class="btn danger small" type="button">Retirar alumno</button></div>'+
       '<p class="notice">Un profesor + un alumno por sala. Recomendado: Chrome, Edge o Safari actual.</p></section>':'')+
     (isTeacher?'<section class="card board-tools"><h2>Control del tablero</h2>'+
+      '<div class="button-row teacher-workbench">'+
+      '<button id="toggle-editor" class="btn primary" type="button">Tablero libre · editar</button>'+
+      '<button id="annotation-mode" class="btn secondary" type="button" aria-pressed="false">Dibujar flechas</button>'+
+      '<button id="clear-annotations" class="btn quiet" type="button">Borrar marcas</button></div>'+
       '<label for="board-controller">Quién puede mover las piezas</label>'+
       '<select id="board-controller"><option value="both">Profesor y alumno</option>'+
-      '<option value="teacher">Solo profesor</option><option value="student">Solo alumno</option></select>'+
+      '<option value="teacher">Solo profesor</option><option value="student">Solo alumno</option>'+
+      '<option value="student-white">Alumno blancas · profesor negras</option>'+
+      '<option value="student-black">Alumno negras · profesor blancas</option></select>'+
       '<div class="field"><label for="fen-editor">Cargar posición (FEN)</label>'+
       '<input id="fen-editor" type="text" placeholder="Pega una posición FEN" maxlength="110" spellcheck="false"></div>'+
       '<div class="button-row"><button id="apply-fen" class="btn secondary" type="button">Cargar FEN</button>'+
@@ -154,7 +170,7 @@ const htmlRoom=()=>{
     (isTeacher?'<label for="puzzle-picker">Elegir ejercicio</label><select id="puzzle-picker" aria-label="Elegir ejercicio"><option value="rook-file">Torre y columnas</option></select>'+
       '<div class="button-row"><button id="assign-exercise" class="btn primary" type="button">Enviar ejercicio</button>'+
       '<button id="next-exercise" class="btn secondary" type="button">Siguiente</button>'+
-      '<button id="reset-board" class="btn quiet" type="button">Tablero libre</button>'+
+      '<button id="reset-board" class="btn quiet" type="button">Nueva partida</button>'+
       '<button id="show-hint" class="btn secondary" type="button">Mostrar pista</button></div>':
       '<p class="muted small">Tu profesor puede asignarte ejercicios. Mueve las piezas para resolverlos.</p>')+
     '<div id="assignment-badge" class="assignment-badge">Sin ejercicio asignado.</div></section>'+
@@ -166,7 +182,7 @@ const htmlRoom=()=>{
 function renderBoard(){
   if(!room)return;
   const board=document.querySelector('#board');if(!board)return;
-  const position=room.fen.split(' ')[0], ranks=position.split('/'),map={};
+  const position=room.boardMode==='setup'&&room.editor?room.editor.placement:room.fen.split(' ')[0], ranks=position.split('/'),map={};
   for(let i=0;i<8;i++){
     let file=0;
     for(const ch of ranks[i]){
@@ -178,22 +194,64 @@ function renderBoard(){
   const cols=flipped?[...'hgfedcba']:[...'abcdefgh'];
   const list=[];
   for(const rank of rows)for(const [colIndex,file]of cols.entries()){
-    const sq=file+rank, piece=map[sq],dark=((rank+'abcdefgh'.indexOf(file))%2===0);
+    const sq=file+rank, piece=map[sq],dark=((rank+'abcdefgh'.indexOf(file))%2===1);
     const readable=piece?labels[piece.toUpperCase()]+(piece===piece.toUpperCase()?' blanco':' negro'):'vacía';
     const coord=(!flipped?rank===1:rank===8)?file:'';
     list.push('<button type="button" draggable="'+(piece?'true':'false')+'" class="square'+(dark?' dark':'')+(selected===sq?' selected':'')+
       (legalSquares.includes(sq)?' legal':'')+
       (room.lastMove && (room.lastMove.from===sq||room.lastMove.to===sq)?' last-move':'')+
       (room.hint && (room.hint.from===sq||room.hint.to===sq)?' hint-square':'')+
-      '" data-square="'+sq+'" aria-label="'+sq+': '+readable+'">'+
+      '" data-square="'+sq+'" data-piece="'+(piece||'')+'" aria-label="'+sq+': '+readable+'">'+
       (piece?'<span class="'+(piece===piece.toUpperCase()?'piece-white':'piece-black')+'">'+glyph[piece]+'</span>':'')+
       (coord?'<span class="coord" aria-hidden="true">'+coord+'</span>':'')+'</button>');
   }
   board.innerHTML=list.join('');
+  renderAnnotations();
+}
+function renderAnnotations(){
+  const board=document.querySelector('#board');
+  if(!board)return;
+  let layer=board.querySelector('.annotation-layer');
+  if(!layer){
+    layer=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    layer.setAttribute('class','annotation-layer');
+    layer.setAttribute('viewBox','0 0 800 800');
+    layer.setAttribute('aria-hidden','true');
+    board.appendChild(layer);
+  }
+  const center=square=>{
+    if(!/^[a-h][1-8]$/.test(square))return null;
+    const col='abcdefgh'.indexOf(square[0]),rank=Number(square[1]);
+    return [(flipped?7-col:col)*100+50,(flipped?rank-1:8-rank)*100+50];
+  };
+  const squareMarks=(room?.annotations?.squares||[]).flatMap(square=>{
+    const xy=center(square);return xy?['<circle cx="'+xy[0]+'" cy="'+xy[1]+
+      '" r="39" fill="#f5d55b" fill-opacity=".23" stroke="#f2cd54" stroke-width="7"/>']:[];
+  });
+  const arrows=(room?.annotations?.arrows||[]).flatMap(({from,to})=>{
+    const a=center(from),b=center(to);
+    if(!a||!b)return [];
+    const dx=b[0]-a[0],dy=b[1]-a[1],length=Math.hypot(dx,dy);
+    if(length<1)return [];
+    const x=b[0]-dx/length*28,y=b[1]-dy/length*28;
+    return ['<line x1="'+a[0]+'" y1="'+a[1]+'" x2="'+x+'" y2="'+y+
+      '" stroke="#efb947" stroke-opacity=".8" stroke-width="16" stroke-linecap="round" marker-end="url(#chessy-arrow)"/>'];
+  });
+  layer.innerHTML='<defs><marker id="chessy-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#efb947"/></marker></defs>'+
+    [...squareMarks,...arrows].join('');
 }
 function updateRoom(info){
   const wasPresent=room?.present?.student;
-  room={...room,...info};selected=null;legalSquares=[];renderBoard();
+  const previous=room;
+  const changed=!document.querySelector('#board .square')||
+    previous?.revision!==info.revision||
+    previous?.fen!==info.fen||
+    previous?.boardMode!==info.boardMode||
+    previous?.editor?.placement!==info.editor?.placement||
+    previous?.hint?.from!==info.hint?.from||previous?.hint?.to!==info.hint?.to;
+  room={...room,...info};
+  if(changed){selected=null;legalSquares=[];markSource=null;renderBoard();}
+  else renderAnnotations();
   const present=room.present||{teacher:false,student:false};
   const pill=document.querySelector('#seat-status');
   if(pill)pill.textContent=present.teacher&&present.student?'Profesor y alumno conectados':
@@ -203,14 +261,35 @@ function updateRoom(info){
   const hist=document.querySelector('#move-history');
   if(hist)hist.textContent=room.history?.length?room.history.join('  ·  '):'Sin jugadas todavía';
   const turn=document.querySelector('#turn-status');
-  if(turn)turn.textContent=room.fen.split(' ')[1]==='b'?'Turno de las negras':'Turno de las blancas';
+  if(turn)turn.textContent=(room.boardMode==='setup'?room.editor?.turn:room.fen.split(' ')[1])==='b'?
+    'Turno de las negras':'Turno de las blancas';
   const permissions=document.querySelector('#board-permission');
-  if(permissions)permissions.textContent=room.control==='teacher'?'Solo profesor mueve':
-    room.control==='student'?'Solo alumno mueve':'Ambos pueden mover';
+  if(permissions)permissions.textContent=room.boardMode==='setup'?'El profesor prepara el tablero':
+    room.control==='teacher'?'Solo profesor mueve':
+    room.control==='student'?'Solo alumno mueve':
+    room.control==='student-white'?'Alumno blancas · profesor negras':
+    room.control==='student-black'?'Alumno negras · profesor blancas':'Ambos pueden mover';
   const control=document.querySelector('#board-controller');
   if(control && control.value!==room.control)control.value=room.control||'both';
   const undo=document.querySelector('#undo-move');
-  if(undo)undo.disabled=!room.history?.length;
+  if(undo)undo.disabled=!(room.undoCount>0);
+  const redo=document.querySelector('#redo-move');
+  if(redo)redo.disabled=!(room.redoCount>0);
+  const setup=room.boardMode==='setup';
+  const editorPanel=document.querySelector('#editor-panel');
+  if(editorPanel)editorPanel.hidden=!setup;
+  const toggleEditor=document.querySelector('#toggle-editor');
+  if(toggleEditor)toggleEditor.textContent=setup?'Finalizar preparación':'Tablero libre · editar';
+  const boardStatus=document.querySelector('#board-status');
+  if(boardStatus)boardStatus.textContent=setup?'Preparando posición · movimientos libres':'Jugadas legales · posición sincronizada';
+  const turnEditor=document.querySelector('#board-turn');
+  if(turnEditor&&setup)turnEditor.value=room.editor?.turn||'w';
+  const controller=document.querySelector('#board-controller');
+  if(controller)controller.disabled=setup;
+  const palette=document.querySelector('#piece-palette');
+  if(palette)palette.querySelectorAll('[data-piece]').forEach(button=>{
+    button.setAttribute('aria-pressed',String(setup&&editorTool===button.dataset.piece));
+  });
   const ex=document.querySelector('#exercise-status'),badge=document.querySelector('#assignment-badge');
   if(ex&&badge){
     const e=room.exercise;
@@ -235,7 +314,12 @@ function updateRoom(info){
       'control-updated':'Permisos del tablero actualizados.',
       'move-undone':'Se deshizo la última jugada.',
       'position-updated':'Nueva posición cargada para ambos.',
-      'hint-shown':'Pista visible en el tablero.'};
+      'hint-shown':'Pista visible en el tablero.',
+      'move-redone':'Cambio restaurado.',
+      'editor-started':'Modo libre: coloca y mueve piezas sin restricciones.',
+      'editor-updated':'Posición actualizada para ambos.',
+      'editor-finished':'Preparación terminada. Ahora se aplican las reglas legales.',
+      'annotation-updated':'Anotación compartida.'};
     const status=document.querySelector('#board-feedback');if(status)status.textContent=label[info.feedback]||'';
   }
   if(room.status==='closed'){resetPeer();socket?.close();root.innerHTML='<section class="landing"><h1>La clase ha terminado.</h1><p class="muted">El profesor cerró el aula. Puedes volver a Chessy.</p><a class="btn primary" href="/#/classes">Volver a Chessy</a></section>';return;}
@@ -249,34 +333,86 @@ function sendMove(from,to){
     ...(/[a-h][27]$/.test(from)&&/[a-h][18]$/.test(to)?{promotion:'q'}:{})});
 }
 function mayMove(){
-  if(!room)return false;
+  if(!room||room.boardMode==='setup')return false;
   if(room.exercise)return room.exercise.status==='active' && role==='student';
-  return room.control==='both'||room.control===role;
+  const turn=room.fen.split(' ')[1];
+  if(room.control==='both')return true;
+  if(room.control==='student-white')return role===(turn==='w'?'student':'teacher');
+  if(room.control==='student-black')return role===(turn==='b'?'student':'teacher');
+  return room.control===role;
+}
+function pieceAt(square){
+  return document.querySelector('#board [data-square="'+square+'"]')?.dataset.piece||'';
+}
+function sendBoardMove(from,to){
+  if(room.boardMode==='setup'){
+    if(role!=='teacher')return feedback('Solo el profesor puede preparar posiciones.');
+    send({type:'edit',action:'move',from,square:to,revision:room.revision});
+    return;
+  }
+  sendMove(from,to);
 }
 function selectSquare(square){
+  if(room.boardMode==='setup'){
+    if(role!=='teacher'){feedback('Solo el profesor puede preparar posiciones.');return;}
+    selected=square;legalSquares=[];renderBoard();return;
+  }
   if(!mayMove()){feedback('El profesor controla quién puede mover las piezas.');return;}
+  const piece=pieceAt(square);
+  const turn=room.fen.split(' ')[1];
+  if(!piece||(piece===piece.toUpperCase())!==(turn==='w')){
+    feedback('Elige una pieza del bando al que le toca mover.');return;
+  }
   selected=square;legalSquares=[];renderBoard();
   send({type:'legal',square});
 }
 function clickBoard(ev){
   const square=ev.target.closest('button[data-square]');if(!square||!room)return;
   const target=square.dataset.square;
-  // A native drag/touch drop may emit a trailing click on the destination.
-  // Suppress only that one square, never unrelated rapid lesson moves.
   if(recentlyDropped){
     const ignore=recentlyDropped.square===target && Date.now()<recentlyDropped.until;
     recentlyDropped=null;if(ignore)return;
   }
+  if(marking&&role==='teacher'){
+    if(!markSource){markSource=target;selected=target;renderBoard();return;}
+    const from=markSource;markSource=null;selected=null;renderBoard();
+    send(from===target?{type:'annotate',action:'square',square:target,revision:room.revision}:
+      {type:'annotate',action:'arrow',from,to:target,revision:room.revision});
+    return;
+  }
+  if(room.boardMode==='setup'){
+    if(role!=='teacher')return feedback('Solo el profesor puede preparar posiciones.');
+    if(editorTool){
+      send(editorTool==='remove'?{type:'edit',action:'remove',square:target,revision:room.revision}:
+        {type:'edit',action:'place',square:target,piece:editorTool,revision:room.revision});
+      return;
+    }
+    if(!selected){
+      if(!pieceAt(target)){feedback('Elige una pieza o selecciona una ya colocada.');return;}
+      selectSquare(target);return;
+    }
+    if(selected===target){selected=null;renderBoard();return;}
+    const from=selected;selected=null;renderBoard();sendBoardMove(from,target);return;
+  }
   if(!selected){selectSquare(target);return;}
   if(selected===target){selected=null;legalSquares=[];renderBoard();return;}
-  const from=selected;selected=null;legalSquares=[];renderBoard();sendMove(from,target);
+  // As in Chess.com/Lichess, clicking another piece of the same side
+  // switches the selection instead of attempting an illegal capture.
+  const current=pieceAt(target),turn=room.fen.split(' ')[1];
+  if(current&&(current===current.toUpperCase())===(turn==='w')){
+    selectSquare(target);return;
+  }
+  const from=selected;selected=null;legalSquares=[];renderBoard();sendBoardMove(from,target);
 }
 function dragStartBoard(ev){
   const square=ev.target.closest('button[data-square]');
-  if(!square||!mayMove()){ev.preventDefault();return;}
+  const allowed=room?.boardMode==='setup'?role==='teacher':mayMove();
+  const piece=square?pieceAt(square.dataset.square):'';
+  const correctTurn=room?.boardMode==='setup'||(piece && (piece===piece.toUpperCase())===(room.fen.split(' ')[1]==='w'));
+  if(!square||!piece||!allowed||!correctTurn||marking){ev.preventDefault();return;}
   ev.dataTransfer.effectAllowed='move';
   ev.dataTransfer.setData('text/plain',square.dataset.square);
-  // Never rebuild the source element while HTML5 drag-and-drop owns it.
+  // Preserve this element until drop: rebuilding here breaks Chromium DnD.
   selected=square.dataset.square;legalSquares=[];
 }
 function dropBoard(ev){
@@ -285,12 +421,17 @@ function dropBoard(ev){
   const from=ev.dataTransfer?.getData('text/plain');
   if(!square || !/^[a-h][1-8]$/.test(from||''))return;
   selected=null;legalSquares=[];renderBoard();
-  recentlyDropped={square:square.dataset.square,until:Date.now()+250};sendMove(from,square.dataset.square);
+  recentlyDropped={square:square.dataset.square,until:Date.now()+250};
+  sendBoardMove(from,square.dataset.square);
 }
 function pointerStartBoard(ev){
-  if(ev.pointerType==='mouse')return;
+  if(ev.pointerType==='mouse'||marking)return;
   const square=ev.target.closest('button[data-square]');
   if(!square)return;
+  const allowed=room?.boardMode==='setup'?role==='teacher':mayMove();
+  const piece=pieceAt(square.dataset.square);
+  if(!allowed||!piece||(room?.boardMode!=='setup'&&
+    (piece===piece.toUpperCase())!==(room.fen.split(' ')[1]==='w')))return;
   dragStart={square:square.dataset.square,x:ev.clientX,y:ev.clientY};
   square.setPointerCapture?.(ev.pointerId);
 }
@@ -301,7 +442,8 @@ function pointerEndBoard(ev){
   const square=document.elementFromPoint(ev.clientX,ev.clientY)?.closest('button[data-square]');
   if(!square||square.dataset.square===origin.square)return;
   selected=null;legalSquares=[];renderBoard();
-  recentlyDropped={square:square.dataset.square,until:Date.now()+350};sendMove(origin.square,square.dataset.square);
+  recentlyDropped={square:square.dataset.square,until:Date.now()+350};
+  sendBoardMove(origin.square,square.dataset.square);
 }
 async function openRoom(){
   root.innerHTML=htmlRoom();
@@ -313,6 +455,39 @@ async function openRoom(){
   bind('board','pointerup',pointerEndBoard);
   bind('flip-board','click',()=>{flipped=!flipped;renderBoard();});
   bind('undo-move','click',()=>send({type:'undo'}));
+  bind('redo-move','click',()=>send({type:'redo'}));
+  bind('toggle-editor','click',()=>{
+    const entering=room.boardMode!=='setup';
+    if(entering){
+      editorTool=null;marking=false;markSource=null;
+      const marker=document.querySelector('#annotation-mode');
+      if(marker){marker.setAttribute('aria-pressed','false');marker.textContent='Dibujar flechas';}
+    }
+    send({type:'mode',value:entering?'setup':'play',revision:room.revision});
+  });
+  bind('clear-position','click',()=>{
+    if(room.boardMode==='setup')send({type:'edit',action:'clear',revision:room.revision});
+  });
+  bind('board-turn','change',ev=>{
+    if(room.boardMode==='setup')send({type:'edit',action:'turn',turn:ev.target.value,revision:room.revision});
+  });
+  bind('piece-palette','click',ev=>{
+    const button=ev.target.closest('[data-piece]');
+    if(!button)return;
+    editorTool=editorTool===button.dataset.piece?null:button.dataset.piece;
+    selected=null;renderBoard();
+    document.querySelectorAll('#piece-palette [data-piece]').forEach(item=>{
+      item.setAttribute('aria-pressed',String(editorTool===item.dataset.piece));
+    });
+  });
+  bind('annotation-mode','click',ev=>{
+    marking=!marking;markSource=null;selected=null;renderBoard();
+    ev.currentTarget.setAttribute('aria-pressed',String(marking));
+    ev.currentTarget.textContent=marking?'Dejar de dibujar':'Dibujar flechas';
+    const help=document.querySelector('#board-feedback');
+    if(help&&marking)help.textContent='Toca dos veces la misma casilla para resaltarla, o dos distintas para dibujar una flecha.';
+  });
+  bind('clear-annotations','click',()=>send({type:'annotate',action:'clear',revision:room.revision}));
   bind('board-controller','change',ev=>send({type:'control',value:ev.target.value}));
   bind('apply-fen','click',()=>{
     const fen=document.querySelector('#fen-editor')?.value?.trim();

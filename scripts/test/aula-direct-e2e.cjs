@@ -137,7 +137,7 @@ async function smoke(){
    await teacher.locator('#fen-editor').fill(fen);
    await teacher.getByRole('button',{name:'Cargar FEN'}).click();
    await student.waitForFunction(()=>document.querySelectorAll('#board .piece-white').length===2);
-   await teacher.getByRole('button',{name:'Tablero libre'}).click();
+   await teacher.getByRole('button',{name:'Nueva partida'}).click();
    await student.waitForFunction(()=>document.querySelectorAll('#board .piece-white').length===16);
  });
  await check('Exercise is assigned to learner, wrong move increments attempts without mutating FEN',async()=>{
