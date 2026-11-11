@@ -121,7 +121,7 @@ async function smoke(){
    await teacher.locator('.square.legal[data-square=e4]').waitFor();
    await teacher.locator('[data-square=e4]').click();
    await student.waitForFunction(()=>document.querySelector('#move-history')?.textContent?.includes('e4'));
-   await teacher.getByRole('button',{name:'Deshacer jugada'}).click();
+   await teacher.getByRole('button',{name:'Deshacer'}).click();
    await student.getByText('Sin jugadas todavía').waitFor();
    await teacher.locator('#board-controller').selectOption('both');
    await student.getByText('Ambos pueden mover',{exact:true}).waitFor();
@@ -129,7 +129,7 @@ async function smoke(){
  await check('Learner drags a legal piece and teacher synchronizes the result',async()=>{
    await student.locator('[data-square=e2]').dragTo(student.locator('[data-square=e4]'));
    await teacher.waitForFunction(()=>document.querySelector('#move-history')?.textContent?.includes('e4'));
-   await teacher.getByRole('button',{name:'Deshacer jugada'}).click();
+   await teacher.getByRole('button',{name:'Deshacer'}).click();
    await student.getByText('Sin jugadas todavía').waitFor();
  });
  await check('Coach imports FEN and resets board without leaving stale exercises',async()=>{
