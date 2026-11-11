@@ -1,0 +1,77 @@
+TAP version 13
+# Subtest: FEN placement decodes and re-encodes all 64 squares
+ok 1 - FEN placement decodes and re-encodes all 64 squares
+  ---
+  duration_ms: 0.494833
+  type: 'test'
+  ...
+# Subtest: visual editor moves pieces independent of legal turn and maintains validation
+ok 2 - visual editor moves pieces independent of legal turn and maintains validation
+  ---
+  duration_ms: 0.327958
+  type: 'test'
+  ...
+# Subtest: palette places both colors, clears squares and chooses playing side
+ok 3 - palette places both colors, clears squares and chooses playing side
+  ---
+  duration_ms: 0.230458
+  type: 'test'
+  ...
+# Subtest: empty board remains editable and requires both kings before play
+ok 4 - empty board remains editable and requires both kings before play
+  ---
+  duration_ms: 0.242875
+  type: 'test'
+  ...
+# Subtest: invalid square, pieces, rank and actions are rejected
+ok 5 - invalid square, pieces, rank and actions are rejected
+  ---
+  duration_ms: 0.257666
+  type: 'test'
+  ...
+# Subtest: REA: private teacher/learner free board, editing, markings, authority and history
+    # Subtest: learner cannot invoke teacher editor
+    ok 1 - learner cannot invoke teacher editor
+      ---
+      duration_ms: 22.566375
+      type: 'test'
+      ...
+    # Subtest: teacher enters synchronized editor, clears, places kings and rook
+    ok 2 - teacher enters synchronized editor, clears, places kings and rook
+      ---
+      duration_ms: 151.325625
+      type: 'test'
+      ...
+    # Subtest: annotations are shared and can be cleared
+    ok 3 - annotations are shared and can be cleared
+      ---
+      duration_ms: 62.6605
+      type: 'test'
+      ...
+    # Subtest: color assignment authorizes only correct role per turn
+    ok 4 - color assignment authorizes only correct role per turn
+      ---
+      duration_ms: 103.131291
+      type: 'test'
+      ...
+    # Subtest: undo/redo recover both position and permissions
+    ok 5 - undo/redo recover both position and permissions
+      ---
+      duration_ms: 45.416917
+      type: 'test'
+      ...
+    1..5
+ok 6 - REA: private teacher/learner free board, editing, markings, authority and history
+  ---
+  duration_ms: 441.695084
+  type: 'test'
+  ...
+1..6
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1424.085793

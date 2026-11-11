@@ -1,0 +1,8 @@
+PASS teacher creates isolated classroom and shares invite
+PASS learner joins and receives same board
+PASS teacher opens REAL unrestricted free-board editor
+PASS teacher controls drawing arrows shared with learner
+PASS incoming chat does not interrupt selected rook move
+PASS Undo and redo synchronize both boards
+PASS mobile width and runtime errors
+AULA_FREE_BOARD_BROWSER_RESULT {"checks":[{"name":"teacher creates isolated classroom and shares invite","status":"PASS","ms":245},{"name":"learner joins and receives same board","status":"PASS","ms":246},{"name":"teacher opens REAL unrestricted free-board editor","status":"PASS","ms":354},{"name":"teacher controls drawing arrows shared with learner","status":"PASS","ms":130},{"name":"incoming chat does not interrupt selected rook move","status":"PASS","ms":131},{"name":"Undo and redo synchronize both boards","status":"PASS","ms":69},{"name":"mobile width and runtime errors","status":"PASS","ms":1}],"errors":[]}

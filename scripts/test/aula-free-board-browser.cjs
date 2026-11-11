@@ -47,7 +47,7 @@ async function check(name,fn){
     server.listen(0,'127.0.0.1');
     await once(server,'listening');
     const base='http://127.0.0.1:'+server.address().port;
-    browser=await chromium.launch({executablePath:'/usr/bin/chromium',headless:true,
+    browser=await chromium.launch({executablePath:process.env.CHESSY_PLAYWRIGHT_CHROMIUM||chromium.executablePath(),headless:true,
       args:['--no-sandbox','--disable-dev-shm-usage']});
     const teacherCtx=await browser.newContext({viewport:{width:1440,height:900}});
     const learnerCtx=await browser.newContext({viewport:{width:390,height:844}});
@@ -91,7 +91,8 @@ async function check(name,fn){
       await teacher.locator('#annotation-mode').click();
       await teacher.locator('#board [data-square=a1]').click();
       await teacher.locator('#board [data-square=a8]').click();
-      await student.locator('svg.annotation-layer line').waitFor();
+      await student.locator('svg.annotation-layer line').waitFor({state:'attached'});
+      assert.equal(await student.locator('svg.annotation-layer').isVisible(),true);
       assert.equal(await student.locator('svg.annotation-layer line').count(),1);
       await teacher.locator('#annotation-mode').click();
     });
@@ -104,7 +105,7 @@ async function check(name,fn){
       assert.equal(await teacher.locator('#board [data-square=a1].selected').count(),1);
       await teacher.locator('#board [data-square=a4]').click();
       await student.locator('#board [data-square=a4][data-piece=R]').waitFor();
-      assert.equal(await teacher.locator('#move-history').innerText(),'Ra4');
+      await teacher.waitForFunction(()=>document.querySelector('#move-history')?.textContent==='Ra4');
     });
     await check('Undo and redo synchronize both boards',async()=>{
       await teacher.locator('#undo-move').click();
