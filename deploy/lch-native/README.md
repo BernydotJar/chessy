@@ -19,7 +19,7 @@ The LCH runtime MUST be independent of the old Sandbox/Docker origin. Merely poi
 
 ## Preflight, without touching production
 
-1. Select an LCH-managed Linux host with Node.js 22, Python 3, systemd, Caddy and cloudflared. Create a non-login chessy account and /srv/chessy/releases readable by that account. The host must remain available when the old Mac Docker instance is offline.
+1. Select an LCH-managed Linux host with Node.js 22, Python 3, curl, systemd, Caddy and cloudflared. Create a non-login chessy account and /srv/chessy/releases readable by that account. The host must remain available when the old Mac Docker instance is offline.
 2. Download the exact GitHub Actions artifact produced by a green Chessy release (name chessy-aula-release-<run-SHA>). This artifact contains dist/ and progress/runtime/aula-server.mjs. Verify the source commit and the two CI jobs, not simply that the ZIP opens.
 3. Recover from the existing protected runtime and copy, using authenticated host access, the *original* aula teacher code, separate admin code and teacher-registry.json to /var/lib/chessy/secrets/. All three files must be owned by chessy with mode 0600. Never put their values in GitHub, logs or the public frontend. Do not regenerate codes; that would revoke teacher access.
 4. Install run.sh as /usr/local/libexec/chessy-lch-run (0755) and chessy-lch.service as /etc/systemd/system/chessy-lch.service, then use systemctl daemon-reload. The service only restarts Chessy. It has no permission to change LUMA or shared services.
