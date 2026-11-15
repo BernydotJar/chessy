@@ -21,7 +21,6 @@ import subprocess
 import sys
 import tempfile
 import time
-from urllib.request import urlopen
 import zipfile
 
 SHA40 = re.compile(r"^[0-9a-f]{40}$")
@@ -45,14 +44,26 @@ def digest(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
-def read_json_url(url: str, timeout: int = 8) -> dict:
-    with urlopen(url, timeout=timeout) as response:
-        if response.status != 200:
-            raise RuntimeError(f"HTTP {response.status} from {url}")
-        result = json.load(response)
-        if not isinstance(result, dict):
-            raise RuntimeError("Unexpected JSON payload")
-        return result
+def fetch_public(url: str, timeout: int = 12) -> bytes:
+    # Cloudflare may challenge Python-urllib's default User-Agent even when
+    # a browser and curl are healthy. Production verification uses curl,
+    # matching the proven cutover probes and preserving fail-closed behavior.
+    call = subprocess.run(
+        ["curl", "--fail", "--silent", "--show-error", "--connect-timeout", "5",
+         "--max-time", str(timeout), url],
+        capture_output=True,
+        timeout=timeout + 2,
+    )
+    if call.returncode:
+        raise RuntimeError(f"HTTPS/HTTP probe failed for {url}: curl exit {call.returncode}")
+    return call.stdout
+
+
+def read_json_url(url: str, timeout: int = 12) -> dict:
+    result = json.loads(fetch_public(url, timeout))
+    if not isinstance(result, dict):
+        raise RuntimeError("Unexpected JSON payload")
+    return result
 
 
 def is_safe_entry(item: zipfile.ZipInfo) -> bool:
@@ -233,12 +244,12 @@ def activate(release: str, root: Path, env_file: Path, origin: str, service: str
 def smoke(origin: str, release: str, root: Path) -> None:
     check_release(origin, release)
     manifest = json.loads((root / "releases" / release / "release-manifest.json").read_text())
-    with urlopen(origin.rstrip("/") + "/aula/app.js", timeout=12) as response:
-        if response.status != 200 or digest(response.read()) != manifest["aula_app_sha256"]:
-            raise RuntimeError("Public Chessy app does not match the release artifact")
-    with urlopen(origin.rstrip("/") + "/aula/", timeout=12) as response:
-        if response.status != 200 or b"app.js" not in response.read():
-            raise RuntimeError("Classroom HTML is not reachable")
+    app = fetch_public(origin.rstrip("/") + "/aula/app.js")
+    if digest(app) != manifest["aula_app_sha256"]:
+        raise RuntimeError("Public Chessy app does not match the release artifact")
+    html = fetch_public(origin.rstrip("/") + "/aula/")
+    if b"app.js" not in html:
+        raise RuntimeError("Classroom HTML is not reachable")
     print(f"PASS {origin} release={release} classroom=ready JS=sha256-matched")
 
 
