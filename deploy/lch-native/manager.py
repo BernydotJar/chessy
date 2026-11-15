@@ -63,7 +63,10 @@ def is_safe_entry(item: zipfile.ZipInfo) -> bool:
     if not (name.startswith("dist/") or name == "progress/runtime/aula-server.mjs"):
         return False
     mode = (item.external_attr >> 16) & 0xFFFF
-    if stat.S_ISLNK(mode) or (mode and not (stat.S_ISREG(mode) or stat.S_ISDIR(mode))):
+    # GitHub Actions archives may store UNIX permissions without S_IFREG.
+    # Accept regular files, directories and entries with an unspecified type.
+    kind = stat.S_IFMT(mode)
+    if kind not in (0, stat.S_IFREG, stat.S_IFDIR):
         return False
     return True
 
@@ -143,8 +146,14 @@ def read_secret_paths(env_file: Path) -> dict[str, Path]:
         info = path.lstat()
         if not stat.S_ISREG(info.st_mode) or info.st_mode & 0o077 or info.st_uid != expected_owner:
             raise RuntimeError(f"Unsafe owner/permissions for {key}")
-        if key != "CHESSY_AULA_TEACHERS_FILE" and len(path.read_text().strip()) < 24:
-            raise RuntimeError(f"Invalid length for {key}")
+        if key != "CHESSY_AULA_TEACHERS_FILE":
+            minimum = 30 if key == "CHESSY_AULA_ADMIN_SECRET_FILE" else 24
+            if len(path.read_text().strip()) < minimum:
+                raise RuntimeError(f"Invalid length for {key}")
+        else:
+            registry = json.loads(path.read_text())
+            if registry.get("version") != 1 or not isinstance(registry.get("teachers"), list) or not isinstance(registry.get("events"), list):
+                raise RuntimeError("Invalid teacher registry; refusing to replace existing governance data")
     return paths
 
 
@@ -189,7 +198,13 @@ def activate(release: str, root: Path, env_file: Path, origin: str, service: str
     with lock_path.open("a+") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         link = root / "current"
+        if link.exists() and not link.is_symlink():
+            raise RuntimeError("Refusing to replace a non-symlink current path")
         previous = link.resolve(strict=True) if link.is_symlink() else None
+        if previous == target:
+            check_release(origin, release)
+            print(f"ALREADY_ACTIVE {release}")
+            return
         if previous:
             check_rooms_empty(origin)
         subprocess.run(["systemctl", "cat", service], check=True, stdout=subprocess.DEVNULL)
