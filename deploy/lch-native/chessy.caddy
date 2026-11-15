@@ -1,0 +1,7 @@
+# Include this standalone site only after validating the existing LCH Caddy config.
+# Keep LUMA, the LCH portfolio, and every other route unchanged.
+# Cloudflare Tunnel terminates HTTPS and retains the incoming Host.
+# Caddy reverse_proxy handles WebSocket Upgrade automatically.
+http://chessy.lch-app.cloud {
+    reverse_proxy 127.0.0.1:14176
+}

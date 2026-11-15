@@ -1,0 +1,30 @@
+name: Verify Chessy LCH native deployment
+
+on:
+  pull_request:
+    paths:
+      - "deploy/lch-native/**"
+      - ".github/workflows/lch-native.yml"
+  push:
+    branches: [main]
+    paths:
+      - "deploy/lch-native/**"
+      - ".github/workflows/lch-native.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Native runtime shell syntax
+        run: sh -n deploy/lch-native/run.sh
+      - name: Adversarial release integrity and classroom safety contracts
+        run: python3 -m unittest discover -s deploy/lch-native -p 'test_*.py' -v

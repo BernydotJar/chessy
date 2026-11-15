@@ -1,0 +1,26 @@
+[Unit]
+Description=Chessy - LCH independent classroom runtime
+Documentation=https://github.com/BernydotJar/chessy/tree/main/deploy/lch-native
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=chessy
+Group=chessy
+WorkingDirectory=/srv/chessy
+EnvironmentFile=/etc/chessy/chessy.env
+ExecStart=/usr/local/libexec/chessy-lch-run
+Restart=always
+RestartSec=3
+TimeoutStopSec=20
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/chessy
+UMask=0077
+LimitNOFILE=8192
+
+[Install]
+WantedBy=multi-user.target
