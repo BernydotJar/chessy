@@ -1,0 +1,29 @@
+name: Verify Chessy macOS native runtime
+
+on:
+  pull_request:
+    paths:
+      - "deploy/lch-macos-native/**"
+      - ".github/workflows/lch-macos-native.yml"
+  push:
+    branches: [main]
+    paths:
+      - "deploy/lch-macos-native/**"
+      - ".github/workflows/lch-macos-native.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate handoff shell syntax
+        run: bash -n deploy/lch-macos-native/GO_CHESSY_NATIVE_MAC.sh
+      - name: Compile native release and scoped tunnel editor
+        run: python3 -m py_compile deploy/lch-macos-native/mac_native_release.py deploy/lch-macos-native/lch_route.py
+      - name: Run adversarial immutable release and tunnel safety gates
+        run: python3 -m unittest discover -s deploy/lch-macos-native -p 'test_*.py' -v
