@@ -123,16 +123,32 @@ const htmlRoom=()=>{
     (isTeacher?'<button id="undo-move" class="btn secondary small" type="button">Deshacer</button>'+
       '<button id="redo-move" class="btn secondary small" type="button">Rehacer</button>':'')+
     '</div></div>'+
-    '<div id="board" class="chessboard" role="group" aria-label="Tablero de ajedrez sincronizado"></div>'+
+    (isTeacher?'<div class="board-quickbar" role="toolbar" aria-label="Controles rápidos del profesor">'+
+      '<button id="toggle-editor" class="btn primary" type="button" aria-controls="editor-panel" aria-expanded="false" aria-pressed="false">Editar tablero</button>'+
+      '<button id="annotation-mode" class="btn secondary" type="button" aria-pressed="false">Dibujar flechas</button>'+
+      '<button id="clear-annotations" class="btn quiet" type="button">Borrar marcas</button>'+
+      '<button id="reset-board" class="btn quiet" type="button">Nueva partida</button></div>'+
+      '<details id="board-advanced" class="board-advanced"><summary>Más controles <span>Permisos y FEN</span></summary>'+
+      '<div class="board-advanced-content">'+
+      '<label for="board-controller">Quién puede mover las piezas</label>'+
+      '<select id="board-controller"><option value="both">Profesor y alumno</option>'+
+      '<option value="teacher">Solo profesor</option><option value="student">Solo alumno</option>'+
+      '<option value="student-white">Alumno blancas · profesor negras</option>'+
+      '<option value="student-black">Alumno negras · profesor blancas</option></select>'+
+      '<div class="field"><label for="fen-editor">Cargar posición (FEN)</label>'+
+      '<input id="fen-editor" type="text" placeholder="Pega una posición FEN" maxlength="110" spellcheck="false"></div>'+
+      '<div class="button-row"><button id="apply-fen" class="btn secondary" type="button">Cargar FEN</button>'+
+      '<button id="copy-fen" class="btn quiet" type="button">Copiar FEN actual</button></div></div></details>':'')+
     (isTeacher?'<div id="editor-panel" class="editor-panel" hidden>'+
-      '<p class="muted small">Preparar posición: elige una pieza y toca una casilla; para moverla, toca origen y destino. Los movimientos son libres mientras editas.</p>'+
+      '<p class="muted small">Elige una pieza y toca una casilla, o mueve las piezas libremente. Para borrarlas, selecciona ×.</p>'+
       '<div id="piece-palette" class="piece-palette" role="group" aria-label="Piezas para preparar posición">'+
       Object.entries(glyph).map(([piece,symbol])=>'<button type="button" class="palette-piece" data-piece="'+piece+'" aria-label="'+
         esc(labels[piece.toUpperCase()]+' '+(piece===piece.toUpperCase()?'blanco':'negro'))+'">'+symbol+'</button>').join('')+
       '<button type="button" class="palette-piece palette-remove" data-piece="remove" aria-label="Borrar pieza">×</button></div>'+
       '<div class="button-row editor-actions"><button id="clear-position" class="btn quiet small" type="button">Vaciar tablero</button>'+
       '<label for="board-turn" class="turn-label">Juegan <select id="board-turn"><option value="w">Blancas</option><option value="b">Negras</option></select></label></div>'+
-      '<p id="editor-help" role="status" class="muted small">Al terminar debe haber un rey blanco y uno negro.</p></div>':'')+
+      '<p id="editor-help" role="status" class="muted small">Para finalizar: un rey blanco y un rey negro.</p></div>':'')+
+    '<div id="board" class="chessboard" role="group" aria-label="Tablero de ajedrez sincronizado"></div>'+
     '<div class="board-meta"><span id="move-count">Posición inicial</span><span id="exercise-status" class="text-gold">Tablero libre</span></div>'+
     '<div class="board-meta"><span id="turn-status">Turno de las blancas</span><span id="board-permission">Ambos pueden mover</span></div>'+
     '<div id="move-history" class="move-history" role="log" aria-label="Historial de jugadas">Sin jugadas todavía</div>'+
@@ -151,26 +167,10 @@ const htmlRoom=()=>{
       '<div class="button-row invite-actions"><button id="rotate-invite" class="btn quiet small" type="button">Regenerar enlace</button>'+
       '<button id="remove-learner" class="btn danger small" type="button">Retirar alumno</button></div>'+
       '<p class="notice">Un profesor + un alumno por sala. Recomendado: Chrome, Edge o Safari actual.</p></section>':'')+
-    (isTeacher?'<section class="card board-tools"><h2>Control del tablero</h2>'+
-      '<div class="button-row teacher-workbench">'+
-      '<button id="toggle-editor" class="btn primary" type="button">Tablero libre · editar</button>'+
-      '<button id="annotation-mode" class="btn secondary" type="button" aria-pressed="false">Dibujar flechas</button>'+
-      '<button id="clear-annotations" class="btn quiet" type="button">Borrar marcas</button></div>'+
-      '<label for="board-controller">Quién puede mover las piezas</label>'+
-      '<select id="board-controller"><option value="both">Profesor y alumno</option>'+
-      '<option value="teacher">Solo profesor</option><option value="student">Solo alumno</option>'+
-      '<option value="student-white">Alumno blancas · profesor negras</option>'+
-      '<option value="student-black">Alumno negras · profesor blancas</option></select>'+
-      '<div class="field"><label for="fen-editor">Cargar posición (FEN)</label>'+
-      '<input id="fen-editor" type="text" placeholder="Pega una posición FEN" maxlength="110" spellcheck="false"></div>'+
-      '<div class="button-row"><button id="apply-fen" class="btn secondary" type="button">Cargar FEN</button>'+
-      '<button id="copy-fen" class="btn quiet" type="button">Copiar FEN actual</button></div>'+
-      '<p class="notice">Arrastra las piezas o pulsa la casilla de origen y después la de destino. Las jugadas ilegales se rechazan automáticamente.</p></section>':'')+
     '<section class="card exercise-card"><h2>Ejercicios con el profesor</h2>'+
     (isTeacher?'<label for="puzzle-picker">Elegir ejercicio</label><select id="puzzle-picker" aria-label="Elegir ejercicio"><option value="rook-file">Torre y columnas</option></select>'+
       '<div class="button-row"><button id="assign-exercise" class="btn primary" type="button">Enviar ejercicio</button>'+
       '<button id="next-exercise" class="btn secondary" type="button">Siguiente</button>'+
-      '<button id="reset-board" class="btn quiet" type="button">Nueva partida</button>'+
       '<button id="show-hint" class="btn secondary" type="button">Mostrar pista</button></div>':
       '<p class="muted small">Tu profesor puede asignarte ejercicios. Mueve las piezas para resolverlos.</p>')+
     '<div id="assignment-badge" class="assignment-badge">Sin ejercicio asignado.</div></section>'+
@@ -279,7 +279,11 @@ function updateRoom(info){
   const editorPanel=document.querySelector('#editor-panel');
   if(editorPanel)editorPanel.hidden=!setup;
   const toggleEditor=document.querySelector('#toggle-editor');
-  if(toggleEditor)toggleEditor.textContent=setup?'Finalizar preparación':'Tablero libre · editar';
+  if(toggleEditor){
+    toggleEditor.textContent=setup?'Finalizar preparación':'Editar tablero';
+    toggleEditor.setAttribute('aria-expanded',String(setup));
+    toggleEditor.setAttribute('aria-pressed',String(setup));
+  }
   const boardStatus=document.querySelector('#board-status');
   if(boardStatus)boardStatus.textContent=setup?'Preparando posición · movimientos libres':'Jugadas legales · posición sincronizada';
   const turnEditor=document.querySelector('#board-turn');

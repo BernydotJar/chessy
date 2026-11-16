@@ -113,6 +113,10 @@ async function smoke(){
    await student.getByText('Profesor y alumno conectados',{exact:true}).waitFor({timeout:20000});
  });
  await check('Coach can lock learner moves, make legal move and undo for both browsers',async()=>{
+   const advanced=teacher.locator('#board-advanced');
+   assert.equal(await advanced.getAttribute('open'),null,'Advanced tools should start collapsed');
+   await advanced.locator('summary').click();
+   assert.notEqual(await advanced.getAttribute('open'),null,'Teacher can expand advanced tools beside the board');
    await teacher.locator('#board-controller').selectOption('teacher');
    await student.getByText('Solo profesor mueve',{exact:true}).waitFor();
    await student.locator('[data-square=e2]').click();
@@ -139,6 +143,8 @@ async function smoke(){
    await student.waitForFunction(()=>document.querySelectorAll('#board .piece-white').length===2);
    await teacher.getByRole('button',{name:'Nueva partida'}).click();
    await student.waitForFunction(()=>document.querySelectorAll('#board .piece-white').length===16);
+   await teacher.locator('#board-advanced summary').click();
+   assert.equal(await teacher.locator('#board-advanced').getAttribute('open'),null);
  });
  await check('Exercise is assigned to learner, wrong move increments attempts without mutating FEN',async()=>{
    await teacher.locator('#puzzle-picker').selectOption('rook-file');
