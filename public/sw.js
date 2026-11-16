@@ -1,4 +1,4 @@
-const CACHE='chessy-mobile-v1-20260906';
+const CACHE='chessy-mobile-v2-20261116';
 const CORE=['/','/index.html','/manifest.webmanifest','/chess-icon.svg','/chess-icon-maskable.svg','/stockfish.js','/art/forest-study.svg','/art/ivory-study.svg','/art/night-study.svg'];
 
 async function cacheBuiltShell(cache){
@@ -33,6 +33,14 @@ self.addEventListener('fetch',event=>{
   if(request.method!=='GET')return;
   const url=new URL(request.url);
   if(url.origin!==self.location.origin||url.pathname==='/health')return;
+  // Classroom data, invitation/session endpoints and WebSocket companion
+  // assets must not be served from an offline cache. Earlier workers could
+  // cache GET /aula/api/* and make a new release appear stale.
+  if(url.pathname.startsWith('/aula/')){
+    event.respondWith(fetch(request));
+    return;
+  }
+
 
   if(request.mode==='navigate'){
     event.respondWith((async()=>{

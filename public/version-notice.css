@@ -1,0 +1,32 @@
+/* Nonmodal release notice; never steals focus or forces a classroom refresh. */
+.chessy-update-banner{
+  position:fixed;
+  z-index:1000;
+  inset:auto 12px calc(12px + env(safe-area-inset-bottom, 0px)) auto;
+  width:min(390px, calc(100vw - 24px));
+  padding:15px 16px;
+  border:1px solid #719b79;
+  border-radius:16px;
+  background:#152b24;
+  color:#f6f6ee;
+  box-shadow:0 13px 45px #061511c9;
+  font-family:Inter,ui-sans-serif,system-ui,sans-serif;
+  font-size:13px;
+  line-height:1.4;
+}
+.chessy-update-banner strong{display:block;font-size:15px;font-weight:750;line-height:1.25}
+.chessy-update-banner p{font-size:13px;color:#d5e5d8;margin:7px 0 12px}
+.chessy-update-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px}
+.chessy-update-actions button{
+  min-height:44px;min-width:92px;padding:8px 12px;
+  border:1px solid #657d6d;border-radius:10px;color:#f6f6ee;
+  background:#294638;cursor:pointer;font:650 13px/1.25 Inter,ui-sans-serif,system-ui,sans-serif;
+}
+.chessy-update-actions .chessy-update-now{background:#eac681;color:#19291f;border-color:#eac681}
+.chessy-update-actions .chessy-update-now:disabled{background:#45604e;border-color:#4d6555;color:#d3ddcf;cursor:default}
+.chessy-update-actions button:focus-visible{outline:3px solid #f6dfa4;outline-offset:2px}
+@media(max-width:480px){
+  .chessy-update-banner{inset:auto 12px calc(10px + env(safe-area-inset-bottom, 0px)) 12px;width:auto;padding:12px}
+  .chessy-update-actions button{flex:1}
+}
+@media(prefers-reduced-motion:reduce){.chessy-update-banner{transition:none}}

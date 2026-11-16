@@ -22,11 +22,26 @@ async function check(name,fn){
   const secretFile=path.join(dir,'secret');
   fs.writeFileSync(secretFile,SECRET,{mode:0o600});
   let server,browser;
+  const oldVersion='a'.repeat(24),newVersion='b'.repeat(24);
+  let publicVersion=oldVersion;
   try{
     const {attachAulaDirect}=await import('../aula-direct.mjs');
     let aula;
     server=http.createServer((req,res)=>{
       const url=new URL(req.url,'http://localhost');
+      if(url.pathname==='/health'){
+        res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store'});
+        res.end(JSON.stringify({status:'ok',product:'chessy',ui_version:publicVersion}));
+        return;
+      }
+      if(url.pathname==='/aula/'){
+        let html=fs.readFileSync(path.join(root,'public/aula/index.html'),'utf8');
+        html=html.replace('name="chessy-ui-version" content="DEV"',
+          'name="chessy-ui-version" content="'+oldVersion+'"');
+        res.writeHead(200,{'Content-Type':'text/html','Cache-Control':'no-store'});
+        res.end(html);
+        return;
+      }
       if(url.pathname.startsWith('/aula/api/')){
         void aula.handle(req,res,url.pathname).catch(e=>{
           if(!res.headersSent){res.writeHead(500);res.end(String(e));}
@@ -36,7 +51,9 @@ async function check(name,fn){
       const assets={
         '/aula/':['public/aula/index.html','text/html'],
         '/aula/app.js':['public/aula/app.js','text/javascript'],
-        '/aula/style.css':['public/aula/style.css','text/css']
+        '/aula/style.css':['public/aula/style.css','text/css'],
+        '/version-notice.js':['public/version-notice.js','text/javascript'],
+        '/version-notice.css':['public/version-notice.css','text/css']
       };
       const file=assets[url.pathname];
       if(!file){res.writeHead(404);res.end('Not found');return;}
@@ -159,6 +176,22 @@ async function check(name,fn){
       await student.locator('#board [data-square=a1][data-piece=R]').waitFor();
       await teacher.locator('#redo-move').click();
       await student.locator('#board [data-square=a4][data-piece=R]').waitFor();
+    });
+    await check('new version notice never interrupts an active classroom',async()=>{
+      publicVersion=newVersion;
+      await teacher.evaluate(()=>window.dispatchEvent(new Event('focus')));
+      await student.evaluate(()=>window.dispatchEvent(new Event('focus')));
+      const teacherNotice=teacher.locator('#chessy-update-banner');
+      await teacherNotice.waitFor();
+      assert.equal(await teacherNotice.locator('strong').textContent(),'Nueva versión de Chessy');
+      assert.equal(await teacherNotice.locator('.chessy-update-now').isDisabled(),true,
+        'A teacher in class must not be offered a disruptive reload');
+      assert.equal(await student.locator('#chessy-update-banner .chessy-update-now').isDisabled(),true,
+        'A student in class must not be offered a disruptive reload');
+      await teacherNotice.getByRole('button',{name:'Más tarde'}).click();
+      assert.equal(await teacher.locator('#chessy-update-banner').count(),0);
+      assert.equal(await teacher.locator('#board .square').count(),64);
+      assert.equal(await student.locator('#board .square').count(),64);
     });
     await check('mobile width and runtime errors',async()=>{
       const dim=await student.evaluate(()=>({scroll:document.documentElement.scrollWidth,width:innerWidth}));

@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && node scripts/stamp-version.mjs",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "vitest --dir tests",
@@ -30,7 +30,8 @@
     "build:server": "node scripts/build-aula-server.mjs",
     "test:aula:direct": "node scripts/test/aula-direct-e2e.cjs",
     "test:aula:free-board": "node --test scripts/test/aula-board-editor.test.mjs scripts/test/aula-free-board-ws.test.mjs",
-    "test:aula:free-board:browser": "node scripts/test/aula-free-board-browser.cjs"
+    "test:aula:free-board:browser": "node scripts/test/aula-free-board-browser.cjs",
+    "test:version": "node --test scripts/test/version-notice.test.mjs"
   },
   "dependencies": {
     "chess.js": "^1.0.0-beta.6",
