@@ -75,7 +75,7 @@ class MacNativeTests(unittest.TestCase):
             calls.append((url, host_header))
             self.assertTrue(url.startswith("http://127.0.0.1:8080/"))
             self.assertEqual(host_header, "chessy.textilesdemedellin.com")
-            if url.endswith("/health"):
+            if url == "http://127.0.0.1:8080/health":
                 return json.dumps({"status": "ok", "product": "chessy", "release_sha": m.RELEASE}).encode()
             return json.dumps({"status": "ok", "backendReady": True, "roomsActive": 0}).encode()
         with patch.object(m, "curl_data", side_effect=mocked_curl):
@@ -86,7 +86,7 @@ class MacNativeTests(unittest.TestCase):
         for bad_type in ("active", "wrong-sha", "invalid-count"):
             with self.subTest(bad_type=bad_type):
                 def mocked_curl(url, timeout=10, host_header=None):
-                    if url.endswith("/health"):
+                    if url == "http://127.0.0.1:8080/health":
                         value = {"status": "ok", "product": "chessy", "release_sha": m.RELEASE}
                         if bad_type == "wrong-sha":
                             value["release_sha"] = "b" * 40
