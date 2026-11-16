@@ -72,9 +72,53 @@ async function check(name,fn){
       await teacher.getByText('Profesor y alumno conectados',{exact:true}).waitFor();
       assert.equal(await student.locator('.square').count(),64);
     });
+    await check('mobile teacher sees board controls without scrolling to the sidebar',async()=>{
+      await teacher.setViewportSize({width:390,height:844});
+      const controls=await teacher.evaluate(()=>{
+        const quickbar=document.querySelector('.board-quickbar');
+        const board=document.querySelector('#board');
+        const advanced=document.querySelector('#board-advanced');
+        const buttons=[...quickbar.querySelectorAll('button')];
+        return {
+          scrollWidth:document.documentElement.scrollWidth,
+          viewportWidth:innerWidth,
+          beforeBoard:quickbar.getBoundingClientRect().bottom<=board.getBoundingClientRect().top,
+          advancedBeforeBoard:advanced.getBoundingClientRect().bottom<=board.getBoundingClientRect().top,
+          buttonCount:buttons.length,
+          minTouchHeight:Math.min(...buttons.map(button=>button.getBoundingClientRect().height)),
+          editLabel:document.querySelector('#toggle-editor')?.textContent,
+          uniqueEditorButton:document.querySelectorAll('#toggle-editor').length
+        };
+      });
+      assert.ok(controls.beforeBoard&&controls.advancedBeforeBoard,JSON.stringify(controls));
+      assert.equal(controls.buttonCount,4);
+      assert.ok(controls.minTouchHeight>=44,JSON.stringify(controls));
+      assert.equal(controls.editLabel,'Editar tablero');
+      assert.equal(controls.uniqueEditorButton,1);
+      assert.ok(controls.scrollWidth<=controls.viewportWidth+2,JSON.stringify(controls));
+      assert.equal(await student.locator('.board-quickbar').count(),0);
+      await teacher.locator('#board-advanced summary').click();
+      assert.equal(await teacher.locator('#board-controller').isVisible(),true);
+      await teacher.locator('#board-advanced summary').click();
+      await teacher.setViewportSize({width:320,height:760});
+      const mobile320=await teacher.evaluate(()=>({scroll:document.documentElement.scrollWidth,width:innerWidth}));
+      assert.ok(mobile320.scroll<=mobile320.width+2,JSON.stringify(mobile320));
+      await teacher.setViewportSize({width:390,height:844});
+    });
     await check('teacher opens REAL unrestricted free-board editor',async()=>{
       await teacher.locator('#toggle-editor').click();
       await teacher.locator('#editor-panel:visible').waitFor();
+      const editorPlacement=await teacher.evaluate(()=>({
+        paletteEnd:document.querySelector('#piece-palette').getBoundingClientRect().bottom,
+        boardStart:document.querySelector('#board').getBoundingClientRect().top,
+        expanded:document.querySelector('#toggle-editor').getAttribute('aria-expanded'),
+        pressed:document.querySelector('#toggle-editor').getAttribute('aria-pressed'),
+        buttonText:document.querySelector('#toggle-editor').textContent
+      }));
+      assert.ok(editorPlacement.paletteEnd<=editorPlacement.boardStart,JSON.stringify(editorPlacement));
+      assert.equal(editorPlacement.expanded,'true');
+      assert.equal(editorPlacement.pressed,'true');
+      assert.equal(editorPlacement.buttonText,'Finalizar preparación');
       await student.getByText('Preparando posición · movimientos libres').waitFor();
       await teacher.locator('#clear-position').click();
       await student.waitForFunction(()=>document.querySelectorAll('#board [data-piece]:not([data-piece=""])').length===0);
@@ -85,6 +129,8 @@ async function check(name,fn){
       }
       await teacher.locator('#toggle-editor').click();
       await student.getByText('Jugadas legales · posición sincronizada').waitFor();
+      assert.equal(await teacher.locator('#toggle-editor').getAttribute('aria-expanded'),'false');
+      assert.equal(await teacher.locator('#editor-panel').isVisible(),false);
       assert.equal(await student.locator('#board [data-square="a1"]').getAttribute('data-piece'),'R');
     });
     await check('teacher controls drawing arrows shared with learner',async()=>{
