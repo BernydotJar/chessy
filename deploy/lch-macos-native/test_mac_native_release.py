@@ -69,6 +69,38 @@ class MacNativeTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "differs"):
             m.prepare()
 
+    def test_old_room_check_uses_local_caddy_origin(self):
+        calls = []
+        def mocked_curl(url, timeout=10, host_header=None):
+            calls.append((url, host_header))
+            self.assertTrue(url.startswith("http://127.0.0.1:8080/"))
+            self.assertEqual(host_header, "chessy.textilesdemedellin.com")
+            if url == "http://127.0.0.1:8080/health":
+                return json.dumps({"status": "ok", "product": "chessy", "release_sha": m.RELEASE}).encode()
+            return json.dumps({"status": "ok", "backendReady": True, "roomsActive": 0}).encode()
+        with patch.object(m, "curl_data", side_effect=mocked_curl):
+            m.check_old_rooms()
+        self.assertEqual(len(calls), 2)
+
+    def test_old_room_check_rejects_active_rooms_and_wrong_release(self):
+        for bad_type in ("active", "wrong-sha", "invalid-count"):
+            with self.subTest(bad_type=bad_type):
+                def mocked_curl(url, timeout=10, host_header=None):
+                    if url == "http://127.0.0.1:8080/health":
+                        value = {"status": "ok", "product": "chessy", "release_sha": m.RELEASE}
+                        if bad_type == "wrong-sha":
+                            value["release_sha"] = "b" * 40
+                    else:
+                        value = {"status": "ok", "backendReady": True, "roomsActive": 0}
+                        if bad_type == "active":
+                            value["roomsActive"] = 1
+                        if bad_type == "invalid-count":
+                            value["roomsActive"] = False
+                    return json.dumps(value).encode()
+                with patch.object(m, "curl_data", side_effect=mocked_curl):
+                    with self.assertRaises(RuntimeError):
+                        m.check_old_rooms()
+
     def test_rejects_traversal_archive(self):
         self.files["dist/../../../escape"] = "escape"
         self.build_zip()
