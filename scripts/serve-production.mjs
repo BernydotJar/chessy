@@ -16,6 +16,13 @@ const gitSha = process.env.CHESSY_RELEASE_SHA || (() => {
   catch { return 'unknown'; }
 })();
 const deploymentClass = process.env.CHESSY_DEPLOYMENT_CLASS || 'public-web';
+const uiVersion = (() => {
+  try {
+    const data = JSON.parse(fs.readFileSync(path.join(root, 'version.json'), 'utf8'));
+    return /^[a-f0-9]{24}$/.test(data.ui_version) ? data.ui_version : null;
+  } catch { return null; }
+})();
+
 const blocked = new Set(['/internal', '/metrics', '/meta', '/ready', '/debug', '/admin']);
 const mime = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
@@ -59,7 +66,7 @@ const server = http.createServer((req, res) => {
   }
   if (pathname.startsWith('/aula/') && !aula) return respond(res, 404, 'Not found\n');
   if (pathname === '/health') {
-    return respond(res, 200, JSON.stringify({ status: 'ok', product: 'chessy', release_sha: gitSha, deployment_class: deploymentClass }) + '\n', 'application/json; charset=utf-8', { 'Cache-Control': 'no-store' });
+    return respond(res, 200, JSON.stringify({ status: 'ok', product: 'chessy', release_sha: gitSha, deployment_class: deploymentClass, ...(uiVersion ? {ui_version:uiVersion}: {}) }) + '\n', 'application/json; charset=utf-8', { 'Cache-Control': 'no-store' });
   }
   if (blocked.has(pathname)) return respond(res, 404, 'Not found\n', undefined, { 'Cache-Control': 'no-store' });
   if (req.method !== 'GET' && req.method !== 'HEAD') return respond(res, 405, 'Method not allowed\n', undefined, { Allow: 'GET, HEAD' });

@@ -53,6 +53,11 @@ async function smoke(){
    assert.match(b.headers.get('permissions-policy'),/camera=\(self\)/);
    assert.equal(b.status,200);
    const h=await fetch(base+'/aula/api/health');assert.equal((await h.json()).backendReady,true);
+   const status=await fetch(base+'/health');
+   const published=await status.json();
+   const manifest=JSON.parse(fs.readFileSync(path.join(root,'dist/version.json'),'utf8'));
+   assert.equal(published.ui_version,manifest.ui_version,'Public health matches stamped UI version');
+   assert.match(status.headers.get('cache-control'),/no-store/);
  });
  await check('Existing Chessy classes visibly links to the teacher classroom',async()=>{
    await teacher.goto(base+'/#/classes',{waitUntil:'domcontentloaded'});

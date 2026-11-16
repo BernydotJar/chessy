@@ -54,6 +54,8 @@ jobs:
         run: node scripts/sync-classroom-exercise-bank.cjs --check
       - name: Build production artifact
         run: npm run build
+      - name: Verify release notification, version stamping and classroom cache exclusion
+        run: npm run test:version
       - name: Compile the opt-in LiveKit classroom separately
         run: VITE_CHESSY_PRIVATE_ROOMS_ENABLED=true VITE_CHESSY_LIVEKIT_ENABLED=true VITE_CHESSY_ADULT_PILOT_ONLY=true npx vite build --outDir /tmp/chessy-livekit-compile
       - name: Disposable pilot gateway auth isolation
