@@ -99,10 +99,17 @@ def check_staged_secrets(path: Path) -> None:
             raise ValueError(f"Missing required teacher/admin code: {variable}")
 
 
-def curl_data(url: str, timeout: int = 10) -> bytes:
-    x = run("curl", "--fail", "--silent", "--show-error", "--connect-timeout", "4",
-            "--max-time", str(timeout), url, capture_output=True)
-    return x.stdout
+def curl_data(url: str, timeout: int = 10, host_header: str | None = None) -> bytes:
+    # Existing Mac edge: native cloudflared → localhost:8080 (Caddy) → Docker
+    # Chessy. Connecting directly here avoids Cloudflare hairpin timeouts on Mac.
+    args = ["curl", "--fail", "--silent", "--show-error", "--connect-timeout", "4",
+            "--max-time", str(timeout)]
+    if host_header is not None:
+        if host_header not in ("chessy.textilesdemedellin.com", "chessy.lch-app.cloud"):
+            raise ValueError("Unrecognized Chessy Host header")
+        args.extend(("--header", "Host: " + host_header))
+    args.append(url)
+    return run(*args, capture_output=True).stdout
 
 
 def check_release(origin: str, include_js: bool = False) -> None:
@@ -121,12 +128,25 @@ def check_release(origin: str, include_js: bool = False) -> None:
 
 
 def check_old_rooms() -> None:
-    data = json.loads(curl_data(
-        "https://chessy.textilesdemedellin.com/aula/api/health"))
+    # Verify the *actual* original production origin directly through the
+    # existing Mac Caddy site. FINALIZE_CHESSY.sh explicitly health-checks
+    # this same endpoint with Host: chessy.textilesdemedellin.com.
+    # Never let a failed public hairpin probe bypass the room occupancy gate.
+    origin = "http://127.0.0.1:8080"
+    host = "chessy.textilesdemedellin.com"
+    identity = json.loads(curl_data(origin + "/health", host_header=host))
+    if (identity.get("status") != "ok" or
+            identity.get("product") != "chessy" or
+            identity.get("release_sha") != RELEASE):
+        raise RuntimeError("Old local Chessy route does not serve the expected release")
+    data = json.loads(curl_data(origin + "/aula/api/health", host_header=host))
     if data.get("status") != "ok" or data.get("backendReady") is not True:
-        raise RuntimeError("Old classroom health unavailable")
-    if data.get("roomsActive") != 0:
+        raise RuntimeError("Old classroom local origin is unhealthy")
+    if type(data.get("roomsActive")) is not int or data["roomsActive"] < 0:
+        raise RuntimeError("Old classroom active-room count is invalid")
+    if data["roomsActive"] != 0:
         raise RuntimeError("An active classroom exists; cutover refused")
+    print("OLD_LOCAL_CHESSY_PREFLIGHT_PASS zero-active-rooms")
 
 
 def prepare() -> tuple[Path, Path]:
