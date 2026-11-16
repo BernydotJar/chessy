@@ -129,8 +129,9 @@ async function check(name,fn){
       }
       await teacher.locator('#toggle-editor').click();
       await student.getByText('Jugadas legales · posición sincronizada').waitFor();
-      assert.equal(await teacher.locator('#toggle-editor').getAttribute('aria-expanded'),'false');
-      assert.equal(await teacher.locator('#editor-panel').isVisible(),false);
+      await teacher.locator('#toggle-editor[aria-expanded="false"]').waitFor();
+      await teacher.locator('#editor-panel').waitFor({state:'hidden'});
+      assert.equal(await teacher.locator('#toggle-editor').getAttribute('aria-pressed'),'false');
       assert.equal(await student.locator('#board [data-square="a1"]').getAttribute('data-piece'),'R');
     });
     await check('teacher controls drawing arrows shared with learner',async()=>{
