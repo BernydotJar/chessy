@@ -409,6 +409,21 @@ export function attachAulaDirect(server,{secretPath,adminSecretPath,registryPath
         room.past.push(capture(room));restore(room,next);room.revision++;
         broadcast(room,{feedback:'move-redone'});return;
       }
+      // Atomic teacher-only clear: enter setup and empty the board in one
+      // revision. Sending 'mode' then 'edit' separately races on mobile/WSS.
+      if(data.type==='clear-board'){
+        if(role!=='teacher')return sendTo(ws,{type:'error',message:'Solo el profesor puede vaciar el tablero'});
+        if(!Number.isSafeInteger(data.revision)||data.revision!==room.revision)
+          return sendTo(ws,{type:'error',message:'La posición cambió. Actualiza el tablero.'});
+        const draft=room.boardMode==='setup'&&room.editor?room.editor:beginPositionEditor(room.fen);
+        const empty=changePositionDraft(draft,{action:'clear'});
+        snapshot(room);
+        room.editor=empty;room.boardMode='setup';room.exercise=null;room.history=[];
+        room.annotations={arrows:[],squares:[]};room.lastMove=null;room.hint=null;
+        room.control='teacher';room.revision++;
+        broadcast(room,{feedback:'board-cleared'});
+        return;
+      }
       if(data.type==='mode'){
         if(role!=='teacher'||!['setup','play'].includes(data.value))
           return sendTo(ws,{type:'error',message:'Solo el profesor puede editar'});
