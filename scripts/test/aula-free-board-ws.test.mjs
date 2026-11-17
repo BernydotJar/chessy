@@ -78,6 +78,25 @@ test('REA: private teacher/learner free board, editing, markings, authority and 
     assert.ok(denied);
     assert.equal(teacher.state.boardMode,'play');
   });
+  await t.test('teacher clears directly from play; learner cannot clear, and undo restores the board',async()=>{
+    const before=teacher.state;
+    student.socket.send(JSON.stringify({type:'clear-board',revision:before.revision}));
+    assert.ok(await student.wait(m=>m.type==='error'&&m.message.includes('profesor')&&m.message.includes('vaciar')));
+    assert.equal(teacher.state.revision,before.revision);
+    teacher.socket.send(JSON.stringify({type:'clear-board',revision:before.revision-1}));
+    assert.ok(await teacher.wait(m=>m.type==='error'&&m.message.includes('cambió')));
+    const cleared=await update({type:'clear-board'});
+    assert.equal(cleared.boardMode,'setup');
+    assert.equal(cleared.editor.placement,'8/8/8/8/8/8/8/8');
+    assert.equal(cleared.control,'teacher');
+    assert.equal(cleared.feedback,'board-cleared');
+    assert.deepEqual(cleared.annotations,{arrows:[],squares:[]});
+    teacher.socket.send(JSON.stringify({type:'mode',value:'play',revision:cleared.revision}));
+    assert.ok(await teacher.wait(m=>m.type==='error'&&m.message.includes('rey')));
+    const restored=await update({type:'undo'});
+    assert.equal(restored.boardMode,'play');
+    assert.equal(restored.fen,before.fen);
+  });
   await t.test('teacher enters synchronized editor, clears, places kings and rook',async()=>{
     let state=await update({type:'mode',value:'setup'});
     assert.equal(state.boardMode,'setup');

@@ -133,7 +133,7 @@ select{appearance:auto}.exercise-card select{margin-bottom:9px}
 /* Teacher-first mobile workbench: actions remain beside the board, not after video. */
 .board-quickbar{
  display:grid;
- grid-template-columns:repeat(4,minmax(0,1fr));
+ grid-template-columns:repeat(5,minmax(0,1fr));
  gap:8px;
  padding:8px;
  margin:0 0 9px;

@@ -108,7 +108,7 @@ async function check(name,fn){
         };
       });
       assert.ok(controls.beforeBoard&&controls.advancedBeforeBoard,JSON.stringify(controls));
-      assert.equal(controls.buttonCount,4);
+      assert.equal(controls.buttonCount,5);
       assert.ok(controls.minTouchHeight>=44,JSON.stringify(controls));
       assert.equal(controls.editLabel,'Editar tablero');
       assert.equal(controls.uniqueEditorButton,1);
@@ -121,6 +121,19 @@ async function check(name,fn){
       const mobile320=await teacher.evaluate(()=>({scroll:document.documentElement.scrollWidth,width:innerWidth}));
       assert.ok(mobile320.scroll<=mobile320.width+2,JSON.stringify(mobile320));
       await teacher.setViewportSize({width:390,height:844});
+    });
+    await check('teacher can empty the board from top controls and undo without losing class',async()=>{
+      assert.equal(await teacher.locator('#clear-position').count(),1);
+      assert.equal(await student.locator('#clear-position').count(),0);
+      teacher.once('dialog',dialog=>dialog.accept());
+      await teacher.locator('#clear-position').click();
+      await student.waitForFunction(()=>document.querySelectorAll('#board [data-piece]:not([data-piece=""])').length===0);
+      await teacher.getByText('Tablero vacío para ambos.',{exact:false}).waitFor();
+      await teacher.locator('#toggle-editor[aria-expanded="true"]').waitFor();
+      assert.equal(await student.locator('#board .square').count(),64);
+      await teacher.locator('#undo-move').click();
+      await student.waitForFunction(()=>document.querySelectorAll('#board [data-piece]:not([data-piece=""])').length===32);
+      await teacher.locator('#toggle-editor[aria-expanded="false"]').waitFor();
     });
     await check('teacher opens REAL unrestricted free-board editor',async()=>{
       await teacher.locator('#toggle-editor').click();
@@ -137,6 +150,7 @@ async function check(name,fn){
       assert.equal(editorPlacement.pressed,'true');
       assert.equal(editorPlacement.buttonText,'Finalizar preparación');
       await student.getByText('Preparando posición · movimientos libres').waitFor();
+      teacher.once('dialog',dialog=>dialog.accept());
       await teacher.locator('#clear-position').click();
       await student.waitForFunction(()=>document.querySelectorAll('#board [data-piece]:not([data-piece=""])').length===0);
       for(const [piece,square] of [['K','e1'],['k','e8'],['R','a1']]){

@@ -125,6 +125,7 @@ const htmlRoom=()=>{
     '</div></div>'+
     (isTeacher?'<div class="board-quickbar" role="toolbar" aria-label="Controles rápidos del profesor">'+
       '<button id="toggle-editor" class="btn primary" type="button" aria-controls="editor-panel" aria-expanded="false" aria-pressed="false">Editar tablero</button>'+
+      '<button id="clear-position" class="btn quiet" type="button">Vaciar tablero</button>'+
       '<button id="annotation-mode" class="btn secondary" type="button" aria-pressed="false">Dibujar flechas</button>'+
       '<button id="clear-annotations" class="btn quiet" type="button">Borrar marcas</button>'+
       '<button id="reset-board" class="btn quiet" type="button">Nueva partida</button></div>'+
@@ -145,8 +146,7 @@ const htmlRoom=()=>{
       Object.entries(glyph).map(([piece,symbol])=>'<button type="button" class="palette-piece" data-piece="'+piece+'" aria-label="'+
         esc(labels[piece.toUpperCase()]+' '+(piece===piece.toUpperCase()?'blanco':'negro'))+'">'+symbol+'</button>').join('')+
       '<button type="button" class="palette-piece palette-remove" data-piece="remove" aria-label="Borrar pieza">×</button></div>'+
-      '<div class="button-row editor-actions"><button id="clear-position" class="btn quiet small" type="button">Vaciar tablero</button>'+
-      '<label for="board-turn" class="turn-label">Juegan <select id="board-turn"><option value="w">Blancas</option><option value="b">Negras</option></select></label></div>'+
+      '<div class="button-row editor-actions"><label for="board-turn" class="turn-label">Juegan <select id="board-turn"><option value="w">Blancas</option><option value="b">Negras</option></select></label></div>'+
       '<p id="editor-help" role="status" class="muted small">Para finalizar: un rey blanco y un rey negro.</p></div>':'')+
     '<div id="board" class="chessboard" role="group" aria-label="Tablero de ajedrez sincronizado"></div>'+
     '<div class="board-meta"><span id="move-count">Posición inicial</span><span id="exercise-status" class="text-gold">Tablero libre</span></div>'+
@@ -322,6 +322,7 @@ function updateRoom(info){
       'move-redone':'Cambio restaurado.',
       'editor-started':'Modo libre: coloca y mueve piezas sin restricciones.',
       'editor-updated':'Posición actualizada para ambos.',
+      'board-cleared':'Tablero vacío para ambos. Coloca las piezas; para finalizar necesitas un rey de cada color.',
       'editor-finished':'Preparación terminada. Ahora se aplican las reglas legales.',
       'annotation-updated':'Anotación compartida.'};
     const status=document.querySelector('#board-feedback');if(status)status.textContent=label[info.feedback]||'';
@@ -470,7 +471,12 @@ async function openRoom(){
     send({type:'mode',value:entering?'setup':'play',revision:room.revision});
   });
   bind('clear-position','click',()=>{
-    if(room.boardMode==='setup')send({type:'edit',action:'clear',revision:room.revision});
+    if(!room||role!=='teacher')return;
+    if(!confirm('¿Vaciar todas las piezas del tablero para ambos? Podrás deshacer el cambio.'))return;
+    editorTool=null;selected=null;legalSquares=[];marking=false;markSource=null;
+    const marker=document.querySelector('#annotation-mode');
+    if(marker){marker.setAttribute('aria-pressed','false');marker.textContent='Dibujar flechas';}
+    send({type:'clear-board',revision:room.revision});
   });
   bind('board-turn','change',ev=>{
     if(room.boardMode==='setup')send({type:'edit',action:'turn',turn:ev.target.value,revision:room.revision});
