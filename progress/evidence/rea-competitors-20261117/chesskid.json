@@ -1,0 +1,82 @@
+{
+  "evidence_id": "ev_89780711f00369a04b0712a7fdf4e85cd2733cff4cbf5504c6c214c2e620e94b",
+  "subject": null,
+  "provider": {
+    "id": "rea-cdp-browser",
+    "name": "REA Chrome DevTools Protocol observation provider",
+    "version": "2"
+  },
+  "authority": "external-service",
+  "observed_url": "https://www.chesskid.com/",
+  "observed_title": "Chess Online For Kids - 100% Safe and Free - ChessKid.com",
+  "captured_at": {
+    "started_at": "2026-11-18T04:57:30.060Z",
+    "ended_at": "2026-11-18T04:57:31.763Z",
+    "observation_ms": 1100
+  },
+  "counts": {
+    "dom_nodes": 2337,
+    "accessibility_nodes": 806,
+    "scripts": 131
+  },
+  "status": "observed_public_page",
+  "completeness": "policy_filtered",
+  "selected_accessibility_evidence": [
+    {
+      "role": "link",
+      "name": "Boy playing chess against a girl Play Kids Play chess with kids from around the world at any time!"
+    },
+    {
+      "role": "link",
+      "name": "Boy playing chess against a robot Play Bots Challenge a bot at any level, from gentle beginner to challenging master!"
+    },
+    {
+      "role": "link",
+      "name": "ChessKid lessons page Watch Lessons 150+ interactive lessons help you learn and practice new skills."
+    },
+    {
+      "role": "link",
+      "name": "ChessKid puzzles page Puzzles Improve your game the fun way, by solving thousands of chess puzzles!"
+    },
+    {
+      "role": "heading",
+      "name": "Play Kids"
+    },
+    {
+      "role": "heading",
+      "name": "Play Bots"
+    },
+    {
+      "role": "heading",
+      "name": "Watch Lessons"
+    },
+    {
+      "role": "heading",
+      "name": "Puzzles"
+    },
+    {
+      "role": "link",
+      "name": "Chess Puzzles"
+    },
+    {
+      "role": "link",
+      "name": "Lesson Planner"
+    },
+    {
+      "role": "link",
+      "name": "Live Classroom"
+    }
+  ],
+  "limitations": [
+    "Artifact identity is unavailable for this observation.",
+    "Observation starts when REA attaches; prior network and console activity is unavailable.",
+    "Worker targets are a final inventory snapshot, not worker-session observation. Their attached flag describes any debugging client; this page-session collector does not observe worker network, console, or script events, and short-lived workers may be absent from the snapshot.",
+    "Raw network headers, bodies, cookies, storage values, console objects, and WebSocket payloads are never retained; explicitly requested primitive console text is retained verbatim, while payload captures retain value-free shapes.",
+    "Source maps are reported only as declarative URLs and are not fetched.",
+    "URL-less scripts and console events without an allowed source URL are excluded because their origin cannot be proven.",
+    "CDP discovery could not establish the target's debugger attachment state.",
+    "Browser host platform and architecture were not observed."
+  ],
+  "raw_capture_sha256": "e5702e3560717a5e1b9469e04af1dc99582c8a9ebd77a33081fa09cd1b2d998f",
+  "command": "rea inspect-web-page http://127.0.0.1:19332 <target-id> --include-accessibility-text --observation-ms 1100 --format json"
+}

@@ -1,0 +1,90 @@
+{
+  "evidence_id": "ev_85fcd1833d3eef331f7f724d6c51ad69126cd5df17889ff935817f9034c53b5e",
+  "subject": null,
+  "provider": {
+    "id": "rea-cdp-browser",
+    "name": "REA Chrome DevTools Protocol observation provider",
+    "version": "2"
+  },
+  "authority": "external-service",
+  "observed_url": "https://www.chessable.com/",
+  "observed_title": "Chessable",
+  "captured_at": {
+    "started_at": "2026-11-18T04:57:25.843Z",
+    "ended_at": "2026-11-18T04:57:28.757Z",
+    "observation_ms": 1100
+  },
+  "counts": {
+    "dom_nodes": 1210,
+    "accessibility_nodes": 619,
+    "scripts": 7
+  },
+  "status": "observed_public_page",
+  "completeness": "policy_filtered",
+  "selected_accessibility_evidence": [
+    {
+      "role": "link",
+      "name": "Start Learning - It's free"
+    },
+    {
+      "role": "link",
+      "name": "Start Learning - It's free"
+    },
+    {
+      "role": "heading",
+      "name": "Select your course"
+    },
+    {
+      "role": "heading",
+      "name": "Learn the Moves"
+    },
+    {
+      "role": "heading",
+      "name": "Review"
+    },
+    {
+      "role": "tab",
+      "name": "Endgame"
+    },
+    {
+      "role": "tab",
+      "name": "Tactics"
+    },
+    {
+      "role": "tab",
+      "name": "Beginners"
+    },
+    {
+      "role": "link",
+      "name": "Start Learning - It's free"
+    },
+    {
+      "role": "link",
+      "name": "Improving Endgame Technique: Knight Endgames by Valeriy Aveskulov"
+    },
+    {
+      "role": "link",
+      "name": "100 Endgames You Must Know by Jesús de la Villa"
+    },
+    {
+      "role": "heading",
+      "name": "Improving Endgame Technique: Knight Endgames"
+    },
+    {
+      "role": "heading",
+      "name": "100 Endgames You Must Know"
+    }
+  ],
+  "limitations": [
+    "Artifact identity is unavailable for this observation.",
+    "Observation starts when REA attaches; prior network and console activity is unavailable.",
+    "Worker targets are a final inventory snapshot, not worker-session observation. Their attached flag describes any debugging client; this page-session collector does not observe worker network, console, or script events, and short-lived workers may be absent from the snapshot.",
+    "Raw network headers, bodies, cookies, storage values, console objects, and WebSocket payloads are never retained; explicitly requested primitive console text is retained verbatim, while payload captures retain value-free shapes.",
+    "Source maps are reported only as declarative URLs and are not fetched.",
+    "URL-less scripts and console events without an allowed source URL are excluded because their origin cannot be proven.",
+    "CDP discovery could not establish the target's debugger attachment state.",
+    "Browser host platform and architecture were not observed."
+  ],
+  "raw_capture_sha256": "2de398eb9261caa79d978521506c3d5d10ae6a514ff8c4270b4edcb88352527b",
+  "command": "rea inspect-web-page http://127.0.0.1:19332 <target-id> --include-accessibility-text --observation-ms 1100 --format json"
+}

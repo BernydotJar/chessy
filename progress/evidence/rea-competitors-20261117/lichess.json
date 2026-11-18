@@ -1,0 +1,42 @@
+{
+  "evidence_id": "ev_d4e9c83884183303aec95ff1d344ad8a5405e3ca5c445d60d4c10f8a189a334f",
+  "subject": null,
+  "provider": {
+    "id": "rea-cdp-browser",
+    "name": "REA Chrome DevTools Protocol observation provider",
+    "version": "2"
+  },
+  "authority": "external-service",
+  "observed_url": "https://lichess.org/training/themes",
+  "observed_title": "Just a moment...",
+  "captured_at": {
+    "started_at": "2026-11-18T04:56:30.187Z",
+    "ended_at": "2026-11-18T04:56:31.537Z",
+    "observation_ms": 1200
+  },
+  "counts": {
+    "dom_nodes": 64,
+    "accessibility_nodes": 44,
+    "scripts": 2
+  },
+  "status": "blocked_by_site_protection",
+  "completeness": "policy_filtered",
+  "selected_accessibility_evidence": [
+    {
+      "role": "heading",
+      "name": "Performing security verification"
+    }
+  ],
+  "limitations": [
+    "Artifact identity is unavailable for this observation.",
+    "Observation starts when REA attaches; prior network and console activity is unavailable.",
+    "Worker targets are a final inventory snapshot, not worker-session observation. Their attached flag describes any debugging client; this page-session collector does not observe worker network, console, or script events, and short-lived workers may be absent from the snapshot.",
+    "Raw network headers, bodies, cookies, storage values, console objects, and WebSocket payloads are never retained; explicitly requested primitive console text is retained verbatim, while payload captures retain value-free shapes.",
+    "Source maps are reported only as declarative URLs and are not fetched.",
+    "URL-less scripts and console events without an allowed source URL are excluded because their origin cannot be proven.",
+    "CDP discovery could not establish the target's debugger attachment state.",
+    "Browser host platform and architecture were not observed."
+  ],
+  "raw_capture_sha256": "d3a1e6ca7c6b604ee67c880861cb5c6933ad16aecb7f16906b60bf533914622e",
+  "command": "rea inspect-web-page http://127.0.0.1:19332 <target-id> --include-accessibility-text --observation-ms 1100 --format json"
+}

@@ -1,0 +1,18 @@
+{
+  "schema": "chessy-prod-gate-evidence.v1",
+  "checked_at_utc": "2026-11-18T05:00:05.005701+00:00",
+  "origin": "https://chessy.lch-app.cloud/",
+  "public_release_at_preflight": "49ac6982a1a140195584b3b0f22c09a5ed3aabe6",
+  "candidate_release": "ae47628ec8b3c58099930f7a9e5917ce7747bfe1",
+  "public_ui_version": "4e7182daeb75214feb8c1bb7",
+  "candidate_ui_version": "2d1546b03b32f5919e2d84e5",
+  "aula_health_status": "ok",
+  "backend_ready": true,
+  "active_rooms": 1,
+  "gate_decision": "NO_GO_ACTIVE_ROOMS",
+  "current_supervisor_conf_sha256": "9b9ccf66c77e8a999dfc154a5e675d9e1d5097675baf6915a15348304aabcc39",
+  "candidate_artifact_id": 14394984168,
+  "ci_run": "https://github.com/BernydotJar/chessy/actions/runs/44231130732",
+  "promoted": false,
+  "teacher_secrets_read": false
+}
