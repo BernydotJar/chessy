@@ -324,3 +324,34 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
  .play-view-v3 .game-controls-v3 .local-clock-picker{padding:4px 0 0}
  .play-view-v3 .game-controls-v3 .resign-confirm{margin:0}
 }
+
+/* Chessy product discovery: teacher shortcut and curriculum continuity. */
+.classroom-launch{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:8px 13px;border:1px solid var(--line-strong);border-radius:10px;background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:700;white-space:nowrap}
+.classroom-launch.active{box-shadow:inset 0 0 0 1px var(--accent)}
+.classroom-launch:hover{border-color:var(--accent)}
+.home-learning-progress{max-width:430px;margin-top:22px;padding:15px 17px;border:1px solid var(--line-strong);border-radius:13px;background:var(--surface);display:grid;gap:8px}
+.home-learning-progress__heading{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:11px;color:var(--muted)}
+.home-learning-progress__heading span{color:var(--accent);font-weight:700}
+.home-learning-progress__heading strong{font-size:10px;font-weight:550}
+.home-learning-progress>p{font-size:13px;line-height:1.35;font-weight:600;color:var(--text)}
+.home-learning-progress progress,.academy-next-copy progress{width:100%;height:7px;accent-color:var(--accent);border:0;border-radius:20px;overflow:hidden;background:var(--surface-2)}
+.home-learning-progress progress::-webkit-progress-bar,.academy-next-copy progress::-webkit-progress-bar{background:var(--surface-2)}
+.home-learning-progress progress::-webkit-progress-value,.academy-next-copy progress::-webkit-progress-value{background:var(--accent);border-radius:20px}
+.academy-next-action{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:24px;margin-bottom:26px;background:linear-gradient(125deg,var(--surface),var(--accent-soft))}
+.academy-next-copy{max-width:570px;min-width:0}
+.academy-next-copy h2{font-size:clamp(19px,2.2vw,26px);line-height:1.25;margin:10px 0 5px}
+.academy-next-copy>p:not(.eyebrow){font-size:12px;color:var(--muted);margin-bottom:12px}
+.academy-next-actions{display:flex;flex-direction:column;gap:10px;min-width:170px}
+.academy-secondary{border:1px solid var(--line);border-radius:15px;margin-top:22px;background:var(--surface)}
+.academy-secondary>summary{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:17px 22px;min-height:58px;cursor:pointer;list-style:none}
+.academy-secondary>summary::-webkit-details-marker{display:none}
+.academy-secondary>summary span{display:grid;gap:3px}
+.academy-secondary>summary strong{font-size:14px;color:var(--text)}
+.academy-secondary>summary small{font-size:11px;color:var(--muted)}
+.academy-secondary>summary>svg{color:var(--accent);transition:transform .2s}
+.academy-secondary[open]>summary>svg{transform:rotate(90deg)}
+.academy-secondary-body{padding:10px 22px 25px;border-top:1px solid var(--line)}
+.academy-secondary-body .mastery-path-section,.academy-secondary-body .mini-game-section{margin-top:25px}
+@media(max-width:760px){.classroom-launch{min-width:44px;width:44px;padding:9px}.classroom-launch-label{display:none}.academy-next-action{grid-template-columns:1fr;gap:16px}.academy-next-actions{flex-direction:row;flex-wrap:wrap}.academy-next-actions .btn{flex:1;min-width:135px}.academy-secondary>summary{padding:14px 17px}.academy-secondary-body{padding:8px 15px 20px}}
+@media(max-width:390px){.topbar-actions .settings-launch{display:none}}
+@media(prefers-reduced-motion:reduce){.academy-secondary>summary>svg{transition:none}}

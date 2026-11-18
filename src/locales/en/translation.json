@@ -865,7 +865,15 @@
     "miniGamesSubtitle": "Fewer pieces make decisions easier to see. Practice one family of ideas before returning to a full position.",
     "startMiniGame": "Play mini-game",
     "lessonsEyebrow": "Guided concepts",
-    "lessonsTitle": "Lessons that feed the path"
+    "lessonsTitle": "Lessons that feed the path",
+    "classroomShortcut": "Classroom",
+    "nextLessonLabel": "Your next lesson",
+    "lessonProgressLabel": "Lesson progress",
+    "allLessonsComplete": "You completed every lesson!",
+    "extraResources": "Explore more resources",
+    "extraResourcesHint": "Mastery path and mini-games",
+    "browseLessons": "Browse library",
+    "revisitLesson": "Review lessons"
   },
   "auth": {
     "title": "Your Chessy account",

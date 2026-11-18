@@ -4,6 +4,7 @@ import { useGameStore } from '../../store/gameStore';
 import { useLearningStore } from '../../learning/store';
 import { PUZZLES, dailyPuzzle } from '../../learning/puzzles';
 import { LESSONS } from '../../learning/curriculum';
+import { lessonJourney } from '../../learning/lessonJourney';
 import { localDay, streak, xp } from '../../learning/progress';
 import { locale } from '../../learning/types';
 import { PositionBoard } from './Shared';
@@ -11,12 +12,12 @@ import { ChessyIcon } from '../../design/icons';
 
 export function HomeView() {
  const {t,i18n}=useTranslation(),lang=locale(i18n.resolvedLanguage);const {progress,configure}=useLearningStore();const setView=useGameStore(s=>s.setView);
- const daily=dailyPuzzle(localDay()),next=LESSONS.find(l=>!progress.lessons.includes(l.id))||LESSONS[0];
+ const daily=dailyPuzzle(localDay()),journey=lessonJourney(progress),next=journey.next||LESSONS[0];
  const start=(mode:'practice'|'daily'|'sprint')=>{configure(mode);setView('training');};
  const continueLesson=()=>{window.location.hash='/academy/'+next.id;setView('academy');};
  return <div className="view-enter home-view">
   <div className="hero-grid home-workspace">
-   <section className="hero-copy"><p className="eyebrow"><span className="live-dot"/>{t('studio.heroEyebrow')}</p><h1>{t('studio.heroTitle')}</h1><p>{t('studio.heroSubtitle')}</p><div className="button-row"><button className="btn primary large" onClick={()=>start('practice')}>{t('studio.startPractice')}<ChessyIcon name="arrow" size={18}/></button><button className="btn secondary large" onClick={()=>setView('academy')}>{t('studio.exploreAcademy')}</button></div><div className="hero-proof"><span><ChessyIcon name="target" size={16}/>{t('studio.challengeCount',{count:PUZZLES.length})}</span><span><Globe2 size={16}/>ES / EN / PT</span></div></section>
+   <section className="hero-copy"><p className="eyebrow"><span className="live-dot"/>{t('studio.heroEyebrow')}</p><h1>{t('studio.heroTitle')}</h1><p>{t('studio.heroSubtitle')}</p><div className="button-row"><button className="btn primary large" onClick={()=>start('practice')}>{t('studio.startPractice')}<ChessyIcon name="arrow" size={18}/></button><button className="btn secondary large" onClick={continueLesson}>{t('studio.continueLearning')}</button></div><div className="home-learning-progress"><div className="home-learning-progress__heading"><span>{t('studio.nextLessonLabel')}</span><strong>{journey.completed}/{journey.total} · {t('studio.completed')}</strong></div><p>{journey.next?journey.next.title[lang]:t('studio.allLessonsComplete')}</p><progress max={journey.total||1} value={journey.completed} aria-label={t('studio.lessonProgressLabel')}/></div><div className="hero-proof"><span><ChessyIcon name="target" size={16}/>{t('studio.challengeCount',{count:PUZZLES.length})}</span><span><Globe2 size={16}/>ES / EN / PT</span></div></section>
    <section className="hero-board-panel"><div className="hero-board-heading"><span className="icon-tile small"><ChessyIcon name="spark" size={18}/></span><div><h2>{t('studio.daily')}</h2><p>{t('studio.dailyHint')}</p></div><span className="tag gold">{localDay().slice(5).replace('-',' / ')}</span></div><div className="hero-board"><PositionBoard fen={daily.fen} readOnly/></div><button className="hero-board-cta" onClick={()=>start('daily')}><span>{t('studio.solveDaily')}</span><ChessyIcon name="arrow" size={19}/></button></section>
   </div>
   <div className="home-section-title"><div><p className="eyebrow">{t('studio.yourPath')}</p><h2>{t('studio.choosePath')}</h2></div><button className="text-button" onClick={()=>setView('progress')}>{t('studio.progress')}<ArrowRight size={17}/></button></div>
