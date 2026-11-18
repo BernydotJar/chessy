@@ -865,7 +865,15 @@
     "miniGamesSubtitle": "Menos piezas, decisiones más visibles. Practica una familia de ideas antes de volver a una posición completa.",
     "startMiniGame": "Jugar minipartida",
     "lessonsEyebrow": "Conceptos guiados",
-    "lessonsTitle": "Lecciones que alimentan la ruta"
+    "lessonsTitle": "Lecciones que alimentan la ruta",
+    "classroomShortcut": "Aula",
+    "nextLessonLabel": "Tu próxima lección",
+    "lessonProgressLabel": "Progreso de lecciones",
+    "allLessonsComplete": "¡Completaste todas las lecciones!",
+    "extraResources": "Explorar otros recursos",
+    "extraResourcesHint": "Ruta de dominio y minijuegos",
+    "browseLessons": "Ver biblioteca",
+    "revisitLesson": "Revisar lecciones"
   },
   "auth": {
     "title": "Tu cuenta Chessy",

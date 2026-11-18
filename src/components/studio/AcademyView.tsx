@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, ArrowRight, CheckCircle2, Clock } from 'lucide-react';
 import { LESSONS, TRACKS } from '../../learning/curriculum';
+import { lessonJourney } from '../../learning/lessonJourney';
 import { lessonFromHash } from '../../learning/lessonNavigation';
 import { MINI_GAME_PRESETS, type MiniGamePreset } from '../../learning/minigames';
 import { MASTERY_PATH } from '../../learning/masteryPath';
@@ -43,14 +44,24 @@ export function AcademyView() {
   window.addEventListener('hashchange',sync);
   return ()=>window.removeEventListener('hashchange',sync);
  },[]);
+ const journey=lessonJourney(progress),featuredLesson=journey.next||LESSONS[0];
  const openLesson=(lesson:Lesson)=>{setSelected(lesson);window.location.hash='/academy/'+lesson.id;};
  const backToAcademy=()=>{setSelected(null);window.location.hash='/academy';};
  const launchMiniGame=(preset:MiniGamePreset)=>{loadGame(preset.fen);setTrainingMode(true);setView('play');};
  if(selected)return <LessonReader key={selected.id} lesson={selected} onBack={backToAcademy}/>;
  return <div className="view-enter">
   <SectionHeading eyebrow={t('studio.academyEyebrow')} title={t('studio.academyTitle')} subtitle={t('studio.academySubtitle')}/>
-  <div className="academy-summary"><ChessyIcon name="academy" size={18}/><span>{t('studio.lessonCount',{count:LESSONS.length})}</span><span className="divider-dot"/><span>{progress.lessons.length} / {LESSONS.length} · {t('studio.completed')}</span></div>
+  <div className="academy-summary"><ChessyIcon name="academy" size={18}/><span>{t('studio.lessonCount',{count:LESSONS.length})}</span><span className="divider-dot"/><span>{journey.completed} / {journey.total} · {t('studio.completed')}</span></div>
+  <section className="panel academy-next-action" aria-label={t('studio.nextLessonLabel')}>
+   <div className="academy-next-copy"><p className="eyebrow">{journey.next?t('studio.nextLessonLabel'):t('studio.allLessonsComplete')}</p><h2>{featuredLesson.title[lang]}</h2><p>{t(`studio.track.${featuredLesson.track}`)} · {t('studio.minutes',{count:featuredLesson.minutes})}</p><progress value={journey.completed} max={journey.total||1} aria-label={t('studio.lessonProgressLabel')}/></div>
+   <div className="academy-next-actions"><button className="btn primary" onClick={()=>openLesson(featuredLesson)}>{t(journey.next?'studio.readLesson':'studio.revisitLesson')}<ChessyIcon name="arrow" size={17}/></button><button className="btn secondary" onClick={()=>{window.location.hash='/library';setView('library');}}>{t('studio.browseLessons')}</button></div>
+  </section>
 
+  <section className="academy-lessons-section" aria-labelledby="academy-lessons-title">
+   <div className="home-section-title"><div><p className="eyebrow">{t('studio.lessonsEyebrow')}</p><h2 id="academy-lessons-title">{t('studio.lessonsTitle')}</h2></div></div>
+   <div className="track-grid">{TRACKS.map((track,index)=>{const icon=icons[track];const lessons=LESSONS.filter(l=>l.track===track),count=lessons.filter(l=>progress.lessons.includes(l.id)).length;return <section className={`panel track-card track-${track}`} key={track}><div className="track-card-top"><div className="icon-tile"><ChessyIcon name={icon} size={26}/></div><span className="track-number">0{index+1}</span></div><h2>{t(`studio.track.${track}`)}</h2><div className="track-progress"><span style={{width:`${count/lessons.length*100}%`}}/></div><div className="lesson-list">{lessons.map(lesson=><button key={lesson.id} className="lesson-link" onClick={()=>openLesson(lesson)}><span>{progress.lessons.includes(lesson.id)?<ChessyIcon name="check" size={18} className="accent"/>:<ChessyIcon name="library" size={18}/>}</span><span><strong>{lesson.title[lang]}</strong><small>{t(`studio.level.${lesson.level}`)} · {t('studio.minutes',{count:lesson.minutes})}</small></span><ArrowRight size={17}/></button>)}</div></section>;})}</div>
+  </section>
+  <details className="academy-secondary"><summary><span><strong>{t('studio.extraResources')}</strong><small>{t('studio.extraResourcesHint')}</small></span><ChessyIcon name="arrow" size={18}/></summary><div className="academy-secondary-body">
   <section className="mastery-path-section" aria-labelledby="mastery-path-title">
    <div className="home-section-title"><div><p className="eyebrow">{t('studio.masteryEyebrow')}</p><h2 id="mastery-path-title">{t('studio.masteryTitle')}</h2><p className="section-description">{t('studio.masterySubtitle')}</p></div></div>
    <ol className="mastery-path-grid">{MASTERY_PATH.map(phase=><li className="panel mastery-phase-card" key={phase.id}><div className="mastery-phase-top"><span className="mastery-order">{String(phase.order).padStart(2,'0')}</span><span className="tag">{phase.marker[lang]}</span></div><h3>{phase.title[lang]}</h3><p>{phase.summary[lang]}</p></li>)}</ol>
@@ -60,11 +71,7 @@ export function AcademyView() {
    <div className="home-section-title"><div><p className="eyebrow">{t('studio.miniGamesEyebrow')}</p><h2 id="mini-games-title">{t('studio.miniGamesTitle')}</h2><p className="section-description">{t('studio.miniGamesSubtitle')}</p></div></div>
    <div className="mini-game-grid">{MINI_GAME_PRESETS.map(preset=><article className="panel mini-game-card" key={preset.id}><span className="icon-tile small"><ChessyIcon name={miniGameIcons[preset.family]} size={20}/></span><div><h3>{preset.title[lang]}</h3><p>{preset.purpose[lang]}</p></div><button className="btn secondary" onClick={()=>launchMiniGame(preset)}>{t('studio.startMiniGame')}<ChessyIcon name="arrow" size={17}/></button></article>)}</div>
   </section>
-
-  <section className="academy-lessons-section" aria-labelledby="academy-lessons-title">
-   <div className="home-section-title"><div><p className="eyebrow">{t('studio.lessonsEyebrow')}</p><h2 id="academy-lessons-title">{t('studio.lessonsTitle')}</h2></div></div>
-   <div className="track-grid">{TRACKS.map((track,index)=>{const icon=icons[track];const lessons=LESSONS.filter(l=>l.track===track),count=lessons.filter(l=>progress.lessons.includes(l.id)).length;return <section className={`panel track-card track-${track}`} key={track}><div className="track-card-top"><div className="icon-tile"><ChessyIcon name={icon} size={26}/></div><span className="track-number">0{index+1}</span></div><h2>{t(`studio.track.${track}`)}</h2><div className="track-progress"><span style={{width:`${count/lessons.length*100}%`}}/></div><div className="lesson-list">{lessons.map(lesson=><button key={lesson.id} className="lesson-link" onClick={()=>openLesson(lesson)}><span>{progress.lessons.includes(lesson.id)?<ChessyIcon name="check" size={18} className="accent"/>:<ChessyIcon name="library" size={18}/>}</span><span><strong>{lesson.title[lang]}</strong><small>{t(`studio.level.${lesson.level}`)} · {t('studio.minutes',{count:lesson.minutes})}</small></span><ArrowRight size={17}/></button>)}</div></section>;})}</div>
-  </section>
+  </div></details>
 
  </div>;
 }

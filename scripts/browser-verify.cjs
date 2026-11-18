@@ -105,7 +105,37 @@ const report={createdAt:new Date().toISOString(),browser:null,checks:[],pageErro
   await check('Multi-ply puzzle plays legal opponent reply and accepts final mate',async()=>{await goto('training');await selectPuzzle('rook-two');await typeMove('a2a7');assert.match(await page.locator('.feedback[role="status"]').innerText(),/rival ha respondido/);await typeMove('b1b8');assert.match(await page.locator('.feedback[role="status"]').innerText(),/Idea encontrada/);});
   await check('Black-side Lichess line solves through the same input contract',async()=>{const {Chess}=require('chess.js');const rows=require('../src/data/lichess-sample.json');const row=rows.find(r=>{const b=new Chess(r.FEN),m=r.Moves.split(' ')[0];b.move({from:m.slice(0,2),to:m.slice(2,4),promotion:m[4]});return b.turn()==='b';});await goto('training');await selectPuzzle('lichess-'+row.PuzzleId);assert.match(await page.locator('.board-topline').innerText(),/Juegan negras/);const moves=row.Moves.split(' ').slice(1);for(let i=0;i<moves.length;i+=2)await typeMove(moves[i]);assert.match(await page.locator('.feedback[role="status"]').innerText(),/Idea encontrada/);});
   await check('Configured account route exposes email and Google auth without touching local progress',async()=>{await page.setViewportSize({width:390,height:844});await goto('account');await page.locator('.account-form').waitFor({timeout:10000});assert.equal(await page.locator('.account-unconfigured').count(),0);assert.equal(await page.locator('input[type="email"]').count(),1);assert.equal(await page.locator('input[type="password"]').count(),1);assert.equal(await page.getByRole('button',{name:/Continuar con Google/}).count(),1);const localBefore=await page.evaluate(()=>localStorage.getItem('chessy-learning-v1'));await goto('training');await page.locator('.challenge-layout').waitFor();assert.equal(await page.evaluate(()=>localStorage.getItem('chessy-learning-v1')),localBefore);await page.setViewportSize({width:1440,height:1000});});
-  await check('Academy v2 shows mastery path and launches a constrained mini-game',async()=>{await page.setViewportSize({width:390,height:844});await goto('academy');assert.equal(await page.locator('.mastery-phase-card').count(),8);assert.equal(await page.locator('.mini-game-card').count(),5);const card=page.locator('.mini-game-card').filter({hasText:'8 peones + rey'});await card.getByRole('button',{name:'Jugar minipartida',exact:true}).click();await page.waitForURL(/#\/play$/);await page.locator('.play-view-v3').waitFor();assert.equal(await page.locator('[id="play-board-piece-wP-a2"]').count(),1);assert.equal(await page.locator('[id="play-board-piece-wR-a1"]').count(),0);await page.setViewportSize({width:1440,height:1000});});
+  await check('Competitor-informed mobile UX exposes classroom, next lesson, and achievements',async()=>{
+    await page.setViewportSize({width:390,height:844});
+    await goto('home');
+    const classroom=page.locator('.classroom-launch');
+    assert.equal(await classroom.isVisible(),true,'Classroom shortcut must be visible on mobile Home');
+    const box=await classroom.boundingBox();
+    assert.ok(box&&box.width>=44&&box.height>=44,'Classroom shortcut has insufficient touch size');
+    assert.equal(await page.locator('.mobile-bottom-nav a').count(),5);
+    assert.equal(await page.locator('.home-learning-progress progress').count(),1);
+    await page.locator('.hero-copy .btn.secondary').click();
+    await page.waitForURL(/#\/academy\/[^/]+$/);
+    await page.locator('.lesson-reader h1').waitFor();
+    await goto('academy');
+    assert.equal(await page.locator('.academy-next-action').count(),1);
+    assert.equal(await page.locator('.academy-secondary').evaluate(el=>el.open),false);
+    const featured=await page.locator('.academy-next-action').boundingBox();
+    assert.ok(featured&&featured.y<844,'Next lesson is not discoverable without scrolling');
+    await goto('progress');
+    const order=await page.evaluate(()=>{
+      const achievements=document.querySelector('#progress-achievements');
+      const review=document.querySelector('.learning-review-summary');
+      return Boolean(achievements&&review&&(achievements.compareDocumentPosition(review)&Node.DOCUMENT_POSITION_FOLLOWING));
+    });
+    assert.equal(order,true,'Achievements must precede secondary review analysis');
+    await goto('home');
+    await classroom.click();
+    await page.waitForURL(/#\/rooms$/);
+    assert.equal(await page.locator('.studio-app').count(),1);
+    await page.setViewportSize({width:1440,height:1000});
+  });
+  await check('Academy v2 shows mastery path and launches a constrained mini-game',async()=>{await page.setViewportSize({width:390,height:844});await goto('academy');await page.locator('.academy-secondary > summary').click();assert.equal(await page.locator('.mastery-phase-card').count(),8);assert.equal(await page.locator('.mini-game-card').count(),5);const card=page.locator('.mini-game-card').filter({hasText:'8 peones + rey'});await card.getByRole('button',{name:'Jugar minipartida',exact:true}).click();await page.waitForURL(/#\/play$/);await page.locator('.play-view-v3').waitFor();assert.equal(await page.locator('[id="play-board-piece-wP-a2"]').count(),1);assert.equal(await page.locator('[id="play-board-piece-wR-a1"]').count(),0);await page.setViewportSize({width:1440,height:1000});});
   await check('Language switches and survives reload in English and Portuguese',async()=>{for(const lang of ['en','pt','es']){await goto('settings');await page.locator('.language-switcher select').selectOption(lang);await page.reload({waitUntil:'load'});assert.equal(await page.locator('html').getAttribute('lang'),lang);assert.ok(!(await page.locator('main').innerText()).includes('studio.'));}});
   await check('Themes stay under Settings, Atlas persists, and country palettes reach the board',async()=>{
    await page.setViewportSize({width:1440,height:1000});await goto('home');assert.equal(await page.locator('.theme-gallery,.theme-launch,.atlas-card').count(),0);
