@@ -1,0 +1,54 @@
+{
+  "evidence_id": "ev_7799db993997df6b3b18e1509cb4674181f808919ef882b9c3a22d08cd80ad87",
+  "subject": null,
+  "provider": {
+    "id": "rea-cdp-browser",
+    "name": "REA Chrome DevTools Protocol observation provider",
+    "version": "2"
+  },
+  "authority": "external-service",
+  "observed_url": "https://www.chess.com/lessons",
+  "observed_title": "Chess Lessons - Learn with Online Courses - Chess.com",
+  "captured_at": {
+    "started_at": "2026-11-18T04:56:07.129Z",
+    "ended_at": "2026-11-18T04:56:08.916Z",
+    "observation_ms": 1200
+  },
+  "counts": {
+    "dom_nodes": 4562,
+    "accessibility_nodes": 60,
+    "scripts": 183
+  },
+  "status": "observed_public_page",
+  "completeness": "policy_filtered",
+  "selected_accessibility_evidence": [
+    {
+      "role": "heading",
+      "name": "Chess Lessons"
+    },
+    {
+      "role": "heading",
+      "name": "Watch videos to learn concepts"
+    },
+    {
+      "role": "heading",
+      "name": "Test knowledge with Challenges"
+    },
+    {
+      "role": "heading",
+      "name": "Level up to achieve Mastery"
+    }
+  ],
+  "limitations": [
+    "Artifact identity is unavailable for this observation.",
+    "Observation starts when REA attaches; prior network and console activity is unavailable.",
+    "Worker targets are a final inventory snapshot, not worker-session observation. Their attached flag describes any debugging client; this page-session collector does not observe worker network, console, or script events, and short-lived workers may be absent from the snapshot.",
+    "Raw network headers, bodies, cookies, storage values, console objects, and WebSocket payloads are never retained; explicitly requested primitive console text is retained verbatim, while payload captures retain value-free shapes.",
+    "Source maps are reported only as declarative URLs and are not fetched.",
+    "URL-less scripts and console events without an allowed source URL are excluded because their origin cannot be proven.",
+    "CDP discovery could not establish the target's debugger attachment state.",
+    "Browser host platform and architecture were not observed."
+  ],
+  "raw_capture_sha256": "91c8cbb67f5c9b6969802323da8c2db584a13a97832eeb3cd9c674d71d08b2ae",
+  "command": "rea inspect-web-page http://127.0.0.1:19332 <target-id> --include-accessibility-text --observation-ms 1100 --format json"
+}

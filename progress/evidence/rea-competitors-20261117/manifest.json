@@ -1,0 +1,45 @@
+{
+  "schema": "chessy-rea-benchmark-evidence.v1",
+  "observed_at_utc": "2026-11-18T04:59:25.399664+00:00",
+  "tool": {
+    "name": "morluto/rea",
+    "version": "6.9.0",
+    "runtime": "node-v24.22.1-linux-arm64",
+    "browser": "Chromium 151 isolated headless, loopback CDP port 19332"
+  },
+  "captures": {
+    "chesscom": {
+      "source": "https://www.chess.com/lessons",
+      "evidence_id": "ev_7799db993997df6b3b18e1509cb4674181f808919ef882b9c3a22d08cd80ad87",
+      "raw_capture_sha256": "91c8cbb67f5c9b6969802323da8c2db584a13a97832eeb3cd9c674d71d08b2ae",
+      "summary_file": "progress/evidence/rea-competitors-20261117/chesscom.json",
+      "summary_sha256": "0728e3f48ff76fb27185c25494fd4a1e750f29345b153c0a152e0c63b624e520",
+      "status": "observed_public_page"
+    },
+    "chessable": {
+      "source": "https://www.chessable.com/",
+      "evidence_id": "ev_85fcd1833d3eef331f7f724d6c51ad69126cd5df17889ff935817f9034c53b5e",
+      "raw_capture_sha256": "2de398eb9261caa79d978521506c3d5d10ae6a514ff8c4270b4edcb88352527b",
+      "summary_file": "progress/evidence/rea-competitors-20261117/chessable.json",
+      "summary_sha256": "d359cfc8d6eee0e8a09b5008fee9dcae7001a1d0c3263d67ee0c45ce97591978",
+      "status": "observed_public_page"
+    },
+    "chesskid": {
+      "source": "https://www.chesskid.com/",
+      "evidence_id": "ev_89780711f00369a04b0712a7fdf4e85cd2733cff4cbf5504c6c214c2e620e94b",
+      "raw_capture_sha256": "e5702e3560717a5e1b9469e04af1dc99582c8a9ebd77a33081fa09cd1b2d998f",
+      "summary_file": "progress/evidence/rea-competitors-20261117/chesskid.json",
+      "summary_sha256": "afe589c066d8f7c84be7580805a521a6668686b5e19d219d81889880733361d3",
+      "status": "observed_public_page"
+    },
+    "lichess": {
+      "source": "https://lichess.org/training/themes",
+      "evidence_id": "ev_d4e9c83884183303aec95ff1d344ad8a5405e3ca5c445d60d4c10f8a189a334f",
+      "raw_capture_sha256": "d3a1e6ca7c6b604ee67c880861cb5c6933ad16aecb7f16906b60bf533914622e",
+      "summary_file": "progress/evidence/rea-competitors-20261117/lichess.json",
+      "summary_sha256": "3930e5cacd29335c93c1524429a63f8765db58b45c27539c3cf92dfd21f45bb7",
+      "status": "blocked_by_site_protection"
+    }
+  },
+  "scope": "Public unauthenticated pages; no private data, page mutation, login or anti-bot bypass"
+}
