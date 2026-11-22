@@ -433,6 +433,8 @@ export function attachAulaDirect(server,{secretPath,adminSecretPath,registryPath
         if(data.value==='setup'){
           snapshot(room);room.editor=beginPositionEditor(room.fen);room.boardMode='setup';
           room.exercise=null;room.lastMove=null;room.hint=null;room.control='teacher';
+          // Old move/annotation overlays describe the previous board position.
+          room.annotations={arrows:[],squares:[]};
           room.revision++;broadcast(room,{feedback:'editor-started'});return;
         }
         try{
@@ -452,6 +454,9 @@ export function attachAulaDirect(server,{secretPath,adminSecretPath,registryPath
           const next=changePositionDraft(room.editor,data);
           if(JSON.stringify(next)===JSON.stringify(room.editor))return;
           snapshot(room);room.editor=next;room.revision++;
+          // A placed/moved/deleted piece invalidates highlights of the old
+          // position; never leave a circle on an unrelated knight.
+          if(data.action!=='turn')room.annotations={arrows:[],squares:[]};
           broadcast(room,{feedback:'editor-updated'});
         }catch{return sendTo(ws,{type:'error',message:'No se pudo editar esa casilla.'});}
         return;
@@ -532,6 +537,7 @@ export function attachAulaDirect(server,{secretPath,adminSecretPath,registryPath
           }
           e.status=e.ply>=e.solution.length?'completed':'active';
           room.fen=game.fen();room.history.push(uci);
+          room.annotations={arrows:[],squares:[]};
           room.lastMove={from:data.from,to:data.to};room.hint=null;room.revision++;
           broadcast(room,{feedback:e.status==='completed'?'completed':'correct'});return;
         }
@@ -540,6 +546,7 @@ export function attachAulaDirect(server,{secretPath,adminSecretPath,registryPath
           if(!move)return sendTo(ws,{type:'error',message:'Jugada ilegal'});
           snapshot(room);
           room.fen=game.fen();room.history.push(move.san);
+          room.annotations={arrows:[],squares:[]};
           room.lastMove={from:data.from,to:data.to};room.hint=null;room.revision++;
           broadcast(room,{feedback:'move'});
         }catch {sendTo(ws,{type:'error',message:'Movimiento inválido'});}

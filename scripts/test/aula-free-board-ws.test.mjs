@@ -124,13 +124,31 @@ test('REA: private teacher/learner free board, editing, markings, authority and 
     teacher.socket.send(JSON.stringify({type:'annotate',action:'clear',revision:teacher.state.revision}));
     assert.ok(await student.wait(m=>m.type==='state'&&m.feedback==='annotation-updated'&&m.annotations?.squares.length===0&&m.annotations?.arrows.length===0));
   });
+  await t.test('editing invalidates earlier square circles and arrows for both roles',async()=>{
+    teacher.socket.send(JSON.stringify({type:'annotate',action:'square',square:'g4',revision:teacher.state.revision}));
+    assert.ok(await student.wait(m=>m.type==='state'&&m.annotations?.squares?.includes('g4')));
+    let state=await update({type:'mode',value:'setup'});
+    assert.deepEqual(state.annotations,{arrows:[],squares:[]});
+    teacher.socket.send(JSON.stringify({type:'annotate',action:'square',square:'e4',revision:state.revision}));
+    assert.ok(await student.wait(m=>m.type==='state'&&m.annotations?.squares?.includes('e4')));
+    state=await update({type:'edit',action:'place',square:'a8',piece:'n'});
+    assert.deepEqual(state.annotations,{arrows:[],squares:[]});
+    state=await update({type:'edit',action:'remove',square:'a8'});
+    assert.deepEqual(state.annotations,{arrows:[],squares:[]});
+    state=await update({type:'mode',value:'play'});
+    assert.equal(state.boardMode,'play');
+    assert.equal(state.fen,'4k3/8/8/8/8/8/8/R3K3 w - - 0 1');
+  });
   await t.test('color assignment authorizes only correct role per turn',async()=>{
     let state=await update({type:'control',value:'student-black'});
     assert.equal(state.control,'student-black');
     student.socket.send(JSON.stringify({type:'move',from:'a1',to:'a2',revision:state.revision}));
     assert.ok(await student.wait(m=>m.type==='error'&&m.message.includes('bloque')));
+    teacher.socket.send(JSON.stringify({type:'annotate',action:'square',square:'a1',revision:state.revision}));
+    assert.ok(await student.wait(m=>m.type==='state'&&m.annotations?.squares?.includes('a1')));
     state=await update({type:'move',from:'a1',to:'a2'});
     assert.equal(state.fen.split(' ')[1],'b');
+    assert.deepEqual(state.annotations,{arrows:[],squares:[]});
     teacher.socket.send(JSON.stringify({type:'move',from:'e8',to:'e7',revision:state.revision}));
     assert.ok(await teacher.wait(m=>m.type==='error'&&m.message.includes('bloque')));
     student.socket.send(JSON.stringify({type:'move',from:'e8',to:'e7',revision:state.revision}));
