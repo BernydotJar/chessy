@@ -123,6 +123,13 @@ async function check(name,fn){
       assert.equal(await teacher.locator('#board-controller').isVisible(),true);
       await teacher.locator('#board-advanced summary').click();
       await teacher.setViewportSize({width:320,height:760});
+      // ResizeObserver and the browser's viewport resize event settle on the
+      // next frame; do not assert the stale pre-resize inline board width.
+      // If it never converges, keep the outlier diagnostics below.
+      await teacher.waitForFunction(()=>
+        document.querySelector('#board')?.getBoundingClientRect().right<=innerWidth+2 &&
+        document.documentElement.scrollWidth<=innerWidth+2,
+        null,{timeout:3500}).catch(()=>{});
       const mobile320=await teacher.evaluate(()=>({
         scroll:document.documentElement.scrollWidth,width:innerWidth,
         outliers:[...document.querySelectorAll('body *')].map(el=>({
