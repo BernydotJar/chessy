@@ -231,7 +231,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 /* Premium Match Experience v1 — the board is the stage; everything else is instrumentation. */
 .play-view-v3{max-width:1120px;margin:0 auto}.play-view-v3 .section-heading{max-width:720px}
 .match-cockpit{display:grid;grid-template-columns:minmax(0,642px) minmax(300px,360px);gap:24px;align-items:start;justify-content:start}
-.match-stage{width:100%;max-width:642px;min-width:0}.play-view-v3 .play-board-frame{margin:0;padding:10px;border-radius:14px;background:var(--surface);border:1px solid var(--line-strong)}.play-view-v3 .board-shell{max-width:620px;margin:0 auto}.play-view-v3 .board-container{max-width:620px}
+.match-stage{width:100%;max-width:642px;min-width:0}.play-view-v3 .play-board-frame{margin:0;padding:10px;border-radius:14px;background:var(--surface);border:1px solid var(--line-strong)}.play-view-v3 .board-shell{max-width:620px;aspect-ratio:1;margin:0 auto}.play-view-v3 .board-container{max-width:620px}
 .match-rail{display:grid;gap:12px;position:sticky;top:100px;min-width:0}.match-rail>.panel{border-radius:12px}
 .match-player-bar{display:grid;grid-template-columns:38px minmax(0,1fr) minmax(68px,auto) 116px;align-items:center;gap:11px;min-height:62px;padding:9px 10px;border:1px solid transparent;color:var(--text);transition:background-color .16s,border-color .16s}
 .match-player-bar:first-child{margin-bottom:8px;border-bottom-color:var(--line);border-radius:10px 10px 5px 5px;background:color-mix(in srgb,var(--surface) 74%,transparent)}
@@ -303,7 +303,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 }
 
 /* Stable mobile gameplay: keep actions by the board and scroll only the score sheet. */
-.move-history-list{overscroll-behavior:contain}
+.move-history-list{overscroll-behavior:contain;scrollbar-gutter:stable}
 .play-view-v3 .board-notation--left{left:2px;display:grid;grid-template-rows:repeat(8,minmax(0,1fr));align-items:start;gap:0;padding-top:2px}
 .play-view-v3 .board-notation--bottom{bottom:2px;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));justify-items:end;gap:0;padding-right:2px}
 .play-view-v3 .board-notation__label{font-size:9px;line-height:1;padding:1px 2px;border:0;border-radius:2px}

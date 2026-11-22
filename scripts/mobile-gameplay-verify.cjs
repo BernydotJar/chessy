@@ -93,6 +93,22 @@ async function check(name, run) {
         } finally { await context.close(); }
       });
     }
+    await check('Board and squares keep their proportions when a mobile game is rotated', async () => {
+      const { page, context } = await fresh();
+      try {
+        await tapMove(page, 'e2', 'e4', 'opening before rotation');
+        for (const viewport of [{ width: 760, height: 1024 }, { width: 844, height: 390 }, { width: 390, height: 844 }]) {
+          await page.setViewportSize(viewport);
+          await settle(page);
+          const board = await page.locator('.board-shell').boundingBox();
+          const cell = await square(page, 'e4').boundingBox();
+          assert.ok(Math.abs(board.width - board.height) <= 1, `Board is ${board.width} × ${board.height} at ${viewport.width}px`);
+          assert.ok(Math.abs(cell.width * 8 - board.width) <= 1 && Math.abs(cell.height * 8 - board.height) <= 1, 'Squares must fill the board');
+          assert.equal(await count(page), 1);
+        }
+        await tapMove(page, 'e7', 'e5', 'reply after rotation');
+      } finally { await context.close(); }
+    });
     for (const reducedMotion of ['reduce','no-preference']) await check(`Touch drag at a deliberate scroll offset stays stable (${reducedMotion})`, async () => {
       const {page,context} = await fresh(undefined,{reducedMotion});
       try {
