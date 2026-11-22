@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { useCallback, useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { Chessboard, type ChessboardOptions } from 'react-chessboard';
 import { useGameStore } from '../store/gameStore';
 import { Square } from 'chess.js';
@@ -26,8 +26,6 @@ export const ChessBoard: React.FC = () => {
   
   const [highlightedSquares, setHighlightedSquares] = useState<string[]>([]);
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
-  const [boardWidth, setBoardWidth] = useState(560);
-  const boardRef = useRef<HTMLDivElement | null>(null);
   const { t } = useTranslation();
   const accessiblePieces = useMemo(() => createAccessibleChessPieces(t), [t]);
   const verboseMoves = chess.history({ verbose: true });
@@ -106,16 +104,6 @@ export const ChessBoard: React.FC = () => {
       0 12px 30px rgba(0, 0, 0, 0.22)
     `,
   }), []);
-
-  useEffect(() => {
-    const node = boardRef.current;
-    if (!node) return;
-    const updateSize = () => setBoardWidth(Math.min(node.clientWidth, 620));
-    updateSize();
-    const observer = new ResizeObserver(updateSize);
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
 
   const files = useMemo(() => isAIGame && playerColor === 'black' ? ['h','g','f','e','d','c','b','a'] : ['a','b','c','d','e','f','g','h'], [isAIGame, playerColor]);
   const ranks = useMemo(() => isAIGame && playerColor === 'black' ? ['1','2','3','4','5','6','7','8'] : ['8','7','6','5','4','3','2','1'], [isAIGame, playerColor]);
@@ -214,7 +202,7 @@ export const ChessBoard: React.FC = () => {
         </div>
       )}
 
-      <div className={`relative board-shell ${setupMode ? 'board-shell--setup' : ''}`} ref={boardRef} style={{ height: boardWidth }}>
+      <div className={`relative board-shell ${setupMode ? 'board-shell--setup' : ''}`}>
         {isAIThinking && <div className="board-thinking-chip" role="status"><span className="spinner"/><span>{t('ai.thinking')}</span></div>}
 
         <div className="board-notation board-notation--left">
