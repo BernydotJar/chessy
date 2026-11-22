@@ -99,6 +99,11 @@ async function check(name,fn){
         return {
           scrollWidth:document.documentElement.scrollWidth,
           viewportWidth:innerWidth,
+          outliers:[...document.querySelectorAll('body *')].map(el=>({
+            tag:el.tagName,id:el.id,cls:(el.getAttribute('class')||'').slice(0,70),
+            right:Math.round(el.getBoundingClientRect().right),
+            width:Math.round(el.getBoundingClientRect().width)
+          })).filter(el=>el.right>innerWidth+2).slice(0,12),
           beforeBoard:quickbar.getBoundingClientRect().bottom<=board.getBoundingClientRect().top,
           advancedBeforeBoard:advanced.getBoundingClientRect().bottom<=board.getBoundingClientRect().top,
           buttonCount:buttons.length,
@@ -118,7 +123,14 @@ async function check(name,fn){
       assert.equal(await teacher.locator('#board-controller').isVisible(),true);
       await teacher.locator('#board-advanced summary').click();
       await teacher.setViewportSize({width:320,height:760});
-      const mobile320=await teacher.evaluate(()=>({scroll:document.documentElement.scrollWidth,width:innerWidth}));
+      const mobile320=await teacher.evaluate(()=>({
+        scroll:document.documentElement.scrollWidth,width:innerWidth,
+        outliers:[...document.querySelectorAll('body *')].map(el=>({
+          tag:el.tagName,id:el.id,cls:(el.getAttribute('class')||'').slice(0,70),
+          right:Math.round(el.getBoundingClientRect().right),
+          width:Math.round(el.getBoundingClientRect().width)
+        })).filter(el=>el.right>innerWidth+2).slice(0,16)
+      }));
       assert.ok(mobile320.scroll<=mobile320.width+2,JSON.stringify(mobile320));
       await teacher.setViewportSize({width:390,height:844});
     });
