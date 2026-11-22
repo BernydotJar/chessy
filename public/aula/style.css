@@ -39,11 +39,11 @@ input[type=checkbox]{accent-color:var(--gold);width:17px;height:17px;vertical-al
 .topline{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
 .topline h1{margin:0;font-size:clamp(23px,3vw,35px)}
 .room-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(290px,390px);gap:22px;align-items:start}
-.board-panel{padding:20px}
+.board-panel{padding:20px;min-width:0}
 .board-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:15px}
 .board-heading h2{margin:0;font-size:18px}.board-heading .muted{font-size:12px}
-.chessboard{width:min(100%,680px);aspect-ratio:1;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));margin:0 auto;border:6px solid #345247;border-radius:9px;overflow:hidden;box-shadow:0 12px 35px #0005;touch-action:manipulation;user-select:none}
-.square{border:0;border-radius:0;display:grid;place-items:center;position:relative;font-family:"Segoe UI Symbol","Apple Symbols",serif;font-size:clamp(21px,4.3vw,55px);padding:0;line-height:1;color:#111;text-shadow:0 2px 2px #0005;background:var(--square-light)}
+.chessboard{width:min(100%,680px);max-width:100%;aspect-ratio:1;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));margin:0 auto;border:6px solid #345247;border-radius:9px;overflow:hidden;box-shadow:0 12px 35px #0005;touch-action:manipulation;user-select:none}
+.square{border:0;border-radius:0;min-width:0;min-height:0;display:grid;place-items:center;position:relative;font-family:"Segoe UI Symbol","Apple Symbols",serif;font-size:clamp(21px,4.3vw,55px);padding:0;line-height:1;color:#111;text-shadow:0 2px 2px #0005;background:var(--square-light)}
 .square.dark{background:var(--square-dark)}.square.selected{box-shadow:inset 0 0 0 4px #ebc65b;z-index:1}
 .square:focus-visible{outline:4px solid #f3b83e;z-index:3}
 .square .piece-white{color:#fffdf0;-webkit-text-stroke:1.15px #1c2821;text-shadow:0 2px 2px #0008}
@@ -77,7 +77,7 @@ select{appearance:auto}.exercise-card select{margin-bottom:9px}
 .assignment-badge{font-size:12px;padding:7px 10px;border:1px solid #eac68155;background:#cba45826;border-radius:8px;margin:10px 0}
 .hidden{display:none!important}
 @media(max-width:1000px){.room-layout{grid-template-columns:minmax(0,1fr) 320px;gap:13px}main{padding:22px 16px}.board-panel{padding:13px}.side .card{padding:14px}}
-@media(max-width:760px){.room-layout{grid-template-columns:1fr}.side{grid-template-columns:minmax(0,1fr)}.chessboard{max-width:560px}.site-header{padding:0 16px;height:62px;gap:10px}.private-chip{font-size:10px}.room-layout{gap:12px}main{padding:14px 10px 36px}.board-panel{padding:10px}.square{font-size:clamp(27px,9vw,53px)}.site-footer{padding:10px}}
+@media(max-width:760px){.room-layout{grid-template-columns:minmax(0,1fr)}.side{min-width:0;grid-template-columns:minmax(0,1fr)}.chessboard{max-width:560px}.site-header{padding:0 16px;height:62px;gap:10px}.private-chip{font-size:10px}.room-layout{gap:12px}main{padding:14px 10px 36px}.board-panel{padding:10px}.square{font-size:clamp(27px,9vw,53px)}.site-footer{padding:10px}}
 @media(max-width:420px){.header-divider,.header-label{display:none}.chessboard{border-width:3px}.square{font-size:clamp(26px,9vw,44px)}.side .card{padding:12px}.videos{gap:6px}.media-buttons .btn{font-size:11px}.board-heading h2{font-size:16px}}
 @media(prefers-reduced-motion:reduce){.spinner{animation:none}.btn{transition:none}}
 
@@ -85,7 +85,7 @@ select{appearance:auto}.exercise-card select{margin-bottom:9px}
 .chessboard{touch-action:none}
 .square[draggable=true]{cursor:grab}
 .square[draggable=true]:active{cursor:grabbing}
-.square.legal:after{content:"";position:absolute;width:28%;height:28%;border-radius:50%;background:#f0bf43a6;pointer-events:none;box-shadow:0 0 0 3px #1c2a1845}
+.square.legal:after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:1;width:28%;height:28%;border-radius:50%;background:#f0bf43a6;pointer-events:none;box-shadow:0 0 0 3px #1c2a1845}
 .square.legal:has(.piece-white):after,.square.legal:has(.piece-black):after{width:82%;height:82%;background:transparent;border:4px solid #e6bc56a6}
 .square.last-move:not(.selected){box-shadow:inset 0 0 0 4px #e3cb4f6e}
 .square.hint-square:not(.selected){outline:3px dashed #dce978;outline-offset:-6px;z-index:2}
@@ -168,3 +168,15 @@ select{appearance:auto}.exercise-card select{margin-bottom:9px}
  .turn-label{font-size:12px}
  .turn-label select{padding:7px}
 }
+
+/* Every square is exactly one eighth of the board's content box.
+   The resize helper snaps eight squares together to physical pixels. */
+.chessboard > .square{box-sizing:border-box;min-width:0;min-height:0}
+.square > .piece-white,.square > .piece-black{
+  display:grid;place-items:center;
+  width:100%;height:100%;min-width:0;min-height:0;
+  line-height:1;
+}
+
+/* Explicitly allow both board and sidebar grid items to shrink below intrinsic contents. */
+.room-layout>.board-panel,.room-layout>.side,.side>.card{min-width:0}

@@ -99,6 +99,11 @@ async function check(name,fn){
         return {
           scrollWidth:document.documentElement.scrollWidth,
           viewportWidth:innerWidth,
+          outliers:[...document.querySelectorAll('body *')].map(el=>({
+            tag:el.tagName,id:el.id,cls:(el.getAttribute('class')||'').slice(0,70),
+            right:Math.round(el.getBoundingClientRect().right),
+            width:Math.round(el.getBoundingClientRect().width)
+          })).filter(el=>el.right>innerWidth+2).slice(0,12),
           beforeBoard:quickbar.getBoundingClientRect().bottom<=board.getBoundingClientRect().top,
           advancedBeforeBoard:advanced.getBoundingClientRect().bottom<=board.getBoundingClientRect().top,
           buttonCount:buttons.length,
@@ -118,9 +123,83 @@ async function check(name,fn){
       assert.equal(await teacher.locator('#board-controller').isVisible(),true);
       await teacher.locator('#board-advanced summary').click();
       await teacher.setViewportSize({width:320,height:760});
-      const mobile320=await teacher.evaluate(()=>({scroll:document.documentElement.scrollWidth,width:innerWidth}));
+      // ResizeObserver and the browser's viewport resize event settle on the
+      // next frame; do not assert the stale pre-resize inline board width.
+      // If it never converges, keep the outlier diagnostics below.
+      await teacher.waitForFunction(()=>
+        document.querySelector('#board')?.getBoundingClientRect().right<=innerWidth+2 &&
+        document.documentElement.scrollWidth<=innerWidth+2,
+        null,{timeout:3500}).catch(()=>{});
+      const mobile320=await teacher.evaluate(()=>({
+        scroll:document.documentElement.scrollWidth,width:innerWidth,
+        outliers:[...document.querySelectorAll('body *')].map(el=>({
+          tag:el.tagName,id:el.id,cls:(el.getAttribute('class')||'').slice(0,70),
+          right:Math.round(el.getBoundingClientRect().right),
+          width:Math.round(el.getBoundingClientRect().width)
+        })).filter(el=>el.right>innerWidth+2).slice(0,16)
+      }));
       assert.ok(mobile320.scroll<=mobile320.width+2,JSON.stringify(mobile320));
       await teacher.setViewportSize({width:390,height:844});
+    });
+    await check('mobile 8×8 squares remain pixel-aligned with equal geometry at four widths',async()=>{
+      for(const width of [320,360,390,412]){
+        await teacher.setViewportSize({width,height:800});
+        await teacher.waitForFunction(()=>{
+          const board=document.querySelector('#board');
+          const panel=board?.parentElement;
+          if(!board||!panel)return false;
+          const b=getComputedStyle(board),p=getComputedStyle(panel);
+          const border=(parseFloat(b.borderLeftWidth)||0)+(parseFloat(b.borderRightWidth)||0);
+          const available=Math.min(680,panel.clientWidth-
+            (parseFloat(p.paddingLeft)||0)-(parseFloat(p.paddingRight)||0));
+          const expected=Math.floor((available-border)*devicePixelRatio/8)*8/devicePixelRatio+border;
+          return Math.abs(board.getBoundingClientRect().width-expected)<0.09;
+        });
+        const metrics=await teacher.evaluate(()=>{
+          const board=document.querySelector('#board');
+          const b=board.getBoundingClientRect();
+          const cells=[...board.querySelectorAll('.square')].map(el=>el.getBoundingClientRect());
+          const style=getComputedStyle(board);
+          const border=parseFloat(style.borderLeftWidth)+parseFloat(style.borderRightWidth);
+          const sum=(b.width-border)*devicePixelRatio;
+          const sorted=Array.from({length:8},(_,i)=>cells[i*8]);
+          return {
+            dpr:devicePixelRatio,columns:cells.slice(0,8).map(c=>c.width),
+            rows:sorted.map(c=>c.height),boardWidth:b.width,boardHeight:b.height,
+            contentPhysicalPx:sum,
+            layoutRows:style.gridTemplateRows.split(' ').length,
+            overflow:document.documentElement.scrollWidth-innerWidth,
+            rowTop:sorted.map(c=>c.top),
+            firstRowX:cells.slice(0,8).map(c=>c.x),
+            innerWidth:innerWidth
+          };
+        });
+        assert.equal(metrics.layoutRows,8,JSON.stringify(metrics));
+        assert.ok(Math.max(...metrics.columns)-Math.min(...metrics.columns)<0.09,JSON.stringify(metrics));
+        assert.ok(Math.max(...metrics.rows)-Math.min(...metrics.rows)<0.09,JSON.stringify(metrics));
+        assert.ok(Math.abs(metrics.columns[0]-metrics.rows[0])<0.1,JSON.stringify(metrics));
+        assert.ok(Math.abs(metrics.boardWidth-metrics.boardHeight)<0.1,JSON.stringify(metrics));
+        assert.ok(Math.abs(metrics.contentPhysicalPx/8-Math.round(metrics.contentPhysicalPx/8))<0.1,JSON.stringify(metrics));
+        assert.ok(metrics.overflow<=2,JSON.stringify(metrics));
+        for(let i=1;i<8;i++){
+          assert.ok(Math.abs(metrics.rowTop[i]-metrics.rowTop[i-1]-metrics.rows[i])<0.15);
+          assert.ok(Math.abs(metrics.firstRowX[i]-metrics.firstRowX[i-1]-metrics.columns[i])<0.15);
+        }
+      }
+      await teacher.setViewportSize({width:390,height:844});
+    });
+    await check('changing palette tools clears stale knight legal rings in setup',async()=>{
+      await teacher.locator('#board [data-square="g1"]').click();
+      await teacher.locator('#board .square.legal').first().waitFor();
+      await teacher.locator('#toggle-editor').click();
+      await teacher.locator('#editor-panel:visible').waitFor();
+      assert.equal(await teacher.locator('#board .square.legal').count(),0);
+      await teacher.locator('#piece-palette .palette-piece[data-piece="r"]').click();
+      assert.equal(await teacher.locator('#board .square.legal, #board .square.selected').count(),0);
+      await teacher.locator('#piece-palette .palette-piece[data-piece="n"]').click();
+      assert.equal(await teacher.locator('#board .square.legal, #board .square.selected').count(),0);
+      await teacher.locator('#toggle-editor').click();
+      await teacher.locator('#toggle-editor[aria-expanded="false"]').waitFor();
     });
     await check('teacher can empty the board from top controls and undo without losing class',async()=>{
       assert.equal(await teacher.locator('#clear-position').count(),1);
@@ -153,11 +232,24 @@ async function check(name,fn){
       teacher.once('dialog',dialog=>dialog.accept());
       await teacher.locator('#clear-position').click();
       await student.waitForFunction(()=>document.querySelectorAll('#board [data-piece]:not([data-piece=""])').length===0);
-      for(const [piece,square] of [['K','e1'],['k','e8'],['R','a1']]){
+      for(const [piece,square] of [['K','e1'],['k','e8']]){
         await teacher.locator('[data-piece="'+piece+'"].palette-piece').click();
         await teacher.locator('#board [data-square="'+square+'"]').click();
         await student.locator('#board [data-square="'+square+'"][data-piece="'+piece+'"]').waitFor();
       }
+      // Reproduce the report: an annotation circle remains on the board
+      // while the teacher selects the rook in the palette.
+      await teacher.locator('#annotation-mode').click();
+      await teacher.locator('#board [data-square="e4"]').click();
+      await teacher.locator('#board [data-square="e4"]').click();
+      await student.locator('svg.annotation-layer circle').waitFor({state:'attached'});
+      await teacher.locator('#annotation-mode').click();
+      await teacher.locator('#piece-palette .palette-piece[data-piece="R"]').click();
+      await student.locator('svg.annotation-layer circle').waitFor({state:'detached'});
+      assert.equal(await teacher.locator('#board .square.legal, #board .square.selected').count(),0);
+      await teacher.locator('#board [data-square="a1"]').click();
+      await student.locator('#board [data-square="a1"][data-piece="R"]').waitFor();
+      assert.equal(await student.locator('svg.annotation-layer circle').count(),0);
       await teacher.locator('#toggle-editor').click();
       await student.getByText('Jugadas legales · posición sincronizada').waitFor();
       await teacher.locator('#toggle-editor[aria-expanded="false"]').waitFor();
@@ -184,6 +276,8 @@ async function check(name,fn){
       await teacher.locator('#board [data-square=a4]').click();
       await student.locator('#board [data-square=a4][data-piece=R]').waitFor();
       await teacher.waitForFunction(()=>document.querySelector('#move-history')?.textContent==='Ra4');
+      // Historical arrows / circles must not point to stale squares after moves.
+      await student.locator('svg.annotation-layer line').waitFor({state:'detached'});
     });
     await check('Undo and redo synchronize both boards',async()=>{
       await teacher.locator('#undo-move').click();

@@ -1,0 +1,37 @@
+name: Chessy Aula mobile regression
+
+on:
+  pull_request:
+    paths:
+      - "public/aula/**"
+      - "scripts/aula-direct.mjs"
+      - "scripts/test/aula-free-board-browser.cjs"
+      - ".github/workflows/aula-mobile-regression.yml"
+  push:
+    branches: [main]
+    paths:
+      - "public/aula/**"
+      - "scripts/aula-direct.mjs"
+      - "scripts/test/aula-free-board-browser.cjs"
+      - ".github/workflows/aula-mobile-regression.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  aula-mobile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install pinned dependencies
+        run: npm ci --ignore-scripts
+      - name: Install isolated Chromium (never on production Sandbox V3)
+        run: npx playwright install chromium --with-deps
+      - name: Teacher/learner mobile board geometry and visual state E2E
+        run: npm run test:aula:free-board:browser

@@ -6,6 +6,47 @@ const root=document.querySelector('#app');
 const apiBase='/aula/api/';
 let role=null, room=null, socket=null, selected=null, flipped=false, puzzles=[], reconnectTimer=null;
 let legalSquares=[],dragStart=null,recentlyDropped=null,editorTool=null,marking=false,markSource=null;
+let boardSizeObserver=null;
+
+// Palette selection, board selection and instructional annotations are distinct.
+function clearBoardInteraction(){
+  selected=null;
+  legalSquares=[];
+  dragStart=null;
+  markSource=null;
+}
+
+// Pixel-align the board's INNER eight-by-eight grid on high-DPI Android screens.
+// CSS remains responsive if ResizeObserver is unavailable.
+function fitBoardToPixels(){
+  const board=document.querySelector('#board');
+  if(!board?.parentElement)return;
+  const parent=board.parentElement;
+  const panelStyle=getComputedStyle(parent);
+  const boardStyle=getComputedStyle(board);
+  const parse=value=>Number.parseFloat(value)||0;
+  const available=Math.min(680,parent.clientWidth-
+    parse(panelStyle.paddingLeft)-parse(panelStyle.paddingRight));
+  const borders=parse(boardStyle.borderLeftWidth)+parse(boardStyle.borderRightWidth);
+  if(available<96||!Number.isFinite(available))return;
+  const scale=Math.max(1,window.devicePixelRatio||1);
+  // Eight equal squares, all rounded together, never one stretched row.
+  const innerPx=Math.floor((available-borders)*scale/8)*8;
+  const size=innerPx/scale+borders;
+  board.style.width=size+'px';
+}
+function watchBoardSize(){
+  boardSizeObserver?.disconnect();
+  boardSizeObserver=null;
+  fitBoardToPixels();
+  const board=document.querySelector('#board');
+  if(board?.parentElement&&typeof ResizeObserver==='function'){
+    boardSizeObserver=new ResizeObserver(fitBoardToPixels);
+    boardSizeObserver.observe(board.parentElement);
+  }
+}
+window.addEventListener('resize',fitBoardToPixels);
+
 let rtc=null, audioSender=null, videoSender=null, remoteStream=null, micTrack=null, cameraTrack=null, screenTrack=null;
 let offerStarted=false, candidates=[];
 let errorTimeout=null;
@@ -198,7 +239,7 @@ function renderBoard(){
     const readable=piece?labels[piece.toUpperCase()]+(piece===piece.toUpperCase()?' blanco':' negro'):'vacía';
     const coord=(!flipped?rank===1:rank===8)?file:'';
     list.push('<button type="button" draggable="'+(piece?'true':'false')+'" class="square'+(dark?' dark':'')+(selected===sq?' selected':'')+
-      (legalSquares.includes(sq)?' legal':'')+
+      (room.boardMode==='play' && selected && legalSquares.includes(sq)?' legal':'')+
       (room.lastMove && (room.lastMove.from===sq||room.lastMove.to===sq)?' last-move':'')+
       (room.hint && (room.hint.from===sq||room.hint.to===sq)?' hint-square':'')+
       '" data-square="'+sq+'" data-piece="'+(piece||'')+'" aria-label="'+sq+': '+readable+'">'+
@@ -250,7 +291,11 @@ function updateRoom(info){
     previous?.editor?.placement!==info.editor?.placement||
     previous?.hint?.from!==info.hint?.from||previous?.hint?.to!==info.hint?.to;
   room={...room,...info};
-  if(changed){selected=null;legalSquares=[];markSource=null;renderBoard();}
+  if(changed){
+    clearBoardInteraction();
+    if(previous?.boardMode==='setup'&&info.boardMode==='play')editorTool=null;
+    renderBoard();
+  }
   else renderAnnotations();
   const present=room.present||{teacher:false,student:false};
   const pill=document.querySelector('#seat-status');
@@ -452,6 +497,7 @@ function pointerEndBoard(ev){
 }
 async function openRoom(){
   root.innerHTML=htmlRoom();
+  watchBoardSize();
   bind('board','click',clickBoard);
   bind('board','dragstart',dragStartBoard);
   bind('board','dragover',ev=>ev.preventDefault());
@@ -465,6 +511,7 @@ async function openRoom(){
     const entering=room.boardMode!=='setup';
     if(entering){
       editorTool=null;marking=false;markSource=null;
+      clearBoardInteraction();
       const marker=document.querySelector('#annotation-mode');
       if(marker){marker.setAttribute('aria-pressed','false');marker.textContent='Dibujar flechas';}
     }
@@ -485,13 +532,21 @@ async function openRoom(){
     const button=ev.target.closest('[data-piece]');
     if(!button)return;
     editorTool=editorTool===button.dataset.piece?null:button.dataset.piece;
-    selected=null;renderBoard();
+    clearBoardInteraction();
+    // The palette highlights a tool only; it must never preserve a chess
+    // legal-move ring on a knight or a previously selected square.
+    // Teacher annotations belong to the previous position, not the newly
+    // selected editing tool. The existing annotation-clear action is
+    // revision-neutral, so a rapid subsequent piece placement cannot race.
+    if(editorTool&&(room.annotations?.squares?.length||room.annotations?.arrows?.length))
+      send({type:'annotate',action:'clear',revision:room.revision});
+    renderBoard();
     document.querySelectorAll('#piece-palette [data-piece]').forEach(item=>{
       item.setAttribute('aria-pressed',String(editorTool===item.dataset.piece));
     });
   });
   bind('annotation-mode','click',ev=>{
-    marking=!marking;markSource=null;selected=null;renderBoard();
+    marking=!marking;clearBoardInteraction();renderBoard();
     ev.currentTarget.setAttribute('aria-pressed',String(marking));
     ev.currentTarget.textContent=marking?'Dejar de dibujar':'Dibujar flechas';
     const help=document.querySelector('#board-feedback');
@@ -570,7 +625,7 @@ function connectSocket(){
   ws.addEventListener('message',ev=>{
     let msg;try{msg=JSON.parse(ev.data);}catch{return;}
     if(msg.type==='state')updateRoom(msg);
-    else if(msg.type==='legal' && selected===msg.from){
+    else if(msg.type==='legal' && room?.boardMode==='play' && !marking && selected===msg.from){
       legalSquares=Array.isArray(msg.moves)?msg.moves.filter(x=>/^[a-h][1-8]$/.test(x)):[];
       // Do not replace live square buttons while the next pointer/click is in flight.
       document.querySelectorAll('#board button[data-square]').forEach(button=>{
